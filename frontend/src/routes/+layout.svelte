@@ -1,13 +1,17 @@
 <script>
-  
+    import Header from "$lib/components/Header.svelte";
+    import Footer from "$lib/components/Footer.svelte";
+    import * as Config from "$lib/config";
 </script>
 
 <svelte:head>
-<title></title>
+<title>{ Config.title }</title>
 </svelte:head>
 
+<Header />
 
-
-<main class="container-xxl">
-<slot />
+<main class="container">
+    <slot />
 </main>
+
+<Footer />
