@@ -55,7 +55,7 @@
             <li class="nav-item"><a href="/faq" class="nav-link px-2 { ($page.data.title == 'Faq' ? 'text-dark' : 'text-secondary') }">FAQs</a></li>
             <li class="nav-item"><a href="/impressum" class="nav-link px-2 { ($page.data.title == 'Impressum' ? 'text-dark' : 'text-secondary') }">Impressum</a></li>
           </ul>
-        <button type="button" class="btn btn-outline-secondary me-2">Login</button>
+        <a href="/login" type="button" class="btn btn-outline-secondary me-2">Login</a>
         <button type="button" class="btn btn-primary">Vorgang erstellen</button>
       </div>
     </div>
