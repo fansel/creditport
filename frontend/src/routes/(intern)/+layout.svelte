@@ -1,10 +1,11 @@
 <script>
   import Header from '$root/lib/components/InternHeader.svelte';
-  import * as Config from '$lib/config';
+  import * as config from '$lib/config';
+  import { page } from '$app/stores';
 </script>
 
 <svelte:head>
-  <title>{Config.title}</title>
+  <title>{config.title} - {$page.data.title}</title>
 </svelte:head>
 
 <Header />
