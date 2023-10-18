@@ -1,4 +1,9 @@
 <script>
+  export let data;
+
+  const modules = data.modules.courses[0].modules;
+
+  console.log(data);
 </script>
 
 <ul class="status-list my-3 m-0 p-0" id="pills-tab" role="tablist">
@@ -56,7 +61,7 @@
       <!-- <h1 class="my-3 h2">Allgemeine Angaben</h1> -->
       <form action="/?add" method="POST">
         <div class="row">
-          <div class="col">
+          <div class="col-md">
             <div class="mb-3">
               <label for="" class="mb-2">Bisherige Universität</label>
               <input type="text" class="form-control" />
@@ -66,8 +71,8 @@
               <input type="text" class="form-control" />
             </div>
           </div>
-          <div class="col">
-            <p />
+          <div class="col-md">
+            <div class="alert alert-primary" role="alert"><span class="fw-bold me-2">Vorgangsnummer: </span>3987-5309-2432</div>
           </div>
         </div>
 
@@ -81,24 +86,45 @@
 
       <form action="POST">
         <div class="card w-100 mb-3">
-          <div class="card-header fw-bold">Modul Antrag 1</div>
+          <div class="card-header fw-bold">Modulantrag für Anrechnung der Universität Halle</div>
           <div class="card-body">
             <div class="row">
-              <div class="col">
+              <div class="col-md">
                 <h2 class="h4">Fremdmodul</h2>
+
                 <div class="mb-3">
-                  <label for="" class="mb-2">Modulname</label>
-                  <input type="text" class="form-control" />
+                  <label for="" class="mb-2">Name</label>
+                  <input type="text" class="form-control" placeholder="Modellierung und Programmierung" />
+                </div>
+
+                <div class="row">
+                  <div class="col-md-8">
+                    <div class="mb-3">
+                      <label for="" class="mb-2">Website zum Modul</label>
+                      <input type="text" class="form-control" placeholder="http://uni-leipzig.de/module_xyz" />
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="mb-3">
+                      <label for="" class="mb-2">LP</label>
+                      <input type="text" class="form-control" placeholder="5" />
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label for="formFile" class="form-label">Modulbeschreibung<i class="bi bi-question-circle ms-2" /> </label>
+                  <input class="form-control" type="file" id="formFile" />
                 </div>
               </div>
-              <div class="col">
+              <div class="col-md">
+                <h2 class="h4">Modul Vorschlag</h2>
+
                 <div class="mb-3">
-                  <label for="" class="mb-2">Modulename</label>
+                  <label for="" class="mb-2">Name</label>
                   <select class="form-select" aria-label="Default select example">
-                    <option selected>Open this select menu</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                    {#each modules as modul}
+                      <option value={modul.name}>{modul.name}</option>
+                    {/each}
                   </select>
                 </div>
               </div>
@@ -106,7 +132,7 @@
           </div>
         </div>
 
-        <div class="w-100 d-inline-flex justify-content-center"><a href="/"><i class="bi bi-plus-circle" style="width: 3rem;"/> </a></div>
+        <div class="w-100 d-inline-flex justify-content-center"><a href="/"><i class="bi bi-plus-circle" style="font-size: 2rem;" /></a></div>
 
         <button class="btn btn-primary">Weiter</button>
       </form>
@@ -143,5 +169,15 @@
     border: none;
     display: flex;
     align-items: center;
+  }
+
+  @media screen and (max-width: 768px) {
+    .status-circle {
+      font-size: 1rem;
+    }
+
+    .status-list {
+      flex-direction: column;
+    }
   }
 </style>
