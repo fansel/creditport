@@ -3,56 +3,82 @@
   import { enhance } from '$app/forms';
 </script>
 
-<h1 class="my-3">Vorgänge</h1>
-
-<input type="text" placeholder="Suche" class="form-control mb-3" />
-
-<!-- <div class="d-flex justify-content-between align-items-center">
-  <select class="form-select form-select-sm w-auto" aria-label="Select pagesize">
-    <option value="25">25</option>
-    <option value="50">50</option>
-    <option value="75">75</option>
-    <option value="100">100</option>
-    <option value="10">Alle</option>
-  </select>
-
-
-  <div>
-    <label for="">Filtern nach Status</label>
-    <select class="form-select form-select-sm w-auto" aria-label="Select pagesize">
-      <option value="25">offen</option>
-      <option value="50">bearbeitung</option>
-      <option value="75">gehnemigt</option>
-    </select>
+<div class="row py-3 mb-3 pb-md-1 border-bottom align-items-center">
+  <div class="col-md">
+    <h1>Vorgänge</h1>
   </div>
 
-  <div class="d-flex align-items-center">
-    <label for="">Sortieren nach</label>
-    <select class="form-select form-select-sm w-auto" aria-label="Select pagesize">
-      <option value="25">Erstellt am</option>
-      <option value="50">Zu letzt bearbeitet</option>
-      <option value="75">Universität</option>
-    </select>
+  <div class="col-md-auto col">
+    <div class="btn-group flex-fill dropwdown">
+      <button class="dropdown-toggle btn btn-outline-primary btn-sm" type="button" data-bs-toggle="dropdown">Sortieren</button>
+      <div class="shadow dropdown-menu-right dropdown-menu">
+        <div class="w-100 d-flex pb-2 mb-1 border-bottom">
+          <input type="radio" class="btn-check ng-untouched ng-pristine ng-valid" />
+          <label for="listSortReverseFalse" class="btn btn-outline-primary btn-sm mx-2 flex-fill">
+            <i class="bi bi-sort-alpha-down" />
+          </label>
+
+          <input type="radio" class="btn-check ng-untouched ng-pristine ng-valid" />
+          <label for="listSortReverseTrue" class="btn btn-outline-primary btn-sm me-2 flex-fill">
+            <i class="bi bi-sort-alpha-up" />
+          </label>
+        </div>
+        <div>
+          <button class="dropdown-item" tabindex="0">Eingereicht am</button>
+          <button class="dropdown-item" tabindex="0">Zuletzt bearbeitet</button>
+          <button class="dropdown-item" tabindex="0">Status</button>
+          <button class="dropdown-item" tabindex="0">Universität</button>
+          <button class="dropdown-item" tabindex="0">Studiengang</button>
+        </div>
+      </div>
+    </div>
   </div>
+  <div class="col-md-auto col">
+    <div class="btn-group flex-fill dropwdown">
+      <button class="dropdown-toggle btn btn-outline-primary btn-sm" type="button" data-bs-toggle="dropdown">Ansicht</button>
+      <div class="shadow dropdown-menu-right dropdown-menu">
+        <button class="dropdown-item" tabindex="0">100</button>
+        <button class="dropdown-item" tabindex="0">75</button>
+        <button class="dropdown-item" tabindex="0">Status</button>
+        <button class="dropdown-item" tabindex="0">Universität</button>
+        <button class="dropdown-item" tabindex="0">Alle</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-  <nav aria-label="..." class="">
-    <ul class="pagination pagination-sm">
-      <li class="page-item"><button class="page-link" aria-label="Previous"><span aria-hidden="true">&laquo;</span></button></li>
+<div class="row mb-3 align-items-center">
+  <div class="col-sm"><input type="text" placeholder="Suche" class="form-control form-control-sm" /></div>
 
-      <li class="page-item active">
-        <button class="page-link">1</button>
-      </li>
+  <div class="col-sm-auto text-end">
+    <div class="btn-group ms-2 flex-fill dropwdown">
+      <button class="dropdown-toggle btn btn-outline-secondary btn-sm" type="button" data-bs-toggle="dropdown">Bearbeitet am</button>
+      <div class="shadow dropdown-menu-right dropdown-menu">
+        <button class="dropdown-item" tabindex="0">offen</button>
+        <button class="dropdown-item" tabindex="0">bearbeitet</button>
+        <button class="dropdown-item" tabindex="0">archiviert</button>
+      </div>
+    </div>
 
-      <li class="page-item">
-        <button class="page-link">2</button>
-      </li>
-      <li class="page-item">
-        <button class="page-link">3</button>
-      </li>
-      <li class="page-item"><button class="page-link" aria-label="Next"><span aria-hidden="true">&raquo;</span></button></li>
-    </ul>
-  </nav>
-</div> -->
+    <div class="btn-group ms-2 flex-fill dropwdown">
+      <button class="dropdown-toggle btn btn-outline-secondary btn-sm" type="button" data-bs-toggle="dropdown">Erstellt am</button>
+      <div class="shadow dropdown-menu-right dropdown-menu">
+        <button class="dropdown-item" tabindex="0">offen</button>
+        <button class="dropdown-item" tabindex="0">bearbeitet</button>
+        <button class="dropdown-item" tabindex="0">archiviert</button>
+      </div>
+    </div>
+
+    <div class="btn-group ms-2 flex-fill dropwdown">
+      <button class="dropdown-toggle btn btn-outline-secondary btn-sm" type="button" data-bs-toggle="dropdown">Status</button>
+      <div class="shadow dropdown-menu-right dropdown-menu">
+        <button class="dropdown-item" tabindex="0">offen</button>
+        <button class="dropdown-item" tabindex="0">bearbeitet</button>
+        <button class="dropdown-item" tabindex="0">archiviert</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="table-responsive">
   <table class="table table-sm table-hover table-responsive align-middle">
@@ -63,7 +89,7 @@
         <th>Studiengang</th>
         <th>Anzahl der Anträge</th>
         <th>Status</th>
-        <th></th>
+        <th />
       </tr>
     </thead>
 
@@ -81,15 +107,32 @@
           <div class="btn-group text-nowrap float-end" role="group">
             <form method="POST" action="?/delete" use:enhance>
               <input type="hidden" name="id" value="1" />
-              <button class="btn btn-sm btn-danger btn-group-left" type="submit"><i class="bi bi-x-lg" /></button>
+              <a type="button" href="/jobs/2" class="btn btn-sm btn-primary btn-group-right"><i class="bi bi-pencil-square" /></a>
             </form>
-            <a type="button" href="/jobs/2" class="btn btn-sm btn-primary btn-group-right"><i class="bi bi-box-arrow-up-right" /></a>
           </div>
         </td>
       </tr>
     </tbody>
   </table>
 </div>
+
+<nav aria-label="..." class="">
+  <ul class="pagination pagination-sm">
+    <li class="page-item"><button class="page-link" aria-label="Previous"><span aria-hidden="true">&laquo;</span></button></li>
+
+    <li class="page-item active">
+      <button class="page-link">1</button>
+    </li>
+
+    <li class="page-item">
+      <button class="page-link">2</button>
+    </li>
+    <li class="page-item">
+      <button class="page-link">3</button>
+    </li>
+    <li class="page-item"><button class="page-link" aria-label="Next"><span aria-hidden="true">&raquo;</span></button></li>
+  </ul>
+</nav>
 
 <style>
 </style>

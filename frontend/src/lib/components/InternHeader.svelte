@@ -21,8 +21,8 @@
       <a href="/vorgang" type="button" class="btn btn-primary">Einstellungen</a> -->
       <div class="dropdown ms-3">
         <a href="#" class="d-flex align-items-center link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-          <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2" />
           <strong>Studienbüro</strong>
+          <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle ms-2" />
         </a>
         <ul class="dropdown-menu text-small">
           <li><a class="dropdown-item" href="#">Einstellungen</a></li>

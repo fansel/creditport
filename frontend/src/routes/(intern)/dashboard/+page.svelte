@@ -50,7 +50,7 @@
   <div class="col-md">
     <div class="card mb-3" style="max-height: 243px;">
       <div class="card-header d-flex justify-content-between align-items-center" style="display: inherit;">
-        <p class="fs-3 mb-0">Neueste Vorgänge</p>
+        <p class="fs-3 mb-0">Vorgänge</p>
       </div>
       <div class="card-body overflow-y-auto p-0">
         <table class="log-table text-left table-responsive">
@@ -61,8 +61,9 @@
 
               <td>Universität Halle</td>
 
-              <td>4 Module</td>
-              <td>27 Seite PDF</td>
+              <td>Bachlor Informatik</td>
+              <td><span class="badge bg-primary rounded-pill">5 Anträge</span></td>
+              <td><span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill">eingereicht</span></td>
 
               <td class="float-end">
                 <a type="button" href="/logs/1" class="btn btn-sm btn-outline-primary ms-2 me-2">
