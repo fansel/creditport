@@ -12,10 +12,10 @@
     <div class="collapse navbar-collapse" id="navbarsExample04">
       <ul class="navbar-nav me-auto mb-2 mb-md-0">
         <li class="nav-item"><a href="/dashboard" class="nav-link px-2 {$page.data.title == 'Dashboard' ? 'text-dark' : 'text-secondary'}">Dashboard</a></li>
-        <li class="nav-item"><a href="/" class="nav-link px-2 {$page.data.title == 'Home' ? 'text-dark' : 'text-secondary'}">Offene</a></li>
+        <li class="nav-item"><a href="/items" class="nav-link px-2 {$page.data.title == 'Home' ? 'text-dark' : 'text-secondary'}">Offene</a></li>
 
-        <li class="nav-item"><a href="/faq" class="nav-link px-2 {$page.data.title == 'Faq' ? 'text-dark' : 'text-secondary'}">Markierte</a></li>
-        <li class="nav-item"><a href="/impressum" class="nav-link px-2 {$page.data.title == 'Impressum' ? 'text-dark' : 'text-secondary'}">Archiv</a></li>
+        <li class="nav-item"><a href="/items" class="nav-link px-2 {$page.data.title == 'Faq' ? 'text-dark' : 'text-secondary'}">Markierte</a></li>
+        <li class="nav-item"><a href="/items" class="nav-link px-2 {$page.data.title == 'Impressum' ? 'text-dark' : 'text-secondary'}">Archiv</a></li>
       </ul>
       <!-- <a href="/login" type="button" class="btn btn-outline-secondary me-2">Logout</a>
       <a href="/vorgang" type="button" class="btn btn-primary">Einstellungen</a> -->
