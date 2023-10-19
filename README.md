@@ -1,8 +1,28 @@
 # swtp-2023-13
 
-## API Routes
+## API Routes Übersicht
 
-| Methods | Urls             | Actions              |
-|---------|------------------|------------------    |
-| POST    | /api/auth/signin | login an account     |
-| POST    | /api/auth/signup | signup new account   |
+| Methods | Urls              | Actions              |
+|---------|------------------ |------------------    |
+| POST    | /api/users/login  | login an account     |
+| POST    | /api/users/signup | signup new account   |
+
+
+## API Routes Dokumentation
+
+### /api/users/login
+
+**Request**
+```json
+{
+  "username": "",
+  "password_hash" : "",
+}
+```
+
+**Respond**
+```json
+{
+  "token": "",
+}
+```
