@@ -2,7 +2,7 @@
 
 ## API Routes
 
-| Methods | Urls             | Actions          |
--------------------------------------------------
-| POST    | /api/auth/signin | login an account |
-|
+| Methods | Urls             | Actions              |
+|---------|------------------|------------------    |
+| POST    | /api/auth/signin | login an account     |
+| POST    | /api/auth/signup | signup new account   |
