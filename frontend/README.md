@@ -1,24 +1,33 @@
 # create-svelte
 
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+## Installation für Entwickler
 
 ```bash
-npm run dev
 
-# or start the server and open the app in a new browser tab
+git clone git@git.informatik.uni-leipzig.de:SWS/lehre/ws-2023-2024/swt-p/projects/swtp-2023-13.git
+cd swtp-2023-13/frontend
+git checkout developer
+
+npm i
 npm run dev -- --open
+
 ```
 
-## Building
+## Seiten Übersicht fürs Frontend
 
-To create a production version of your app:
+| Urls              | Designer  | Beschreibung                                            |
+|------------------ |---------- | ---                                                     |
+| /                 | Leopold   | Startseite                                              |
+| /login            | Leopold   | Login für Bearbeiter                                    |
+| /vorgang          | Leopold   | Formular zum erstellen eines Vorgang                    |
+| /status           | Leopold   | Status abfragen / Übersicht bekommen                    |
+| /faq              | Elias     | |
+| /impressum        | Elias     | |
+| /dashboard        | Leopold   | Übersicht für Bearbeiter                                |
+| /profile          | Leopold   | Email und Passwort ändern                               |
+| /settings         | Leopold   | Allgemeine Einstellungen                                |
+| /procedures       | Leopold   | Liste mit allen Vorgängen                               |
+| /procedures/[id]  | Leopold   | Bearbeitung / Übersicht eines Vorgangs                  |
+| /requests         | Leopold   | Liste aller Anträge (verlinkung zu jeweiligem Vorgang)  |
+| /requests/[id]    | Leopold   | Bearbeitung / Übersicht eines Antrags                   |
 
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.

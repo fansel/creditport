@@ -1,5 +1,4 @@
 <script>
-  import Footer from '$lib/components/Footer.svelte';
 </script>
 
 <div class="px-4 pt-5 mt-5 mb-2 text-center">
@@ -18,8 +17,6 @@
     <img src="/uni-logo.png" class="uni-logo" alt="" />
   </div>
 </div>
-
-<Footer />
 
 <style>
   .uni-logo {

@@ -6,6 +6,7 @@
 |---------|------------------ |------------------    |
 | POST    | /api/users/login  | login an account     |
 | POST    | /api/users/signup | signup new account   |
+| GET     | /api/procedures   | Gibt alle Vorgänge zurück   |
 
 
 ## API Routes Dokumentation
@@ -23,6 +24,36 @@
 **Respond**
 ```json
 {
-  "token": "",
+  "token": "", //JWT Token
+}
+```
+
+### /api/users/signup
+
+**Request**
+```json
+{
+  "username": "",
+  "password_hash" : "",
+  "role" : "",
+}
+```
+
+**Respond**
+```json
+{
+  "status": true,
+  "token": "", //JWT Token
+}
+```
+
+### /api/procedures
+
+**Respond**
+```json
+{
+  [
+    { "" },
+  ]
 }
 ```

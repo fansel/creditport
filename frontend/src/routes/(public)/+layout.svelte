@@ -1,6 +1,8 @@
 <script>
   import Header from '$root/lib/components/PublicHeader.svelte';
   import * as config from '$lib/config';
+  import Footer from '$lib/components/Footer.svelte';
+
   import { page } from '$app/stores';
 </script>
 
@@ -13,3 +15,5 @@
 <main class="container">
   <slot />
 </main>
+
+<Footer />

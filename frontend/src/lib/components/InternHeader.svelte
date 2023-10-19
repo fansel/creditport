@@ -2,7 +2,7 @@
   import { page } from '$app/stores';
 </script>
 
-<nav class="navbar navbar-expand-md navbar-light bg-light shadow-sm p-3" aria-label="Fourth navbar example">
+<nav class="navbar navbar-expand-md navbar-light bg-light shadow-sm p-3 sticky-top" aria-label="Fourth navbar example">
   <div class="container">
     <a class="navbar-brand" href="/"><i class="bi bi-send" /> </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
