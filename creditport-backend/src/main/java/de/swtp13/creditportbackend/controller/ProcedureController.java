@@ -7,7 +7,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/")
 public class ProcedureController {
 
-
+    /**
+     *
+     *
+     * @return a list of all procedures
+     */
         @GetMapping("/procedures")
         public String result() {
             return "[]";
