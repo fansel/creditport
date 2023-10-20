@@ -19,8 +19,7 @@ Die wichtigsten Teile der Codebasis sind:
 
 ## Build-Anleitung
 
-Um das Projekt zu bauen:
-, führen Sie den folgenden Befehl im Projektverzeichnis aus:
+Um das Projekt zu bauen, den folgenden Befehl im Projektverzeichnis ausführen:
 ```shell
 ./gradlew build
 ```
@@ -30,7 +29,7 @@ Hier ist ein einfacher Überblick über die Struktur des Backends:
 
 ## Modellklassen
 
-Modellklassen repräsentieren die Struktur der Daten, die wir in der Datenbank speichern möchten. Auch wenn Sie vielleicht nicht mit JPA (Java Persistence API) vertraut sind, reicht es aus zu wissen, dass wir diese Klassen mit speziellen Anmerkungen (Annotations) versehen, um anzugeben, wie die Daten in der Datenbank organisiert und gespeichert werden sollen. 
+Modellklassen repräsentieren die Struktur der Daten, die wir in der Datenbank speichern möchten. 
 
 ## Controller-Klassen
 
