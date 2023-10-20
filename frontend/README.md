@@ -21,7 +21,7 @@ npm run dev -- --open
 | /login            | Leopold   | Login für Bearbeiter                                    |
 | /vorgang          | Leopold   | Formular zum erstellen eines Vorgang                    |
 | /status           | Leopold   | Status abfragen / Übersicht bekommen                    |
-| /faq              | Elias     | |
+| /faq              | Elias     | Seite auf der Fragen beantwortet werden                 |
 | /impressum        | Elias     | |
 | /dashboard        | Leopold   | Übersicht für Bearbeiter                                |
 | /profile          | Leopold   | Email und Passwort ändern                               |
