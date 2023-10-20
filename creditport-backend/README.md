@@ -36,10 +36,6 @@ Modellklassen repräsentieren die Struktur der Daten, die wir in der Datenbank s
 Die Controller-Klassen sind so etwas wie die Gatekeeper unserer Anwendung. Sie empfangen HTTP-Anfragen von Clients und entscheiden, was mit diesen Anfragen geschehen soll. (z.B Abrufen von Daten aus der Datenbank, das Aktualisieren von Daten etc.
 
 ## Service-Klassen
-## Konfigurationsdateien
-
-Die Konfigurationsdateien sind essenziell, um zu steuern, wie die Anwendung und die Datenbank laufen und interagieren. Hier stellen wir verschiedene Einstellungen und Parameter ein, um die Umgebung nach unseren Bedürfnissen anzupassen. Sie enthalten spezifische Details, wie die Datenbankverbindungen hergestellt werden, welche Ports der Server verwendet und viele andere Einstellungen, die das Verhalten der Anwendung bestimmen.
-
 Service-Klassen enthalten die eigentliche Logik, die ausgeführt wird, nachdem die Controller eine Anfrage erhalten haben.
 
 ## Repository-Klassen
