@@ -25,7 +25,7 @@ public class ProcedureController {
                     "     requestCount : 5,\n" +
                     "     },\n" +
                     "     {\n" +
-                    "     createdAt : new Date(),\n" +
+                    "     createdAt : "+ new Date() + ",\n" +
                     "     university : \"Universität Leipzig\",\n" +
                     "     course : \"Physik Bachelor\",\n" +
                     "     status : 1,\n" +
