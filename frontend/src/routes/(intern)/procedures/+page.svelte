@@ -1,6 +1,10 @@
 <script>
-  import { format } from 'date-fns';
+  import { format, parseISO } from 'date-fns';
   import { enhance } from '$app/forms';
+
+  export let data;
+
+  console.log(data);
 </script>
 
 <div class="row py-3 mb-3 pb-md-1 border-bottom align-items-center">
@@ -35,7 +39,7 @@
   </div>
   <div class="col-auto col">
     <div class="btn-group flex-fill dropwdown">
-      <button class="dropdown-toggle btn btn-outline-primary btn-sm" type="button" data-bs-toggle="dropdown">Ansicht</button>
+      <button class="dropdown-toggle btn btn-outline-primary btn-sm" type="button" data-bs-toggle="dropdown">Anzahl</button>
       <div class="shadow dropdown-menu-right dropdown-menu">
         <button class="dropdown-item" tabindex="0">25</button>
         <button class="dropdown-item" tabindex="0">50</button>
@@ -88,7 +92,7 @@
 
 <div class="d-flex flex-wrap gap-3 mb-3 justify-content-between align-items-center">
   <div class="d-flex align-center">
-    174 Vorgänge (gefiltert)
+    {data.procedures.count} Vorgänge (gefiltert)
     <button class="btn btn-link py-0"><i class="bi bi-x" />Filter zurücksetzen</button>
   </div>
 
@@ -114,7 +118,7 @@
 </div>
 
 <div class="table-responsive">
-  <table class="table table-sm table-hover table-responsive align-middle border shadow-sm">
+  <table class="table table-sm table-hover table-responsive border align-middle shadow-sm">
     <thead>
       <tr>
         <th>Eingereicht am</th>
@@ -127,188 +131,55 @@
     </thead>
 
     <tbody>
-      <tr>
-        <td>{format(new Date(), 'dd.MM.yyyy HH:mm')} </td>
-        <td>Universität Halle</td>
+      {#each data.procedures.data as procedure}
+        <tr>
+          <td>{format(parseISO(procedure.created_at), 'dd.MM.yyyy HH:mm')} </td>
+          <td>{procedure.university}</td>
 
-        <td>Bachlor Informatik</td>
-        <td>5</td>
+          <td>{procedure.course}</td>
+          <td>{procedure.requestCount}</td>
 
-        <td><span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill">eingereicht</span></td>
+          <td><span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill">eingereicht</span></td>
 
-        <td>
-          <div class="btn-group text-nowrap float-end" role="group">
-            <form method="POST" action="?/delete" use:enhance>
-              <input type="hidden" name="id" value="1" />
-              <a type="button" href="/jobs/2" class="btn btn-sm btn-primary btn-group-right"><i class="bi bi-pencil-square" /></a>
-            </form>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <td>{format(new Date(), 'dd.MM.yyyy HH:mm')} </td>
-        <td>Universität Halle</td>
-
-        <td>Bachlor Informatik</td>
-        <td>5</td>
-
-        <td><span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill">eingereicht</span></td>
-
-        <td>
-          <div class="btn-group text-nowrap float-end" role="group">
-            <form method="POST" action="?/delete" use:enhance>
-              <input type="hidden" name="id" value="1" />
-              <a type="button" href="/jobs/2" class="btn btn-sm btn-primary btn-group-right"><i class="bi bi-pencil-square" /></a>
-            </form>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <td>{format(new Date(), 'dd.MM.yyyy HH:mm')} </td>
-        <td>Universität Halle</td>
-
-        <td>Bachlor Informatik</td>
-        <td>5</td>
-
-        <td><span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill">eingereicht</span></td>
-
-        <td>
-          <div class="btn-group text-nowrap float-end" role="group">
-            <form method="POST" action="?/delete" use:enhance>
-              <input type="hidden" name="id" value="1" />
-              <a type="button" href="/jobs/2" class="btn btn-sm btn-primary btn-group-right"><i class="bi bi-pencil-square" /></a>
-            </form>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <td>{format(new Date(), 'dd.MM.yyyy HH:mm')} </td>
-        <td>Universität Halle</td>
-
-        <td>Bachlor Informatik</td>
-        <td>5</td>
-
-        <td><span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill">eingereicht</span></td>
-
-        <td>
-          <div class="btn-group text-nowrap float-end" role="group">
-            <form method="POST" action="?/delete" use:enhance>
-              <input type="hidden" name="id" value="1" />
-              <a type="button" href="/jobs/2" class="btn btn-sm btn-primary btn-group-right"><i class="bi bi-pencil-square" /></a>
-            </form>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <td>{format(new Date(), 'dd.MM.yyyy HH:mm')} </td>
-        <td>Universität Halle</td>
-
-        <td>Bachlor Informatik</td>
-        <td>5</td>
-
-        <td><span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill">eingereicht</span></td>
-
-        <td>
-          <div class="btn-group text-nowrap float-end" role="group">
-            <form method="POST" action="?/delete" use:enhance>
-              <input type="hidden" name="id" value="1" />
-              <a type="button" href="/jobs/2" class="btn btn-sm btn-primary btn-group-right"><i class="bi bi-pencil-square" /></a>
-            </form>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <td>{format(new Date(), 'dd.MM.yyyy HH:mm')} </td>
-        <td>Universität Halle</td>
-
-        <td>Bachlor Informatik</td>
-        <td>5</td>
-
-        <td><span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill">eingereicht</span></td>
-
-        <td>
-          <div class="btn-group text-nowrap float-end" role="group">
-            <form method="POST" action="?/delete" use:enhance>
-              <input type="hidden" name="id" value="1" />
-              <a type="button" href="/jobs/2" class="btn btn-sm btn-primary btn-group-right"><i class="bi bi-pencil-square" /></a>
-            </form>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <td>{format(new Date(), 'dd.MM.yyyy HH:mm')} </td>
-        <td>Universität Halle</td>
-
-        <td>Bachlor Informatik</td>
-        <td>5</td>
-
-        <td><span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill">eingereicht</span></td>
-
-        <td>
-          <div class="btn-group text-nowrap float-end" role="group">
-            <form method="POST" action="?/delete" use:enhance>
-              <input type="hidden" name="id" value="1" />
-              <a type="button" href="/jobs/2" class="btn btn-sm btn-primary btn-group-right"><i class="bi bi-pencil-square" /></a>
-            </form>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <td>{format(new Date(), 'dd.MM.yyyy HH:mm')} </td>
-        <td>Universität Halle</td>
-
-        <td>Bachlor Informatik</td>
-        <td>5</td>
-
-        <td><span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill">eingereicht</span></td>
-
-        <td>
-          <div class="btn-group text-nowrap float-end" role="group">
-            <form method="POST" action="?/delete" use:enhance>
-              <input type="hidden" name="id" value="1" />
-              <a type="button" href="/jobs/2" class="btn btn-sm btn-primary btn-group-right"><i class="bi bi-pencil-square" /></a>
-            </form>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <td>{format(new Date(), 'dd.MM.yyyy HH:mm')} </td>
-        <td>Universität Halle</td>
-
-        <td>Bachlor Informatik</td>
-        <td>5</td>
-
-        <td><span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill">eingereicht</span></td>
-
-        <td>
-          <div class="btn-group text-nowrap float-end" role="group">
-            <form method="POST" action="?/delete" use:enhance>
-              <input type="hidden" name="id" value="1" />
-              <a type="button" href="/jobs/2" class="btn btn-sm btn-primary btn-group-right"><i class="bi bi-pencil-square" /></a>
-            </form>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <td>{format(new Date(), 'dd.MM.yyyy HH:mm')} </td>
-        <td>Universität Halle</td>
-
-        <td>Bachlor Informatik</td>
-        <td>5</td>
-
-        <td><span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill">eingereicht</span></td>
-
-        <td>
-          <div class="btn-group text-nowrap float-end" role="group">
-            <form method="POST" action="?/delete" use:enhance>
-              <input type="hidden" name="id" value="1" />
-              <a type="button" href="/jobs/2" class="btn btn-sm btn-primary btn-group-right"><i class="bi bi-pencil-square" /></a>
-            </form>
-          </div>
-        </td>
-      </tr>
+          <td>
+            <div class="btn-group text-nowrap float-end" role="group">
+              <form method="POST" action="?/delete" use:enhance>
+                <input type="hidden" name="id" value="1" />
+                <a type="button" href="/jobs/2" class="btn btn-sm btn-primary btn-group-right"><i class="bi bi-pencil-square" /></a>
+              </form>
+            </div>
+          </td>
+        </tr>
+      {/each}
     </tbody>
   </table>
+</div>
+
+<div class="d-flex flex-wrap gap-3 mb-3 justify-content-between align-items-center">
+  <div class="d-flex align-center">
+    {data.procedures.count} Vorgänge (gefiltert)
+    <button class="btn btn-link py-0"><i class="bi bi-x" />Filter zurücksetzen</button>
+  </div>
+
+  <div>
+    <nav aria-label="..." class="">
+      <ul class="pagination pagination-sm mb-0">
+        <li class="page-item"><button class="page-link" aria-label="Previous"><span aria-hidden="true">&laquo;</span></button></li>
+
+        <li class="page-item active">
+          <button class="page-link">1</button>
+        </li>
+
+        <li class="page-item">
+          <button class="page-link">2</button>
+        </li>
+        <li class="page-item">
+          <button class="page-link">3</button>
+        </li>
+        <li class="page-item"><button class="page-link" aria-label="Next"><span aria-hidden="true">&raquo;</span></button></li>
+      </ul>
+    </nav>
+  </div>
 </div>
 
 <style>
