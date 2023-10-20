@@ -14,6 +14,6 @@ public class ProcedureController {
      */
         @GetMapping("/procedures")
         public String result() {
-            return "[]";
+            return "{[]}";
         }
     }
