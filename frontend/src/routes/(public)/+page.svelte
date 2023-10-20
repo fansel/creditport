@@ -2,7 +2,7 @@
 </script>
 
 <div class="px-4 pt-5 mt-5 mb-2 text-center">
-  <h1 class="display-4 fw-bold text-body-emphasis">Anrechnungsprozess starten</h1>
+  <h1 class="display-4 fw-bold text-body-emphasis">Anrechnung von Studienleistungen</h1>
   <div class="col-lg-6 mx-auto">
     <p class="lead mb-4">Sie möchten Leistungen, die Sie an anderen Hochschulen erbracht haben, an der Informatik Fakultät der Universität Leipzig anrechnen lassen?</p>
     <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5">

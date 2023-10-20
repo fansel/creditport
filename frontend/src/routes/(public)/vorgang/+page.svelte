@@ -2,8 +2,6 @@
   export let data;
 
   const modules = data.modules.courses[0].modules;
-
-  console.log(data);
 </script>
 
 <ul class="status-list my-3 m-0 p-0" id="pills-tab" role="tablist">

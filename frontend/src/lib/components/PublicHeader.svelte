@@ -17,7 +17,7 @@
         <li class="nav-item"><a href="/impressum" class="nav-link px-2 {$page.data.title == 'Impressum' ? 'text-dark' : 'text-secondary'}">Impressum</a></li>
       </ul>
       <a href="/login" type="button" class="btn btn-outline-secondary me-2">Login</a>
-      <a href="/vorgang" type="button" class="btn btn-primary">Vorgang erstellen</a>
+      <a href="/vorgang" type="button" class="btn btn-primary">Neuer Vorgang</a>
     </div>
   </div>
 </nav>
