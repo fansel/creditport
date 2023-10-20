@@ -13,8 +13,11 @@ Die wichtigsten Teile der Codebasis sind:
 
 ## Voraussetzungen
 
-- Java JDK
+- Java JDK 17
 - Gradle
+
+## IDE
+Ich schlage IntelliJ als IDE vor, wenn man sich einen Studi-Account bei JetBrains macht kann man die Ulimate Edition kostenlos runterladen (alternativ geht auch IntelliJ CE)
 
 ## Build-Anleitung
 
