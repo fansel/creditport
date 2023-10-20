@@ -1,4 +1,3 @@
-
 # CreditPort Backend
 
  Backend-System für das CreditPort-Projekt. Es handelt sich um eine Spring Boot Anwendung, die mithilfe von Gradle gebaut wird.
@@ -41,4 +40,13 @@ Service-Klassen enthalten die eigentliche Logik, die ausgeführt wird, nachdem d
 ## Repository-Klassen
 
 Repository-Klassen sind die Schnittstelle zwischen dem Backend und der Datenbank. Sie enthalten Methoden, die es uns ermöglichen, Daten aus der Datenbank abzurufen, zu aktualisieren, zu löschen und zu speichern.
+
+
+
+| Teammitglied  | möglicher Aufgabenbereich    ?                |
+|---------------|-----------------------------------------------|
+| Felix         | - Architektur und Gesamtstruktur des Backend-Systems|
+| Daniel        | - Authentifizierung und Sicherheitsaspekte (JWT, Passwortschutz)|
+| Frida         | - Datenbankintegration und -zugriff (JPA, Repository)|
+| Maike         | - Implementierung von Vorgangs-API-Endpunkten (GET, POST usw.)|
 
