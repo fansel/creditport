@@ -10,7 +10,6 @@ public class ProcedureController {
 
     /**
      *
-     *
      * @return a list of all procedures
      */
         @GetMapping("/procedures")

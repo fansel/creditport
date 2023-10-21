@@ -61,7 +61,7 @@
 
               <td>Universität Halle</td>
 
-              <td>Bachlor Informatik</td>
+              <td>Bachelor Informatik</td>
               <td><span class="badge bg-primary rounded-pill">5 Anträge</span></td>
               <td><span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill">eingereicht</span></td>
 
