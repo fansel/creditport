@@ -4,7 +4,7 @@
 
   export let data;
 
-  console.log(data);
+  console.log(new Date());
 </script>
 
 <div class="row py-3 mb-3 pb-md-1 border-bottom align-items-center">
@@ -133,7 +133,7 @@
     <tbody>
       {#each data.procedures.data as procedure}
         <tr>
-          <td>{format(parseISO(procedure.created_at), 'dd.MM.yyyy HH:mm')} </td>
+          <td>{format(new Date(), 'dd.MM.yyyy HH:mm')} </td>
           <td>{procedure.university}</td>
 
           <td>{procedure.course}</td>
