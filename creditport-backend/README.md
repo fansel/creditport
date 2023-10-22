@@ -1,50 +1,14 @@
 # CreditPort Backend
 
- Backend-System für das CreditPort-Projekt. Es handelt sich um eine Spring Boot Anwendung, die mithilfe von Gradle gebaut wird.
-
-## Struktur
-
-Die wichtigsten Teile der Codebasis sind:
-
-- **Model-Klassen**: `src/main/java/de/swtp13/creditportbackend/model`
-- **Controller**: `src/main/java/de/swtp13/creditportbackend/controller`
-- **Service-Klassen**: `src/main/java/de/swtp13/creditportbackend/service`
-- **Konfigurationsdateien**: `src/main/resources`
+Das CreditPort Backend ist eine Spring Boot-Anwendung, die als Backend-System für das CreditPort-Projekt dient. Es ermöglicht Funktionen wie Authentifizierung, Datenbankzugriff und API-Routenverwaltung.
 
 ## Voraussetzungen
 
 - Java JDK 17
 - Gradle
+- (Optional) IntelliJ IDEA - Die Ultimate Edition ist für Studierende kostenlos verfügbar.
 
-## IDE
-Ich schlage IntelliJ als IDE vor, wenn man sich einen Studi-Account bei JetBrains macht kann man die Ulimate Edition kostenlos runterladen (alternativ geht auch IntelliJ CE)
-
-## Build-Anleitung
-
-Um das Projekt zu bauen, den folgenden Befehl im Projektverzeichnis ausführen:
-```shell
-./gradlew build
-```
-# Projektstruktur Übersicht
-
-Hier ist ein einfacher Überblick über die Struktur des Backends:
-
-## Modellklassen
-
-Modellklassen repräsentieren die Struktur der Daten, die wir in der Datenbank speichern möchten. 
-
-## Controller-Klassen
-
-Die Controller-Klassen sind so etwas wie die Gatekeeper unserer Anwendung. Sie empfangen HTTP-Anfragen von Clients und entscheiden, was mit diesen Anfragen geschehen soll. (z.B Abrufen von Daten aus der Datenbank, das Aktualisieren von Daten etc.
-
-## Service-Klassen
-Service-Klassen enthalten die eigentliche Logik, die ausgeführt wird, nachdem die Controller eine Anfrage erhalten haben.
-
-## Repository-Klassen
-
-Repository-Klassen sind die Schnittstelle zwischen dem Backend und der Datenbank. Sie enthalten Methoden, die es uns ermöglichen, Daten aus der Datenbank abzurufen, zu aktualisieren, zu löschen und zu speichern.
-
-
+## Entwicklung 
 
 | Teammitglied  | möglicher Aufgabenbereich    ?                |
 |---------------|-----------------------------------------------|
@@ -53,31 +17,94 @@ Repository-Klassen sind die Schnittstelle zwischen dem Backend und der Datenbank
 | Frida         | - Datenbankintegration und -zugriff (JPA, Repository)|
 | Maike         | - Implementierung von Vorgangs-API-Endpunkten (GET, POST usw.)|
 
-# To-Do für das Backend könnte ungefähr so aussehen:
 
-## Projektsetup und Architektur
-- [ ] Client-Server-Architektur erstellen.
-- [ ] Backend auf Microservice-Architektur umsetzen.
+## Aufbau und Ausführung
 
-## Backend-Entwicklung
-- [ ] Authentifizierungsfunktionen für Studienbüro und Prüfungsausschussvorsitzenden implementieren.
 
-## API-Routen und Endpunkte
-- [ ] API-Route für Antragstellung durch Studierende implementieren.
-- [ ] API-Route für Dokumentenhochladen im Antrag umsetzen.
-- [ ] API-Route für Herunterladen einer Antragszusammenfassung hinzufügen.
-- [ ] API-Route für Einsehen des Bearbeitungsstatus eines Antrags implementieren.
-- [ ] API-Routen für das Studienbüro zur Bearbeitung von Anträgen umsetzen.
-- [ ] API-Routen für den Prüfungsausschussvorsitzenden zur Genehmigung oder Ablehnung von Anträgen hinzufügen.
+1. Das Projekt klonen oder herunterladen.
+2. Im Projektverzeichnis den folgenden Befehl ausführen:
+    ```shell
+    ./gradlew build
+    ```
 
-## Datenbank
-- [ ] Datenbanktabellen zur Speicherung von Antragsinformationen erstellen.
-- [ ] Logik zur Speicherung und Aktualisierung von Antragsdaten in der Datenbank implementieren.
-- [ ] Mechanismen zur Vermeidung von Dopplungen von Anträgen umsetzen.
+## Projektstruktur
 
-## Sicherheit und Zugriffskontrolle
-- [ ] Sichere Authentifizierung für alle Benutzerrollen implementieren.
-- [ ] Zugriff nur für autorisierte Benutzer sicherstellen.
+### Model-Klassen
+Befinden sich im Verzeichnis `src/main/java/de/swtp13/creditportbackend/model` und definieren die Struktur der in der Datenbank gespeicherten Daten.
 
-## Entwicklungsprozess
-- [ ] CI/CD-Pipeline für automatisierte Tests und Deployment implementieren.
+### Controller-Klassen
+Zu finden unter `src/main/java/de/swtp13/creditportbackend/controller`. Sie behandeln Clientanfragen und leiten sie an die entsprechenden Services weiter.
+
+### Service-Klassen
+Unter `src/main/java/de/swtp13/creditportbackend/service` enthalten und führen die Geschäftslogik aus, die auf die entsprechenden Anfragen folgt.
+
+### Konfigurationsdateien
+Zu finden im Verzeichnis `src/main/resources`.
+
+
+# Verwendung von Lombok
+
+Lombok ist eine coole Java-Bibliothek, die hilft, den Boilerplate-Code zu reduzieren. Mit verschiedenen Annotationen kannst du deinen Code einfacher und sauberer gestalten.
+
+## Gradle Dependency
+
+Folgende Dependency muss für die Verwendung in die  `build.gradle` Datei:
+```
+dependencies {
+compileOnly 'org.projectlombok:lombok'
+annotationProcessor 'org.projectlombok:lombok'
+}
+```
+
+## Kurze Ausführung der wichtigsten Annotationen
+
+### @Data
+
+Ein Shortcut für `@ToString`, `@EqualsAndHashCode`, `@Getter`, `@Setter`, und `@RequiredArgsConstructor`.
+```
+import lombok.Data;
+
+@Data
+public class User {
+private String name;
+private int age;
+}
+```
+
+### @Getter / @Setter
+
+Kein manuelles Schreiben von Getter- und Setter-Methoden mehr nötig.
+```
+import lombok.Getter;
+import lombok.Setter;
+
+public class User {
+@Getter @Setter
+private String name;
+@Getter @Setter
+private int age;
+}
+```
+
+### Konstruktor Annotationen
+
+- `@NoArgsConstructor`: Erstellt einen Konstruktor ohne Parameter.
+- `@RequiredArgsConstructor`: Erstellt einen Konstruktor für alle finalen Felder.
+- `@AllArgsConstructor`: Erstellt einen Konstruktor für alle Felder der Klasse.
+```
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
+
+@NoArgsConstructor
+@RequiredArgsConstructor
+@AllArgsConstructor
+public class User {
+private String name;
+private int age;
+}
+
+```
+
+
+

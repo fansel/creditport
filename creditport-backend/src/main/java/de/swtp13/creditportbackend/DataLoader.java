@@ -1,4 +1,4 @@
-package de.swtp13.creditportbackend.procedures.config;
+package de.swtp13.creditportbackend;
 
 /**
  * DataLoader Klasse zum Laden von Anfangsdaten in die Datenbank.
@@ -8,8 +8,10 @@ package de.swtp13.creditportbackend.procedures.config;
  * @author Felix
  */
 
-import de.swtp13.creditportbackend.procedures.repository.ProcedureRepository;
-import de.swtp13.creditportbackend.procedures.model.Procedure;
+import de.swtp13.creditportbackend.modules.Module;
+import de.swtp13.creditportbackend.modules.ModuleRepository;
+import de.swtp13.creditportbackend.procedures.ProcedureRepository;
+import de.swtp13.creditportbackend.procedures.Procedure;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -21,6 +23,9 @@ public class DataLoader implements CommandLineRunner {
 
     @Autowired  // Diese Annotation ermöglicht die Injektion des ModuleRepository.
     private ProcedureRepository procedureRepository;
+
+    @Autowired  // Diese Annotation ermöglicht die Injektion des ModuleRepository.
+    private ModuleRepository moduleRepository;
 
     /**
      * Diese Methode wird beim Start der Anwendung ausgeführt.
@@ -39,6 +44,41 @@ public class DataLoader implements CommandLineRunner {
 
         // Speichern der Module in der Datenbank
         procedureRepository.save(procedure);
+
+        System.out.println("Module wurden in der Datenbank gesichert !");
+        System.out.println("DataLoader wird ausgeführt!");
+
+        // Erstellen einer Liste von Modulen mit vordefinierten Daten.
+        List<Module> modules = Arrays.asList(
+                new Module("10-201-2012", "Einführung in die objektorientierte Modellierung und Programmierung"),
+                new Module("10-201-2005-2", "Programmierparadigmen"),
+                new Module("10-201-2001-1", "Algorithmen und Datenstrukturen 1"),
+                new Module("10-201-2001-2", "Algorithmen und Datenstrukturen 2"),
+                new Module("10-201-2006-1", "Grundlagen der Technischen Informatik 1"),
+                new Module("10-201-2006-2", "Grundlagen der Technischen Informatik 2"),
+                new Module("", "Betriebs- und Kommunikationssysteme"),
+                new Module("10-201-2108-1", "Logik"),
+                new Module("10-201-2108-2", "Automaten und Sprachen"),
+                new Module("10-201-2009","Berechenbarkeit"),
+                new Module("10-201-2211", "Datenbanksysteme 1"),
+                new Module("10-201-2321", "Software Engineering"),
+                new Module("10-201-2320", "Software Engineering Praktikum"),
+                new Module("10-201-1602", "Diskrete Strukturen"),
+                new Module("10-201-1011", "Analysis"),
+                new Module("10-201-1015", "Lineare Algebra"),
+                new Module("10-201-1802", "Wahrscheinlichkeitstheorie"),
+                new Module("", "Kermodul (Wahlpflichtfach)"),
+                new Module("", "Seminarmodule (Wahlpflichtfach)"),
+                new Module("", "Vertiefungsmodul (Wahlpflichtfach)"),
+                new Module("", "Ergänzungsbereich (Wahlpflichtfach)"),
+                new Module("", "Schlüsselqualifikation (Wahlpflichtfach)"),
+                new Module("10-201-2108-1", "Bachelorseminar")
+        );
+
+
+
+        // Speichern der Module in der Datenbank
+        moduleRepository.saveAll(modules);
 
         System.out.println("Module wurden in der Datenbank gesichert !");
     }

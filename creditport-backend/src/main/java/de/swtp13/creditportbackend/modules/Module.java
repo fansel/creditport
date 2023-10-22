@@ -1,4 +1,4 @@
-package de.swtp13.creditportbackend.modules.model;
+package de.swtp13.creditportbackend.modules;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

@@ -1,6 +1,4 @@
-package de.swtp13.creditportbackend.modules.controller;
-import de.swtp13.creditportbackend.modules.model.Module;
-import de.swtp13.creditportbackend.modules.repository.ModuleRepository;
+package de.swtp13.creditportbackend.modules;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

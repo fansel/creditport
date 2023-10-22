@@ -1,5 +1,5 @@
-package de.swtp13.creditportbackend.modules.repository;
-import de.swtp13.creditportbackend.modules.model.Module;
+package de.swtp13.creditportbackend.modules;
+import de.swtp13.creditportbackend.modules.Module;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

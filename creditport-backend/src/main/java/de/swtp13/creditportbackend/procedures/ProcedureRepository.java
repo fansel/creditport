@@ -1,4 +1,4 @@
-package de.swtp13.creditportbackend.procedures.repository;
+package de.swtp13.creditportbackend.procedures;
 
 
 import de.swtp13.creditportbackend.procedures.Procedure;
