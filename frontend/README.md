@@ -35,8 +35,8 @@ npm run dev -- --open
 | /faq              | Elias     | Seite auf der Fragen beantwortet werden                 |
 | /impressum        | Elias     | |
 | /dashboard        | Leopold   | Übersicht für Bearbeiter                                |
-| /profile          | Leopold   | Email und Passwort ändern                               |
-| /settings         | Leopold   | Allgemeine Einstellungen                                |
+| /profile          | Elias     | Email und Passwort ändern                               |
+| /settings         | Elias     | Allgemeine Einstellungen                                |
 | /procedures       | Leopold   | Liste mit allen Vorgängen                               |
 | /procedures/[id]  | Leopold   | Bearbeitung / Übersicht eines Vorgangs                  |
 | /requests         | Leopold   | Liste aller Anträge (verlinkung zu jeweiligem Vorgang)  |
