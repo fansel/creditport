@@ -12,7 +12,7 @@
     <div class="collapse navbar-collapse" id="navbarsExample04">
       <ul class="navbar-nav me-auto mb-2 mb-md-0">
         <li class="nav-item"><a href="/dashboard" class="nav-link px-2 {$page.data.title == 'Dashboard' ? 'text-dark' : 'text-secondary'}">Dashboard</a></li>
-        <li class="nav-item"><a href="/items" class="nav-link px-2 {$page.data.title == 'Home' ? 'text-dark' : 'text-secondary'}">Offene</a></li>
+        <li class="nav-item"><a href="/procedures" class="nav-link px-2 {$page.data.title == 'Vorgänge' ? 'text-dark' : 'text-secondary'}">Vorgänge</a></li>
 
         <li class="nav-item"><a href="/items" class="nav-link px-2 {$page.data.title == 'Faq' ? 'text-dark' : 'text-secondary'}">Markierte</a></li>
         <li class="nav-item"><a href="/items" class="nav-link px-2 {$page.data.title == 'Impressum' ? 'text-dark' : 'text-secondary'}">Archiv</a></li>

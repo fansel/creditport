@@ -4,7 +4,6 @@
 
   export let data;
 
-  console.log(new Date());
 </script>
 
 <div class="row py-3 mb-3 pb-md-1 border-bottom align-items-center">
