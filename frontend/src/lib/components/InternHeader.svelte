@@ -26,7 +26,7 @@
         </a>
         <ul class="dropdown-menu text-small">
           <li><a class="dropdown-item" href="#">Einstellungen</a></li>
-          <li><a class="dropdown-item" href="#">Profil</a></li>
+          <li><a class="dropdown-item" href="/profile">Profil</a></li>
           <li><hr class="dropdown-divider" /></li>
           <li><a class="dropdown-item" href="#">Logout</a></li>
         </ul>
