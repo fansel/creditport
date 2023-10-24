@@ -56,7 +56,7 @@ public class DataLoader implements CommandLineRunner {
                 new Module("10-201-2001-2", "Algorithmen und Datenstrukturen 2",""),
                 new Module("10-201-2006-1", "Grundlagen der Technischen Informatik 1",""),
                 new Module("10-201-2006-2", "Grundlagen der Technischen Informatik 2",""),
-                new Module("", "Betriebs- und Kommunikationssysteme",""),
+                new Module("10-201-2004", "Betriebs- und Kommunikationssysteme",""),
                 new Module("10-201-2108-1", "Logik",""),
                 new Module("10-201-2108-2", "Automaten und Sprachen",""),
                 new Module("10-201-2009","Berechenbarkeit",""),
