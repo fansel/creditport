@@ -21,4 +21,5 @@ public class Module {
     @Id
     private String number;
     private String name;
+    private String beschreibung;
 }

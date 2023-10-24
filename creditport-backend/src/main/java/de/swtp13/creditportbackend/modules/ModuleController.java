@@ -23,7 +23,7 @@ public class ModuleController {
 
     @GetMapping
     public List<Module> getAllModules() {
-
+        System.out.println("Get all modules");
         return moduleRepository.findAll();
     }
 }
