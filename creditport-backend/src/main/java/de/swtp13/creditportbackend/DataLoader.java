@@ -36,17 +36,17 @@ public class DataLoader implements CommandLineRunner {
      */
     @Override
     public void run(String... args) throws Exception {
-        System.out.println("Test-Procedure wird erstellt!");
+        System.out.println("Test procedure is being created!");
 
         // Erstellen einer Liste von Modulen mit vordefinierten Daten.
-        Procedure procedure = new Procedure(1,"Nur ein Test-Procedure");
+        Procedure procedure = new Procedure(1,"only a test procedure");
 
 
         // Speichern der Module in der Datenbank
         procedureRepository.save(procedure);
 
-        System.out.println("Module wurden in der Datenbank gesichert !");
-        System.out.println("DataLoader wird ausgeführt!");
+        System.out.println("Procedures were saved in the database!");
+        System.out.println("DataLoader is being executed!");
 
         // Erstellen einer Liste von Modulen mit vordefinierten Daten.
         List<Module> modules = Arrays.asList(
@@ -80,6 +80,6 @@ public class DataLoader implements CommandLineRunner {
         // Speichern der Module in der Datenbank
         moduleRepository.saveAll(modules);
 
-        System.out.println("Module wurden in der Datenbank gesichert !");
+        System.out.println("Modules were saved in the database!");
     }
 }
