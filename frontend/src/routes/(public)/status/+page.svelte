@@ -1,24 +1,87 @@
+<script>
+  let uuid = '';
+  let inputSuccess = false;
+
+  let fields = [];
+
+  function clear($event) {
+    $event.target.value = '';
+  }
+
+  function onPaste($event) {
+    console.log('paste');
+    const data = $event.clipboardData.getData('text');
+    const value = data.replace(/ /g, '').split('');
+
+    if (!value.some((number) => !checkNumber(number))) {
+      if (value.length === fields.length) {
+        fields.forEach((field, index) => {
+          field.value = value[index];
+          submit();
+        });
+      }
+    } else {
+      return;
+    }
+  }
+
+  function onKeyUp($event) {
+    console.log('keyup');
+    const field = $event.target;
+    const value = field.value;
+    const index = findIndexInArray(fields, field);
+
+    if ($event.key === 'Backspace' && index > 0) {
+      field.previousElementSibling.focus();
+    }
+
+    if (checkNumber(value)) {
+      if (value.length > 0 && index < fields.length - 1) {
+        field.nextElementSibling.focus();
+      }
+
+      if (field.value !== '' && index === fields.length - 1) {
+        submit();
+      }
+    } else {
+      clear($event);
+    }
+  }
+
+  function submit() {
+    fields.forEach((field, index) => {
+      uuid += field.value;
+      field.disabled = true;
+    });
+
+    inputSuccess = true;
+  }
+
+  function checkNumber(number) {
+    return /[0-9]/g.test(number);
+  }
+
+  const findIndexInArray = (array, targetObject) => array.findIndex((item) => item === targetObject);
+</script>
+
 <div class="mt-5 d-flex flex-column align-items-center">
   <h1 class="display-4 fw-bold text-body-emphasis">Statusabfrage</h1>
   <p class="lead">Gib deine Vorgangsnummer an und erhalte alle Infos zum aktuellen Bearbeitungsstand deines Vorgangs.</p>
 
-  <form action="" class="status-form rounded-3 mb-4">
-    <div class="digit-fields">
-      <input type="text" class="digit" maxlength="1" autofocus />
-      <input type="text" class="digit" maxlength="1" />
-      <input type="text" class="digit" maxlength="1" />
-      <input type="text" class="digit" maxlength="1" />
-      <input type="text" class="digit" maxlength="1" />
-      <input type="text" class="digit" maxlength="1" />
+  <div class="mt mb-4">
+    <div class="digit-field mb-4">
+      {#each [1, 2, 3, 4, 5, 6] as nb, index}
+        <input type="text" class="digit" maxlength="1" bind:this={fields[index]} on:focus={clear} on:keydown={clear} on:paste={onPaste} on:keyup={onKeyUp} />
+      {/each}
     </div>
 
-    <!-- <div class="form-floating mb-3">
+    <!-- <div class="form-floating mb-3" 123455>
       <input type="text" class="form-control" id="vorgangsnummerInput" />
       <label for="vorgangsnummerInput">Vorgangsnummer</label>
     </div> -->
 
-    <button class="btn btn-primary">Status abfragen</button>
-  </form>
+    <a class="btn btn-primary {inputSuccess ? '' : 'disabled'}" href="/status/{uuid}">Status abfragen</a>
+  </div>
 </div>
 
 <style>
@@ -28,8 +91,8 @@
   }
 
   .digit {
-    width: 4.9rem;
-    padding: 1.5rem;
+    width: 3.9rem;
+    padding: 1rem;
     font-size: 1.5rem;
     border: none;
     outline: 1px solid #6c757d;
@@ -53,7 +116,8 @@
     margin: 0 3rem 0 0;
   }
 
-  .status-form {
+  .digit:disabled {
+    opacity: 0.3;
   }
 
   @media screen and (max-width: 768px) {
