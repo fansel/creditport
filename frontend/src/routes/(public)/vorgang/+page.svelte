@@ -2,6 +2,8 @@
   export let data;
 
   const modules = data.modules;
+
+  let selectedModul = 0;
 </script>
 
 <ul class="status-list my-3 m-0 p-0" id="pills-tab" role="tablist">
@@ -119,12 +121,14 @@
 
                 <div class="mb-3">
                   <label for="" class="mb-2">Name</label>
-                  <select class="form-select" aria-label="Default select example">
-                    {#each modules as modul}
-                      <option value={modul.name}>{modul.name}</option>
+                  <select class="form-select" aria-label="Default select example" bind:value={selectedModul}>
+                    {#each modules as modul, index}
+                      <option value={index}>{modul.name}</option>
                     {/each}
                   </select>
                 </div>
+
+                <p>{modules[selectedModul].description ?? ''}</p>
               </div>
             </div>
           </div>
