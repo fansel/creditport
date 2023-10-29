@@ -18,7 +18,7 @@ public class ProcedureService {
 
         Procedure procedure = new Procedure();
 
-        procedure.setId(id);
+        procedure.setProcedureId(id);
         procedureRepository.save(procedure);
         return procedure;
     }

@@ -1,32 +1,56 @@
 package de.swtp13.creditportbackend.procedures;
 
 import de.swtp13.creditportbackend.modules.Module;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import de.swtp13.creditportbackend.request.Request;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+
 import de.swtp13.creditportbackend.procedures.util.IDGenerator;
 
-@Entity
+@Entity(name = "Procedures")
 @Table(name = "procedures")
 @Data
 @NoArgsConstructor // Lombok generiert einen Konstruktor ohne Parameter
 public class Procedure {
 
     @Id
-    private String id = IDGenerator.generateID(); // Automatische Generierung einer eindeutigen ID bei Erstellung eines Procedure-Objekts
+    @Column(
+            name = "procedureId",
+            nullable = false
+    )
+    private String procedureId = IDGenerator.generateID(); // Automatische Generierung einer eindeutigen ID bei Erstellung eines Procedure-Objekts
+    @Column(
+            name = "status",
+            columnDefinition = "INT",
+            // Zugehöriger Status muss noch festgelegt werden, z.B. nicht geoeffnet, goeffnet, bearbeitet, abgelehnt, angenommen, Nachfrage noetig
+            nullable = false
+    )
     private int status;
+    @Column(
+            name = "annotation",
+            columnDefinition = "TEXT"
+    )
     private String annotation;
+    @Column(
+            name = "university",
+            columnDefinition = "TEXT"
+    )
     private String university;
-    private String course;
+    @Column(
+            name = "courseName",
+            columnDefinition = "TEXT"
+    )
+    private String courseName;
 
-
-
+    @OneToMany(
+            mappedBy = "procedure"
+    )
+    private Set<Request> requests;
 
 
 
