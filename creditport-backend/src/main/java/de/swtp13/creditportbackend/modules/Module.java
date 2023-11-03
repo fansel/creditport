@@ -1,5 +1,6 @@
 package de.swtp13.creditportbackend.modules;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -11,15 +12,30 @@ import lombok.NoArgsConstructor;
  * @author Felix
  * Diese Klasse repräsentiert ein Modul.
  */
-@Entity
+@Entity(name = "Modules")
 @Table(name = "modules")
+
 @Data // Erstellt Getter, Setter und toString automatisch
 @NoArgsConstructor // Erstellt den Standardkonstruktor
 @AllArgsConstructor // Erstellt einen Konstruktor mit allen Feldern als Parameter
 public class Module {
 
     @Id
+    @Column(
+            name = "number",
+            columnDefinition = "Text"
+    )
     private String number;
-    private String name;
-    private String description;
+    @Column(
+            name = "moduleName",
+            nullable = false,
+            columnDefinition = "TEXT"
+    )
+    private String moduleName;
+    @Column(
+            name = "moduleDescription",
+            nullable = false,
+            columnDefinition = "TEXT"
+    )
+    private String moduleDescription;
 }
