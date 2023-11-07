@@ -123,12 +123,12 @@
                   <label for="" class="mb-2">Name</label>
                   <select class="form-select" aria-label="Default select example" bind:value={selectedModul}>
                     {#each modules as modul, index}
-                      <option value={index}>{modul.name}</option>
+                      <option value={index}>{modul.moduleName}</option>
                     {/each}
                   </select>
                 </div>
 
-                <p>{modules[selectedModul].description ?? ''}</p>
+                <p>{modules[selectedModul].moduleDescription ?? ''}</p>
               </div>
             </div>
           </div>
