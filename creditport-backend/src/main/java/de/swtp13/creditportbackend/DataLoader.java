@@ -239,23 +239,18 @@ public class DataLoader implements CommandLineRunner {
                         "    Eigenwerte.\n" +
                         "    Numerische Lösung linearer Gleichungssysteme."),
                 new Module("10-201-1802", "Wahrscheinlichkeitstheorie",
-                        "Nach der Teilnahme am Modul \"Wahrscheinlichkeitstheorie\" erlangen die Studierenden folgende Fähigkeiten:\n" +
-                        "    Definition und Kenntnis grundlegender Begriffe aus der Wahrscheinlichkeitstheorie, einschließlich Wahrscheinlichkeit (klassisch, statistisch und axiomatisch), bedingte Wahrscheinlichkeit, stochastische Unabhängigkeit, Zufallsgröße, Verteilungsfunktion, Erwartungswert und Varianz sowie deren Eigenschaften.\n" +
-                        "    Kenntnis der wichtigsten stetigen und diskreten Wahrscheinlichkeitsverteilungen (z.B., Binomialverteilung, Hypergeometrische Verteilung, Poisson-Verteilung, Exponentialverteilung, Normalverteilung) und Fähigkeit, konkrete Beispiele diesen Verteilungen zuzuordnen.\n" +
-                        "    Fähigkeit zur Bearbeitung und Diskussion von Fragestellungen aus dem Bereich der Wahrscheinlichkeitstheorie, auch in kleinen Gruppen.\n" +
-                        "\n" +
-                        "Die Inhalt des Moduls umfasst die folgenden Themen:\n" +
-                        "    Behandlung von diskreten Wahrscheinlichkeitsräumen und Wahrscheinlichkeiten mit Dichten.\n" +
-                        "    Grundlegende Konzepte wie Erwartungswert, Varianz, Unabhängigkeit und Zufallsgrößen.\n" +
-                        "    Beispiele für Wahrscheinlichkeitsverteilungen.\n" +
-                        "    Das Gesetz der Großen Zahlen und der Satz von Moivre-Laplace.\n" +
+                        "Das Modul umfasst die folgenden Themen:" +
+                        "    Behandlung von diskreten Wahrscheinlichkeitsräumen und Wahrscheinlichkeiten mit Dichten," +
+                        "    grundlegende Konzepte wie Erwartungswert, Varianz, Unabhängigkeit und Zufallsgrößen, " +
+                        "    Beispiele für Wahrscheinlichkeitsverteilungen, " +
+                        "    das Gesetz der Großen Zahlen und der Satz von Moivre-Laplace, " +
                         "    Einführende Betrachtungen zur mathematischen Statistik, einschließlich Schätztheorie, Konfidenzbereiche und Testtheorie."),
                 new Module("", "Seminarmodule (Wahlpflichtfach)",""),
                 new Module("", "Kermodul (Wahlpflichtfach)",""),
                 new Module("", "Vertiefungsmodul (Wahlpflichtfach)",""),
                 new Module("", "Ergänzungsbereich (Wahlpflichtfach)",""),
                 new Module("", "Schlüsselqualifikation (Wahlpflichtfach)",""),
-                new Module("10-201-2108-1", "Bachelorseminar","Nach der Teilnahme am Bachelorseminar erlangen die Studierenden folgende Fähigkeiten:\n"+
+                new Module("10-201-2108-1", "Bachelorseminar","Nach der  Teilnahme am Bachelorseminar erlangen die Studierenden folgende Fähigkeiten:\n"+
                         "Selbständige Einarbeitung in ein wissenschaftliches Thema der Informatik\n" +
                         "Vorbereitung auf die Bachelorarbeit\n" +
                         "Präsentation selbst erarbeiteten Wissens")
