@@ -21,7 +21,7 @@ import java.util.Arrays;
 @Component  // Diese Annotation gibt an, dass diese Klasse ein Component ist, und von Spring automatisch erkannt und instanziiert wird.
 public class DataLoader implements CommandLineRunner {
 
-    @Autowired  // Diese Annotation ermöglicht die Injektion des ModuleRepository.
+    @Autowired  // Diese Annotation ermöglicht die Injektion des ProcedureRepository.
     private ProcedureRepository procedureRepository;
 
     @Autowired  // Diese Annotation ermöglicht die Injektion des ModuleRepository.
