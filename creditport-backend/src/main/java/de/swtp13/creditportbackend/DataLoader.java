@@ -97,7 +97,7 @@ public class DataLoader implements CommandLineRunner {
                         "    Darstellung, Entwurfsminimierung und Realisierung digitaler Schaltungen.\n" +
                         "    Den Aufbau und die Funktionsweise von Rechnersystemen und deren Peripheriegeräte."),
                 new Module("10-201-2004", "Betriebs- und Kommunikationssysteme",
-                        "Nach der aktiven Teilnahme am Modul \"Betriebs- und Kommunikationssysteme\" sind die Studierenden in der Lage, folgende Fähigkeiten zu erlangen:\n" +
+                        "Nach der Teilnahme am Modul \"Betriebs- und Kommunikationssysteme\" sind die Studierenden in der Lage, folgende Fähigkeiten zu erlangen:\n" +
                         "    Sie können die Grundlagen des Internets, einschließlich seiner Technologien und Konzepte, erläutern.\n" +
                         "    Die Studierenden sind in der Lage, die Aufgaben, die von den einzelnen Schichten des TCP/IP-Protokoll-Stacks wahrgenommen werden, zu definieren und die grundlegenden Protokolle, die in diesem Zusammenhang eine Rolle spielen, zu erklären.\n" +
                         "    Die Studierenden können einfache Client/Server-Anwendungen sowie Peer-to-Peer-Anwendungen entwickeln.\n" +
@@ -111,7 +111,7 @@ public class DataLoader implements CommandLineRunner {
                         "    Anwendung von Client/Server- und Peer-to-Peer-Paradigmen in Internetanwendungen\n" +
                         "    Untersuchung spezifischer Anwendungen wie E-Mail, World Wide Web, Internet-Suchmaschinen, Peer-to-Peer-Dateienaustausch und Peer-to-Peer-Instant-Messaging."),
                 new Module("10-201-2108-1", "Logik",
-                        "Nach der aktiven Teilnahme am Modul \"Logik\" können die Studierenden:\n" +
+                        "Nach der Teilnahme am Modul \"Logik\" können die Studierenden:\n" +
                         "    Sachverhalte präzise formalisieren, indem sie Aussagen- und Prädikatenlogik anwenden.\n" +
                         "    Bestimmen, ob eine Formel aus anderen logisch hergeleitet werden kann.\n" +
                         "    Grundlegende automatische und formale Beweisverfahren nutzen.\n" +
@@ -137,7 +137,7 @@ public class DataLoader implements CommandLineRunner {
                         "    Keller-Automaten und kontextfreie Sprachen\n" +
                         "    Kontextsensitive Sprachen."),
                 new Module("10-201-2009","Berechenbarkeit",
-                        "Nach der aktiven Teilnahme am Modul \"Berechenbarkeit\" erwerben die Studierenden die Fähigkeit:\n" +
+                        "Nach der Teilnahme am Modul \"Berechenbarkeit\" erwerben die Studierenden die Fähigkeit:\n" +
                         "    Grundlegende Begriffe und Konzepte aus der Algorithmentheorie und der Komplexitätstheorie präzise zu formalisieren.\n" +
                         "    Mathematische Aussagen bezüglich Berechenbarkeitskonzepten zu überprüfen, nachzuweisen oder zu widerlegen.\n" +
                         "    Grundlegende formale Beweisverfahren für Entscheidbarkeits-, Berechenbarkeits- und Komplexitätsfragen anzuwenden.\n" +
@@ -153,7 +153,7 @@ public class DataLoader implements CommandLineRunner {
                         "    Halteproblem\n" +
                         "    Elemente der Komplexitätstheorie"),
                 new Module("10-201-2211", "Datenbanksysteme 1",
-                        "Nach dem Modul \"Datenbanksysteme 1\" beherrschen Studierende:\n" +
+                        "Nach der Teilnahme am Modul \"Datenbanksysteme 1\" beherrschen Studierende:\n" +
                         "    Grundlagen von Datenbanksystemen für große Datensätze.\n" +
                         "    Modellierung in Entity-Relationship und UML-Klassendiagrammen anhand von Anwendungsbeschreibungen.\n" +
                         "    Kenntnisse über relationale Datenbanksysteme, Relationenalgebra und SQL-Abfragen.\n" +
@@ -166,7 +166,7 @@ public class DataLoader implements CommandLineRunner {
                         "    Das relationale Modell und Normalformen\n" +
                         "    Relationenalgebra und SQL-Abfragen."),
                 new Module("10-201-2321", "Software Engineering",
-                        "Nach der aktiven Teilnahme am Modul \"Software Engineering\" sind die Studierenden in der Lage:\n" +
+                        "Nach der Teilnahme am Modul \"Software Engineering\" sind die Studierenden in der Lage:\n" +
                         "    Prinzipien, Methoden und Werkzeuge für die ingenieurmäßige Entwicklung und Anwendung umfangreicher Software-Systeme zu verstehen und anzuwenden.\n" +
                         "    Verschiedene Vorgehensweisen der Softwareentwicklung zu vergleichen und anhand von Anwendungsbeispielen darzustellen.\n" +
                         "\n" +
@@ -178,7 +178,7 @@ public class DataLoader implements CommandLineRunner {
                         "    Untersuchung leicht- und schwergewichtiger Entwicklungsprozesse.\n" +
                         "    Behandlung ausgewählter Diagramme der UML in Bezug auf Notation und Verwendung sowie modellbasierte Entwicklung."),
                 new Module("10-201-2320", "Software Engineering Praktikum",
-                        "Nach der aktiven Teilnahme am Modul \"Software Engineering Praktikum\" erwerben die Studierenden die Fähigkeit:\n" +
+                        "Nach der Teilnahme am Modul \"Software Engineering Praktikum\" erwerben die Studierenden die Fähigkeit:\n" +
                         "    Die Aufgabenstellung eines größeren IT-Projekts im Team zu analysieren und deren Umsetzung gemeinsam zu organisieren.\n" +
                         "    Verschiedene Rollen innerhalb eines IT-Projekts selbstständig zu übernehmen.\n" +
                         "    Kommunikationsmittel systematisch zur Planung, Vorbereitung, Durchführung und Auswertung angemessen einzusetzen.\n" +
@@ -191,7 +191,7 @@ public class DataLoader implements CommandLineRunner {
                         "    Erstellung von begleitender Projekt- und Produkt-Dokumentation, darunter Design-Beschreibungen, Javadoc-Kommentare und Inline-Kommentare.\n" +
                         "    Regelmäßige Reviews wichtiger Entwicklungsphasen zu vorgegebenen Terminen."),
                 new Module("10-201-1602", "Diskrete Strukturen",
-                        "Nach der aktiven Teilnahme am Modul \"Diskrete Strukturen\" erlangen die Studierenden folgende Fähigkeiten:\n" +
+                        "Nach der Teilnahme am Modul \"Diskrete Strukturen\" erlangen die Studierenden folgende Fähigkeiten:\n" +
                         "    Präzise formale Spezifikation grundlegender Begriffe und Konzepte aus der diskreten Mathematik.\n" +
                         "    Überprüfung algebraischer Aussagen im Zusammenhang mit diskreten Strukturen, sowie die Fähigkeit, diese nachzuweisen oder zu widerlegen.\n" +
                         "    Anwendung grundlegender formaler Beweisverfahren im Kontext diskreter Strukturen.\n" +
@@ -206,7 +206,7 @@ public class DataLoader implements CommandLineRunner {
                         "    Boolesche Algebren.\n" +
                         "    Anwendungen dieser Konzepte in der Informatik."),
                 new Module("10-201-1011", "Analysis",
-                        "Nach der aktiven Teilnahme am Modul \"Analysis\" erwerben die Studierenden folgende Fähigkeiten:\n" +
+                        "Nach der Teilnahme am Modul \"Analysis\" erwerben die Studierenden folgende Fähigkeiten:\n" +
                         "    Definition und Erklärung grundlegender analytischer Begriffe, einschließlich Folgen und Reihen, Funktionen, Stetigkeit, Differentiation und Integration.\n" +
                         "    Verständnis des deduktiven Aufbaus der Mathematik.\n" +
                         "    Kenntnis mathematischer Beweismethoden wie direkter und indirekter Beweis sowie vollständige Induktion und die Fähigkeit, mathematische Beweise nachzuvollziehen.\n" +
@@ -223,7 +223,7 @@ public class DataLoader implements CommandLineRunner {
                         "    Lösungsformeln für spezielle gewöhnliche Differentialgleichungen erster Ordnung, sowohl lineare als auch separierbare.\n" +
                         "    Interpolation und das Newton-Verfahren oder approximative Differentiation und Integration."),
                 new Module("10-201-1015", "Lineare Algebra",
-                        "Nach der aktiven Teilnahme am Modul \"Lineare Algebra\" erwerben die Studierenden die folgenden Fähigkeiten:\n" +
+                        "Nach der Teilnahme am Modul \"Lineare Algebra\" erwerben die Studierenden die folgenden Fähigkeiten:\n" +
                         "    Definition und Kenntnis grundlegender Begriffe der Linearen Algebra wie Vektorraum, Lineare Abbildung, Matrix und Determinante sowie deren Eigenschaften.\n" +
                         "    Anwendung mathematischer Beweismethoden, darunter direkter und indirekter Beweis sowie vollständige Induktion, zur Lösung von Problemstellungen im Zusammenhang mit der Linearen Algebra.\n" +
                         "    Fähigkeit zur Bearbeitung und Diskussion von Fragestellungen aus dem Bereich der Linearen Algebra, auch in kleinen Gruppen.\n" +
@@ -239,7 +239,7 @@ public class DataLoader implements CommandLineRunner {
                         "    Eigenwerte.\n" +
                         "    Numerische Lösung linearer Gleichungssysteme."),
                 new Module("10-201-1802", "Wahrscheinlichkeitstheorie",
-                        "Nach der aktiven Teilnahme am Modul \"Wahrscheinlichkeitstheorie\" erlangen die Studierenden folgende Fähigkeiten:\n" +
+                        "Nach der Teilnahme am Modul \"Wahrscheinlichkeitstheorie\" erlangen die Studierenden folgende Fähigkeiten:\n" +
                         "    Definition und Kenntnis grundlegender Begriffe aus der Wahrscheinlichkeitstheorie, einschließlich Wahrscheinlichkeit (klassisch, statistisch und axiomatisch), bedingte Wahrscheinlichkeit, stochastische Unabhängigkeit, Zufallsgröße, Verteilungsfunktion, Erwartungswert und Varianz sowie deren Eigenschaften.\n" +
                         "    Kenntnis der wichtigsten stetigen und diskreten Wahrscheinlichkeitsverteilungen (z.B., Binomialverteilung, Hypergeometrische Verteilung, Poisson-Verteilung, Exponentialverteilung, Normalverteilung) und Fähigkeit, konkrete Beispiele diesen Verteilungen zuzuordnen.\n" +
                         "    Fähigkeit zur Bearbeitung und Diskussion von Fragestellungen aus dem Bereich der Wahrscheinlichkeitstheorie, auch in kleinen Gruppen.\n" +
@@ -255,7 +255,7 @@ public class DataLoader implements CommandLineRunner {
                 new Module("", "Vertiefungsmodul (Wahlpflichtfach)",""),
                 new Module("", "Ergänzungsbereich (Wahlpflichtfach)",""),
                 new Module("", "Schlüsselqualifikation (Wahlpflichtfach)",""),
-                new Module("10-201-2108-1", "Bachelorseminar","Nach der aktiven Teilnahme am Bachelorseminar erlangen die Studierenden folgende Fähigkeiten:\n"+
+                new Module("10-201-2108-1", "Bachelorseminar","Nach der Teilnahme am Bachelorseminar erlangen die Studierenden folgende Fähigkeiten:\n"+
                         "Selbständige Einarbeitung in ein wissenschaftliches Thema der Informatik\n" +
                         "Vorbereitung auf die Bachelorarbeit\n" +
                         "Präsentation selbst erarbeiteten Wissens")
