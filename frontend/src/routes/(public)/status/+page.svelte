@@ -8,12 +8,14 @@
     $event.target.value = '';
   }
 
+  // Handler für das Paste Event
   function onPaste($event) {
-    console.log('paste');
     const data = $event.clipboardData.getData('text');
     const value = data.replace(/ /g, '').split('');
 
+    //Prüft ob alle Werte des Zwischenablage Nummern sind
     if (!value.some((number) => !checkNumber(number))) {
+      //Der einzufügende Wert muss genau 6 Stellen haben
       if (value.length === fields.length) {
         fields.forEach((field, index) => {
           field.value = value[index];
@@ -25,12 +27,13 @@
     }
   }
 
+  //Handler für das Event wenn eine Taste im Input Feld gedrückt wird
   function onKeyUp($event) {
-    console.log('keyup');
     const field = $event.target;
     const value = field.value;
-    const index = findIndexInArray(fields, field);
+    const index = findIndexInArray(fields, field); //Bestimmt an welcher Stelle der Input steht
 
+    //Wenn die löschen Taste gedrückt wird
     if ($event.key === 'Backspace' && index > 0) {
       field.previousElementSibling.focus();
     }
@@ -49,10 +52,14 @@
   }
 
   function submit() {
+    //Baue noch einen Check ein ob auch wirklich alle Felder eingetragen sind
+
     fields.forEach((field, index) => {
       uuid += field.value;
       field.disabled = true;
     });
+
+    //Zusätlich sollte serverseitig angefragt werden ob diese uuid überhaupt exisitert
 
     inputSuccess = true;
   }
@@ -74,11 +81,6 @@
         <input type="text" class="digit" maxlength="1" bind:this={fields[index]} on:focus={clear} on:keydown={clear} on:paste={onPaste} on:keyup={onKeyUp} />
       {/each}
     </div>
-
-    <!-- <div class="form-floating mb-3" 123455>
-      <input type="text" class="form-control" id="vorgangsnummerInput" />
-      <label for="vorgangsnummerInput">Vorgangsnummer</label>
-    </div> -->
 
     <a class="btn btn-primary {inputSuccess ? '' : 'disabled'}" href="/status/{uuid}">Status abfragen</a>
   </div>
@@ -121,10 +123,14 @@
   }
 
   @media screen and (max-width: 768px) {
-    .status-form {
-      max-width: 100%;
-      margin-left: 1rem;
-      margin-right: 1rem;
+    .digit {
+      width: 2.7rem;
+      padding: 0.75rem;
+      font-size: 1rem;
+      margin: 0 0.5rem 0 0;
+    }
+    .digit:nth-child(3) {
+      margin: 0 1.25rem 0 0;
     }
   }
 </style>
