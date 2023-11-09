@@ -9,7 +9,6 @@ COPY .env /app/.env
 
 # Die JAR-Datei in das Arbeitsverzeichnis des Containers kopieren
 COPY build/libs/creditport-backend-0.0.1-SNAPSHOT.jar /app/creditport-backend.jar
-
 # Port freigeben, auf dem die Anwendung laufen soll
 EXPOSE 8080
 

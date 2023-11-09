@@ -10,4 +10,7 @@ class CreditPortApplicationTests {
 	void contextLoads() {
 	}
 
+	//Add test if modules are returned correctly
+
+
 }
