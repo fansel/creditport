@@ -12,11 +12,16 @@ import de.swtp13.creditportbackend.modules.Module;
 import de.swtp13.creditportbackend.modules.ModuleRepository;
 import de.swtp13.creditportbackend.procedures.ProcedureRepository;
 import de.swtp13.creditportbackend.procedures.Procedure;
+import de.swtp13.creditportbackend.request.Request;
+import de.swtp13.creditportbackend.request.RequestRepository;
+import de.swtp13.creditportbackend.users.User;
+import de.swtp13.creditportbackend.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Arrays;
+import java.util.Set;
 
 @Component  // Diese Annotation gibt an, dass diese Klasse ein Component ist, und von Spring automatisch erkannt und instanziiert wird.
 public class DataLoader implements CommandLineRunner {
@@ -27,6 +32,14 @@ public class DataLoader implements CommandLineRunner {
     @Autowired  // Diese Annotation ermöglicht die Injektion des ModuleRepository.
     private ModuleRepository moduleRepository;
 
+    @Autowired
+    private RequestRepository requestRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+
+
     /**
      * Diese Methode wird beim Start der Anwendung ausgeführt.
      * Sie initialisiert und speichert eine Liste von Modulen in der Datenbank.
@@ -36,17 +49,25 @@ public class DataLoader implements CommandLineRunner {
      */
     @Override
     public void run(String... args) throws Exception {
+        System.out.println("DataLoader is being executed!");
+
         System.out.println("Test procedure is being created!");
 
-        // Erstellen einer Liste von Modulen mit vordefinierten Daten.
-        Procedure procedure = new Procedure(1,"only a test procedure");
-
-
-        // Speichern der Module in der Datenbank
+        // Erstelle einen neuen Vorgang mit Antrag 1
+        Procedure procedure = new Procedure("1",1,"only a test procedure",
+                "Universitaet Leipzig","Informatik Bachelor");
+        // Speichern des Vorgangs in der Datenbank
         procedureRepository.save(procedure);
 
         System.out.println("Procedures were saved in the database!");
-        System.out.println("DataLoader is being executed!");
+
+        //Erstelle einen neuen Antrag
+        Request request = new Request("1",procedure,"10-201-2001-2",
+                "testId","Algorithmen und Datenstrukturen 1",5);
+        requestRepository.save(request);
+        System.out.println("Requests were saved in the database!");
+
+
 
         // Erstellen einer Liste von Modulen mit vordefinierten Daten.
         List<Module> modules = Arrays.asList(
@@ -262,5 +283,9 @@ public class DataLoader implements CommandLineRunner {
         moduleRepository.saveAll(modules);
 
         System.out.println("Modules were saved in the database!");
+
+        User testUser = new User(1,"testUser","password",0);
+        userRepository.save(testUser);
+        System.out.println("Users were saved in the database!");
     }
 }
