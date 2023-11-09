@@ -2,6 +2,7 @@ package de.swtp13.creditportbackend.request;
 
 import de.swtp13.creditportbackend.procedures.Procedure;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,28 +10,29 @@ import lombok.NoArgsConstructor;
 @Table(name = "requests")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Request {
     @Id
     @Column(
-            name = "requestId",
-            columnDefinition = "TEXT"
+            name = "request_id",
+            columnDefinition = "VARCHAR"
     )
     private String requestId;
     @ManyToOne()
     @JoinColumn(
-            name="procedureId",
+            name="procedure_id",
             nullable=false
     )
     private Procedure procedure;
     @Column(
-            name = "externalModuleId",
-            columnDefinition = "TEXT",
+            name = "external_module_id",
+            columnDefinition = "VARCHAR",
             nullable = false
     )
     private String externalModuleId;
     @Column(
-            name = "internalModuleId",
-            columnDefinition = "TEXT",
+            name = "internal_module_id",
+            columnDefinition = "VARCHAR",
             nullable = false
     )
     private String internalModuleId;
@@ -43,7 +45,7 @@ public class Request {
     )
     private String annotation;
     @Column(
-            name = "creditPoints",
+            name = "credit_points",
             columnDefinition = "INT",
             nullable = false
     )
