@@ -38,12 +38,12 @@ public class Procedure {
     private String annotation;
     @Column(
             name = "university",
-            columnDefinition = "TEXT"
+            columnDefinition = "VARCHAR"
     )
     private String university;
     @Column(
             name = "courseName",
-            columnDefinition = "TEXT"
+            columnDefinition = "VARCHAR"
     )
     private String courseName;
 

@@ -23,19 +23,19 @@ public class Module {
     @Id
     @Column(
             name = "number",
-            columnDefinition = "Text"
+            columnDefinition = "VARCHAR"
     )
     private String number;
     @Column(
             name = "moduleName",
             nullable = false,
-            columnDefinition = "TEXT"
+            columnDefinition = "VARCHAR"
     )
     private String moduleName;
     @Column(
             name = "moduleDescription",
             nullable = false,
-            columnDefinition = "TEXT"
+            columnDefinition = "VARCHAR"
     )
     private String moduleDescription;
 }
