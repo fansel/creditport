@@ -27,15 +27,22 @@ public class Module {
     )
     private String number;
     @Column(
-            name = "moduleName",
+            name = "module_name",
             nullable = false,
             columnDefinition = "VARCHAR"
     )
     private String moduleName;
+    //@Column(
+      //      name = "creditPoints",
+        //    nullable = false,
+          //  columnDefinition = "INT"
+    //)
+    //private int creditpoints;
     @Column(
-            name = "moduleDescription",
+           name = "module_description",
             nullable = false,
-            columnDefinition = "VARCHAR"
+           columnDefinition = "VARCHAR"
     )
     private String moduleDescription;
+
 }
