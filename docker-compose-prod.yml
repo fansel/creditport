@@ -1,0 +1,11 @@
+version: "3.8"
+
+services:
+  frontend:
+    container_name: creditport-frontend
+    image: swtp2023/creditport:frontend-latest
+    ports:
+      - 172.26.92.92:3000:80
+    restart: unless-stopped
+
+    

@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  frontend:
+    container_name: creditport-frontend
+    build:
+      context: ./frontend/
+      dockerfile: Dockerfile
+      target: development
+    ports:
+      - 3000:3000
+    volumes:
+      - ./frontend/:/app
+    restart: unless-stopped
