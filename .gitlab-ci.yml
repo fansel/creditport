@@ -32,7 +32,7 @@ build_frontend:
   tags:
     - vm
   only:
-    - main
+    - developer
    
 deploy:
   stage: deploy
@@ -47,7 +47,7 @@ deploy:
         docker compose pull &&
         docker compose up -d"
   only:
-    - main
+    - developer
   
 
 # build_backend_image:
