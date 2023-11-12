@@ -5,21 +5,19 @@ import { error } from '@sveltejs/kit';
 export async function load({ params, fetch }) {
   try {
     const response = await fetch('http://localhost:8080/api/procedures');
-    
+
     if (!response.ok) {
       throw new Error(`API-Fehler: ${response.statusText}`);
     }
-    
+
     const data = await response.json();
-    
+
     return {
-      procedures: data,
+      procedures: data
     };
   } catch (e) {
+    console.log(e);
 
-    console.log(e)
-
-    throw error(500, "Fehler beim Laden des API-Endpoints!");
+    throw error(500, 'Fehler beim Laden des API-Endpoints!');
   }
-
 }
