@@ -30,6 +30,23 @@ services:
       - application
     restart: unless-stopped
 
+  backend:
+    container_name: creditport-backend
+    build:
+      context: ./creditport-backend/
+      dockerfile: Dockerfile
+    image: creditport-backend
+    environment:
+      - DB_HOST=localhost
+      - DB_PORT=1432
+      - DB_NAME=development
+      - DB_USERNAME=admin
+      - DB_PASSWORD=admin
+    ports:
+      - '8080:8080'
+    networks:
+      - application
+    restart: unless-stopped
 
 
 networks:

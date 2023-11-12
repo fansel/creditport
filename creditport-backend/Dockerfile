@@ -14,18 +14,32 @@
 
 # Befehl zum Starten der Anwendung festlegen
 #CMD ["java", "-jar", "/app/creditport-backend.jar"]
+FROM gradle:8.0.0-jdk17-alpine AS build
+COPY --chown=gradle:gradle . /home/gradle/src
+WORKDIR /home/gradle/src
+RUN gradle build --no-daemon 
 
-FROM eclipse-temurin:17-jdk-alpine as development
-WORKDIR /app
+FROM eclipse-temurin:17-jre-alpine
 
-COPY .mvn/ .mvn
-COPY mvnw pom.xml ./
-RUN ./mvnw dependency:go-offline
-COPY ./src ./src
-RUN ./mvnw clean install
- 
-FROM eclipse-temurin:17-jre-alpine as build
-WORKDIR /app
 EXPOSE 8080
-COPY --from=builder /opt/app/target/*.jar /opt/app/*.jar
-ENTRYPOINT ["java", "-jar", "/opt/app/*.jar" ]
+
+RUN mkdir /app
+
+COPY --from=build /home/gradle/src/build/libs/*.jar /app/creditport-backend.jar
+CMD ["java", "-jar", "/app/creditport-backend.jar"]
+
+
+# FROM eclipse-temurin:17-jdk-alpine as development
+# WORKDIR /app
+
+# COPY .mvn/ .mvn
+# COPY mvnw pom.xml ./
+# RUN ./mvnw dependency:go-offline
+# COPY ./src ./src
+# RUN ./mvnw clean install
+ 
+# FROM eclipse-temurin:17-jre-alpine as build
+# WORKDIR /app
+# EXPOSE 8080
+# COPY --from=builder /opt/app/target/*.jar /opt/app/*.jar
+# ENTRYPOINT ["java", "-jar", "/opt/app/*.jar" ]
