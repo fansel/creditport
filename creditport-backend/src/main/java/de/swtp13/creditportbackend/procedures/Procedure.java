@@ -3,6 +3,7 @@ package de.swtp13.creditportbackend.procedures;
 import de.swtp13.creditportbackend.modules.Module;
 import de.swtp13.creditportbackend.request.Request;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -16,11 +17,13 @@ import de.swtp13.creditportbackend.procedures.util.IDGenerator;
 @Table(name = "procedures")
 @Data
 @NoArgsConstructor // Lombok generiert einen Konstruktor ohne Parameter
+@AllArgsConstructor
 public class Procedure {
 
     @Id
     @Column(
-            name = "procedureId",
+            name = "procedure_id",
+            columnDefinition = "VARCHAR",
             nullable = false
     )
     private String procedureId = IDGenerator.generateID(); // Automatische Generierung einer eindeutigen ID bei Erstellung eines Procedure-Objekts
@@ -38,19 +41,19 @@ public class Procedure {
     private String annotation;
     @Column(
             name = "university",
-            columnDefinition = "TEXT"
+            columnDefinition = "VARCHAR"
     )
     private String university;
     @Column(
-            name = "courseName",
-            columnDefinition = "TEXT"
+            name = "course_name",
+            columnDefinition = "VARCHAR"
     )
     private String courseName;
 
-    @OneToMany(
-            mappedBy = "procedure"
-    )
-    private Set<Request> requests;
+    //@OneToMany(
+    //        mappedBy = "procedure"
+    //)
+    //private Set<Request> requests;
 
 
 
