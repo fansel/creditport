@@ -1,14 +1,39 @@
 version: "3.8"
 
 services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    ports: 
+      - '1432:5432'
+    environment:
+      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: admin
+      POSTGRES_DB: development
+    volumes:
+      - 'backend-db:/var/lib/postgresql/data'
+    networks:
+      - application
+
   frontend:
     container_name: creditport-frontend
     build:
       context: ./frontend/
       dockerfile: Dockerfile
       target: development
+    image: creditport-frontend     
     ports:
-      - 3000:3000
+      - '5173:5173'
     volumes:
-      - ./frontend/:/app
+      - './frontend/:/app'
+    networks:
+      - application
     restart: unless-stopped
+
+
+
+networks:
+  application:
+    driver: bridge
+volumes:
+  backend-db:
