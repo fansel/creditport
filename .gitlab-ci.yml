@@ -21,13 +21,11 @@ test_backend:
     - echo "Das ist der Backend Test"
 
 build_frontend:
-  needs:
-    - test_frontend
   stage: build
+  needs: ['test_frontend']
   image:
     name: gcr.io/kaniko-project/executor:v1.14.0-debug
-    entrypoint:
-      - ''
+    entrypoint: ['']
   script:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"auth\":\"$(echo -n
       $CI_REGISTRY_USER:$CI_REGISTRY_PASSWORD | base64)\"}}}" >
@@ -40,8 +38,7 @@ build_frontend:
 
 deploy:
   stage: deploy
-  needs:
-    - build_frontend
+  #needs: ['build_frontend']
   when: manual
   image: public.ecr.aws/docker/library/nginx:alpine
   variables:
