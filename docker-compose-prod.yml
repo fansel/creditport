@@ -1,6 +1,21 @@
 version: "3.8"
 
 services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    restart: always
+    ports: 
+      - '5432:5432'
+    environment:
+      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - 'postgres_data:/var/lib/postgresql/data'
+    networks:
+      - application
+
   frontend:
     container_name: creditport-frontend
     image: swtp202313/creditport:frontend-latest
@@ -8,5 +23,13 @@ services:
       # - 172.26.92.92:3000:80
       - 3000:3000
     restart: unless-stopped
+    networks:
+      - application
+
+networks:
+  application:
+    driver: bridge
+volumes:
+  postgres_data:
 
     

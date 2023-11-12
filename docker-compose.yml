@@ -11,7 +11,7 @@ services:
       POSTGRES_USER: admin
       POSTGRES_DB: development
     volumes:
-      - 'backend-db:/var/lib/postgresql/data'
+      - 'postgres_data:/var/lib/postgresql/data'
     networks:
       - application
 
@@ -36,4 +36,4 @@ networks:
   application:
     driver: bridge
 volumes:
-  backend-db:
+  postgres_data:

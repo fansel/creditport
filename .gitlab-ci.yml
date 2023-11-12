@@ -42,25 +42,47 @@ build_frontend:
       --context "frontend"
       --dockerfile "${CI_PROJECT_DIR}/frontend/Dockerfile"
       --destination "${CI_REGISTRY_IMAGE}:frontend-${CI_COMMIT_TAG}"
+  rules:
+    - if: $CI_COMMIT_TAG
   only:
     - ci-pipline
    
-deploy_frontend:
+deploy:
   stage: deploy
+  needs: ["build_frontend"]
+  when: manual
+  image: public.ecr.aws/docker/library/nginx:alpine
   variables:
     DOCKER_HOST: "ssh://$DEPLOY_USER@$DEPLOY_SERVER"
   before_script:
     - apk update
-    - echo "$SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
-    - chmod 400 $SSH_KEY
+    - apk add openssh docker docker-compose
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh && chmod 700 ~/.ssh
+    - echo "$SSH_KOWN_HOSTS" >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
   script:
-    - ssh -o StrictHostKeyChecking=no -i $SSH_KEY root@$DEPLOY_SERVER "
-        cd /opt/creditport &&
-        docker compose down &&
-        docker compose pull &&
-        docker compose up -d"
-  only:
-    - main
+    - docker compose -f docker-compose-prod.yml down
+    - docker compose -f docker-compose-prod.yml up -d
+
+
+# deploy_frontend:
+#   stage: deploy
+#   variables:
+#     DOCKER_HOST: "ssh://$DEPLOY_USER@$DEPLOY_SERVER"
+#   before_script:
+#     - apk update
+#     - echo "$SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
+#     - chmod 400 $SSH_KEY
+#   script:
+#     - ssh -o StrictHostKeyChecking=no -i $SSH_KEY root@$DEPLOY_SERVER "
+#         cd /opt/creditport &&
+#         docker compose down &&
+#         docker compose pull &&
+#         docker compose up -d"
+#   only:
+#     - main
   
 
 # build_backend_image:
