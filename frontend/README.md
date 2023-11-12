@@ -33,9 +33,8 @@ npm run dev -- --open
 | /vorgang          | Leopold   | Formular zum erstellen eines Vorgang                    |
 | /status           | Leopold   | Status abfragen / Übersicht bekommen                    |
 | /faq              | Elias     | Seite auf der Fragen beantwortet werden                 |
-| /impressum        | Elias     | |
+| /impressum        | Elias     |                                                         |
 | /dashboard        | Leopold   | Übersicht für Bearbeiter                                |
-| /profile          | Elias     | Email und Passwort ändern                               |
 | /settings         | Elias     | Allgemeine Einstellungen                                |
 | /procedures       | Leopold   | Liste mit allen Vorgängen                               |
 | /procedures/[id]  | Leopold   | Bearbeitung / Übersicht eines Vorgangs                  |
