@@ -4,8 +4,8 @@ services:
   postgres:
     image: postgres:latest
     container_name: postgres
-    ports: 
-      - '1432:5432'
+    # ports: 
+    #   - '1432:5432'
     environment:
       POSTGRES_PASSWORD: admin
       POSTGRES_USER: admin
@@ -32,13 +32,15 @@ services:
 
   backend:
     container_name: creditport-backend
+    depends_on:
+      - postgres
     build:
       context: ./creditport-backend/
       dockerfile: Dockerfile
     image: creditport-backend
     environment:
-      - DB_HOST=localhost
-      - DB_PORT=1432
+      - DB_HOST=postgres
+      - DB_PORT=5432
       - DB_NAME=development
       - DB_USERNAME=admin
       - DB_PASSWORD=admin
