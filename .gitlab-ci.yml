@@ -34,9 +34,11 @@ build_frontend:
       /kaniko/.docker/config.json
     - /kaniko/executor --context "frontend" --dockerfile
       "${CI_PROJECT_DIR}/frontend/Dockerfile" --destination
-      "${CI_REGISTRY_IMAGE}:frontend-${CI_COMMIT_TAG}"
+      "${CI_REGISTRY_IMAGE}:frontend-latest"
+      #"${CI_REGISTRY_IMAGE}:frontend-${CI_COMMIT_TAG}"
   rules:
-    - if: '$CI_COMMIT_REF_NAME == "ci-pipline" && $CI_COMMIT_TAG'
+    - if: '$CI_COMMIT_REF_NAME == "ci-pipline"'
+    #- if: '$CI_COMMIT_REF_NAME == "ci-pipline" && $CI_COMMIT_TAG'
 
 deploy:
   stage: deploy
@@ -55,6 +57,7 @@ deploy:
     - chmod 644 ~/.ssh/known_hosts
     - ssh -o StrictHostKeyChecking=no -i $SSH_KEY $DEPLOY_USER@$DEPLOY_SERVER "touch derjobwarhier"
   script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
     - docker compose -f docker-compose-prod.yml down
     - docker compose -f docker-compose-prod.yml up -d
 # deploy_frontend:
