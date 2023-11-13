@@ -1,9 +1,9 @@
 version: "3.8"
 
 services:
-  postgres:
+  db:
     image: postgres:latest
-    container_name: postgres
+    container_name: postgres-db
     # ports: 
     #   - '1432:5432'
     environment:
@@ -21,9 +21,11 @@ services:
       context: ./frontend/
       dockerfile: Dockerfile
       target: development
-    image: creditport-frontend     
+    image: creditport-frontend   
+    environment:
+      - API_ENDPOINT=http://backend:80080/api
     ports:
-      - '5173:5173'
+      - 5173:5173
     volumes:
       - './frontend/:/app'
     networks:
@@ -33,19 +35,19 @@ services:
   backend:
     container_name: creditport-backend
     depends_on:
-      - postgres
+      - db
     build:
       context: ./creditport-backend/
       dockerfile: Dockerfile
     image: creditport-backend
     environment:
-      - DB_HOST=postgres
+      - DB_HOST=db
       - DB_PORT=5432
       - DB_NAME=development
       - DB_USERNAME=admin
       - DB_PASSWORD=admin
     ports:
-      - '8080:8080'
+      - 8080:8080
     networks:
       - application
     restart: unless-stopped

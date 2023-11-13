@@ -1,16 +1,16 @@
 version: "3.8"
 
 services:
-  postgres:
+  db:
     image: postgres:latest
-    container_name: postgres
+    container_name: postgres-db
     restart: always
     ports: 
-      - '5432:5432'
+      - 5432:5432
     environment:
       POSTGRES_PASSWORD: admin
       POSTGRES_USER: postgres
-      POSTGRES_DB: postgres
+      POSTGRES_DB: production
     volumes:
       - 'postgres_data:/var/lib/postgresql/data'
     networks:
@@ -22,9 +22,29 @@ services:
     ports:
       # - 172.26.92.92:3000:80
       - 3000:3000
-    restart: unless-stopped
+    environment:
+      - API_ENDPOINT=http://backend:80080/api
     networks:
       - application
+    restart: unless-stopped
+
+
+  backend:
+    container_name: creditport-backend
+    depends_on:
+      - db
+    image: swtp202313/creditport:backend-latest
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=production
+      - DB_USERNAME=admin
+      - DB_PASSWORD=admin
+    ports:
+      - 8080:8080
+    networks:
+      - application
+    restart: unless-stopped
 
 networks:
   application:
