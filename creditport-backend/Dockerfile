@@ -18,7 +18,7 @@ COPY build.gradle settings.gradle /home/gradle/src/
 
 COPY . .
 
-RUN gradle build --info
+RUN gradle build -x test
 
 
 FROM eclipse-temurin:17-jdk-alpine

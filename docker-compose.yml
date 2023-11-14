@@ -28,6 +28,7 @@ services:
       - 5173:5173
     volumes:
       - './frontend/:/app'
+      - '/app/node_modules/'
     networks:
       - application
     restart: unless-stopped
@@ -38,7 +39,14 @@ services:
       - db
     build:
       context: ./creditport-backend/
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile.prod
+      # network: host
+      # args:
+      #   DB_HOST: localhost
+      #   DB_PORT: 1432
+      #   DB_USERNAME: admin
+      #   DB_PASSWORD: admin
+      #   DB_NAME: development        
     image: creditport-backend
     environment:
       - DB_HOST=db
