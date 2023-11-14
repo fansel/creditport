@@ -1,8 +1,6 @@
 package de.swtp13.creditportbackend.config;
 
-import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -27,7 +25,8 @@ public class SecurityConfig {
                 .csrf((csrf) -> csrf.disable())
                 .authorizeHttpRequests(
                         (authorizeHttpRequests) -> authorizeHttpRequests
-                                .requestMatchers("/auth/**")
+                        //        .requestMatchers("/auth/**")
+                                .requestMatchers("/**")
                                 .permitAll()
                                 .anyRequest()
                                 .authenticated())
