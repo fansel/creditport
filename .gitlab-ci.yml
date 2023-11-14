@@ -38,34 +38,37 @@ test_backend:
       command: ["postgres"]
   script:
     - cd creditport-backend
-    # - ping -c 1 db
-    # - ping -c 1 postgres
-    # - touch .env
-    # - echo "$BACKEND_ENV" >> .env
-    # - chmod 644 .env
-    # - cat .env
     - export DB_NAME="development"
     - export DB_USERNAME="admin"
     - export DB_PASSWORD="admin"
     - export DB_PORT="5432"
-    - export DB_HOST="postgres"
+    - export DB_HOST="db"
     - gradle test -i
 
-# build_backend:
-#   stage: build
-#   needs: ['test_backend']
-#   image:
-#     name: gcr.io/kaniko-project/executor:v1.14.0-debug
-#     entrypoint: ['']
-#   script:
-#     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"auth\":\"$(echo -n
-#       $CI_REGISTRY_USER:$CI_REGISTRY_PASSWORD | base64)\"}}}" >
-#       /kaniko/.docker/config.json
-#     - /kaniko/executor --context "frontend" --dockerfile
-#       "${CI_PROJECT_DIR}/frontend/Dockerfile" --destination
-#       "${CI_REGISTRY_IMAGE}:frontend-${CI_COMMIT_TAG}"
-#   rules:
-#     - if: '$CI_COMMIT_REF_NAME == "developer" && $CI_COMMIT_TAG'
+build_backend:
+  stage: build
+  needs: ['test_backend']
+  image:
+    name: gcr.io/kaniko-project/executor:v1.14.0-debug
+    entrypoint: ['']
+  services:
+    - name: postgres:16.0-alpine
+      alias: db
+      variables:
+        POSTGRES_PASSWORD: "admin"
+        POSTGRES_USER: "admin"
+        POSTGRES_DB: "development"
+      entrypoint: ["docker-entrypoint.sh"]
+      command: ["postgres"]
+  script:
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"auth\":\"$(echo -n
+      $CI_REGISTRY_USER:$CI_REGISTRY_PASSWORD | base64)\"}}}" >
+      /kaniko/.docker/config.json
+    - /kaniko/executor --context "backend" --dockerfile
+      "${CI_PROJECT_DIR}/creditport-backend/Dockerfile.prod" --destination
+      "${CI_REGISTRY_IMAGE}:backend-${CI_COMMIT_TAG}"
+  rules:
+    - if: '$CI_COMMIT_REF_NAME == "ci-pipline" && $CI_COMMIT_TAG'
 
 build_frontend:
   stage: build
