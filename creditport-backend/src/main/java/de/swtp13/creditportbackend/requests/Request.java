@@ -1,4 +1,4 @@
-package de.swtp13.creditportbackend.request;
+package de.swtp13.creditportbackend.requests;
 
 import de.swtp13.creditportbackend.procedures.Procedure;
 import jakarta.persistence.*;

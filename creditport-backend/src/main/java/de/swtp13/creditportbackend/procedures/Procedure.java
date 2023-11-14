@@ -1,7 +1,7 @@
 package de.swtp13.creditportbackend.procedures;
 
 import de.swtp13.creditportbackend.modules.Module;
-import de.swtp13.creditportbackend.request.Request;
+import de.swtp13.creditportbackend.requests.Request;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
