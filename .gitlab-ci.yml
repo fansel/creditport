@@ -38,12 +38,17 @@ test_backend:
       command: ["postgres"]
   script:
     - cd creditport-backend
-    - ping -c 1 db
-    - ping -c 1 postgres
-    - touch .env
-    - echo "$BACKEND_ENV" >> .env
-    - chmod 644 .env
-    - cat .env
+    # - ping -c 1 db
+    # - ping -c 1 postgres
+    # - touch .env
+    # - echo "$BACKEND_ENV" >> .env
+    # - chmod 644 .env
+    # - cat .env
+    - export DB_NAME="development"
+    - export DB_USERNAME="admin"
+    - export DB_PASSWORD="admin"
+    - export DB_PORT="5432"
+    - export DB_HOST="postgres"
     - gradle test -i
 
 # build_backend:
