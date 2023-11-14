@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   db:
-    image: postgres:latest
+    image: postgres:16.0-alpine
     container_name: postgres-db
     ports: 
       - 1432:5432
@@ -40,8 +40,12 @@ services:
       context: ./creditport-backend/
       dockerfile: Dockerfile.dev
     image: creditport-backend
-    env_file:
-      - ./creditport-backend/.env
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USERNAME=admin
+      - DB_PASSWORD=admin
+      - DB_NAME=development
     ports:
       - 8080:8080
     networks:

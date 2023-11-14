@@ -1,5 +1,5 @@
 # development
-FROM public.ecr.aws/docker/library/node:lts-alpine as development
+FROM node:21.1-alpine3.17 as development
 WORKDIR /app
 COPY package*.json ./ 
 
