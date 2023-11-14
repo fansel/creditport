@@ -2,17 +2,17 @@ FROM gradle:8.4.0-jdk17-alpine AS build
 COPY --chown=gradle:gradle . /home/gradle/src
 WORKDIR /home/gradle/src
 
-ARG db_host
-ARG db_username
-ARG db_password
-ARG db_port
-ARG db_name
+ARG DB_HOST
+ARG DB_USERNAME
+ARG DB_PASSWORD
+ARG DB_PORT
+ARG DB_NAME
 
-ENV DB_HOST=$db_host
-ENV DB_USERNAME=$db_username
-ENV DB_PASSWORD=$db_password
-ENV DB_PORT=$db_port
-ENV DB_NAME=$db_name
+# ENV DB_HOST=$db_host
+# ENV DB_USERNAME=$db_username
+# ENV DB_PASSWORD=$db_password
+# ENV DB_PORT=$db_port
+# ENV DB_NAME=$db_name
 
 COPY build.gradle settings.gradle /home/gradle/src/
 
