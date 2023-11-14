@@ -39,14 +39,7 @@ services:
       - db
     build:
       context: ./creditport-backend/
-      dockerfile: Dockerfile.prod
-      # network: host
-      # args:
-      #   DB_HOST: localhost
-      #   DB_PORT: 1432
-      #   DB_USERNAME: admin
-      #   DB_PASSWORD: admin
-      #   DB_NAME: development        
+      dockerfile: Dockerfile     
     image: creditport-backend
     environment:
       - DB_HOST=db
