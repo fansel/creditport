@@ -2,7 +2,11 @@ FROM gradle:8.4.0-jdk17-alpine AS build
 COPY --chown=gradle:gradle . /home/gradle/src
 WORKDIR /home/gradle/src
 
-ARG db_host, db_username, db_password, db_port, db_name
+ARG db_host
+ARG db_username
+ARG db_password
+ARG db_port
+ARG db_name
 
 ENV DB_HOST=$db_host
 ENV DB_USERNAME=$db_username
@@ -10,13 +14,21 @@ ENV DB_PASSWORD=$db_password
 ENV DB_PORT=$db_port
 ENV DB_NAME=$db_name
 
+COPY build.gradle settings.gradle /home/gradle/src/
+
+COPY . .
+
 RUN gradle build --info
 
-FROM eclipse-temurin:17-jre-alpine
 
+FROM eclipse-temurin:17-jdk-alpine
+
+WORKDIR /app
+
+#Die JAR-Datei in das Arbeitsverzeichnis des Containers kopieren
+COPY --from=build /home/gradle/src/build/libs/creditport-backend-0.0.1-SNAPSHOT.jar /app/creditport-backend.jar
+#Port freigeben, auf dem die Anwendung laufen soll
 EXPOSE 8080
 
-RUN mkdir /app
-
-COPY --from=build /home/gradle/src/build/libs/*.jar /app/creditport-backend.jar
+#Befehl zum Starten der Anwendung festlegen
 CMD ["java", "-jar", "/app/creditport-backend.jar"]
