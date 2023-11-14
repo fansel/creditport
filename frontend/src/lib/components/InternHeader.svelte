@@ -25,7 +25,7 @@
           <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle ms-2" />
         </a>
         <ul class="dropdown-menu text-small">
-          <li><a class="dropdown-item" href="#">Einstellungen</a></li>
+          <li><a class="dropdown-item" href="/settings">Einstellungen</a></li>
           <li><a class="dropdown-item" href="/profile">Profil</a></li>
           <li><hr class="dropdown-divider" /></li>
           <li><a class="dropdown-item" href="#">Logout</a></li>
