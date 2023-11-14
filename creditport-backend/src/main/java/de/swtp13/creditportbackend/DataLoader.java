@@ -14,6 +14,7 @@ import de.swtp13.creditportbackend.procedures.ProcedureRepository;
 import de.swtp13.creditportbackend.procedures.Procedure;
 import de.swtp13.creditportbackend.request.Request;
 import de.swtp13.creditportbackend.request.RequestRepository;
+import de.swtp13.creditportbackend.users.Role;
 import de.swtp13.creditportbackend.users.User;
 import de.swtp13.creditportbackend.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -284,7 +285,7 @@ public class DataLoader implements CommandLineRunner {
 
         System.out.println("Modules were saved in the database!");
 
-        User testUser = new User(1,"testUser","password",0);
+        User testUser = new User(1,"testUser","password", Role.StudyOffice);
         userRepository.save(testUser);
         System.out.println("Users were saved in the database!");
     }
