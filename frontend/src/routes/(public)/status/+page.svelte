@@ -81,9 +81,8 @@
         <input type="text" class="digit" maxlength="1" bind:this={fields[index]} on:focus={clear} on:keydown={clear} on:paste={onPaste} on:keyup={onKeyUp} />
       {/each}
     </div>
-
-    <a class="btn btn-primary {inputSuccess ? '' : 'disabled'}" href="/status/{uuid}">Status abfragen</a>
   </div>
+  <a class="btn btn-primary {inputSuccess ? '' : 'disabled'}" href="/status/{uuid}">Status abfragen</a>
 </div>
 
 <style>
