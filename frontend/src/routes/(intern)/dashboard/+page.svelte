@@ -15,8 +15,8 @@
         <p>Offen</p>
       </div>
       <div class="card-body">
-        <a href="/jobs" class="btn btn-sm btn-outline-secondary">Zu den Vorgängen</a>
-        <a href="/jobs" class="btn btn-sm btn-outline-secondary float-end">Bearbeiten</a>
+        <a href="/procedures" class="btn btn-sm btn-outline-secondary">Zu den Vorgängen</a>
+        <a href="/procedures" class="btn btn-sm btn-outline-secondary float-end">Bearbeiten</a>
       </div>
     </div>
   </div>
@@ -27,8 +27,8 @@
         <p>In Bearbeitung</p>
       </div>
       <div class="card-body">
-        <a href="/jobs" class="btn btn-sm btn-outline-secondary">Zu den Vorgängen</a>
-        <a href="/jobs" class="btn btn-sm btn-outline-secondary float-end">Neu</a>
+        <a href="/procedures" class="btn btn-sm btn-outline-secondary">Zu den Vorgängen</a>
+        <a href="/procedures" class="btn btn-sm btn-outline-secondary float-end">Neu</a>
       </div>
     </div>
   </div>
@@ -39,8 +39,8 @@
         <p>Archiviert</p>
       </div>
       <div class="card-body">
-        <a href="/jobs" class="btn btn-sm btn-outline-secondary">Zu den Jobs</a>
-        <a href="/jobs" class="btn btn-sm btn-outline-secondary float-end">Neu</a>
+        <a href="/procedures" class="btn btn-sm btn-outline-secondary">Zu den Jobs</a>
+        <a href="/procedures" class="btn btn-sm btn-outline-secondary float-end">Neu</a>
       </div>
     </div>
   </div>
@@ -66,7 +66,7 @@
               <td><span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill">eingereicht</span></td>
 
               <td class="float-end">
-                <a type="button" href="/logs/1" class="btn btn-sm btn-outline-primary ms-2 me-2">
+                <a type="button" href="/procedures" class="btn btn-sm btn-outline-primary ms-2 me-2">
                   <i class="bi bi-chevron-right" />
                 </a>
               </td>
