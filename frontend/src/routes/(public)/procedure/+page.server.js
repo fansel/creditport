@@ -1,9 +1,9 @@
 import * as config from '$lib/config';
+import * as api from '$lib/api.js';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ params }) {
-  const request = await fetch(`${config.api_endpoint}/modules`);
-  const modules = await request.json();
+  const modules = await api.get('modules');
 
   return {
     modules: modules

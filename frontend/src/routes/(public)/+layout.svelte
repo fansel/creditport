@@ -4,6 +4,8 @@
   import Footer from '$lib/components/Footer.svelte';
 
   import { page } from '$app/stores';
+
+  export let data;
 </script>
 
 <svelte:head>
@@ -16,4 +18,4 @@
   <slot />
 </main>
 
-<Footer />
+<Footer status={data.status} />
