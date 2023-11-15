@@ -24,7 +24,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Arrays;
-import java.util.Set;
 
 @Component  // Diese Annotation gibt an, dass diese Klasse ein Component ist, und von Spring automatisch erkannt und instanziiert wird.
 public class DataLoader implements CommandLineRunner {
@@ -290,7 +289,7 @@ public class DataLoader implements CommandLineRunner {
 
         System.out.println("Modules were saved in the database!");
 
-        User testUser = new User(1,"testUser","password", Role.StudyOffice);
+        User testUser = new User(1,"testUser","password", Role.STUDY_OFFICE);
         userRepository.save(testUser);
         System.out.println("Users were saved in the database!");
 
