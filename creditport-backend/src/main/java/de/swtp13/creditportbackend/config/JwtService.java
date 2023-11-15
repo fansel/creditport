@@ -5,12 +5,10 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import jakarta.websocket.Decoder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
-import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,10 +43,10 @@ public class JwtService {
     }
 
     private Boolean isTokenExpired(String token) {
-        return extractExpriration(token).before(new Date(System.currentTimeMillis()));
+        return extractExpiration(token).before(new Date(System.currentTimeMillis()));
     }
 
-    private Date extractExpriration(String token) {
+    private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 

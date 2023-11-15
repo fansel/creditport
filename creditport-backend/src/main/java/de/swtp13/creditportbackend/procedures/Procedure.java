@@ -1,15 +1,10 @@
 package de.swtp13.creditportbackend.procedures;
 
-import de.swtp13.creditportbackend.modules.Module;
-import de.swtp13.creditportbackend.requests.Request;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 
 import de.swtp13.creditportbackend.procedures.util.IDGenerator;
 
