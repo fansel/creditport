@@ -43,7 +43,7 @@ public class User implements UserDetails {
     @Column(
             name = "role",
             columnDefinition = "VARCHAR",
-            nullable = false
+            nullable = true
     )
     @Enumerated(EnumType.STRING)
     private Role role;
