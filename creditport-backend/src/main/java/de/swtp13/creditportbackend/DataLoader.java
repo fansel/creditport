@@ -8,6 +8,7 @@ package de.swtp13.creditportbackend;
  * @author Felix
  */
 
+import com.fasterxml.jackson.core.util.ByteArrayBuilder;
 import de.swtp13.creditportbackend.modules.Module;
 import de.swtp13.creditportbackend.modules.ModuleRepository;
 import de.swtp13.creditportbackend.procedures.ProcedureRepository;
@@ -21,6 +22,7 @@ import de.swtp13.creditportbackend.users.User;
 import de.swtp13.creditportbackend.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Arrays;
@@ -42,7 +44,6 @@ public class DataLoader implements CommandLineRunner {
 
     @Autowired
     private UniversityRepository universityRepository;
-
 
 
     /**
@@ -286,7 +287,6 @@ public class DataLoader implements CommandLineRunner {
 
         // Speichern der Module in der Datenbank
         moduleRepository.saveAll(modules);
-
         System.out.println("Modules were saved in the database!");
 
         User testUser = new User(1,"testUser","password", Role.STUDY_OFFICE);

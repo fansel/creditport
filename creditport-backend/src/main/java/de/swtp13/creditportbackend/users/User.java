@@ -20,6 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 public class User implements UserDetails {
     @Id
+    @GeneratedValue
     @Column(
             name = "user_id",
             columnDefinition = "INT",
