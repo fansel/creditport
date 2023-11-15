@@ -289,7 +289,7 @@ public class DataLoader implements CommandLineRunner {
         moduleRepository.saveAll(modules);
         System.out.println("Modules were saved in the database!");
 
-        User testUser = new User(1,"testUser","password", Role.STUDY_OFFICE);
+        User testUser = new User(0,"testUser","password", Role.STUDY_OFFICE);
         userRepository.save(testUser);
         System.out.println("Users were saved in the database!");
 
