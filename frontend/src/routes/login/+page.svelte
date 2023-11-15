@@ -4,7 +4,7 @@
 
 <div class="mt-5 d-flex justify-content-center">
   <form data-bitwarden-watching="1" class="border rounded-3 p-4 login-form" use:enhance method="POST">
-    <h1 class="display-5 fw-bold mb-3 text-center">Login</h1>
+    <h1 class="display-6 fw-bold mb-4 text-center">Einloggen</h1>
 
     <div class="mb-3">
       <label for="floatingInput">Nutzername</label>
@@ -20,7 +20,7 @@
       <input class="form-check-input" type="checkbox" value="remember-me" id="flexCheckDefault" />
       <label class="form-check-label" for="flexCheckDefault"> eingeloggt bleiben </label>
     </div> -->
-    <button class="btn btn-primary py-2 w-100 mb-3" type="submit">Einloggen</button>
+    <button class="btn btn-primary py-2 w-100 my-3" type="submit">Einloggen</button>
   </form>
 </div>
 

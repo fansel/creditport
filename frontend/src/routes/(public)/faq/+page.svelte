@@ -26,7 +26,7 @@
   ];
 </script>
 
-<div class="px-4 pt-5 mt-5 mb-2 text-center">
+<div class="px-4 mt-5 mb-2 text-center">
   <h1 class="display-4 fw-bold">FAQ's</h1>
 </div>
 

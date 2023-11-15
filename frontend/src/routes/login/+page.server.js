@@ -11,18 +11,16 @@ export const actions = {
   default: async ({ cookies, request }) => {
     const data = await request.formData();
 
-    const body = await api.post('users/login', {
-      user: {
+    const body = await api.post('auth/login', {
         username: data.get('username'),
         password: data.get('password')
-      }
     });
 
     if (body.errors) {
       return fail(401, body);
     }
 
-    const value = btoa(JSON.stringify(body.user));
+    const value = btoa(JSON.stringify(body));
     cookies.set('jwt', value, { path: '/' });
 
     throw redirect(307, '/dashboard');
