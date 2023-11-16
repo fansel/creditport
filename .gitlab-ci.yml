@@ -92,6 +92,7 @@ deploy:
     - echo $CI_REGISTRY_TOKEN | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
     - docker compose -f docker-compose-prod.yml stop
     - docker compose rm -f frontend backend
+    - docker compose -f docker-compose-prod.yml pull
     - docker compose -f docker-compose-prod.yml up -d
   rules:
     - if: '$CI_COMMIT_REF_NAME == "main" || $CI_COMMIT_REF_NAME == "developer"'
