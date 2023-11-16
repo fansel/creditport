@@ -24,6 +24,7 @@ services:
       - 3000:3000
     environment:
       - PUBLIC_API_ENDPOINT=http://backend:8080/api
+      - PUBLIC_ENV=production
     networks:
       - application
     restart: unless-stopped
