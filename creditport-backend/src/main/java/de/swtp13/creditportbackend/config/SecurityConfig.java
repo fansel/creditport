@@ -27,12 +27,21 @@ public class SecurityConfig {
 
         // Alle Sicherheitseinstellungen auskommentieren
         /*
-        .authorizeHttpRequests((authorize) -> authorize
-            .requestMatchers("/**").permitAll())
-        .sessionManagement()
-        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        .authenticationProvider(authenticationProvider)
-        .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
+                .authorizeHttpRequests(
+                        (authorizeHttpRequests) -> authorizeHttpRequests
+                        //        .requestMatchers("/auth/**")
+                                .requestMatchers("/**")
+                                .permitAll()
+                                .anyRequest()
+                                .authenticated())
+                .sessionManagement(
+                        (sessionManagement) -> sessionManagement
+                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .csrf(AbstractHttpConfigurer::disable);
+
         */
 
         return http.build();
