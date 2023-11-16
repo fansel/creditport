@@ -22,7 +22,7 @@ import de.swtp13.creditportbackend.users.User;
 import de.swtp13.creditportbackend.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Arrays;
@@ -44,6 +44,9 @@ public class DataLoader implements CommandLineRunner {
 
     @Autowired
     private UniversityRepository universityRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
     /**
@@ -289,8 +292,12 @@ public class DataLoader implements CommandLineRunner {
         moduleRepository.saveAll(modules);
         System.out.println("Modules were saved in the database!");
 
-        User testUser = new User(0,"testUser","password", Role.STUDY_OFFICE);
-        userRepository.save(testUser);
+        var testuser = User.builder()
+                .username("testUser")
+                .password(passwordEncoder.encode("password"))
+                .role(Role.ADMIN)
+                .build();
+        userRepository.save(testuser);
         System.out.println("Users were saved in the database!");
 
         University testUniversity = new University(2, "HTWK Leipzig");
