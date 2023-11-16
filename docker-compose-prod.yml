@@ -23,7 +23,7 @@ services:
       # - 172.26.92.92:3000:80
       - 3000:3000
     environment:
-      - API_ENDPOINT=http://backend:8080/api
+      - PUBLIC_API_ENDPOINT=http://backend:8080/api
     networks:
       - application
     restart: unless-stopped

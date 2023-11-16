@@ -23,7 +23,7 @@ services:
       target: development
     image: creditport-frontend   
     environment:
-      - API_ENDPOINT=http://backend:8080/api
+      - PUBLIC_API_ENDPOINT=http://backend:8080/api
     ports:
       - 5173:5173
     volumes:
