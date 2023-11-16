@@ -14,8 +14,8 @@
         <li class="nav-item"><a href="/dashboard" class="nav-link px-2 {$page.data.title == 'Dashboard' ? 'text-dark' : 'text-secondary'}">Dashboard</a></li>
         <li class="nav-item"><a href="/procedures" class="nav-link px-2 {$page.data.title == 'Vorgänge' ? 'text-dark' : 'text-secondary'}">Vorgänge</a></li>
 
-        <li class="nav-item"><a href="/items" class="nav-link px-2 {$page.data.title == 'Faq' ? 'text-dark' : 'text-secondary'}">Markierte</a></li>
-        <li class="nav-item"><a href="/items" class="nav-link px-2 {$page.data.title == 'Impressum' ? 'text-dark' : 'text-secondary'}">Archiv</a></li>
+        <li class="nav-item"><a href="/procedures" class="nav-link px-2 {$page.data.title == 'Faq' ? 'text-dark' : 'text-secondary'}">Markierte</a></li>
+        <li class="nav-item"><a href="/procedures" class="nav-link px-2 {$page.data.title == 'Impressum' ? 'text-dark' : 'text-secondary'}">Archiv</a></li>
       </ul>
       <!-- <a href="/login" type="button" class="btn btn-outline-secondary me-2">Logout</a>
       <a href="/vorgang" type="button" class="btn btn-primary">Einstellungen</a> -->
@@ -26,7 +26,6 @@
         </a>
         <ul class="dropdown-menu text-small">
           <li><a class="dropdown-item" href="/settings">Einstellungen</a></li>
-          <li><a class="dropdown-item" href="/profile">Profil</a></li>
           <li><hr class="dropdown-divider" /></li>
           <li><a class="dropdown-item" href="#">Logout</a></li>
         </ul>
