@@ -708,7 +708,7 @@ public class DataLoader implements CommandLineRunner {
                 new University("XU Exponential University of Applied Sciences"),
                 new University("Zeppelin Universität – Hochschule zwischen Wirtschaft, Kultur und Politik")
         );
-        //universityRepository.saveAll(unis);
+        universityRepository.saveAll(unis);
         System.out.println("Universities were saved in the database!");
 
 
@@ -726,8 +726,6 @@ public class DataLoader implements CommandLineRunner {
         userRepository.save(testuser);
         System.out.println("Users were saved in the database!");
 
-        University testUniversity = new University(2, "HTWK Leipzig");
-        universityRepository.save(testUniversity);
-        System.out.println("Universities were saved in the database!");
+
     }
 }
