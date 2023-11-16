@@ -17,12 +17,12 @@ public class UniversityController {
 
     @GetMapping
     public List<University> getAllUniversities(@RequestParam(required = false) String name) {
-/*        if (name != null && !name.isEmpty()) {
+        if (name != null && !name.isEmpty()) {
             System.out.println("Get Universities with uniName like: " + name);
             return universityRepository.findByUniNameContaining(name);
         } else {
             System.out.println("Get all Universities");
             return universityRepository.findAll();
-        }*/
+        }
     }
 }
