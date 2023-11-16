@@ -1,9 +1,6 @@
 package de.swtp13.creditportbackend.universities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,6 +21,7 @@ public class University {
             columnDefinition = "INT"
     )
     @Id
+    @GeneratedValue
     private int uniId;
 
     @Column(
