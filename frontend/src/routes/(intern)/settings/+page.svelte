@@ -3,6 +3,8 @@
   import TabNotifcations from './TabNotifcations.svelte';
   import TabUsermanagment from './TabUsermanagment.svelte';
 
+  export let data;
+
   let activeSlide = 0;
 
   $: console.log(activeSlide);
@@ -48,7 +50,7 @@
   {:else if activeSlide === 1}
     <TabNotifcations />
   {:else if activeSlide === 2}
-    <TabUsermanagment />
+    <TabUsermanagment users={data.users} />
   {/if}
 </div>
 

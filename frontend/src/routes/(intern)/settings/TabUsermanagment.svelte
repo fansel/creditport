@@ -1,38 +1,26 @@
+<script>
+  export let users;
+</script>
+
 <div class="">
   <table class="table table-striped">
     <thead>
       <tr>
         <th scope="col">#</th>
-        <th scope="col">Vorname</th>
-        <th scope="col">Nachname</th>
-        <th scope="col">Zugriffsrechte</th>
+        <th scope="col">Username</th>
+        <th scope="col">Rolle</th>
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <th scope="row">1</th>
-        <td>Leopold</td>
-        <td>Flemming</td>
-        <td>
-          <span class="badge bg-success-subtle border border-success-subtle text-secondary-emphasis rounded-pill">alle</span>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">2</th>
-        <td>Elias</td>
-        <td>Taibi Haschke</td>
-        <td>
-          <span class="badge bg-danger-subtle border border-danger-subtle text-secondary-emphasis rounded-pill">keine</span>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">3</th>
-        <td>Clara</td>
-        <td>Schmidt</td>
-        <td>
-          <span class="badge bg-success-subtle border border-success-subtle text-secondary-emphasis rounded-pill">alle</span>
-        </td>
-      </tr>
+      {#each users as user, index}
+        <tr>
+          <th scope="row">{user.userId}</th>
+          <td>{user.username}</td>
+          <td>
+            <span class="badge bg-success-subtle border border-success-subtle text-secondary-emphasis rounded-pill">{user.role}</span>
+          </td>
+        </tr>
+      {/each}
     </tbody>
   </table>
 </div>
