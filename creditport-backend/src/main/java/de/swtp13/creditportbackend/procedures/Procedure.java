@@ -24,11 +24,12 @@ public class Procedure {
     private String procedureId = IDGenerator.generateID(); // Automatische Generierung einer eindeutigen ID bei Erstellung eines Procedure-Objekts
     @Column(
             name = "status",
-            columnDefinition = "INT",
+            columnDefinition = "VARCHAR",
             // Zugehöriger Status muss noch festgelegt werden, z.B. nicht geoeffnet, goeffnet, bearbeitet, abgelehnt, angenommen, Nachfrage noetig
             nullable = false
     )
-    private int status;
+    @Enumerated(EnumType.STRING)
+    private Status status;
     @Column(
             name = "annotation",
             columnDefinition = "TEXT"
@@ -53,26 +54,26 @@ public class Procedure {
     //private Set<Request> requests;
 
 
-
     // Benutzerdefinierter Konstruktor ohne ID
-    public Procedure(int status, String annotation) {
+    public Procedure(Status status, String annotation) {
         this.university = "Universität Leipzig";
         this.courseName = "Informatik Bachelor";
         this.status = status;
         this.annotation = annotation;
     }
-    public Procedure(String annotation,String university,String courseName ){
+
+    public Procedure(String annotation, String university, String courseName) {
         this.annotation = annotation;
         this.university = university;
         this.courseName = courseName;
-        this.status = 1;
+        this.status = Status.NEU;
     }
-    public Procedure(String university,String courseName ){
+
+    public Procedure(String university, String courseName) {
         this.university = university;
         this.courseName = courseName;
-        this.status = 1;
+        this.status = Status.NEU;
     }
-}
 
 /*
 
@@ -103,3 +104,4 @@ public class Procedure {
 
 
  */
+}
