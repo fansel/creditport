@@ -63,10 +63,12 @@ public class DataLoader implements CommandLineRunner {
         System.out.println("Test procedure is being created!");
 
         // Erstelle einen neuen Vorgang mit Antrag 1
-        Procedure procedure = new Procedure("1",1,"only a test procedure",
+        Procedure procedure = new Procedure("only a test procedure",
                 "Universitaet Leipzig","Informatik Bachelor");
+        Procedure procedure2 = new Procedure("Universitaet Leipzig", "Data Science Master");
         // Speichern des Vorgangs in der Datenbank
         procedureRepository.save(procedure);
+        procedureRepository.save(procedure2);
 
         System.out.println("Procedures were saved in the database!");
 
