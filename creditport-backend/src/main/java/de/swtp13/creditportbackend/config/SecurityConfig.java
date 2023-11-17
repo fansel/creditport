@@ -28,6 +28,8 @@ public class SecurityConfig {
                         (authorizeHttpRequests) -> authorizeHttpRequests
                                 .requestMatchers("api/test-endpoint/secure")
                                 .authenticated()
+                                .requestMatchers("api/auth/register")
+                                .hasRole("ADMIN")
                                 .requestMatchers("api/test-endpoint/open")
                                 .permitAll()
                                 .anyRequest()

@@ -8,7 +8,6 @@ package de.swtp13.creditportbackend;
  * @author Felix
  */
 
-import com.fasterxml.jackson.core.util.ByteArrayBuilder;
 import de.swtp13.creditportbackend.modules.Module;
 import de.swtp13.creditportbackend.modules.ModuleRepository;
 import de.swtp13.creditportbackend.procedures.ProcedureRepository;
@@ -724,11 +723,23 @@ public class DataLoader implements CommandLineRunner {
         System.out.println("Modules were saved in the database!");
 
         var testuser = User.builder()
-                .username("testUser")
-                .password(passwordEncoder.encode("password"))
+                .username("admin")
+                .password(passwordEncoder.encode("admin"))
                 .role(Role.ADMIN)
                 .build();
+        var studyOffice = User.builder()
+                .username("studyOffice")
+                .password(passwordEncoder.encode("studyOffice"))
+                .role(Role.STUDY_OFFICE)
+                .build();
+        var examComittee = User.builder()
+                .username("examComittee")
+                .password(passwordEncoder.encode("examComittee"))
+                .role(Role.EXAM_COMMITTEE)
+                .build();
         userRepository.save(testuser);
+        userRepository.save(studyOffice);
+        userRepository.save(examComittee);
         System.out.println("Users were saved in the database!");
 
 
