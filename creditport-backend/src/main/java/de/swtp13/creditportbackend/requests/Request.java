@@ -52,10 +52,11 @@ public class Request {
     private int creditPoints;
     @Column(
             name = "request_status",
-            columnDefinition = "INT",
+            columnDefinition = "VARCHAR",
             nullable = false
     )
-    private int status;
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     public Request(Procedure procedure, String externalModuleId, String internalModuleId,String annotation, int creditPoints){
         this.procedure = procedure;
@@ -63,6 +64,6 @@ public class Request {
         this.internalModuleId = internalModuleId;
         this.annotation = annotation;
         this.creditPoints = creditPoints;
-        this.status = 1;
+        this.status = Status.NICHT_BEARBEITET;
     }
 }
