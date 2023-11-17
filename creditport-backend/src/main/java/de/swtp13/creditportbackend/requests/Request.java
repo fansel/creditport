@@ -13,11 +13,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Request {
     @Id
+    @GeneratedValue
     @Column(
             name = "request_id",
-            columnDefinition = "VARCHAR"
+            columnDefinition = "INT"
     )
-    private String requestId;
+    private int requestId;
     @ManyToOne()
     @JoinColumn(
             name="procedure_id",
@@ -50,6 +51,19 @@ public class Request {
             nullable = false
     )
     private int creditPoints;
+    @Column(
+            name = "request_status",
+            columnDefinition = "INT",
+            nullable = false
+    )
+    private int status;
 
-
+    public Request(Procedure procedure, String externalModuleId, String internalModuleId,String annotation, int creditPoints){
+        this.procedure = procedure;
+        this.externalModuleId = externalModuleId;
+        this.internalModuleId = internalModuleId;
+        this.annotation = annotation;
+        this.creditPoints = creditPoints;
+        this.status = 1;
+    }
 }
