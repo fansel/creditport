@@ -2,13 +2,10 @@ package de.swtp13.creditportbackend.universities;
 import de.swtp13.creditportbackend.universities.University;
 import de.swtp13.creditportbackend.universities.UniversityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/universities")
@@ -27,5 +24,16 @@ public class UniversityController {
             return universityRepository.findAll();
         }
     }
+
+  /*  @PostMapping
+    public University createUniversity(@RequestBody University university) {
+        System.out.println("Create University: " + university.getUniName());
+        return universityRepository.save(university);
+    }*/
+
+
+
+
+
 
 }
