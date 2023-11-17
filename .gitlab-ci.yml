@@ -1,3 +1,4 @@
+---
 variables:
   CI_REGISTRY_IMAGE: docker.io/swtp202313/creditport
   CI_COMMIT_TAG: latest
@@ -6,6 +7,14 @@ variables:
   DB_PASSWORD: admin
   DB_PORT: 5432
   DB_NAME: development
+
+# Wenn der Commit Tag nicht gesetzt ist wird er auf latest gesetzt
+# workflow:
+#   rules:
+#     - if: $CI_COMMIT_TAG == ""
+#       variables:
+#         CI_COMMIT_TAG: "latest"
+#     - when: always
 
 stages:
   - test
@@ -58,9 +67,11 @@ build_backend:
       command: ['postgres']
   script:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"auth\":\"$(echo -n $CI_REGISTRY_USER:$CI_REGISTRY_PASSWORD | base64)\"}}}" > /kaniko/.docker/config.json
-    - /kaniko/executor --context "${CI_PROJECT_DIR}/creditport-backend" --build-arg DB_HOST=$DB_HOST --build-arg DB_NAME=$DB_NAME --build-arg DB_PORT=$DB_PORT --build-arg DB_USERNAME=$DB_USERNAME --build-arg DB_PASSWORD=$DB_PASSWORD --dockerfile "${CI_PROJECT_DIR}/creditport-backend/Dockerfile" --destination "${CI_REGISTRY_IMAGE}:backend-${CI_COMMIT_TAG}"
+    - /kaniko/executor --context "${CI_PROJECT_DIR}/creditport-backend" --build-arg DB_HOST=$DB_HOST --build-arg DB_NAME=$DB_NAME --build-arg
+      DB_PORT=$DB_PORT --build-arg DB_USERNAME=$DB_USERNAME --build-arg DB_PASSWORD=$DB_PASSWORD  --dockerfile
+      "${CI_PROJECT_DIR}/creditport-backend/Dockerfile" --destination "${CI_REGISTRY_IMAGE}:backend-${CI_COMMIT_TAG}"
   rules:
-    - if: '$CI_COMMIT_REF_NAME == "main" || $CI_COMMIT_REF_NAME == "developer"'
+    - if: '$CI_COMMIT_REF_NAME == "main" && $CI_COMMIT_TAG'
 
 build_frontend:
   stage: build
@@ -70,12 +81,14 @@ build_frontend:
     entrypoint: ['']
   script:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"auth\":\"$(echo -n $CI_REGISTRY_USER:$CI_REGISTRY_PASSWORD | base64)\"}}}" > /kaniko/.docker/config.json
-    - /kaniko/executor --context "${CI_PROJECT_DIR}/frontend" --dockerfile "${CI_PROJECT_DIR}/frontend/Dockerfile" --destination "${CI_REGISTRY_IMAGE}:frontend-${CI_COMMIT_TAG}"
+    - /kaniko/executor --context "${CI_PROJECT_DIR}/frontend" --dockerfile "${CI_PROJECT_DIR}/frontend/Dockerfile" --destination
+      "${CI_REGISTRY_IMAGE}:frontend-${CI_COMMIT_TAG}"
   rules:
-    - if: '$CI_COMMIT_REF_NAME == "main" || $CI_COMMIT_REF_NAME == "developer"'
+    - if: '$CI_COMMIT_REF_NAME == "main" && $CI_COMMIT_TAG'
 
 deploy:
   stage: deploy
+  #needs: ['build_frontend']
   when: manual
   image: nginx:1.25.3-alpine
   variables:
@@ -85,14 +98,11 @@ deploy:
     - apk add openssh docker docker-compose
     - eval $(ssh-agent -s)
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
-    - mkdir -p ~/.ssh and chmod 700 ~/.ssh
+    - mkdir -p ~/.ssh && chmod 700 ~/.ssh
     - echo "$SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
   script:
     - echo $CI_REGISTRY_TOKEN | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
     - docker compose -f docker-compose-prod.yml stop
     - docker compose rm -f frontend backend
-    - docker compose -f docker-compose-prod.yml pull
     - docker compose -f docker-compose-prod.yml up -d
-  rules:
-    - if: '$CI_COMMIT_REF_NAME == "main" || $CI_COMMIT_REF_NAME == "developer"'
