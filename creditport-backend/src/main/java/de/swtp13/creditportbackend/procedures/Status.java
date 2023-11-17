@@ -4,5 +4,6 @@ public enum Status {
     NEU,
     OFFEN,
     IN_BEARBEITUNG,
-    WEITERGELEITET;
+    WEITERGELEITET,
+    VOLLSTÄNDIG; //wenn alle Anträge angenommen/ abgelehnt wurden
 }
