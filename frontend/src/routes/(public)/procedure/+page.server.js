@@ -1,4 +1,3 @@
-import * as config from '$lib/config';
 import * as api from '$lib/api.js';
 
 /** @type {import('./$types').PageServerLoad} */

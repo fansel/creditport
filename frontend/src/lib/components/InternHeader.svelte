@@ -1,5 +1,7 @@
 <script>
   import { page } from '$app/stores';
+
+  export let username;
 </script>
 
 <nav class="navbar navbar-expand-md navbar-light bg-light shadow-sm p-3 sticky-top" aria-label="Fourth navbar example">
@@ -19,16 +21,23 @@
       </ul>
 
       <div class="dropdown ms-3">
-        <button class="d-flex align-items-center link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-          <strong>Studienbüro</strong>
+        <button class="profil-btn d-flex align-items-center link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+          <strong>{username}</strong>
           <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle ms-2" />
         </button>
         <ul class="dropdown-menu text-small">
           <li><a class="dropdown-item" href="/settings">Einstellungen</a></li>
           <li><hr class="dropdown-divider" /></li>
-          <li><a class="dropdown-item" href="/logout">Logout</a></li>
+          <li><a class="dropdown-item" href="/exit">Logout</a></li>
         </ul>
       </div>
     </div>
   </div>
 </nav>
+
+<style>
+  .profil-btn {
+    border: none;
+    background-color: transparent;
+  }
+</style>

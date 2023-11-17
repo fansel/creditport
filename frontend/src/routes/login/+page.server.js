@@ -12,15 +12,20 @@ export const actions = {
     const data = await request.formData();
 
     const body = await api.post('api/auth/login', {
-        username: data.get('username'),
-        password: data.get('password')
+      username: data.get('username'),
+      password: data.get('password')
     });
 
-    if (body.errors) {
+    if (!body.success) {
       return fail(401, body);
     }
 
-    const value = btoa(JSON.stringify(body));
+    const user = {
+      token: body.token,
+      username: JSON.parse(atob(body.token.split('.')[1])).sub
+    };
+
+    const value = btoa(JSON.stringify(user));
     cookies.set('jwt', value, { path: '/' });
 
     throw redirect(307, '/dashboard');
