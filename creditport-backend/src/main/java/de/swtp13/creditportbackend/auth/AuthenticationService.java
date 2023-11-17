@@ -1,6 +1,7 @@
 package de.swtp13.creditportbackend.auth;
 
 import de.swtp13.creditportbackend.config.JwtService;
+import de.swtp13.creditportbackend.users.Role;
 import de.swtp13.creditportbackend.users.User;
 import de.swtp13.creditportbackend.users.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ public class AuthenticationService {
         var user = User.builder()
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
+                .role(Role.STUDY_OFFICE)
                 .build();
         userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
