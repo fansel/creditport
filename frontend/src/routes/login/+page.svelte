@@ -17,12 +17,12 @@
 
     <div class="mb-3">
       <label for="floatingInput">Nutzername</label>
-      <input type="text" class="form-control mt-2" id="floatingInput" placeholder="Admin" name="username" required />
+      <input type="text" class="form-control mt-2 {form?.success == false ? 'is-invalid' : ''}" id="floatingInput" placeholder="Admin" name="username" required />
     </div>
 
     <div class="mb-3">
       <label for="floatingPassword">Password</label>
-      <input type="password" class="form-control mt-2" id="floatingPassword" placeholder="Password" name="password" required />
+      <input type="password" class="form-control mt-2 {form?.success == false ? 'is-invalid' : ''}" id="floatingPassword" placeholder="Password" name="password" required />
     </div>
 
     <div class="form-check text-start mt-4 mb-3">
