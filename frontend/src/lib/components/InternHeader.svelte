@@ -17,17 +17,16 @@
         <li class="nav-item"><a href="/procedures" class="nav-link px-2 {$page.data.title == 'Faq' ? 'text-dark' : 'text-secondary'}">Markierte</a></li>
         <li class="nav-item"><a href="/procedures" class="nav-link px-2 {$page.data.title == 'Impressum' ? 'text-dark' : 'text-secondary'}">Archiv</a></li>
       </ul>
-      <!-- <a href="/login" type="button" class="btn btn-outline-secondary me-2">Logout</a>
-      <a href="/vorgang" type="button" class="btn btn-primary">Einstellungen</a> -->
+
       <div class="dropdown ms-3">
-        <a href="#" class="d-flex align-items-center link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+        <button class="d-flex align-items-center link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
           <strong>Studienbüro</strong>
           <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle ms-2" />
-        </a>
+        </button>
         <ul class="dropdown-menu text-small">
           <li><a class="dropdown-item" href="/settings">Einstellungen</a></li>
           <li><hr class="dropdown-divider" /></li>
-          <li><a class="dropdown-item" href="#">Logout</a></li>
+          <li><a class="dropdown-item" href="/logout">Logout</a></li>
         </ul>
       </div>
     </div>

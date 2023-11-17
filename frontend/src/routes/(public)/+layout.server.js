@@ -4,10 +4,10 @@ import * as api from '$lib/api.js';
 export async function load() {
   //Hier wird ein Request ans Backend gesendet um zu prüfen ob es ONLINE ist
   try {
-    const backend_data = (await api.get('modules')) || [];
+    const backend_data = (await api.get('actuator/health')) || [];
     let status = false;
 
-    if (backend_data.find((item) => item.moduleName === 'Schlüsselqualifikation (Wahlpflichtfach)')) {
+    if (backend_data.status === 'UP') {
       status = true;
     }
 
