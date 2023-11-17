@@ -36,12 +36,14 @@ public class Procedure {
     private String annotation;
     @Column(
             name = "university",
-            columnDefinition = "VARCHAR"
+            columnDefinition = "VARCHAR",
+            nullable = false
     )
     private String university;
     @Column(
             name = "course_name",
-            columnDefinition = "VARCHAR"
+            columnDefinition = "VARCHAR",
+            nullable = false
     )
     private String courseName;
 
@@ -54,8 +56,21 @@ public class Procedure {
 
     // Benutzerdefinierter Konstruktor ohne ID
     public Procedure(int status, String annotation) {
+        this.university = "Universität Leipzig";
+        this.courseName = "Informatik Bachelor";
         this.status = status;
         this.annotation = annotation;
+    }
+    public Procedure(String annotation,String university,String courseName ){
+        this.annotation = annotation;
+        this.university = university;
+        this.courseName = courseName;
+        this.status = 1;
+    }
+    public Procedure(String university,String courseName ){
+        this.university = university;
+        this.courseName = courseName;
+        this.status = 1;
     }
 }
 
