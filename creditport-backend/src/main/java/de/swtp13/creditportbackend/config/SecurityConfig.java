@@ -29,7 +29,7 @@ public class SecurityConfig {
                                 .requestMatchers("api/test-endpoint/secure")
                                 .authenticated()
                                 .requestMatchers("api/auth/register")
-                                .hasRole("ADMIN")
+                                .hasAuthority("ADMIN")
                                 .requestMatchers("api/test-endpoint/open")
                                 .permitAll()
                                 .anyRequest()
