@@ -41,8 +41,7 @@ public class Request {
     //private File pdf
     @Column(
             name = "annotation",
-            columnDefinition = "TEXT",
-            nullable = true
+            columnDefinition = "TEXT"
     )
     private String annotation;
     @Column(
