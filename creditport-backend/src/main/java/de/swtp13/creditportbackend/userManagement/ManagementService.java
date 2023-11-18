@@ -50,7 +50,14 @@ public class ManagementService {
     public ManagementResponse updateRole(UpdateRequest request) {
         if (userRepository.existsById(request.getId())) {
             var user = userRepository.findById(request.getId()).orElseThrow();
-            user.setRole(Role.valueOf(request.getUpdatedValue()));
+            try {
+                user.setRole(Role.valueOf(request.getUpdatedValue()));
+            } catch (IllegalArgumentException iae) {
+                return ManagementResponse.builder()
+                        .success(false)
+                        .errorMsg("Invalid role")
+                        .build();
+            }
             userRepository.save(user);
             return ManagementResponse.builder()
                     .success(true)
