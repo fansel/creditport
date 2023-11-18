@@ -1,11 +1,25 @@
 <script>
   import * as config from '$lib/config';
+  import Modal from '$lib/components/Modal.svelte';
   export let users;
+
+  let showModal = false;
 </script>
+
+<Modal bind:showModal>
+  <h2 slot="headline" class="m-0">Neuen Benutzer erstellen</h2>
+  <form action="" slot="body" class="p-3">
+    <p>Hallo</p>
+  </form>
+  <div slot="footer" class="p-3 d-flex justify-content-end align-items-center border-top">
+    <button class="btn btn-outline-secondary me-3">Abbrechen</button>
+    <button class="btn btn-primary">Speichern</button>
+  </div>
+</Modal>
 
 <h4 class="mb-3 d-flex">
   Benutzer
-  <button class="btn btn-primary btn-sm ms-4">
+  <button class="btn btn-primary btn-sm ms-4" on:click={() => (showModal = true)}>
     <i class="bi bi-plus-circle" />
     Benutzer hinzufügen
   </button>
@@ -28,7 +42,7 @@
             {user.username}
           </button>
         </div>
-        <div class="col d-flex align-items-center"><span class="badge bg-success-subtle border border-success-subtle text-secondary-emphasis rounded-pill">{user.role}</span></div>
+        <div class="col d-flex align-items-center"><span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill">{user.role}</span></div>
         <div class="col d-flex align-items-center">
           <div class="btn-group">
             <button class="btn btn-sm btn-outline-primary">Bearbeiten</button>
@@ -48,7 +62,7 @@
     <div class="row">
       <div class="col-4">Berechtigungen</div>
       {#each Object.entries(config.user_roles) as [key, value] (key)}
-        <div class="col"><span class="badge bg-success-subtle border border-success-subtle text-secondary-emphasis rounded-pill">{value}</span></div>
+        <div class="col"><span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill">{value}</span></div>
       {/each}
     </div>
   </li>
