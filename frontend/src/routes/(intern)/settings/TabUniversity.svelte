@@ -1,12 +1,21 @@
 <script>
-  import { onMount } from 'svelte';
+  import VirtualList from '@sveltejs/svelte-virtual-list';
 
   export let universities;
+
+  let start;
+  let end;
 
   let searchTerm = '';
   let searchResults;
   let searchResultsCount = 0;
   // let lowerCaseUniversities = [];
+
+  //TODO
+  // - Groß und Kleinschreibung ignorieren beim suchen
+  // - BUG wenn man ganz runtergescrollt hat und neu sucht wird Scrollbar nicht geupdatet
+  // - eigene Implementierung von VirtualList
+  // - letztes Item hat doppelten Border-Bottom
 
   $: searchResultsCount = searchResults.length;
 
@@ -19,29 +28,25 @@
   <div class="col"><h4>Vorschlagliste</h4></div>
   <div class="col-8">
     <div class="form-inline d-flex align-items-center no-wrap">
-      {#if searchResultsCount < universities.length}
-        <span class="me-3 font-sm">{searchResultsCount} Treffer</span>
-      {/if}
-
       <input type="text" placeholder="Suche" class="form-control form-control-sm" bind:value={searchTerm} />
     </div>
   </div>
 </div>
 
-<ul class="list-group mb-4 uni-table border">
+<ul class="list-group mb-3 uni-table border">
   <li class="uni-table-header border-bottom font-sm">
     <div class="row">
-      <div class="col-9">Name</div>
+      <div class="col-8">Name</div>
       <div class="col">Aktionen</div>
     </div>
   </li>
 
   <div class="uni-table-body">
-    {#each searchResults as uni}
+    <VirtualList items={searchResults} height="332px" bind:start bind:end let:item>
       <li class="uni-table-item">
         <div class="row">
-          <div class="col-9 d-flex align-items-center">
-            {uni.uniName}
+          <div class="col-8 d-flex align-items-center">
+            {item.uniName}
           </div>
           <div class="col d-flex align-items-center">
             <div class="btn-group">
@@ -51,11 +56,13 @@
           </div>
         </div>
       </li>
-    {/each}
+    </VirtualList>
   </div>
 </ul>
 
-<button class="btn btn-primary mt-2 mb-2">Speichern</button>
+{#if searchResultsCount < universities.length}
+  <p>{searchResultsCount} Treffer</p>
+{/if}
 
 <style>
   .no-wrap {
@@ -64,11 +71,6 @@
 
   .font-sm {
     font-size: 0.875rem;
-  }
-
-  .uni-table {
-    max-height: 320px;
-    overflow: hidden;
   }
 
   .uni-table-header {
@@ -81,18 +83,12 @@
   }
 
   .uni-table-item {
-    border-width: 0 0 1px;
-    border-color: #dee2e6;
-    border-bottom: 1px solid #dee2e6;
+    border-bottom: 1px solid rgb(222, 226, 230);
     width: 100%;
     padding: 0.5rem 1rem;
   }
 
   .uni-table-item:hover {
     background-color: rgba(0, 0, 0, 0.075);
-  }
-
-  .uni-table-item:last-child {
-    border-bottom-width: 0;
   }
 </style>
