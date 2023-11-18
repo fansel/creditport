@@ -1,12 +1,22 @@
 <script>
+  import { onMount } from 'svelte';
+
   export let universities;
+
+  let searchTerm = '';
+  let searchResults;
+  // let lowerCaseUniversities = [];
+
+  $: searchResults = universities.filter((uni) => {
+    return uni.uniName.includes(searchTerm);
+  });
 </script>
 
 <div class="row mb-3">
   <div class="col"><h4>Vorschlagliste</h4></div>
   <div class="col-8">
     <div class="form-inline d-flex align-items-center">
-      <input type="text" placeholder="Suche" class="form-control form-control-sm" />
+      <input type="text" placeholder="Suche" class="form-control form-control-sm" bind:value={searchTerm} />
     </div>
   </div>
 </div>
@@ -20,7 +30,7 @@
   </li>
 
   <div class="uni-table-body">
-    {#each universities as uni}
+    {#each searchResults as uni}
       <li class="uni-table-item">
         <div class="row">
           <div class="col-9 d-flex align-items-center">
