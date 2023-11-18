@@ -5,7 +5,10 @@
 
   let searchTerm = '';
   let searchResults;
+  let searchResultsCount = 0;
   // let lowerCaseUniversities = [];
+
+  $: searchResultsCount = searchResults.length;
 
   $: searchResults = universities.filter((uni) => {
     return uni.uniName.includes(searchTerm);
@@ -15,7 +18,11 @@
 <div class="row mb-3">
   <div class="col"><h4>Vorschlagliste</h4></div>
   <div class="col-8">
-    <div class="form-inline d-flex align-items-center">
+    <div class="form-inline d-flex align-items-center no-wrap">
+      {#if searchResultsCount < universities.length}
+        <span class="me-3 font-sm">{searchResultsCount} Treffer</span>
+      {/if}
+
       <input type="text" placeholder="Suche" class="form-control form-control-sm" bind:value={searchTerm} />
     </div>
   </div>
@@ -51,8 +58,16 @@
 <button class="btn btn-primary mt-2 mb-2">Speichern</button>
 
 <style>
+  .no-wrap {
+    white-space: nowrap;
+  }
+
+  .font-sm {
+    font-size: 0.875rem;
+  }
+
   .uni-table {
-    max-height: 330px;
+    max-height: 320px;
     overflow: hidden;
   }
 
