@@ -20,7 +20,7 @@
         <li class="nav-item"><a href="/procedures" class="nav-link px-2 {$page.data.title == 'Impressum' ? 'text-dark' : 'text-secondary'}">Archiv</a></li>
       </ul>
 
-      <div class="dropdown ms-3">
+      <div class="dropdown profil-dropdown">
         <button class="profil-btn d-flex align-items-center link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
           <strong>{username}</strong>
           <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle ms-2" />

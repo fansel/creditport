@@ -22,7 +22,8 @@ export const actions = {
 
     const user = {
       token: body.token,
-      username: JSON.parse(atob(body.token.split('.')[1])).sub
+      username: JSON.parse(atob(body.token.split('.')[1])).sub,
+      expires_at: new Date(Number(JSON.parse(atob(body.token.split('.')[1])).exp * 1000))
     };
 
     const value = btoa(JSON.stringify(user));

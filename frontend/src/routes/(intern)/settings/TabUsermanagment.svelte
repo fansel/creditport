@@ -1,26 +1,103 @@
 <script>
+  import * as config from '$lib/config';
   export let users;
 </script>
 
-<div class="">
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Username</th>
-        <th scope="col">Rolle</th>
-      </tr>
-    </thead>
-    <tbody>
-      {#each users as user, index}
-        <tr>
-          <th scope="row">{user.userId}</th>
-          <td>{user.username}</td>
-          <td>
-            <span class="badge bg-success-subtle border border-success-subtle text-secondary-emphasis rounded-pill">{user.role}</span>
-          </td>
-        </tr>
+<h4 class="mb-3 d-flex">
+  Benutzer
+  <button class="btn btn-primary btn-sm ms-4">
+    <i class="bi bi-plus-circle" />
+    Benutzer hinzufügen
+  </button>
+</h4>
+
+<ul class="list-group mb-4">
+  <li class="list-group-item font-sm">
+    <div class="row">
+      <div class="col">Nutzername</div>
+      <div class="col">Rolle</div>
+      <div class="col">Aktionen</div>
+    </div>
+  </li>
+
+  {#each users as user, index}
+    <li class="list-group-item">
+      <div class="row">
+        <div class="col d-flex align-items-center">
+          <button class="btn btn-link p-0">
+            {user.username}
+          </button>
+        </div>
+        <div class="col d-flex align-items-center"><span class="badge bg-success-subtle border border-success-subtle text-secondary-emphasis rounded-pill">{user.role}</span></div>
+        <div class="col d-flex align-items-center">
+          <div class="btn-group">
+            <button class="btn btn-sm btn-outline-primary">Bearbeiten</button>
+            <button class="btn btn-sm btn-outline-danger">Löschen</button>
+          </div>
+        </div>
+      </div>
+    </li>
+  {/each}
+</ul>
+
+<h4 class="mb-3">Rollen</h4>
+<p>Die Nutzerrollen sind unveränderlich</p>
+
+<ul class="list-group mb-4 font-sm">
+  <li class="list-group-item">
+    <div class="row">
+      <div class="col-4">Berechtigungen</div>
+      {#each Object.entries(config.user_roles) as [key, value] (key)}
+        <div class="col"><span class="badge bg-success-subtle border border-success-subtle text-secondary-emphasis rounded-pill">{value}</span></div>
       {/each}
-    </tbody>
-  </table>
-</div>
+    </div>
+  </li>
+
+  <li class="list-group-item">
+    <div class="row">
+      <div class="col-4 d-flex align-items-center">Anträge ansehen</div>
+      <div class="col d-flex align-items-center"><input type="checkbox" name="" id="" class="form-check-input" checked disabled /></div>
+      <div class="col d-flex align-items-center"><input type="checkbox" name="" id="" class="form-check-input" disabled /></div>
+      <div class="col d-flex align-items-center"><input type="checkbox" name="" id="" class="form-check-input" disabled /></div>
+    </div>
+  </li>
+
+  <li class="list-group-item">
+    <div class="row">
+      <div class="col-4 d-flex align-items-center">Anträge bearbeiten</div>
+      <div class="col d-flex align-items-center"><input type="checkbox" name="" id="" class="form-check-input" disabled /></div>
+      <div class="col d-flex align-items-center"><input type="checkbox" name="" id="" class="form-check-input" checked disabled /></div>
+      <div class="col d-flex align-items-center"><input type="checkbox" name="" id="" class="form-check-input" disabled /></div>
+    </div>
+  </li>
+
+  <li class="list-group-item">
+    <div class="row">
+      <div class="col-4 d-flex align-items-center">Anträge weiterleiten</div>
+      <div class="col d-flex align-items-center"><input type="checkbox" name="" id="" class="form-check-input" disabled /></div>
+      <div class="col d-flex align-items-center"><input type="checkbox" name="" id="" class="form-check-input" disabled /></div>
+      <div class="col d-flex align-items-center"><input type="checkbox" name="" id="" class="form-check-input" checked disabled /></div>
+    </div>
+  </li>
+
+  <li class="list-group-item">
+    <div class="row">
+      <div class="col-4 d-flex align-items-center">Anträge löschen</div>
+      <div class="col d-flex align-items-center"><input type="checkbox" name="" id="" class="form-check-input" checked disabled /></div>
+      <div class="col d-flex align-items-center"><input type="checkbox" name="" id="" class="form-check-input" disabled /></div>
+      <div class="col d-flex align-items-center"><input type="checkbox" name="" id="" class="form-check-input" disabled /></div>
+    </div>
+  </li>
+</ul>
+
+<button class="btn btn-primary mt-2 mb-2">Speichern</button>
+
+<style>
+  .btn-link {
+    text-decoration: none;
+  }
+
+  .font-sm {
+    font-size: 0.875rem;
+  }
+</style>
