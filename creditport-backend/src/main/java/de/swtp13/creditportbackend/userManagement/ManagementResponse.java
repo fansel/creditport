@@ -1,4 +1,4 @@
-package de.swtp13.creditportbackend.auth;
+package de.swtp13.creditportbackend.userManagement;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,10 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationResponse {
+public class ManagementResponse {
 
     private boolean success;
     private String errorMsg;
-    private String token;
-    private String role;
 }

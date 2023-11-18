@@ -65,12 +65,12 @@ public class AuthenticationService {
                     .build();
         }
 
-        var user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow(); //throw specific exception, catch and handle?
+        var user = userRepository.findByUsername(request.getUsername()).orElseThrow();
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .success(true)
                 .token(jwtToken)
+                .role(user.getRole().name())
                 .build();
     }
 }

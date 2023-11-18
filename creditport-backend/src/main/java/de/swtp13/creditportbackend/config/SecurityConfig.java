@@ -30,17 +30,12 @@ public class SecurityConfig {
                                 .authenticated()
                                 .requestMatchers("api/auth/register")
                                 .hasAuthority("ADMIN")
-                                .requestMatchers("api/usermanagement/users")
+                                .requestMatchers("api/usermanagement/**")
                                 .hasAuthority("ADMIN")
                                 .requestMatchers("api/test-endpoint/open")
                                 .permitAll()
                                 .anyRequest()
                                 .permitAll())
-                        /*        .requestMatchers("/auth/**")
-                                .requestMatchers("**")
-                                .permitAll()
-                                .anyRequest()
-                                .authenticated())*/
                 .sessionManagement(
                         (sessionManagement) -> sessionManagement
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))

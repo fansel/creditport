@@ -2,23 +2,53 @@ package de.swtp13.creditportbackend.userManagement;
 
 import de.swtp13.creditportbackend.users.User;
 import de.swtp13.creditportbackend.users.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/usermanagement")
+@RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    private final ManagementService managementService;
 
     @GetMapping("/users")
     public List<User> getAllModules() {
         System.out.println("Get all Users");
         return userRepository.findAll();
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<ManagementResponse> deleteUser(
+            @RequestBody UserRequest request
+    ) {
+        ManagementResponse response = managementService.deleteUser(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/update/password")
+    public ResponseEntity<ManagementResponse> updatePassword(
+            @RequestBody UpdateRequest request
+    ) {
+        return ResponseEntity.ok(managementService.updatePassword(request));
+    }
+
+    @PostMapping("/update/username")
+    public ResponseEntity<ManagementResponse> updateUsername(
+            @RequestBody UpdateRequest request
+    ) {
+        return ResponseEntity.ok(managementService.updateUsername(request));
+    }
+
+    @PostMapping("/update/role")
+    public ResponseEntity<ManagementResponse> updateRole(
+            @RequestBody UpdateRequest request
+    ) {
+        return ResponseEntity.ok(managementService.updateRole(request));
     }
 }
