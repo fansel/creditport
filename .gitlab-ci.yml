@@ -51,21 +51,29 @@ test_backend:
     - gradle test -i
 
 generate_and_deploy_javadoc:
-  stage: build
+  stage: deploy
   image: gradle:8.4.0-jdk17-alpine
   script:
     - cd creditport-backend
     - gradle javadoc
-    - ls -la  # Debug: list current directory contents
-    - ls -la build/docs/javadoc  # Debug: list JavaDoc directory contents
-    - mkdir ../public  # Create public at the project root
-    - mv build/docs/javadoc ../public/
-    - ls -la ../public  # Debug: verify contents of public
+    - mkdir -p ../public/javadoc  # Create the public/javadoc directory at the root
+    - mv build/docs/javadoc/* ../public/javadoc/  # Move JavaDoc files to the public/javadoc directory
   artifacts:
     paths:
-      - public  # Relative to the project root
+      - public  # The public directory at the root is marked as an artifact
   only:
-    - developer
+    - developer  # Specify the branch here
+
+pages:
+  stage: deploy
+  script:
+    - echo 'Deploying JavaDoc to GitLab Pages'
+  artifacts:
+    paths:
+      - public
+  only:
+    - developer  # Specify the branch here
+
 
 build_backend:
   stage: build
