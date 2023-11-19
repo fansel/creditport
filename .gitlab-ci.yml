@@ -62,12 +62,13 @@ generate_javadoc:
     - mkdir -p doc
     - mv build/docs/javadoc/* doc/
     - echo $GITLAB_ACCESS_TOKEN
+    - git config --global user.email "GitLab@Runner.com"
+    - git config --global user.name 'GitLab Runner'
+    - "git config --global http.extraheader "Authorization: Bearer $GITLAB_ACCESS_TOKEN"
     - git add doc/
     - git commit -m "Update JavaDoc documentation by $GITLAB_USER_NAME"
   only:
     - developer
-
-
 
 
 
