@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface ProcedureRepository extends JpaRepository<Procedure, String> {
-    @Query("SELECT p FROM Procedure p")
+    @Query("SELECT p FROM Procedures p")
     List<Procedure> findAllWithDetails();
 }
