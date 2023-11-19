@@ -1,14 +1,12 @@
 package de.swtp13.creditportbackend.universities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
+
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -18,9 +16,10 @@ import lombok.NoArgsConstructor;
 @Table(name = "universities")
 public class University {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto-increment
-    @Column(name = "uni_id", columnDefinition = "INT")
-    private int uniId;
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(name = "uni_id", updatable = false, nullable = false)
+    private UUID uniId;
 
     @Column(name = "uni_name", columnDefinition = "VARCHAR", nullable = false)
     private String uniName;
