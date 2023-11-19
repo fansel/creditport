@@ -1,5 +1,6 @@
 package de.swtp13.creditportbackend.userManagement;
 
+import de.swtp13.creditportbackend.config.JwtService;
 import de.swtp13.creditportbackend.users.Role;
 import de.swtp13.creditportbackend.users.User;
 import de.swtp13.creditportbackend.users.UserRepository;
@@ -14,21 +15,38 @@ public class ManagementService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
-    public ManagementResponse updatePassword(UpdateRequest request) {
-        if (userRepository.existsById(request.getId())) {
-            var user = userRepository.findById(request.getId()).orElseThrow();
-            user.setPassword(passwordEncoder.encode(request.getUpdatedValue()));
-            userRepository.save(user);
-            return ManagementResponse.builder()
-                    .success(true)
-                    .build();
+    public UpdatePasswordResponse updatePassword(UpdateRequest request, String token) {
+        User user;
+        if (request.getId() == null) {
+            try {
+                user = userRepository.findById(
+                        userRepository.findByUsername(
+                                jwtService.extractUsername(token)
+                        ).orElseThrow().getUserId()
+                ).orElseThrow();
+            } catch (IllegalArgumentException iae) {
+                return UpdatePasswordResponse.builder()
+                        .success(false)
+                        .errorMsg("User could not be found")
+                        .build();
+            }
+
+        } else if (userRepository.existsById(request.getId())) {
+            user = userRepository.findById(request.getId()).orElseThrow();
         } else {
-            return ManagementResponse.builder()
+            return UpdatePasswordResponse.builder()
                     .success(false)
                     .errorMsg("User could not be found")
                     .build();
         }
+        user.setPassword(passwordEncoder.encode(request.getUpdatedValue()));
+        userRepository.save(user);
+        return UpdatePasswordResponse.builder()
+                .success(true)
+                .token(jwtService.generateToken(user))
+                .build();
     }
 
     public ManagementResponse updateUsername(UpdateRequest request) {

@@ -30,6 +30,8 @@ public class SecurityConfig {
                                 .authenticated()
                                 .requestMatchers("api/auth/register")
                                 .hasAuthority("ADMIN")
+                                .requestMatchers("api/usermanagement/update/password")
+                                .authenticated()
                                 .requestMatchers("api/usermanagement/**")
                                 .hasAuthority("ADMIN")
                                 .requestMatchers("api/test-endpoint/open")

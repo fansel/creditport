@@ -3,6 +3,7 @@ package de.swtp13.creditportbackend.userManagement;
 import de.swtp13.creditportbackend.users.User;
 import de.swtp13.creditportbackend.users.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,10 +33,12 @@ public class UserController {
     }
 
     @PostMapping("/update/password")
-    public ResponseEntity<ManagementResponse> updatePassword(
+    public ResponseEntity<UpdatePasswordResponse> updatePassword(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
             @RequestBody UpdateRequest request
     ) {
-        return ResponseEntity.ok(managementService.updatePassword(request));
+        String jwt = token.substring(7);
+        return ResponseEntity.ok(managementService.updatePassword(request, jwt));
     }
 
     @PostMapping("/update/username")
