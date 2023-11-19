@@ -8,6 +8,9 @@ import org.hibernate.annotations.GenericGenerator;
 
 import java.util.UUID;
 
+/**
+ * Die Klasse stellt eine Universität dar.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
