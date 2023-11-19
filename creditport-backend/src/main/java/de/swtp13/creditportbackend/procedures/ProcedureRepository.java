@@ -7,9 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface ProcedureRepository extends JpaRepository<Procedure, String> {
-    //@Query("SELECT p.procedureId, p.status, p.courseName FROM Procedure p" +
-    //        "JOIN FETCH p.university u" +
-    //        "JOIN FETCH p.request r" +
-    //        "JOIN FETCH r.module m")
+    @Query("SELECT * FROM procedures")
     List<Procedure> findAllWithDetails();
 }
