@@ -3,7 +3,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 /**
- *
  * @author Felix
  * Dieses Interface ist ein Repository für Module.
  * Es stellt Methoden zum Zugriff auf die Datenbank zur Verfügung.

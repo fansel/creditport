@@ -12,7 +12,6 @@ import java.util.List;
  * Diese Klasse ist ein Controller für die Module.
  * Sie stellt eine REST-Schnittstelle für die Module bereit.
  * Die REST-Schnittstelle ist unter /api/modules erreichbar.
- *
  */
 @RestController
 @RequestMapping("/api/modules")
