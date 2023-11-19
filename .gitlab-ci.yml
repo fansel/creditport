@@ -56,11 +56,14 @@ generate_and_deploy_javadoc:
   script:
     - cd creditport-backend
     - gradle javadoc
-    - mkdir public
-    - mv build/docs/javadoc public/
+    - ls -la  # Debug: list current directory contents
+    - ls -la build/docs/javadoc  # Debug: list JavaDoc directory contents
+    - mkdir ../public  # Create public at the project root
+    - mv build/docs/javadoc ../public/
+    - ls -la ../public  # Debug: verify contents of public
   artifacts:
     paths:
-      - public
+      - public  # Relative to the project root
   only:
     - developer
 
