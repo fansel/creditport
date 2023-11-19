@@ -11,7 +11,6 @@ import java.util.List;
  * @author Maike
  * Die Klasse ist ein Controller für die Vorgänge.
  * REST-Schnittstelle: /api/procedure
- *
  */
 @RestController
 @RequestMapping("/api/procedure")
@@ -20,7 +19,10 @@ public class ProcedureController {
     @Autowired
     private ProcedureRepository procedureRepository;
 
-    // GET all procedures
+    /**
+     * @author Maike
+     * @return List of procedures in JSON Format
+     */
     @GetMapping
     public ResponseEntity<List<Procedure>> getAllProceduresWithDetails() {
         List<Procedure> procedures = procedureRepository.findAllWithDetails();
