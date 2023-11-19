@@ -65,12 +65,14 @@ generate_javadoc:
     - echo $GITLAB_ACCESS_TOKEN
     - git config --global user.email "$GITLAB_USER_EMAIL"
     - git config --global user.name "$GITLAB_USER_NAME"
-    - "echo git config --global http.extraheader 'Authorization: Bearer $GITLAB_ACCESS_TOKEN'"
+    - git config --global credential.helper 'store --file ~/.git-credentials' # Store credentials
+    - echo -e "https://git.informatik.uni-leipzig.de/SWS/lehre/ws-2023-2024/swt-p/projects/swtp-2023-13.git\nusername=$GITLAB_USER_NAME\npassword=$GITLAB_ACCESS_TOKEN" > ~/.git-credentials
     - git add doc/
     - git commit -m "Update JavaDoc documentation by $GITLAB_USER_NAME"
     - git push origin HEAD:developer
   only:
     - developer
+
 
 
 
