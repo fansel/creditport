@@ -7,6 +7,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * @author Maike
+ * Die Klasse ist ein Controller für die Vorgänge.
+ * REST-Schnittstelle: /api/procedure
+ *
+ */
 @RestController
 @RequestMapping("/api/procedure")
 public class ProcedureController {
