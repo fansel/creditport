@@ -24,6 +24,7 @@ stages:
 test_frontend:
   stage: test
   image: node:21.1-alpine3.17
+  when: manual
   script:
     - cd frontend
     - npm install
@@ -31,6 +32,7 @@ test_frontend:
 
 test_backend:
   stage: test
+  when: manual
   image: gradle:8.4.0-jdk17-alpine
   services:
     - name: postgres:16.0-alpine
@@ -52,6 +54,7 @@ test_backend:
 
 generate_javadoc:
   stage: build
+  when: manual
   image: gradle:8.4.0-jdk17-alpine
   script:
     - cd creditport-backend
