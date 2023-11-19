@@ -75,9 +75,6 @@ generate_javadoc:
 
 
 
-
-
-
 build_backend:
   stage: build
   needs: ['test_backend']
