@@ -50,9 +50,21 @@ test_backend:
     - export DB_HOST="$DB_HOST"
     - gradle test -i
 
+generate_javadoc:
+  stage: build
+  image: gradle:8.4.0-jdk17-alpine
+  script:
+    - cd creditport-backend
+    - gradle javadoc
+  artifacts:
+    paths:
+      - creditport-backend/build/docs/javadoc
+  only:
+    - developer
+
 build_backend:
   stage: build
-  needs: ['test_backend']
+  needs: ['test_backend', 'generate_javadoc']
   when: manual
   image:
     name: gcr.io/kaniko-project/executor:v1.14.0-debug
