@@ -31,14 +31,14 @@ public class ManagementService {
                 user = userRepository.findById(request.getId()).orElseThrow();
                 return UserResponse.builder()
                         .success(true)
-                        .user(new DisplayedUser(user.getUserId(), user.getUsername(), user.getRole().name()))
+                        .user(DisplayedUser.of(user))
                         .build();
             }
             case 2 -> { // only username is specified
                 user = userRepository.findByUsername(request.getUsername()).orElseThrow();
                 return UserResponse.builder()
                         .success(true)
-                        .user(new DisplayedUser(user.getUserId(), user.getUsername(), user.getRole().name()))
+                        .user(DisplayedUser.of(user))
                         .build();
             }
             default -> { // both username and ID are null

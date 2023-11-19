@@ -26,7 +26,7 @@ public class UserController {
         ArrayList<DisplayedUser> displayedUserList = new ArrayList<>();
         for (User user:
              userlist) {
-            displayedUserList.add(new DisplayedUser(user.getUserId(), user.getUsername(), user.getRole().name()));
+            displayedUserList.add(DisplayedUser.of(user));
         }
         return displayedUserList;
     }
