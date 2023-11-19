@@ -6,6 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Die Klasse repräsentiert einen Antrag.
+ */
 @Entity(name = "Requests")
 @Table(name = "requests")
 @Data
