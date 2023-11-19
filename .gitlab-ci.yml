@@ -64,7 +64,6 @@ generate_javadoc:
     - echo $GITLAB_ACCESS_TOKEN
     - git config --global user.email $GITLAB_USER_EMAIL
     - git config --global user.name $GITLAB_USER_NAME
-    - "git config --global http.extraheader 'Authorization: Bearer $GITLAB_ACCESS_TOKEN'"
     - git add doc/
     - git commit -m "Update JavaDoc documentation by $GITLAB_USER_NAME"
     - git push origin HEAD:developer
