@@ -17,6 +17,40 @@ public class ManagementService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
+    public UserResponse findUser(UserRequest request) {
+        int givenCredentials = userRequestDisambiguate(request);
+        User user;
+        switch (givenCredentials) {
+            case -1 -> { // username and ID contradict
+                return UserResponse.builder()
+                        .success(false)
+                        .errorMsg("Username and ID contradict")
+                        .build();
+            }
+            case 1 -> { // only ID is specified or ID and username agree
+                user = userRepository.findById(request.getId()).orElseThrow();
+                return UserResponse.builder()
+                        .success(true)
+                        .user(new DisplayedUser(user.getUserId(), user.getUsername(), user.getRole().name()))
+                        .build();
+            }
+            case 2 -> { // only username is specified
+                user = userRepository.findByUsername(request.getUsername()).orElseThrow();
+                return UserResponse.builder()
+                        .success(true)
+                        .user(new DisplayedUser(user.getUserId(), user.getUsername(), user.getRole().name()))
+                        .build();
+            }
+            default -> { // both username and ID are null
+                return UserResponse.builder()
+                        .success(false)
+                        .errorMsg("No user specified")
+                        .build();
+            }
+        }
+
+    }
+
     public UpdatePasswordResponse updatePassword(UpdateRequest request, String token) {
         User user;
         if (request.getId() == null) {
@@ -89,33 +123,24 @@ public class ManagementService {
     }
 
     public ManagementResponse deleteUser(UserRequest request) {
-        // only ID is specified
-        if (request.getId() != null && request.getUsername() == null) {
-            return deleteUserById(request.getId());
+        int givenCredentials = userRequestDisambiguate(request);
+        return switch (givenCredentials) {
+            case -1 -> // username and ID contradict
+                    ManagementResponse.builder()
+                            .success(false)
+                            .errorMsg("Username and UserID contradict")
+                            .build();
+            case 1 -> // only ID is specified or ID and username are specified
+                    deleteUserById(request.getId());
+            case 2 -> // only username is specified
+                    deleteUserByUsername(request.getUsername());
+            default -> // both username and ID are null
+                    ManagementResponse.builder()
+                            .success(false)
+                            .errorMsg("No user specified")
+                            .build();
+        };
 
-        //only username is specified
-        } else if (request.getId() == null && request.getUsername() != null) {
-            return deleteUserByUsername(request.getUsername());
-
-        // both username and ID are specified
-        } else if (request.getId() != null && request.getUsername() != null) {
-            if (userRepository.findByUsername(request.getUsername())
-                    .equals(userRepository.findById(request.getId()))) {
-                return deleteUserById(request.getId());
-            } else {
-                return ManagementResponse.builder()
-                        .success(false)
-                        .errorMsg("Username and UserID contradict")
-                        .build();
-            }
-
-        // neither ID nor username are specified
-        } else {
-            return ManagementResponse.builder()
-                    .success(false)
-                    .errorMsg("No user specified")
-                    .build();
-        }
     }
 
     private ManagementResponse deleteUserById(Integer id) {
@@ -144,6 +169,44 @@ public class ManagementService {
                     .success(false)
                     .errorMsg("User could not be found")
                     .build();
+        }
+    }
+
+    private int userRequestDisambiguate(UserRequest request) {
+        // only ID is specified
+        if (request.getId() != null && request.getUsername() == null) {
+            if (userRepository.existsById(request.getId())){
+                return 1; // ID is valid
+            } else {
+                return 0; // user could not be found
+            }
+        // only username is specified
+        } else if (request.getId() == null && request.getUsername() != null) {
+            if (userRepository.findByUsername(request.getUsername()).isPresent()){
+                return 2; // username is valid
+            } else {
+                return 0; // user could not be found
+            }
+
+        // both username and ID are specified
+        } else if (request.getId() != null && request.getUsername() != null) {
+
+            // if username or ID are invalid
+            if (!userRepository.existsById(request.getId())
+                    || userRepository.findByUsername(request.getUsername()).isEmpty()) {
+                return 0; // user could not be found
+            } else {
+                if (userRepository.findByUsername(request.getUsername())
+                        .equals(userRepository.findById(request.getId()))) {
+                    return 1; // if both are present and valid, use ID
+                } else {
+                    return -1; // username and ID contradict
+                }
+            }
+
+            // neither ID nor username are specified
+        } else {
+            return 0;
         }
     }
 
