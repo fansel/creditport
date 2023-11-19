@@ -13,6 +13,9 @@ import de.swtp13.creditportbackend.procedures.util.IDGenerator;
 @Data
 @NoArgsConstructor // Lombok generiert einen Konstruktor ohne Parameter
 @AllArgsConstructor
+/**
+ * Die Procedure Klasse repräsentiert ein Vorgang. Der Vorgang enthält mehrere Anträge.
+ */
 public class Procedure {
 
     @Id
