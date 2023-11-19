@@ -58,11 +58,15 @@ generate_javadoc:
     - gradle javadoc
     - mkdir -p doc
     - mv build/docs/javadoc/* doc/
-  artifacts:
-    paths:
-      - creditport-backend/doc
+    - git config --global user.email "$GITLAB_USER_EMAIL"
+    - git config --global user.name "$GITLAB_USER_NAME"
+    - git add doc/
+    - git commit -m "Update JavaDoc documentation by $GITLAB_USER_NAME"
+    - git push origin HEAD:developer
   only:
     - developer
+
+
 
 
 
