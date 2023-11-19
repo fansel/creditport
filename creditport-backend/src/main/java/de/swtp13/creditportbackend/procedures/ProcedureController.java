@@ -12,13 +12,12 @@ import java.util.List;
 public class ProcedureController {
 
     @Autowired
-    private ProcedureRepository ProcedureRepository;
+    private ProcedureRepository procedureRepository;
 
     // GET all procedures
     @GetMapping
-    public List<procedure> getAllProcedures() {
-        System.out.println("Get all procedures");
-        return procedureRepository.findAll();
-        }
+    public ResponseEntity<List<Procedure>> getAllProceduresWithDetails() {
+        List<Procedure> procedures = procedureRepository.findAllWithDetails();
+        return ResponseEntity.ok(procedures);
     }
 }
