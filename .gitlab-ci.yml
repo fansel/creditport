@@ -55,6 +55,7 @@ test_backend:
 generate_javadoc:
   stage: build
   when: manual
+  allow_failure: true
   image: gradle:8.4.0-jdk17-alpine
   script:
     - cd creditport-backend
@@ -62,8 +63,9 @@ generate_javadoc:
     - mkdir -p doc
     - mv build/docs/javadoc/* doc/
     - echo $GITLAB_ACCESS_TOKEN
-    - git config --global user.email $GITLAB_USER_EMAIL
-    - git config --global user.name $GITLAB_USER_NAME
+    - git config --global user.email "$GITLAB_USER_EMAIL"
+    - git config --global user.name "$GITLAB_USER_NAME"
+    - "git config --global http.extraheader 'Authorization: Bearer $GITLAB_ACCESS_TOKEN'"
     - git add doc/
     - git commit -m "Update JavaDoc documentation by $GITLAB_USER_NAME"
     - git push origin HEAD:developer
