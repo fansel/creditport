@@ -65,9 +65,10 @@ generate_javadoc:
 
 deploy_javadoc_to_wiki:
   stage: deploy
-  image: alpine/git  # Using an image with Git
+  image: alpine:latest
   before_script:
-    - apk add --update openssh-client
+    - apk update
+    - apk add --no-cache git openssh-client
     - eval $(ssh-agent -s)
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     - mkdir -p ~/.ssh
@@ -79,6 +80,8 @@ deploy_javadoc_to_wiki:
     - mkdir -p wiki-repo/javadoc
     - cp -r creditport-backend/build/docs/javadoc/* wiki-repo/javadoc/
     - cd wiki-repo
+    - git config user.email "$GITLAB_USER_EMAIL"
+    - git config user.name "$GITLAB_USER_NAME"
     - git add .
     - git commit -m "Update JavaDoc"
     - git push origin master
@@ -86,6 +89,7 @@ deploy_javadoc_to_wiki:
     - generate_javadoc
   only:
     - developer
+
 
 
 build_backend:
