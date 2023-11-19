@@ -45,7 +45,7 @@ public class UserController {
         return ResponseEntity.ok(managementService.deleteUser(request));
     }
 
-    @PostMapping("/update/password")
+    @PutMapping("/update/password")
     public ResponseEntity<UpdatePasswordResponse> updatePassword(
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
             @RequestBody UpdateRequest request
@@ -54,14 +54,14 @@ public class UserController {
         return ResponseEntity.ok(managementService.updatePassword(request, jwt));
     }
 
-    @PostMapping("/update/username")
+    @PutMapping("/update/username")
     public ResponseEntity<ManagementResponse> updateUsername(
             @RequestBody UpdateRequest request
     ) {
         return ResponseEntity.ok(managementService.updateUsername(request));
     }
 
-    @PostMapping("/update/role")
+    @PutMapping("/update/role")
     public ResponseEntity<ManagementResponse> updateRole(
             @RequestBody UpdateRequest request
     ) {
