@@ -7,6 +7,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * @author Maike
+ * Die Klasse ist ein Controller für die Universitäten.
+ * REST-Schnittstelle: /api/universities
+ */
 @RestController
 @RequestMapping("/api/universities")
 public class UniversityController {
