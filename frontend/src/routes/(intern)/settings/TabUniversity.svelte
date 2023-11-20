@@ -43,7 +43,7 @@
 
   <div class="uni-table-body">
     <VirtualList items={searchResults} height="332px" bind:start bind:end let:item>
-      <li class="uni-table-item">
+      <li class="uni-table-item border-bottom">
         <div class="row">
           <div class="col-8 d-flex align-items-center">
             {item.uniName}
@@ -83,7 +83,7 @@
   }
 
   .uni-table-item {
-    border-bottom: 1px solid rgb(222, 226, 230);
+    /* border-bottom: 1px solid rgb(222, 226, 230); */
     width: 100%;
     padding: 0.5rem 1rem;
   }

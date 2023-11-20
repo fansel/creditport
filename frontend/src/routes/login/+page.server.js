@@ -6,6 +6,9 @@ export async function load({ locals }) {
   if (locals.user) throw redirect(307, '/dashboard');
 }
 
+//TODO
+// - Einen Button zum anzeigen des Passworts einbauen
+
 /**@type {import('./$types').Actions} */
 export const actions = {
   default: async ({ cookies, request }) => {

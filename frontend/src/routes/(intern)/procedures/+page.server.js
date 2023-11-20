@@ -24,5 +24,5 @@ export async function load({ params, fetch }) {
 
   let data = { data: [{ university: 'test', course: 'test', requestCount: 5 }] };
 
-  return { procedures: data };
+  return { procedures: data, title: 'Vorgänge' };
 }
