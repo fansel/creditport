@@ -35,6 +35,7 @@ services:
     networks:
       - application
     restart: unless-stopped
+    pull_policy: always
 
 
   backend:
@@ -53,6 +54,8 @@ services:
     networks:
       - application
     restart: unless-stopped
+    pull_policy: always
+
 
 networks:
   application:
