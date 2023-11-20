@@ -16,6 +16,13 @@ services:
     networks:
       - application
 
+  javadoc:
+    container_name: creditport-javadoc
+    image: swtp202313/creditport:javadoc-latest
+    ports:
+      - 1234:80
+    restart: unless-stopped
+
   frontend:
     container_name: creditport-frontend
     image: swtp202313/creditport:frontend-latest
