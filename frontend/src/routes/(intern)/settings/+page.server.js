@@ -9,6 +9,8 @@ export async function load({ params, locals, cookies }) {
   let unilist;
 
   let darkMode = cookies.get('theme') || 'light';
+  let useSystemMode = cookies.get('useSystemMode') || false;
+  let pageCount = cookies.get('pageCount') || 10;
 
   //Muss später noch auf die Rolle angepasst werden #TODO
   if (locals.user.username == 'admin') {
@@ -21,41 +23,16 @@ export async function load({ params, locals, cookies }) {
     title: 'Dashboard',
     users: userlist,
     universities: unilist,
-    darkMode: darkMode
+    settings: {
+      darkMode: darkMode,
+      useSystemMode: useSystemMode,
+      pageCount: pageCount
+    }
   };
 }
 
 /** @type {import('./$types').Actions} */
 export const actions = {
-  // setSettings: async ({ cookies, request }) => {
-  //   const data = await request.formData();
-
-  //   const schema = zfd.formData({
-  //     darkMode: zfd.checkbox(),
-  //     pageCount: zfd.numeric(),
-  //     // useSystemMode: zfd.checkbox(),
-  //     language: zfd.numeric()
-  //   });
-
-  //   const result = schema.safeParse(data);
-
-  //   if (!result.success) {
-  //     const data = {
-  //       data: Object.fromEntries(formData),
-  //       errors: result.error.flatten().fieldErrors
-  //     };
-  //     return fail(400, data);
-  //   }
-
-  //   if (result.data.darkMode) {
-  //     cookies.set('theme', 'dark', { path: '/' });
-  //   } else if (!result.data.darkMode) {
-  //     cookies.set('theme', 'light', { path: '/' });
-  //   }
-
-  //   return { success: true };
-  // },
-
   changePassword: async ({ cookies, request }) => {
     const data = await request.formData();
 

@@ -5,7 +5,6 @@
   import TabUniversity from './TabUniversity.svelte';
 
   export let data;
-  export let form;
 
   let activeSlide = 0;
 </script>
@@ -58,7 +57,7 @@
 <!-- Einstellungs INHALT -->
 <div class="tab-content border-start border-end p-3 border-bottom mb-3 shadow-sm">
   {#if activeSlide === 0}
-    <TabGeneral darkMode={data.darkMode} {form} />
+    <TabGeneral settings={data.settings} />
   {:else if activeSlide === 1}
     <TabNotifcations />
   {:else if activeSlide === 2}
