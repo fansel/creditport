@@ -14,13 +14,12 @@ import java.util.List;
  * Die REST-Schnittstelle ist unter /api/modules erreichbar.
  */
 @RestController
-@RequestMapping("/modules")
 public class ModuleController {
 
     @Autowired
     private ModuleRepository moduleRepository;
 
-    @GetMapping
+    @GetMapping("/modules")
     public List<Module> getAllModules() {
         System.out.println("Get all modules");
         return moduleRepository.findAll();
