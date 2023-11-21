@@ -34,6 +34,10 @@ async function send({ method, path, data, token, content }) {
         ret = await res.text();
 
         break;
+      // case content_type.form_data:
+      //     re
+  
+      //     break;
       default:
         break;
     }
