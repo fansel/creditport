@@ -23,7 +23,6 @@ public class UniversityController {
 
     // GET all universities with optional name filter
     @GetMapping
-
     public List<University> getAllUniversities(@RequestParam(required = false) String name) {
         if (name != null && !name.isEmpty()) {
             System.out.println("Get Universities with uniName like: " + name);

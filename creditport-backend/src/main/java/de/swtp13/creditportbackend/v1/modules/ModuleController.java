@@ -14,12 +14,13 @@ import java.util.List;
  */
 
 @RestController
+@RequestMapping("/modules")
 public class ModuleController {
 
     @Autowired
     private ModuleRepository moduleRepository;
 
-    @GetMapping("/modules")
+    @GetMapping
     public List<Module> getAllModules() {
         System.out.println("Get all modules");
         return moduleRepository.findAll();
