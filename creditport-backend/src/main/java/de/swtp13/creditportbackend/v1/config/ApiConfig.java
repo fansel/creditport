@@ -1,4 +1,4 @@
-package de.swtp13.creditportbackend.v1;
+package de.swtp13.creditportbackend.v1.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RequestMapping;
