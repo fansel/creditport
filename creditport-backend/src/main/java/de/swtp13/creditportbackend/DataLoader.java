@@ -8,17 +8,17 @@ package de.swtp13.creditportbackend;
  * @author Felix
  */
 
-import de.swtp13.creditportbackend.modules.Module;
-import de.swtp13.creditportbackend.modules.ModuleRepository;
-import de.swtp13.creditportbackend.procedures.ProcedureRepository;
-import de.swtp13.creditportbackend.procedures.Procedure;
-import de.swtp13.creditportbackend.requests.Request;
-import de.swtp13.creditportbackend.requests.RequestRepository;
-import de.swtp13.creditportbackend.universities.University;
-import de.swtp13.creditportbackend.universities.UniversityRepository;
-import de.swtp13.creditportbackend.users.Role;
-import de.swtp13.creditportbackend.users.User;
-import de.swtp13.creditportbackend.users.UserRepository;
+import de.swtp13.creditportbackend.v1.modules.Module;
+import de.swtp13.creditportbackend.v1.modules.ModuleRepository;
+import de.swtp13.creditportbackend.v1.procedures.ProcedureRepository;
+import de.swtp13.creditportbackend.v1.procedures.Procedure;
+import de.swtp13.creditportbackend.v1.requests.Request;
+import de.swtp13.creditportbackend.v1.requests.RequestRepository;
+import de.swtp13.creditportbackend.v1.universities.University;
+import de.swtp13.creditportbackend.v1.universities.UniversityRepository;
+import de.swtp13.creditportbackend.v1.users.Role;
+import de.swtp13.creditportbackend.v1.users.User;
+import de.swtp13.creditportbackend.v1.users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
