@@ -17,7 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
-
+    private static final String API_VERSION = "/v1";
     private final AuthenticationProvider authenticationProvider;
 
     @Bean
@@ -26,15 +26,15 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         (authorizeHttpRequests) -> authorizeHttpRequests
-                                .requestMatchers("/test-endpoint/secure")
+                                .requestMatchers(API_VERSION+"/test-endpoint/secure")
                                 .authenticated()
-                                .requestMatchers("/auth/register")
+                                .requestMatchers(API_VERSION+"/auth/register")
                                 .hasAuthority("ADMIN")
-                                .requestMatchers("/usermanagement/update/password")
+                                .requestMatchers(API_VERSION+"/usermanagement/update/password")
                                 .authenticated()
-                                .requestMatchers("/usermanagement/**")
+                                .requestMatchers(API_VERSION+"/usermanagement/**")
                                 .hasAuthority("ADMIN")
-                                .requestMatchers("/test-endpoint/open")
+                                .requestMatchers(API_VERSION+"/test-endpoint/open")
                                 .permitAll()
                                 .anyRequest()
                                 .permitAll())

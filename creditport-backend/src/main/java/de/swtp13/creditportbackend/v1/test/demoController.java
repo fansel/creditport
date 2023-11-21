@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/test-endpoint")
 public class demoController {
 
+
     @GetMapping("/open")
     public ResponseEntity<String> sayHello() {
         return ResponseEntity.ok("hello!");

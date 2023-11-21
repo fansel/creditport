@@ -20,6 +20,7 @@ public class ProcedureController {
     @Autowired
     private ProcedureRepository procedureRepository;
 
+
     /**
      * @author Maike
      * @return List of procedures in JSON Format

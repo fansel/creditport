@@ -16,9 +16,9 @@ import java.util.UUID;
 @RequestMapping("/universities")
 public class UniversityController {
 
-    @Autowired
-    private UniversityRepository universityRepository;
 
+    @Autowired
+    private UniversityRepository universityRepository;c
     // GET all universities with optional name filter
     @GetMapping
     public List<University> getAllUniversities(@RequestParam(required = false) String name) {
