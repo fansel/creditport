@@ -20,7 +20,7 @@ public class ModuleControllerTest {
 
     @Test
     public void endpointShouldExist() throws Exception {
-        mockMvc.perform(get("/api/v1/modules"))
+        mockMvc.perform(get("/modules"))
                 .andExpect(status().is(not(HttpStatus.NOT_FOUND.value())));
     }
 
