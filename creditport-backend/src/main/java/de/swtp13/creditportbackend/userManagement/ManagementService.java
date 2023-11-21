@@ -17,43 +17,22 @@ public class ManagementService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
-    public UserResponse findUser(UserRequest request) {
-        int givenCredentials = userRequestDisambiguate(request);
-        User user;
-        switch (givenCredentials) {
-            case -1 -> { // username and ID contradict
-                return UserResponse.builder()
-                        .success(false)
-                        .errorMsg("Username and ID contradict")
-                        .build();
-            }
-            case 1 -> { // only ID is specified or ID and username agree
-                user = userRepository.findById(request.getId()).orElseThrow();
-                return UserResponse.builder()
-                        .success(true)
-                        .user(DisplayedUser.of(user))
-                        .build();
-            }
-            case 2 -> { // only username is specified
-                user = userRepository.findByUsername(request.getUsername()).orElseThrow();
-                return UserResponse.builder()
-                        .success(true)
-                        .user(DisplayedUser.of(user))
-                        .build();
-            }
-            default -> { // both username and ID are null
-                return UserResponse.builder()
-                        .success(false)
-                        .errorMsg("No user specified")
-                        .build();
-            }
-        }
-
+    public Optional<DisplayedUser> findUser(int id) {
+        return DisplayedUser.of(userRepository.findById(id));
     }
 
-    public UpdatePasswordResponse updatePassword(UpdateRequest request, String token) {
+    public boolean deleteUser(int id) {
+        if (userRepository.existsById(id)) {
+            userRepository.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public String updatePassword(Integer id, String token, String newPass) {
         User user;
-        if (request.getId() == null) {
+        if (id == null) {
             try {
                 user = userRepository.findById(
                         userRepository.findByUsername(
@@ -61,152 +40,45 @@ public class ManagementService {
                         ).orElseThrow().getUserId()
                 ).orElseThrow();
             } catch (IllegalArgumentException iae) {
-                return UpdatePasswordResponse.builder()
-                        .success(false)
-                        .errorMsg("User could not be found")
-                        .build();
+                return null;
             }
 
-        } else if (userRepository.existsById(request.getId())) {
-            user = userRepository.findById(request.getId()).orElseThrow();
+        } else if (userRepository.existsById(id)) {
+            user = userRepository.findById(id).orElseThrow();
         } else {
-            return UpdatePasswordResponse.builder()
-                    .success(false)
-                    .errorMsg("User could not be found")
-                    .build();
+            return null;
         }
-        user.setPassword(passwordEncoder.encode(request.getUpdatedValue()));
+        user.setPassword(passwordEncoder.encode(newPass));
         userRepository.save(user);
-        return UpdatePasswordResponse.builder()
-                .success(true)
-                .token(jwtService.generateToken(user))
-                .build();
+        return jwtService.generateToken(user);
     }
 
-    public ManagementResponse updateUsername(UpdateRequest request) {
-        if (userRepository.existsById(request.getId())) {
-            var user = userRepository.findById(request.getId()).orElseThrow();
-            user.setUsername(request.getUpdatedValue());
-            userRepository.save(user);
-            return ManagementResponse.builder()
-                    .success(true)
-                    .build();
-        } else {
-            return ManagementResponse.builder()
-                    .success(false)
-                    .errorMsg("User could not be found")
-                    .build();
-        }
-    }
-
-    public ManagementResponse updateRole(UpdateRequest request) {
-        if (userRepository.existsById(request.getId())) {
-            var user = userRepository.findById(request.getId()).orElseThrow();
-            try {
-                user.setRole(Role.valueOf(request.getUpdatedValue()));
-            } catch (IllegalArgumentException iae) {
-                return ManagementResponse.builder()
-                        .success(false)
-                        .errorMsg("Invalid role")
-                        .build();
-            }
-            userRepository.save(user);
-            return ManagementResponse.builder()
-                    .success(true)
-                    .build();
-        } else {
-            return ManagementResponse.builder()
-                    .success(false)
-                    .errorMsg("User could not be found")
-                    .build();
-        }
-    }
-
-    public ManagementResponse deleteUser(UserRequest request) {
-        int givenCredentials = userRequestDisambiguate(request);
-        return switch (givenCredentials) {
-            case -1 -> // username and ID contradict
-                    ManagementResponse.builder()
-                            .success(false)
-                            .errorMsg("Username and UserID contradict")
-                            .build();
-            case 1 -> // only ID is specified or ID and username are specified
-                    deleteUserById(request.getId());
-            case 2 -> // only username is specified
-                    deleteUserByUsername(request.getUsername());
-            default -> // both username and ID are null
-                    ManagementResponse.builder()
-                            .success(false)
-                            .errorMsg("No user specified")
-                            .build();
-        };
-
-    }
-
-    private ManagementResponse deleteUserById(Integer id) {
+    public boolean updateUsername(int id, String newUsername) {
         if (userRepository.existsById(id)) {
-            userRepository.deleteById(id);
-            return ManagementResponse.builder()
-                    .success(true)
-                    .build();
+            var user = userRepository.findById(id).orElseThrow();
+            user.setUsername(newUsername);
+            userRepository.save(user);
+            return true;
         } else {
-            return ManagementResponse.builder()
-                    .success(false)
-                    .errorMsg("User could not be found")
-                    .build();
+            return false;
         }
     }
 
-    private ManagementResponse deleteUserByUsername(String username) {
-        Optional<User> user = userRepository.findByUsername(username);
-        if (user.isPresent()) {
-            userRepository.delete(user.orElseThrow());
-            return ManagementResponse.builder()
-                    .success(true)
-                    .build();
+    public int updateRole(int id, String newRole) {
+        if (userRepository.existsById(id)) {
+            var user = userRepository.findById(id).orElseThrow();
+            if (newRole == null || newRole.isEmpty()) {
+                return 400;
+            }
+            try {
+                user.setRole(Role.valueOf(newRole));
+            } catch (IllegalArgumentException iae) {
+                return 422;
+            }
+            userRepository.save(user);
+            return 200;
         } else {
-            return ManagementResponse.builder()
-                    .success(false)
-                    .errorMsg("User could not be found")
-                    .build();
-        }
-    }
-
-    private int userRequestDisambiguate(UserRequest request) {
-        // only ID is specified
-        if (request.getId() != null && request.getUsername() == null) {
-            if (userRepository.existsById(request.getId())){
-                return 1; // ID is valid
-            } else {
-                return 0; // user could not be found
-            }
-        // only username is specified
-        } else if (request.getId() == null && request.getUsername() != null) {
-            if (userRepository.findByUsername(request.getUsername()).isPresent()){
-                return 2; // username is valid
-            } else {
-                return 0; // user could not be found
-            }
-
-        // both username and ID are specified
-        } else if (request.getId() != null && request.getUsername() != null) {
-
-            // if username or ID are invalid
-            if (!userRepository.existsById(request.getId())
-                    || userRepository.findByUsername(request.getUsername()).isEmpty()) {
-                return 0; // user could not be found
-            } else {
-                if (userRepository.findByUsername(request.getUsername())
-                        .equals(userRepository.findById(request.getId()))) {
-                    return 1; // if both are present and valid, use ID
-                } else {
-                    return -1; // username and ID contradict
-                }
-            }
-
-            // neither ID nor username are specified
-        } else {
-            return 0;
+            return 404;
         }
     }
 

@@ -31,40 +31,59 @@ public class UserController {
         return displayedUserList;
     }
 
-    @GetMapping("/user")
-    public ResponseEntity<UserResponse> getUser(
-            @RequestBody UserRequest request
+    @GetMapping("/{id}")
+    public ResponseEntity<DisplayedUser> getUser(
+            @PathVariable int id
     ) {
-        return ResponseEntity.ok(managementService.findUser(request));
+        return managementService.findUser(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<ManagementResponse> deleteUser(
-            @RequestBody UserRequest request
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteUser(
+            @PathVariable int id
     ) {
-        return ResponseEntity.ok(managementService.deleteUser(request));
+        if (managementService.deleteUser(id)) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PatchMapping("/update/password")
-    public ResponseEntity<UpdatePasswordResponse> updatePassword(
+    public ResponseEntity<String> updatePassword(
+            @RequestParam(required = false) Integer id,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-            @RequestBody UpdateRequest request
+            @RequestBody String newPass
     ) {
         String jwt = token.substring(7);
-        return ResponseEntity.ok(managementService.updatePassword(request, jwt));
+        String result = managementService.updatePassword(id, jwt, newPass);
+        if (result == null) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(result);
+        }
+
     }
 
-    @PatchMapping("/update/username")
-    public ResponseEntity<ManagementResponse> updateUsername(
-            @RequestBody UpdateRequest request
+    @PatchMapping("/update/username/{id}")
+    public ResponseEntity updateUsername(
+            @PathVariable int id,
+            @RequestBody String newUsername
     ) {
-        return ResponseEntity.ok(managementService.updateUsername(request));
+        if (managementService.updateUsername(id, newUsername)) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    @PatchMapping("/update/role")
-    public ResponseEntity<ManagementResponse> updateRole(
-            @RequestBody UpdateRequest request
+    @PatchMapping("/update/role/{id}")
+    public ResponseEntity updateRole(
+            @PathVariable int id,
+            @RequestBody String newRole
     ) {
-        return ResponseEntity.ok(managementService.updateRole(request));
+        return ResponseEntity.status(managementService.updateRole(id, newRole)).build();
     }
 }
