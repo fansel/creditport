@@ -4,7 +4,7 @@
   export let username;
 </script>
 
-<nav class="navbar navbar-expand-md navbar-light bg-light shadow-sm p-3 sticky-top" aria-label="Fourth navbar example">
+<nav class="navbar navbar-expand-md navbar-light shadow-sm p-3 sticky-top" aria-label="Fourth navbar example">
   <div class="container">
     <a class="navbar-brand" href="/"><i class="bi bi-send" /> </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
@@ -13,11 +13,11 @@
 
     <div class="collapse navbar-collapse" id="navbarsExample04">
       <ul class="navbar-nav me-auto mb-2 mb-md-0">
-        <li class="nav-item"><a href="/dashboard" class="nav-link px-2 {$page.data.title == 'Dashboard' ? 'text-dark' : 'text-secondary'}">Dashboard</a></li>
-        <li class="nav-item"><a href="/procedures" class="nav-link px-2 {$page.data.title == 'Vorgänge' ? 'text-dark' : 'text-secondary'}">Vorgänge</a></li>
+        <li class="nav-item"><a href="/dashboard" class="nav-link px-2 {$page.data.title == 'Dashboard' ? 'fw-bold' : ''}">Dashboard</a></li>
+        <li class="nav-item"><a href="/procedures" class="nav-link px-2 {$page.data.title == 'Vorgänge' ? 'fw-bold' : ''}">Vorgänge</a></li>
 
-        <li class="nav-item"><a href="/procedures" class="nav-link px-2 {$page.data.title == 'Faq' ? 'text-dark' : 'text-secondary'}">Markierte</a></li>
-        <li class="nav-item"><a href="/procedures" class="nav-link px-2 {$page.data.title == 'Impressum' ? 'text-dark' : 'text-secondary'}">Archiv</a></li>
+        <li class="nav-item"><a href="/procedures" class="nav-link px-2 {$page.data.title == 'Faq' ? 'fw-bold' : ''}">Markierte</a></li>
+        <li class="nav-item"><a href="/procedures" class="nav-link px-2 {$page.data.title == 'Impressum' ? 'fw-bold' : ''}">Archiv</a></li>
       </ul>
 
       <div class="dropdown profil-dropdown">

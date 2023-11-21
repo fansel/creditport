@@ -7,7 +7,7 @@
 <div class="row">
   <div class="col-md">
     <div
-      class="card bg-white
+      class="card
     mb-3"
     >
       <div class="card-header">
@@ -21,7 +21,7 @@
     </div>
   </div>
   <div class="col-md">
-    <div class="card bg-white mb-3">
+    <div class="card mb-3">
       <div class="card-header">
         <h2 class="fs-1">2</h2>
         <p>In Bearbeitung</p>
@@ -33,7 +33,7 @@
     </div>
   </div>
   <div class="col-md">
-    <div class="card bg-white mb-3">
+    <div class="card mb-3">
       <div class="card-header">
         <h2 class="fs-1">2</h2>
         <p>Archiviert</p>

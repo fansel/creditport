@@ -27,6 +27,7 @@ public class User implements UserDetails {
             nullable = false
     )
     private int userId;
+
     @Column(
             name = "username",
             columnDefinition = "VARCHAR",
@@ -34,6 +35,7 @@ public class User implements UserDetails {
             nullable = false
     )
     private String username;
+
     @Column(
             name = "password",
             columnDefinition = "VARCHAR",
@@ -41,6 +43,7 @@ public class User implements UserDetails {
             nullable = false
     )
     private String password;
+
     @Column(
             name = "role",
             columnDefinition = "VARCHAR",

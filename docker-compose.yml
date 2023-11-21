@@ -15,6 +15,16 @@ services:
     networks:
       - application
 
+  javadoc:
+    container_name: creditport-javadoc
+    build:
+      context: ./creditport-backend/
+      dockerfile: javadoc.Dockerfile
+    image: creditport-javadoc
+    ports:
+      - 1234:80
+    restart: unless-stopped
+
   frontend:
     container_name: creditport-frontend
     build:
