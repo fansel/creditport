@@ -3,7 +3,6 @@
   import { enhance } from '$app/forms';
 
   export let data;
-
 </script>
 
 <div class="row py-3 mb-3 pb-md-1 border-bottom align-items-center">
@@ -144,7 +143,7 @@
             <div class="btn-group text-nowrap float-end" role="group">
               <form method="POST" action="?/delete" use:enhance>
                 <input type="hidden" name="id" value="1" />
-                <a type="button" href="/jobs/2" class="btn btn-sm btn-primary btn-group-right"><i class="bi bi-pencil-square" /></a>
+                <a type="button" href="/1/1" class="btn btn-sm btn-primary btn-group-right"><i class="bi bi-pencil-square" /></a>
               </form>
             </div>
           </td>
