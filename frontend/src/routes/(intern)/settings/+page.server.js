@@ -15,8 +15,8 @@ export async function load({ params, locals, cookies }) {
   //Muss später noch auf die Rolle angepasst werden #TODO
   if (locals.user.username == 'admin') {
     //Nutzerliste
-    userlist = await api.get('api/usermanagement/users', locals.user?.token, api.content_type.json);
-    unilist = await api.get('api/universities', null, api.content_type.json);
+    userlist = await api.get('api/v1/usermanagement/users', locals.user?.token, api.content_type.json);
+    unilist = await api.get('api/v1/universities', null, api.content_type.json);
   }
 
   return {
