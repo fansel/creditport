@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 
 import de.swtp13.creditportbackend.procedures.util.IDGenerator;
 
+import java.time.LocalDateTime;
+
 @Entity(name = "Procedures")
 @Table(name = "procedures")
 @Data
@@ -50,6 +52,12 @@ public class Procedure {
             nullable = false
     )
     private String courseName;
+    @Column(
+            name = "created_at",
+            nullable = false
+    )
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime createdAt;
 
     //@OneToMany(
     //        mappedBy = "procedure"
@@ -70,12 +78,14 @@ public class Procedure {
         this.university = university;
         this.courseName = courseName;
         this.status = Status.NEU;
+        this.createdAt = LocalDateTime.now();
     }
 
     public Procedure(String university, String courseName) {
         this.university = university;
         this.courseName = courseName;
         this.status = Status.NEU;
+        this.createdAt = LocalDateTime.now();
     }
 
 /*

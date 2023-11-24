@@ -6,6 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+
 /**
  * Die Klasse repräsentiert einen Antrag.
  */
@@ -60,6 +63,17 @@ public class Request {
     )
     @Enumerated(EnumType.STRING)
     private Status status;
+    @Column(
+            name = "created_at",
+            nullable = false
+    )
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime createdAt;
+    //@Column(
+      //      name = "PDFinByte",
+        //    columnDefinition = "INT",
+          //  nullable = false
+    //)
 
     public Request(Procedure procedure, String externalModuleId, String internalModuleId,String annotation, int creditPoints){
         this.procedure = procedure;
@@ -67,6 +81,16 @@ public class Request {
         this.internalModuleId = internalModuleId;
         this.annotation = annotation;
         this.creditPoints = creditPoints;
+        this.status = Status.NICHT_BEARBEITET;
+        this.createdAt = LocalDateTime.now();
+    }
+    public Request(Procedure procedure, String externalModuleId, String internalModuleId,String annotation, int creditPoints, LocalDateTime createdAt){
+        this.procedure = procedure;
+        this.externalModuleId = externalModuleId;
+        this.internalModuleId = internalModuleId;
+        this.annotation = annotation;
+        this.creditPoints = creditPoints;
+        this.createdAt = createdAt;
         this.status = Status.NICHT_BEARBEITET;
     }
 }
