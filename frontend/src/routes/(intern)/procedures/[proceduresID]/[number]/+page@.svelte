@@ -9,27 +9,40 @@
   import Modal from '$lib/components/Modal.svelte';
 
   let showModal = false;
+
+  // APIs (Jetzt noch mit Testsatz, da API nicht steht)
+
+  let request = {
+    procedureID: 1234,
+    requestID: 1,
+    externalModule: 'Mathe I',
+    link: 'https://www.orimi.com/pdf-test.pdf',
+    comment: 'Der Bescheid wurde erfolgreich angenommen.',
+    createdAt: new Date(),
+    lastEditedAt: new Date()
+  };
 </script>
 
-<div class="site position-fixed">
-  <div class="nav-bar my-3" width="100%">
-    <button type="button" class="btn btn-sm btn-outline-primary" onclick="window.location.href='https://google.com'">
-      <i class="bi bi-arrow-left" />
-    </button>
-    <button type="button" class="btn btn-sm btn-outline-primary" onclick="window.location.href='https://youtube.com'">
-      <i class="bi bi-arrow-right" />
-    </button>
-    <button type="button" class="btn btn-sm btn-outline-primary" on:click={() => (showModal = true)}> ähnliche Anträge </button>
+<div class="site position-fixed m-2">
+  <div class="row px-3">
+    <div class="nav-bar my-3" width="100%">
+      <button type="button" class="btn btn-sm btn-outline-primary" onclick="window.location.href='https://google.com'">
+        <i class="bi bi-arrow-left" />
+      </button>
+      <button type="button" class="btn btn-sm btn-outline-primary" onclick="window.location.href='https://youtube.com'">
+        <i class="bi bi-arrow-right" />
+      </button>
+      <button type="button" class="btn btn-sm btn-outline-primary" on:click={() => (showModal = true)}> ähnliche Anträge </button>
+    </div>
   </div>
-
-  <div class="row p-3 w-100">
-    <div class="col">
+  <div class="row px-3 w-100">
+    <div class="col-8">
       <div class="pdf-container">
-        <div class="pdf-content"><iframe src="https://www.orimi.com/pdf-test.pdf" width="700" height="750" /></div>
+        <div class="pdf-content"><iframe src={request.link} width="1150" height="800" /></div>
       </div>
     </div>
 
-    <div class="col">
+    <div class="col-4">
       <form action="">
         <div class="mb-3">
           <label for="" class="mb-2"><strong>Modulvorschlag</strong></label>
@@ -40,10 +53,15 @@
           </select>
         </div>
 
+        <div class="col-auto mb-3">
+          <label><strong>Status</strong></label><br />
+          <button class="badge bg-success-subtle border border-success-subtle text-secondary-emphasis rounded-pill">Status</button>
+        </div>
+
         <div class="form-row">
           <div class="form-group col">
             <label><strong>Bemerkungsfeld</strong></label>
-            <input type="email" class="form-control" id="inputEmail4" placeholder="Begründen Sie Ihren Entscheid" />
+            <textarea class="form-control" id="input" placeholder="Begründen Sie Ihren Entscheid..." rows="4">{request.comment}</textarea>
           </div>
         </div>
       </form>
