@@ -1,7 +1,5 @@
-package de.swtp13.creditportbackend.userManagement;
+package de.swtp13.creditportbackend.users;
 
-import de.swtp13.creditportbackend.users.User;
-import de.swtp13.creditportbackend.users.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;

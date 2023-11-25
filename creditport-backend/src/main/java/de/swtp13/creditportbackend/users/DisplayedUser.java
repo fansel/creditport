@@ -1,6 +1,5 @@
-package de.swtp13.creditportbackend.userManagement;
+package de.swtp13.creditportbackend.users;
 
-import de.swtp13.creditportbackend.users.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

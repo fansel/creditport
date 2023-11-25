@@ -1,9 +1,6 @@
-package de.swtp13.creditportbackend.userManagement;
+package de.swtp13.creditportbackend.users;
 
 import de.swtp13.creditportbackend.config.JwtService;
-import de.swtp13.creditportbackend.users.Role;
-import de.swtp13.creditportbackend.users.User;
-import de.swtp13.creditportbackend.users.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
