@@ -1,5 +1,5 @@
 <!-- Hauptbearbeitungsseite mit PDF Vorschau -->
-<script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/Oo+O5" crossorigin="anonymous">
   export let data;
 
   const modules = data.modules;
@@ -12,16 +12,59 @@
 
   // APIs (Jetzt noch mit Testsatz, da API nicht steht)
 
-  let request = {
+  $: request = {
     procedureID: 1234,
     requestID: 1,
     externalModule: 'Mathe I',
     link: 'https://www.orimi.com/pdf-test.pdf',
+    status: 1,
     comment: 'Der Bescheid wurde erfolgreich angenommen.',
     createdAt: new Date(),
     lastEditedAt: new Date()
   };
+
+  $: statusColor = 'success';
+  $: statusText = 'default';
+  function updateStatus(status) {
+    console.log('updateStatus called');
+
+    request.status = status;
+    if (request.status === 1) {
+      console.log('Status one called');
+      statusText = 'Neu';
+      statusColor = 'secondary';
+    } else if (request.status === 2) {
+      console.log('Status two called');
+      statusText = 'Offen';
+      statusColor = 'secondary';
+    } else if (request.status === 3) {
+      console.log('Status three called');
+      statusText = 'In Bearbeitung';
+      statusColor = 'warning';
+    } else if (request.status === 4) {
+      console.log('Status four called');
+      statusText = 'Weitergeleitet';
+      statusColor = 'warning';
+    } else if (request.status === 5) {
+      console.log('Status five called');
+      statusText = 'Abgeschlossen';
+      statusColor = 'success';
+    }
+    closeDropdown();
+  }
+
+  function closeDropdown() {
+    var dropdown = document.getElementById('myDropdown');
+    var bootstrapDropdown = new bootstrap.Dropdown(dropdown);
+    bootstrapDropdown.hide();
+  }
 </script>
+
+<div class="border-bottom">
+  <div class="col-md m-3">
+    <h1>Vorgangsnummer: {request.procedureID}</h1>
+  </div>
+</div>
 
 <div class="site position-fixed m-2">
   <div class="row px-3">
@@ -54,16 +97,37 @@
         </div>
 
         <div class="col-auto mb-3">
-          <label><strong>Status</strong></label><br />
-          <button class="badge bg-success-subtle border border-success-subtle text-secondary-emphasis rounded-pill">Status</button>
+          <label class="mb-1"><strong>Status</strong></label><br />
+
+          <div class="btn-group dropend">
+            <button
+              type="button"
+              class="btn bg-{statusColor}-subtle border border-{statusColor}-subtle text-{statusColor}-emphasis rounded-pill dropdown-toggle"
+              data-bs-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              {statusText}
+            </button>
+            <div class="dropdown-menu" id="myDropdown">
+              <a class="dropdown-item" on:click={() => updateStatus(1)}>Neu</a>
+              <a class="dropdown-item" on:click={() => updateStatus(2)}>Offen</a>
+              <a class="dropdown-item" on:click={() => updateStatus(3)}>in Bearbeitung</a>
+              <a class="dropdown-item" on:click={() => updateStatus(4)}>Weitergeleitet</a>
+              <a class="dropdown-item" on:click={() => updateStatus(5)}>Abgeschlossen</a>
+            </div>
+          </div>
         </div>
 
-        <div class="form-row">
+        <div class="form-row mb-2">
           <div class="form-group col">
-            <label><strong>Bemerkungsfeld</strong></label>
+            <label class="my-2"><strong>Bemerkungsfeld</strong></label>
             <textarea class="form-control" id="input" placeholder="Begründen Sie Ihren Entscheid..." rows="4">{request.comment}</textarea>
           </div>
         </div>
+
+        <div class="btn btn-primary">Speichern</div>
+        <div class="btn btn-outline-secondary">Abbrechen</div>
       </form>
     </div>
   </div>
