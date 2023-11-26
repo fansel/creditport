@@ -1,5 +1,7 @@
 package de.swtp13.creditportbackend.procedures;
 
+import de.swtp13.creditportbackend.requests.Request;
+import de.swtp13.creditportbackend.requests.RequestRepository;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,6 +11,9 @@ import lombok.NoArgsConstructor;
 import de.swtp13.creditportbackend.procedures.util.IDGenerator;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Entity(name = "Procedures")
 @Table(name = "procedures")
@@ -52,6 +57,12 @@ public class Procedure {
             nullable = false
     )
     private String courseName;
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            mappedBy = "procedure",
+            cascade = CascadeType.ALL)
+    private List<Request> requests;
+
     @Column(
             name = "created_at",
             nullable = false
@@ -88,7 +99,14 @@ public class Procedure {
         this.createdAt = LocalDateTime.now();
     }
 
-/*
+    public List<Integer> getRequestIds() {
+        List<Integer> RequestIds = new ArrayList<>();
+        for (Request request: requests) {
+            RequestIds.add(request.getRequestId());
+        }
+        return RequestIds;
+    }
+    /*
 
 {
   "university": "String",

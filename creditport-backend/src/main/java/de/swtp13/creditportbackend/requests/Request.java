@@ -27,8 +27,8 @@ public class Request {
     private int requestId;
     @ManyToOne()
     @JoinColumn(
-            name="procedure_id",
-            nullable=false
+            name = "procedure_id",
+            nullable = false
     )
     private Procedure procedure;
     @Column(
@@ -70,12 +70,12 @@ public class Request {
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime createdAt;
     //@Column(
-      //      name = "PDFinByte",
-        //    columnDefinition = "INT",
-          //  nullable = false
+    //      name = "PDFinByte",
+    //    columnDefinition = "INT",
+    //  nullable = false
     //)
 
-    public Request(Procedure procedure, String externalModuleId, String internalModuleId,String annotation, int creditPoints){
+    public Request(Procedure procedure, String externalModuleId, String internalModuleId, String annotation, int creditPoints) {
         this.procedure = procedure;
         this.externalModuleId = externalModuleId;
         this.internalModuleId = internalModuleId;
@@ -84,7 +84,8 @@ public class Request {
         this.status = Status.NICHT_BEARBEITET;
         this.createdAt = LocalDateTime.now();
     }
-    public Request(Procedure procedure, String externalModuleId, String internalModuleId,String annotation, int creditPoints, LocalDateTime createdAt){
+
+    public Request(Procedure procedure, String externalModuleId, String internalModuleId, String annotation, int creditPoints, LocalDateTime createdAt) {
         this.procedure = procedure;
         this.externalModuleId = externalModuleId;
         this.internalModuleId = internalModuleId;
@@ -92,5 +93,7 @@ public class Request {
         this.creditPoints = creditPoints;
         this.createdAt = createdAt;
         this.status = Status.NICHT_BEARBEITET;
+
     }
+
 }
