@@ -70,15 +70,19 @@ public class DataLoader implements CommandLineRunner {
         procedureRepository.save(procedure2);
 
         System.out.println("Procedures were saved in the database!");
-
+        List<Request> requests = Arrays.asList(
+            new Request(procedure,"10-201-2001-2",
+                        "testId","Algorithmen und Datenstrukturen 1",5),
+            new Request(procedure,"10-201-1011",
+                "12345","Analysis für Informatiker",10)
+        );
         //Erstelle einen neuen Antrag
-        Request request1 = new Request(procedure,"10-201-2001-2",
-                "testId","Algorithmen und Datenstrukturen 1",5);
-        Request request2 = new Request(procedure,"10-201-1011",
-                "12345","Analysis für Informatiker",10);
-        requestRepository.save(request1);
-        requestRepository.save(request2);
+        requestRepository.saveAll(requests);
         System.out.println("Requests were saved in the database!");
+
+        procedure.setRequests(requestRepository.findAll());
+        System.out.println("The procedure with id: "+procedure.getProcedureId()+"has requests"+procedure.getRequestIds());
+
 
 
 
