@@ -1,19 +1,16 @@
 package de.swtp13.creditportbackend.v1.procedures;
 
 import de.swtp13.creditportbackend.v1.requests.Request;
-import de.swtp13.creditportbackend.v1.requests.RequestRepository;
+import de.swtp13.creditportbackend.v1.procedures.util.IDGenerator;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
-import de.swtp13.creditportbackend.v1.procedures.util.IDGenerator;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @Entity(name = "Procedures")
 @Table(name = "procedures")
