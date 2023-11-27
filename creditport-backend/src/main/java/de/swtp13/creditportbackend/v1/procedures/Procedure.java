@@ -1,10 +1,19 @@
 package de.swtp13.creditportbackend.v1.procedures;
 
-import de.swtp13.creditportbackend.v1.procedures.util.IDGenerator;
+import de.swtp13.creditportbackend.v1.requests.Request;
+import de.swtp13.creditportbackend.v1.requests.RequestRepository;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+
+import de.swtp13.creditportbackend.v1.procedures.util.IDGenerator;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Entity(name = "Procedures")
 @Table(name = "procedures")
@@ -48,6 +57,18 @@ public class Procedure {
             nullable = false
     )
     private String courseName;
+    @OneToMany(
+            fetch = FetchType.LAZY,
+            mappedBy = "procedure",
+            cascade = CascadeType.ALL)
+    private List<Request> requests;
+
+    @Column(
+            name = "created_at",
+            nullable = false
+    )
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime createdAt;
 
     //@OneToMany(
     //        mappedBy = "procedure"
@@ -68,15 +89,24 @@ public class Procedure {
         this.university = university;
         this.courseName = courseName;
         this.status = Status.NEU;
+        this.createdAt = LocalDateTime.now();
     }
 
     public Procedure(String university, String courseName) {
         this.university = university;
         this.courseName = courseName;
         this.status = Status.NEU;
+        this.createdAt = LocalDateTime.now();
     }
 
-/*
+    public List<Integer> getRequestIds() {
+        List<Integer> RequestIds = new ArrayList<>();
+        for (Request request: requests) {
+            RequestIds.add(request.getRequestId());
+        }
+        return RequestIds;
+    }
+    /*
 
 {
   "university": "String",
