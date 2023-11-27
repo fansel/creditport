@@ -29,4 +29,13 @@ public class ProcedureService {
         procedureRepository.save(procedure);
         return procedure;
     }
+
+    public Procedure updateProcedure(String procedureId, Procedure procedure) {
+        procedure.setId(procedureId);
+        return procedureRepository.save(procedure);
+    }
+
+    public boolean existsById(String id) {
+        return procedureRepository.existsById(id);
+    }
 }
