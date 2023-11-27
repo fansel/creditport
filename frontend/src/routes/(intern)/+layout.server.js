@@ -12,6 +12,8 @@ export async function load({ locals, cookies }) {
     throw redirect(300, '/');
   }
 
+  console.log('TEst');
+
   return {
     user: locals.user && { username: locals.user.username }
   };

@@ -1,55 +1,37 @@
 <!-- Hauptbearbeitungsseite mit PDF Vorschau -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/Oo+O5" crossorigin="anonymous">
+<script>
+  import { getStatus } from '$lib/status.js';
+  // importing Requests modal (pop up)
+  import Modal from '$lib/components/Modal.svelte';
+
+  import Header from '$lib/components/InternHeader.svelte';
   export let data;
 
   const modules = data.modules;
   let selectedModul = 0;
 
-  // importing Requests modal (pop up)
-  import Modal from '$lib/components/Modal.svelte';
+  let showModal1 = false;
+  let showModal2 = false;
 
-  let showModal = false;
+  $: console.log(showModal1);
 
   // APIs (Jetzt noch mit Testsatz, da API nicht steht)
 
-  $: request = {
+  let request = {
     procedureID: 1234,
     requestID: 1,
     externalModule: 'Mathe I',
     link: 'https://www.orimi.com/pdf-test.pdf',
-    status: 1,
+    status: 6,
     comment: 'Der Bescheid wurde erfolgreich angenommen.',
     createdAt: new Date(),
     lastEditedAt: new Date()
   };
 
-  $: statusColor = 'success';
-  $: statusText = 'default';
+  $: statusColor = getStatus(request.status).statusColor;
+  $: statusText = getStatus(request.status).statusText;
   function updateStatus(status) {
-    console.log('updateStatus called');
-
     request.status = status;
-    if (request.status === 1) {
-      console.log('Status one called');
-      statusText = 'Neu';
-      statusColor = 'secondary';
-    } else if (request.status === 2) {
-      console.log('Status two called');
-      statusText = 'Offen';
-      statusColor = 'secondary';
-    } else if (request.status === 3) {
-      console.log('Status three called');
-      statusText = 'In Bearbeitung';
-      statusColor = 'warning';
-    } else if (request.status === 4) {
-      console.log('Status four called');
-      statusText = 'Weitergeleitet';
-      statusColor = 'warning';
-    } else if (request.status === 5) {
-      console.log('Status five called');
-      statusText = 'Abgeschlossen';
-      statusColor = 'success';
-    }
     closeDropdown();
   }
 
@@ -59,6 +41,8 @@
     bootstrapDropdown.hide();
   }
 </script>
+
+<Header />
 
 <div class="border-bottom">
   <div class="col-md m-3">
@@ -75,7 +59,14 @@
       <button type="button" class="btn btn-sm btn-outline-primary" onclick="window.location.href='https://youtube.com'">
         <i class="bi bi-arrow-right" />
       </button>
-      <button type="button" class="btn btn-sm btn-outline-primary" on:click={() => (showModal = true)}> ähnliche Anträge </button>
+      <div class="btn-group dropend">
+        <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ähnliche Anträge</button>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" on:click={() => (showModal1 = true)}>Module für aktuelles Fremdmodul</a>
+          <a class="dropdown-item" on:click={() => (showModal2 = true)}>Akzeptierte Fremdmodule für Modulvorschlag</a>
+        </div>
+      </div>
+      <!-- <button type="button" class="btn btn-sm btn-outline-primary" on:click={() => (showModal = true)}> ähnliche Anträge </button> -->
     </div>
   </div>
   <div class="row px-3 w-100">
@@ -88,7 +79,7 @@
     <div class="col-4">
       <form action="">
         <div class="mb-3">
-          <label for="" class="mb-2"><strong>Modulvorschlag</strong></label>
+          <label for="" class="mb-2"><strong>Anrechnungsmodul</strong></label>
           <select class="form-select" aria-label="Default select example" bind:value={selectedModul}>
             {#each modules as modul, index}
               <option value={index}>{modul.moduleName}</option>
@@ -97,24 +88,38 @@
         </div>
 
         <div class="col-auto mb-3">
-          <label class="mb-1"><strong>Status</strong></label><br />
+          <div class="row">
+            <!-- studibüro -->
+            <div class="col-6">
+              <label class="mb-1"><strong>Status</strong></label><br />
 
-          <div class="btn-group dropend">
-            <button
-              type="button"
-              class="btn bg-{statusColor}-subtle border border-{statusColor}-subtle text-{statusColor}-emphasis rounded-pill dropdown-toggle"
-              data-bs-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              {statusText}
-            </button>
-            <div class="dropdown-menu" id="myDropdown">
-              <a class="dropdown-item" on:click={() => updateStatus(1)}>Neu</a>
-              <a class="dropdown-item" on:click={() => updateStatus(2)}>Offen</a>
-              <a class="dropdown-item" on:click={() => updateStatus(3)}>in Bearbeitung</a>
-              <a class="dropdown-item" on:click={() => updateStatus(4)}>Weitergeleitet</a>
-              <a class="dropdown-item" on:click={() => updateStatus(5)}>Abgeschlossen</a>
+              <div class="btn-group dropend">
+                <button
+                  type="button"
+                  class="btn bg-{statusColor}-subtle border border-{statusColor}-subtle text-{statusColor}-emphasis rounded-pill dropdown-toggle"
+                  data-bs-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  {statusText}
+                </button>
+                <div class="dropdown-menu" id="myDropdown">
+                  <a class="dropdown-item" on:click={() => updateStatus(6)}>{getStatus(6).statusText}</a>
+                  <a class="dropdown-item" on:click={() => updateStatus(7)}>{getStatus(7).statusText}</a>
+                  <a class="dropdown-item" on:click={() => updateStatus(8)}>{getStatus(8).statusText}</a>
+                  <a class="dropdown-item" on:click={() => updateStatus(9)}>{getStatus(9).statusText}</a>
+                  <a class="dropdown-item" on:click={() => updateStatus(10)}>{getStatus(10).statusText}</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- studianzeige -->
+            <div class="col-6">
+              <label class="mb-1"><strong>Auf Statusseite</strong></label><br />
+
+              <div class="btn bg-{statusColor}-subtle border border-{statusColor}-subtle text-{statusColor}-emphasis rounded-pill">
+                {statusText}
+              </div>
             </div>
           </div>
         </div>
@@ -133,7 +138,7 @@
   </div>
 </div>
 
-<Modal bind:showModal>
+<Modal bind:showModal={showModal1}>
   <h2 slot="headline" class="m-0">ähnliche Anträge</h2>
 
   <!-- body -->
@@ -177,13 +182,18 @@
       </table>
     </div>
   </form>
+</Modal>
 
-  <!-- footer -->
+<Modal bind:showModal={showModal2}>
+  <h2 slot="headline" class="m-0">ähnliche Anträge</h2>
 
-  <form action="" slot="footer" class="p-3">
+  <!-- body -->
+  <!-- alle Fremdmodule für dieses Modul -->
+
+  <form action="" slot="body" class="p-3">
     <div class="row form-inline d-flex align-items-center no-wrap mb-3">
       <div class="col-4">
-        <strong>akzeptiert für Modul</strong>
+        <strong>akzeptierte Fremdmodule und so </strong>
       </div>
       <div class="col-8">
         <input type="text" placeholder="Suche" class="form-control form-control-sm" />
