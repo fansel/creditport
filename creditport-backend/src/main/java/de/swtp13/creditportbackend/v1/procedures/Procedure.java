@@ -61,12 +61,17 @@ public class Procedure {
     private List<Request> requests;
 
     @Column(
-            name = "created_at",
+            name = "created_on",
             nullable = false
     )
     @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime createdAt;
-
+    private LocalDateTime createdOn;
+    @Column(
+            name = "last_updated_on",
+            nullable = false
+    )
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime lastUpdated;
     //@OneToMany(
     //        mappedBy = "procedure"
     //)
@@ -86,14 +91,16 @@ public class Procedure {
         this.university = university;
         this.courseName = courseName;
         this.status = Status.NEU;
-        this.createdAt = LocalDateTime.now();
+        this.createdOn = LocalDateTime.now();
+        this.lastUpdated = this.createdOn;
     }
 
     public Procedure(String university, String courseName) {
         this.university = university;
         this.courseName = courseName;
         this.status = Status.NEU;
-        this.createdAt = LocalDateTime.now();
+        this.createdOn = LocalDateTime.now();
+        this.lastUpdated = this.createdOn;
     }
 
     public List<Integer> getRequestIds() {
