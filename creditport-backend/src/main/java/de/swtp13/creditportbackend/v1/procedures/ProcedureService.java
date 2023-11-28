@@ -30,11 +30,21 @@ public class ProcedureService {
         return procedure;
     }
 
-    public Procedure updateProcedure(String procedureId, Procedure procedure) {
-        procedure.setId(procedureId);
-        return procedureRepository.save(procedure);
-    }
+    /*
+    public Procedure updateProcedure(String procedureId, Procedure procedureDetails) {
+        // Retrieve the existing procedure from the repository
+        Procedure existingProcedure = procedureRepository.findById(procedureId)
+                .orElseThrow(() -> new EntityNotFoundException("Procedure not found with id: " + procedureId));
 
+        // Update the fields of the existing procedure with the values from the details provided
+        existingProcedure.setSomeField(procedureDetails.getSomeField());            //TODO: anpassen
+        existingProcedure.setAnotherField(procedureDetails.getAnotherField());      //TODO: anpassen
+        // ... update other fields as needed
+
+        // Save the updated procedure back to the repository
+        return procedureRepository.save(existingProcedure);
+    }
+     */
     public boolean existsById(String id) {
         return procedureRepository.existsById(id);
     }
