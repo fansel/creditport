@@ -28,7 +28,6 @@ public class ProcedureController {
 
     /**
      * Constructs a {@code ProcedureController} with the necessary service.
-     *
      * @param procedureService the service that will handle the business logic for {@code Procedure} entities.
      */
     @Autowired
@@ -38,10 +37,7 @@ public class ProcedureController {
 
     /**
      * POST
-     * Creates a new {@code Procedure} entity based on the provided data.
-     *
-     * @param procedure the {@code Procedure} object containing the data for the new entity.
-     * @return a {@code ResponseEntity} containing the created {@code Procedure} and the HTTP status.
+     * saves a new procedure in the database
      */
     @PostMapping
     public ResponseEntity<Procedure> createProcedure(@RequestBody Procedure procedure) {
@@ -51,8 +47,7 @@ public class ProcedureController {
 
     /**
      * GET
-     * @author Maike
-     * @return List of procedures in JSON Format
+     * @return List of all procedures
      */
     @GetMapping
     public ResponseEntity<List<Procedure>> getAllProceduresWithDetails() {
@@ -62,8 +57,7 @@ public class ProcedureController {
 
     /**
      * GET by ID
-     * @author Maike
-     * @return List of procedures in JSON Format
+     * @return procedure with specific ID
      */
     @GetMapping("/{id}")
     public ResponseEntity<Procedure> getProcedureById(@PathVariable String procedureId) {
@@ -74,6 +68,7 @@ public class ProcedureController {
 
     /**
      * PUT by ID
+     * updates a procedure with specific ID in the Database
      */
     @PutMapping("/{id}")
     public ResponseEntity<Procedure> updateProcedure(@PathVariable String procedureId, @RequestBody Procedure procedure) {
