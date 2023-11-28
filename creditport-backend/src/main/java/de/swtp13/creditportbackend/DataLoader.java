@@ -81,7 +81,7 @@ public class DataLoader implements CommandLineRunner {
         System.out.println("Requests were saved in the database!");
 
         procedure.setRequests(requestRepository.findAll());
-        System.out.println("The procedure with id: "+procedure.getProcedureId()+"has requests"+procedure.getRequestIds());
+        System.out.println("The procedure with id: "+procedure.getProcedureId()+" has requests "+procedure.getRequestIds());
 
 
 

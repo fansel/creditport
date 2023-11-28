@@ -39,7 +39,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteUser(
+    public ResponseEntity<String> deleteUser(
             @PathVariable int id
     ) {
         if (managementService.deleteUser(id)) {
@@ -66,7 +66,7 @@ public class UserController {
     }
 
     @PatchMapping("/update/username/{id}")
-    public ResponseEntity updateUsername(
+    public ResponseEntity<String> updateUsername(
             @PathVariable int id,
             @RequestBody String newUsername
     ) {
@@ -78,7 +78,7 @@ public class UserController {
     }
 
     @PatchMapping("/update/role/{id}")
-    public ResponseEntity updateRole(
+    public ResponseEntity<String> updateRole(
             @PathVariable int id,
             @RequestBody String newRole
     ) {

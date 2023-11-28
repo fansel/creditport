@@ -1,9 +1,7 @@
 package de.swtp13.creditportbackend.v1.modules;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import de.swtp13.creditportbackend.v1.universities.University;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -44,5 +42,17 @@ public class Module {
            columnDefinition = "VARCHAR"
     )
     private String moduleDescription;
+    @ManyToOne
+    @JoinColumn(name = "uni_id")
+    private University university;
+
+    public Module(String number,
+                  String moduleName,
+                  String moduleDescription){
+        this.moduleDescription=moduleDescription;
+        this.number=number;
+        this.moduleName= moduleName;
+        //später: als uni leipzig initialisieren
+    }
 
 }
