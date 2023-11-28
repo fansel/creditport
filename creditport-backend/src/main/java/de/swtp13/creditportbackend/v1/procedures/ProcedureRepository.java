@@ -17,6 +17,6 @@ public interface ProcedureRepository extends JpaRepository<Procedure, String> {
      * Liefert alle Vorgänge mit den entsprechenden Anträgen, Modulen und Universität zurück.
      * @return
      */
-    @Query("SELECT p FROM Procedures p") //TODO: Query vervollständigen
+    @Query(value = "SELECT * FROM procedures p JOIN requests r ON p.procedure_id=r.procedure_id", nativeQuery = true)
     List<Procedure> findAllWithDetails();
 }
