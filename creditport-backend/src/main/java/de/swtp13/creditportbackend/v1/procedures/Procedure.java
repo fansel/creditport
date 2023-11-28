@@ -24,7 +24,7 @@ public class Procedure {
 
     @Id
     @Column(
-            name = "procedure_id",
+            name = "id",
             columnDefinition = "VARCHAR",
             nullable = false
     )
