@@ -19,7 +19,7 @@ export function getStatus(status) {
     statusColor = 'success';
   } else if (status === 6) {
     statusText = 'Offen';
-    statusColor = 'warning';
+    statusColor = 'secondary';
   } else if (status === 7) {
     statusText = 'Weitergeleitet';
     statusColor = 'warning';
