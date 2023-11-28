@@ -1,10 +1,10 @@
 <!-- Hauptbearbeitungsseite mit PDF Vorschau -->
 <script>
   import { getStatus } from '$lib/status.js';
-  // importing Requests modal (pop up)
   import Modal from '$lib/components/Modal.svelte';
-
   import Header from '$lib/components/InternHeader.svelte';
+  import { format } from 'date-fns';
+
   export let data;
 
   const modules = data.modules;
@@ -13,8 +13,6 @@
   let showModal1 = false;
   let showModal2 = false;
 
-  $: console.log(showModal1);
-
   // APIs (Jetzt noch mit Testsatz, da API nicht steht)
 
   let request = {
@@ -22,7 +20,7 @@
     requestID: 1,
     externalModule: 'Mathe I',
     link: 'https://www.orimi.com/pdf-test.pdf',
-    status: 6,
+    status: 9,
     comment: 'Der Bescheid wurde erfolgreich angenommen.',
     createdAt: new Date(),
     lastEditedAt: new Date()
@@ -50,7 +48,7 @@
   </div>
 </div>
 
-<div class="site position-fixed m-2">
+<div class="site position-fixed m-2 w-100">
   <div class="row px-3">
     <div class="nav-bar my-3" width="100%">
       <button type="button" class="btn btn-sm btn-outline-primary" onclick="window.location.href='https://google.com'">
@@ -72,12 +70,17 @@
   <div class="row px-3 w-100">
     <div class="col-8">
       <div class="pdf-container">
-        <div class="pdf-content"><iframe src={request.link} width="1150" height="800" /></div>
+        <div class="pdf-content"><iframe src={request.link} width="100%" height="800" /></div>
       </div>
     </div>
 
     <div class="col-4">
       <form action="">
+        <div class="row mb-3">
+          <div class="col-6"><strong>Antrag erstellt am </strong><br />{format(request.createdAt, 'dd.MM.yyyy HH:mm')}</div>
+          <div class="col-6"><strong>zuletzt bearbeitet am</strong><br />{format(request.lastEditedAt, 'dd.MM.yyyy HH:mm')}</div>
+        </div>
+
         <div class="mb-3">
           <label for="" class="mb-2"><strong>Anrechnungsmodul</strong></label>
           <select class="form-select" aria-label="Default select example" bind:value={selectedModul}>
@@ -105,6 +108,7 @@
                 </button>
                 <div class="dropdown-menu" id="myDropdown">
                   <a class="dropdown-item" on:click={() => updateStatus(6)}>{getStatus(6).statusText}</a>
+                  <a class="dropdown-item" on:click={() => updateStatus(3)}>{getStatus(3).statusText}</a>
                   <a class="dropdown-item" on:click={() => updateStatus(7)}>{getStatus(7).statusText}</a>
                   <a class="dropdown-item" on:click={() => updateStatus(8)}>{getStatus(8).statusText}</a>
                   <a class="dropdown-item" on:click={() => updateStatus(9)}>{getStatus(9).statusText}</a>
@@ -118,7 +122,10 @@
               <label class="mb-1"><strong>Auf Statusseite</strong></label><br />
 
               <div class="btn bg-{statusColor}-subtle border border-{statusColor}-subtle text-{statusColor}-emphasis rounded-pill">
-                {statusText}
+                {#if request.status === 7 || request.status === 8}
+                  {getStatus(3).statusText}
+                {:else}{statusText}
+                {/if}
               </div>
             </div>
           </div>
@@ -147,7 +154,7 @@
   <form action="" slot="body" class="p-3">
     <div class="row form-inline d-flex align-items-center no-wrap mb-3">
       <div class="col-4">
-        <strong>akzeptierte Fremdmodule </strong>
+        <strong>für Fremdmodule </strong>
       </div>
       <div class="col-8">
         <input type="text" placeholder="Suche" class="form-control form-control-sm" />
@@ -172,7 +179,7 @@
             <td>Universität Halle</td>
 
             <td>Mathe I</td>
-            <td><span class="badge bg-success-subtle border border-success-subtle text-secondary-emphasis rounded-pill">angenommen</span></td>
+            <td><span class="badge bg-danger-subtle border border-danger-subtle text-secondary-emphasis rounded-pill">abgelehnt</span></td>
 
             <td>
               <div class="btn-group text-nowrap float-end" role="group" />
@@ -193,7 +200,7 @@
   <form action="" slot="body" class="p-3">
     <div class="row form-inline d-flex align-items-center no-wrap mb-3">
       <div class="col-4">
-        <strong>akzeptierte Fremdmodule und so </strong>
+        <strong>für Modulvorschlag </strong>
       </div>
       <div class="col-8">
         <input type="text" placeholder="Suche" class="form-control form-control-sm" />
