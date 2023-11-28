@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.http.HttpStatus;
+
 
 import java.util.List;
 
@@ -41,7 +43,7 @@ public class ProcedureController {
      */
     @PostMapping
     public ResponseEntity<Procedure> createProcedure(@RequestBody Procedure procedure) {
-        Procedure newProcedure = procedureService.createProcedure(procedure);
+        Procedure newProcedure = procedureService.createProcedure();
         return new ResponseEntity<>(newProcedure, HttpStatus.CREATED);
     }
 
@@ -70,12 +72,13 @@ public class ProcedureController {
      * PUT by ID
      * updates a procedure with specific ID in the Database
      */
-    @PutMapping("/{id}")
+    /*@PutMapping("/{id}")
     public ResponseEntity<Procedure> updateProcedure(@PathVariable String procedureId, @RequestBody Procedure procedure) {
         if (!procedureService.existsById(procedureId)) {
             return ResponseEntity.notFound().build();
         }
-        Item updatedProcedure = procedureService.updateProcedure(procedureId, procedure);
+        Procedure updatedProcedure = procedureService.updateProcedure(procedureId, procedure);
         return ResponseEntity.ok(updatedProcedure);
     }
+     */
 }
