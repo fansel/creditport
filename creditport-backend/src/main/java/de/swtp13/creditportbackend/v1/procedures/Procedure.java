@@ -10,8 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
-
 @Entity(name = "Procedures")
 @Table(name = "procedures")
 @Data
@@ -54,24 +52,12 @@ public class Procedure {
             nullable = false
     )
     private String courseName;
-    @OneToMany(
-            fetch = FetchType.LAZY,
-            mappedBy = "procedure",
-            cascade = CascadeType.ALL)
-    private List<Request> requests;
-
     @Column(
             name = "created_at",
             nullable = false
     )
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime createdAt;
-
-    //@OneToMany(
-    //        mappedBy = "procedure"
-    //)
-    //private Set<Request> requests;
-
 
     // Benutzerdefinierter Konstruktor ohne ID
     public Procedure(Status status, String annotation) {
@@ -96,15 +82,7 @@ public class Procedure {
         this.createdAt = LocalDateTime.now();
     }
 
-    public List<Integer> getRequestIds() {
-        List<Integer> RequestIds = new ArrayList<>();
-        for (Request request: requests) {
-            RequestIds.add(request.getRequestId());
-        }
-        return RequestIds;
-    }
     /*
-
 {
   "university": "String",
   "course" : "String",
@@ -126,10 +104,5 @@ public class Procedure {
     },
   ],
 }
-
-
-
-
-
  */
 }
