@@ -53,11 +53,17 @@ public class Procedure {
     )
     private String courseName;
     @Column(
-            name = "created_at",
+            name = "created_on",
             nullable = false
     )
     @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime createdAt;
+    private LocalDateTime createdOn;
+    @Column(
+            name = "last_updated_on",
+            nullable = false
+    )
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime lastUpdated;
 
     // Benutzerdefinierter Konstruktor ohne ID
     public Procedure(Status status, String annotation) {
@@ -72,14 +78,16 @@ public class Procedure {
         this.university = university;
         this.courseName = courseName;
         this.status = Status.NEU;
-        this.createdAt = LocalDateTime.now();
+        this.createdOn = LocalDateTime.now();
+        this.lastUpdated = this.createdOn;
     }
 
     public Procedure(String university, String courseName) {
         this.university = university;
         this.courseName = courseName;
         this.status = Status.NEU;
-        this.createdAt = LocalDateTime.now();
+        this.createdOn = LocalDateTime.now();
+        this.lastUpdated = this.createdOn;
     }
 
     /*

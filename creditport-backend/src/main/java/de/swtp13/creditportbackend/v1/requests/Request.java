@@ -64,11 +64,17 @@ public class Request {
     @Enumerated(EnumType.STRING)
     private Status status;
     @Column(
-            name = "created_at",
+            name = "created_on",
             nullable = false
     )
     @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime createdAt;
+    private LocalDateTime createdOn;
+    @Column(
+            name = "last_updated_on",
+            nullable = false
+    )
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime lastUpdated;
     //@Column(
     //      name = "PDFinByte",
     //    columnDefinition = "INT",
@@ -82,16 +88,18 @@ public class Request {
         this.annotation = annotation;
         this.creditPoints = creditPoints;
         this.status = Status.NICHT_BEARBEITET;
-        this.createdAt = LocalDateTime.now();
+        this.createdOn = LocalDateTime.now();
+        this.lastUpdated = this.createdOn;
     }
 
-    public Request(Procedure procedure, String externalModuleId, String internalModuleId, String annotation, int creditPoints, LocalDateTime createdAt) {
+    public Request(Procedure procedure, String externalModuleId, String internalModuleId, String annotation, int creditPoints, LocalDateTime createdOn) {
         this.procedure = procedure;
         this.externalModuleId = externalModuleId;
         this.internalModuleId = internalModuleId;
         this.annotation = annotation;
         this.creditPoints = creditPoints;
-        this.createdAt = createdAt;
+        this.createdOn = createdOn;
+        this.lastUpdated = this.createdOn;
         this.status = Status.NICHT_BEARBEITET;
 
     }
