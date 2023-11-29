@@ -65,9 +65,11 @@ public class DataLoader implements CommandLineRunner {
         Procedure procedure = new Procedure("only a test procedure",
                 "Universitaet Leipzig","Informatik Bachelor");
         Procedure procedure2 = new Procedure("Universitaet Leipzig", "Data Science Master");
+        Procedure procedure3 = new Procedure ("Das ist eine Bemerkung", "Uni Sososo", "Info");
         // Speichern des Vorgangs in der Datenbank
         procedureRepository.save(procedure);
         procedureRepository.save(procedure2);
+        procedureRepository.save(procedure3);
 
         System.out.println("Procedures were saved in the database!");
         List<Request> requests = Arrays.asList(
@@ -79,12 +81,6 @@ public class DataLoader implements CommandLineRunner {
         //Erstelle einen neuen Antrag
         requestRepository.saveAll(requests);
         System.out.println("Requests were saved in the database!");
-
-        procedure.setRequests(requestRepository.findAll());
-        System.out.println("The procedure with id: "+procedure.getProcedureId()+" has requests "+procedure.getRequestIds());
-
-
-
 
         // Erstellen einer Liste von Modulen mit vordefinierten Daten.
         List<Module> modules = Arrays.asList(
