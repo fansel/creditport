@@ -30,7 +30,7 @@ export const actions = {
     };
 
     const value = btoa(JSON.stringify(user));
-    cookies.set('jwt', value, { path: '/' });
+    cookies.set('jwt', value, { secure: false, path: '/' });
 
     throw redirect(307, '/dashboard');
   }
