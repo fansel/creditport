@@ -19,5 +19,8 @@ COPY --from=build /app/build build/
 COPY --from=build /app/node_modules node_modules/
 COPY --from=build /app/package*.json ./
 
-EXPOSE 3000
-CMD ["node","build/index.js"]
+EXPOSE 4173
+CMD ["npm", "run", "preview", "--", "--host"]
+
+# EXPOSE 3000
+#CMD ["node","build/index.js"]
