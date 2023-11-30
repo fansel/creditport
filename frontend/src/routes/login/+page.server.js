@@ -1,5 +1,6 @@
 import { redirect, fail } from '@sveltejs/kit';
 import * as api from '$lib/api.js';
+import * as config from '$lib/config.js';
 
 /**@type {import('./$types').Actions} */
 export async function load({ locals }) {
@@ -30,7 +31,7 @@ export const actions = {
     };
 
     const value = btoa(JSON.stringify(user));
-    cookies.set('jwt', value, { secure: false, path: '/' });
+    cookies.set('jwt', value, { secure: config.secure_connection, path: '/' });
 
     throw redirect(307, '/dashboard');
   }
