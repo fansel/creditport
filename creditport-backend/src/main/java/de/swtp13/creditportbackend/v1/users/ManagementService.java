@@ -70,5 +70,18 @@ public class ManagementService {
         }
     }
 
+    public boolean register(RegisterRequest request) {
+        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
+            return false;
+        }
+        var user = User.builder()
+                .username(request.getUsername())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .role(Role.valueOf(request.getRole()))
+                .build();
+        userRepository.save(user);
+        return true;
+    }
+
 
 }

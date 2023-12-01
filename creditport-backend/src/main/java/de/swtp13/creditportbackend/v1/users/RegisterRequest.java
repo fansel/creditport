@@ -1,4 +1,4 @@
-package de.swtp13.creditportbackend.v1.auth;
+package de.swtp13.creditportbackend.v1.users;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

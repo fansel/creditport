@@ -28,8 +28,6 @@ public class SecurityConfig {
                         (authorizeHttpRequests) -> authorizeHttpRequests
                                 .requestMatchers(API_VERSION+"/test-endpoint/secure")
                                 .authenticated()
-                                .requestMatchers(API_VERSION+"/auth/register")
-                                .hasAuthority("ADMIN")
                                 .requestMatchers(API_VERSION+"/usermanagement/update/password")
                                 .authenticated()
                                 .requestMatchers(API_VERSION+"/usermanagement/**")

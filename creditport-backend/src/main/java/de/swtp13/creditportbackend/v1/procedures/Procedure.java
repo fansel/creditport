@@ -1,10 +1,7 @@
 package de.swtp13.creditportbackend.v1.procedures;
 
-import de.swtp13.creditportbackend.v1.requests.Request;
 import de.swtp13.creditportbackend.v1.procedures.util.IDGenerator;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,7 +27,7 @@ public class Procedure {
     @Column(
             name = "status",
             columnDefinition = "VARCHAR",
-            // Zugehöriger Status muss noch festgelegt werden, z.B. nicht geoeffnet, goeffnet, bearbeitet, abgelehnt, angenommen, Nachfrage noetig
+            // Zugehöriger Status muss noch festgelegt werden, z.B. nicht geoeffnet, geoeffnet, bearbeitet, abgelehnt, angenommen, Nachfrage noetig
             nullable = false
     )
     @Enumerated(EnumType.STRING)

@@ -49,6 +49,17 @@ public class UserController {
         }).orElse(ResponseEntity.notFound().build());
     }
 
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(
+            @RequestBody RegisterRequest request
+    ) {
+        if (managementService.register(request))
+            return ResponseEntity.ok().build();
+        else
+            return ResponseEntity.status(409).build();
+    }
+
     @PatchMapping("/update/password")
     public ResponseEntity<?> updatePassword(
             @RequestParam(required = false) Integer id,

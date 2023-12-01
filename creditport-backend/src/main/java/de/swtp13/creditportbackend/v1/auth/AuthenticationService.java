@@ -1,8 +1,6 @@
 package de.swtp13.creditportbackend.v1.auth;
 
 import de.swtp13.creditportbackend.v1.config.JwtService;
-import de.swtp13.creditportbackend.v1.users.Role;
-import de.swtp13.creditportbackend.v1.users.User;
 import de.swtp13.creditportbackend.v1.users.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AccountStatusException;
@@ -10,7 +8,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,27 +15,8 @@ import org.springframework.stereotype.Service;
 public class AuthenticationService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-
-    public AuthenticationResponse register(RegisterRequest request) {
-        if (userRepository.findByUsername(request.getUsername()).isPresent()) {
-            return AuthenticationResponse.builder()
-                    .success(false)
-                    .errorMsg("User already exists")
-                    .build();
-        }
-        var user = User.builder()
-                .username(request.getUsername())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.valueOf(request.getRole()))
-                .build();
-        userRepository.save(user);
-        return AuthenticationResponse.builder()
-                .success(true)
-                .build();
-    }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         try {
