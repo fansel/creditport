@@ -39,18 +39,18 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(
+    public ResponseEntity<?> deleteUser(
             @PathVariable int id
     ) {
-        if (managementService.deleteUser(id)) {
+        return userRepository.findById(id)
+                .map(user -> {
+            userRepository.delete(user);
             return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        }).orElse(ResponseEntity.notFound().build());
     }
 
     @PatchMapping("/update/password")
-    public ResponseEntity<String> updatePassword(
+    public ResponseEntity<?> updatePassword(
             @RequestParam(required = false) Integer id,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
             @RequestBody String newPass
@@ -66,7 +66,7 @@ public class UserController {
     }
 
     @PatchMapping("/update/username/{id}")
-    public ResponseEntity<String> updateUsername(
+    public ResponseEntity<?> updateUsername(
             @PathVariable int id,
             @RequestBody String newUsername
     ) {

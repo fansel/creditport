@@ -18,15 +18,6 @@ public class ManagementService {
         return DisplayedUser.of(userRepository.findById(id));
     }
 
-    public boolean deleteUser(int id) {
-        if (userRepository.existsById(id)) {
-            userRepository.deleteById(id);
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     public String updatePassword(Integer id, String token, String newPass) {
         User user;
         if (id == null) {
