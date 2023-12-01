@@ -1,28 +1,10 @@
-import * as Config from '$lib/config';
+import * as config from '$lib/config';
+import * as api from '$lib/api';
 import { error } from '@sveltejs/kit';
 
 /** @type {import('./$types').PageServerLoad} */
-export async function load({ params, fetch }) {
-  // try {
-  //   const response = await fetch('http://localhost:8080/api/procedures');
+export async function load({ params, locals }) {
+  const procedures = (await api.get('procedure', locals.user?.token, api.content_type.json)) || [];
 
-  //   if (!response.ok) {
-  //     throw new Error(`API-Fehler: ${response.statusText}`);
-  //   }
-
-  //   const data = await response.json();
-
-  //   return {
-  //     procedures: data,
-  //   };
-  // } catch (e) {
-
-  //   console.log(e)
-
-  //   throw error(500, "Fehler beim Laden des API-Endpoints!");
-  // }
-
-  let data = { data: [{ university: 'test', course: 'test', requestCount: 5 }] };
-
-  return { procedures: data, title: 'Vorgänge' };
+  return { procedures, title: 'Vorgänge' };
 }

@@ -1,8 +1,12 @@
 <script>
   import { format, parseISO } from 'date-fns';
   import { enhance } from '$app/forms';
+  import { onMount } from 'svelte';
+  import * as api from '$lib/api.js';
 
   export let data;
+
+  $: procedures = data.procedures;
 </script>
 
 <div class="row py-3 mb-3 pb-md-1 border-bottom align-items-center">
@@ -90,7 +94,7 @@
 
 <div class="d-flex flex-wrap gap-3 mb-3 justify-content-between align-items-center">
   <div class="d-flex align-center">
-    {data.procedures.count} Vorgänge (gefiltert)
+    0 Vorgänge (gefiltert)
     <button class="btn btn-link py-0"><i class="bi bi-x" />Filter zurücksetzen</button>
   </div>
 
@@ -129,15 +133,15 @@
     </thead>
 
     <tbody>
-      {#each data.procedures.data as procedure}
+      {#each data.procedures as procedure}
         <tr>
-          <td>{format(new Date(), 'dd.MM.yyyy HH:mm')} </td>
+          <td>{format(new Date(procedure.createdOn), 'dd.MM.yyyy HH:mm')} </td>
           <td>{procedure.university}</td>
 
-          <td>{procedure.course}</td>
-          <td>{procedure.requestCount}</td>
+          <td>{procedure.courseName}</td>
+          <td>10</td>
 
-          <td><span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill">eingereicht</span></td>
+          <td><span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill">{procedure.status}</span></td>
 
           <td>
             <div class="btn-group text-nowrap float-end" role="group">
@@ -155,7 +159,7 @@
 
 <div class="d-flex flex-wrap gap-3 mb-3 justify-content-between align-items-center">
   <div class="d-flex align-center">
-    {data.procedures.count} Vorgänge (gefiltert)
+    0 Vorgänge (gefiltert)
     <button class="btn btn-link py-0"><i class="bi bi-x" />Filter zurücksetzen</button>
   </div>
 
