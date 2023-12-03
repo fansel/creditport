@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 /**
  * Die Klasse repräsentiert einen Antrag.
@@ -25,18 +24,21 @@ public class Request {
             columnDefinition = "INT"
     )
     private int requestId;
+
     @ManyToOne()
     @JoinColumn(
             name = "procedure_id",
             nullable = false
     )
     private Procedure procedure;
+
     @Column(
             name = "external_module_id",
             columnDefinition = "VARCHAR",
             nullable = false
     )
     private String externalModuleId;
+
     @Column(
             name = "internal_module_id",
             columnDefinition = "VARCHAR",
@@ -44,18 +46,19 @@ public class Request {
     )
     private String internalModuleId;
 
-    //private File pdf
     @Column(
             name = "annotation",
             columnDefinition = "TEXT"
     )
     private String annotation;
+
     @Column(
             name = "credit_points",
             columnDefinition = "INT",
             nullable = false
     )
     private int creditPoints;
+
     @Column(
             name = "request_status",
             columnDefinition = "VARCHAR",
@@ -63,23 +66,41 @@ public class Request {
     )
     @Enumerated(EnumType.STRING)
     private Status status;
+
     @Column(
-            name = "created_on",
+            name = "created_at",
             nullable = false
     )
     @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime createdOn;
-    @Column(
-            name = "last_updated_on",
-            nullable = false
-    )
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime lastUpdated;
-    //@Column(
-    //      name = "PDFinByte",
-    //    columnDefinition = "INT",
-    //  nullable = false
-    //)
+    private LocalDateTime createdAt;
+
+    @Lob
+    @Column(name = "pdf_content")
+    private byte[] pdfContent;
+
+    // Überarbeiteter Konstruktor
+    public Request(Procedure procedure, String externalModuleId, String internalModuleId, String annotation, int creditPoints, byte[] pdfContent) {
+        this.procedure = procedure;
+        this.externalModuleId = externalModuleId;
+        this.internalModuleId = internalModuleId;
+        this.annotation = annotation;
+        this.creditPoints = creditPoints;
+        this.status = Status.NICHT_BEARBEITET;
+        this.createdAt = LocalDateTime.now();
+        this.pdfContent = pdfContent;
+    }
+
+    // Überarbeiteter Konstruktor mit 'createdAt'-Parameter
+    public Request(Procedure procedure, String externalModuleId, String internalModuleId, String annotation, int creditPoints, LocalDateTime createdAt, byte[] pdfContent) {
+        this.procedure = procedure;
+        this.externalModuleId = externalModuleId;
+        this.internalModuleId = internalModuleId;
+        this.annotation = annotation;
+        this.creditPoints = creditPoints;
+        this.createdAt = createdAt;
+        this.status = Status.NICHT_BEARBEITET;
+        this.pdfContent = pdfContent;
+    }
 
     public Request(Procedure procedure, String externalModuleId, String internalModuleId, String annotation, int creditPoints) {
         this.procedure = procedure;
@@ -88,20 +109,8 @@ public class Request {
         this.annotation = annotation;
         this.creditPoints = creditPoints;
         this.status = Status.NICHT_BEARBEITET;
-        this.createdOn = LocalDateTime.now();
-        this.lastUpdated = this.createdOn;
-    }
-
-    public Request(Procedure procedure, String externalModuleId, String internalModuleId, String annotation, int creditPoints, LocalDateTime createdOn) {
-        this.procedure = procedure;
-        this.externalModuleId = externalModuleId;
-        this.internalModuleId = internalModuleId;
-        this.annotation = annotation;
-        this.creditPoints = creditPoints;
-        this.createdOn = createdOn;
-        this.lastUpdated = this.createdOn;
-        this.status = Status.NICHT_BEARBEITET;
-
+        this.createdAt = LocalDateTime.now();
+        this.pdfContent = null; // oder ein Standard-PDF-Byte-Array, falls gewünscht
     }
 
 }
