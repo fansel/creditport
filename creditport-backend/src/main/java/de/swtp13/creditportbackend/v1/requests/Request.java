@@ -101,7 +101,6 @@ public class Request {
         this.createdOn = createdOn;
         this.lastUpdated = this.createdOn;
         this.status = Status.NICHT_BEARBEITET;
-
     }
 
 }
