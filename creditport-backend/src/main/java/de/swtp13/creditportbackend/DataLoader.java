@@ -78,8 +78,16 @@ public class DataLoader implements CommandLineRunner {
             new Request(procedure,"10-201-1011",
                 "12345","Analysis für Informatiker",10)
         );
+        Request request1 = new Request(procedure3, "123", "124", "Anmerkung Antrag 1/ Vorgang 3", 10);
+        Request request2 = new Request(procedure3, "125", "126", "Anmerkung Antrag 2/ Vorgang 3", 10);
+        Request request3 = new Request(procedure2, "123", "124", "Anmerkung Antrag 1/ Vorgang 2", 5);
+        Request request4 = new Request(procedure2, "101", "404", "Anmerkung Antrag 2/ Vorgang 2", 10);
         //Erstelle einen neuen Antrag
         requestRepository.saveAll(requests);
+        requestRepository.save(request1);
+        requestRepository.save(request2);
+        requestRepository.save(request3);
+        requestRepository.save(request4);
         System.out.println("Requests were saved in the database!");
 
         // Erstellen einer Liste von Modulen mit vordefinierten Daten.
