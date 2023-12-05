@@ -91,5 +91,26 @@ export const actions = {
     const res = await api.put(`universities/${result.data.id}`, body, locals.user?.token, api.content_type.json);
 
     return { success: true };
+  },
+  addUni: async ({ locals, request }) => {
+    const data = await request.formData();
+
+    const schema = zfd.formData({
+      name: zfd.text()
+    });
+
+    const result = schema.safeParse(data);
+
+    if (!result.success) {
+      return fail(400, { erros: '' });
+    }
+
+    const body = {
+      uniName: result.data.name
+    };
+
+    const res = await api.post(`universities`, body, locals.user?.token, api.content_type.json);
+
+    return { success: true };
   }
 };

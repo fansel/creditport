@@ -3,6 +3,7 @@
   import VirtualList from '@sveltejs/svelte-virtual-list';
   import DeleteUniForm from './Forms/DeleteUniForm.svelte';
   import UpdateUniForm from './Forms/UpdateUniForm.svelte';
+  import AddUniForm from './Forms/AddUniForm.svelte';
 
   export let universities;
 
@@ -11,6 +12,7 @@
 
   let showDeleteModal = false;
   let showUpdateModal = false;
+  let showAddModal = false;
 
   let selectedID;
   let selectedName;
@@ -41,9 +43,19 @@
 
 <DeleteUniForm id={selectedID} bind:showModal={showDeleteModal} />
 <UpdateUniForm id={selectedID} name={selectedName} bind:showModal={showUpdateModal} />
+<AddUniForm bind:showModal={showAddModal} />
 
 <div class="row mb-3">
-  <div class="col"><h4>Vorschlagliste</h4></div>
+  <div class="col">
+    <h4 class=" d-flex">
+      Vorschlagliste
+      <button class="btn btn-primary btn-sm ms-4" on:click={() => (showAddModal = true)}>
+        <i class="bi bi-plus-circle" />
+        Universität hinzufügen
+      </button>
+    </h4>
+  </div>
+
   <div class="col-8">
     <div class="form-inline d-flex align-items-center no-wrap">
       <input type="text" placeholder="Suche" class="form-control form-control-sm" bind:value={searchTerm} />
