@@ -1,12 +1,16 @@
 package de.swtp13.creditportbackend.v1.dto;
 
 import java.time.LocalDateTime;
-
-import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 
-@Data
+@NoArgsConstructor
 @AllArgsConstructor
+@Data
+/**
+ * Die Klasse ist ein DTO (Data Transfer Object) für alle relevanten Infos die Vorgänge und Anträge enthalten.
+ */
 public class ProcedureRequestDTO {
 
     private String id;
@@ -19,5 +23,4 @@ public class ProcedureRequestDTO {
     private String reqAnnotation;
     private Integer creditPoints;
     private LocalDateTime reqCreatedAt;
-
 }

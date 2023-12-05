@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * @author Maike
  * Die Klasse ist ein Controller für die Vorgänge.
- * REST-Schnittstelle: /api/procedure
+ * REST-Schnittstelle: /api/v1/dto
  */
 
 @RestController

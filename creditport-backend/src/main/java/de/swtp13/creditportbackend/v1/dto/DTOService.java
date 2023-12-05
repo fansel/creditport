@@ -1,10 +1,11 @@
 package de.swtp13.creditportbackend.v1.dto;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDateTime;
 import java.sql.Timestamp;
 
 @Service
@@ -13,7 +14,10 @@ public class DTOService {
 
     private final DTORepository procedureRequestRepository;
 
-
+    /**
+     * Mapped die Abfrage Ergebnisse auf ein DTO.
+     * @return eine Liste mit allen DTOs aus der Anfrage.
+     */
     public List<ProcedureRequestDTO> getProcedureRequests() {
         List<Object[]> results = procedureRequestRepository.findAllProcedureRequestDTOs();
         List<ProcedureRequestDTO> dtos = new ArrayList<>();
