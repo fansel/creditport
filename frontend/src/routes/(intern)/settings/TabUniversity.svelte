@@ -1,11 +1,19 @@
 <script>
   import { enhance } from '$app/forms';
   import VirtualList from '@sveltejs/svelte-virtual-list';
+  import DeleteUniForm from './Forms/DeleteUniForm.svelte';
+  import UpdateUniForm from './Forms/UpdateUniForm.svelte';
 
   export let universities;
 
   let start;
   let end;
+
+  let showDeleteModal = false;
+  let showUpdateModal = false;
+
+  let selectedID;
+  let selectedName;
 
   let searchTerm = '';
   let searchResults;
@@ -18,12 +26,21 @@
   // - eigene Implementierung von VirtualList
   // - letztes Item hat doppelten Border-Bottom
 
+  function compareUniNames(a, b) {
+    return a.uniName.localeCompare(b.uniName);
+  }
+
   $: searchResultsCount = searchResults.length;
 
-  $: searchResults = universities.filter((uni) => {
-    return uni.uniName.includes(searchTerm);
-  });
+  $: searchResults = universities
+    .filter((uni) => {
+      return uni.uniName.includes(searchTerm);
+    })
+    .sort(compareUniNames);
 </script>
+
+<DeleteUniForm id={selectedID} bind:showModal={showDeleteModal} />
+<UpdateUniForm id={selectedID} name={selectedName} bind:showModal={showUpdateModal} />
 
 <div class="row mb-3">
   <div class="col"><h4>Vorschlagliste</h4></div>
@@ -50,14 +67,14 @@
             {item.uniName}
           </div>
           <div class="col d-flex align-items-center">
-            <form method="POST" use:enhance>
-              <input type="hidden" name="id" value={item.uniId} />
+            <!-- <form method="POST" use:enhance>
+              <input type="hidden" name="id" value={item.uniId} /> -->
 
-              <div class="btn-group">
-                <button class="btn btn-sm btn-outline-primary">Bearbeiten</button>
-                <button class="btn btn-sm btn-outline-danger" type="submit" formaction="?/deleteUni">Löschen</button>
-              </div>
-            </form>
+            <div class="btn-group">
+              <button class="btn btn-sm btn-outline-primary" on:click={() => ((showUpdateModal = true), (selectedID = item.uniId), (selectedName = item.uniName))}>Bearbeiten</button>
+              <button class="btn btn-sm btn-outline-danger" on:click={() => ((showDeleteModal = true), (selectedID = item.uniId))}>Löschen</button>
+            </div>
+            <!-- </form> -->
           </div>
         </div>
       </li>

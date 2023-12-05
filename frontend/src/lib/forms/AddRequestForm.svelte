@@ -1,5 +1,5 @@
 <script>
-  import Modal from '$lib/components/Modal.svelte';
+  import Modal from '$root/lib/components/FormModal.svelte';
 
   export let showModal = false;
   export let modules;

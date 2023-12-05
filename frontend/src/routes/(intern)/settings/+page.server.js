@@ -69,5 +69,27 @@ export const actions = {
     const body = await api.del(`universities/${result.data.id}`, locals.user?.token, api.content_type.plain);
 
     return { success: true };
+  },
+  changeUni: async ({ locals, request }) => {
+    const data = await request.formData();
+
+    const schema = zfd.formData({
+      id: zfd.text(),
+      name: zfd.text()
+    });
+
+    const result = schema.safeParse(data);
+
+    if (!result.success) {
+      return fail(400, { erros: '' });
+    }
+
+    const body = {
+      uniName: result.data.name
+    };
+
+    const res = await api.put(`universities/${result.data.id}`, body, locals.user?.token, api.content_type.json);
+
+    return { success: true };
   }
 };
