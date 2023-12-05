@@ -14,6 +14,10 @@ public class DTOService {
 
     private final DTORepository procedureRequestRepository;
 
+    /**
+     * Mapped die Abfrage Ergebnisse auf ein DTO.
+     * @return eine Liste mit allen DTOs aus der Anfrage.
+     */
     public List<ProcedureRequestDTO> getProcedureRequests() {
         List<Object[]> results = procedureRequestRepository.findAllProcedureRequestDTOs();
         List<ProcedureRequestDTO> dtos = new ArrayList<>();
