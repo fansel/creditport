@@ -1,24 +1,18 @@
 package de.swtp13.creditportbackend.v1.dto;
 
-import de.swtp13.creditportbackend.v1.dto.ProcedureRequestDTO;
-import de.swtp13.creditportbackend.v1.dto.DTORepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.time.LocalDateTime;
 import java.sql.Timestamp;
 
 @Service
+@RequiredArgsConstructor
 public class DTOService {
 
-    @Autowired
-    private DTORepository procedureRequestRepository;
+    private final DTORepository procedureRequestRepository;
 
-    public DTOService(DTORepository procedureRequestRepository) {
-        this.procedureRequestRepository = procedureRequestRepository;
-    }
 
     public List<ProcedureRequestDTO> getProcedureRequests() {
         List<Object[]> results = procedureRequestRepository.findAllProcedureRequestDTOs();
