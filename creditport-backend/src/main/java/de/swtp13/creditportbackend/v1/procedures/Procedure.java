@@ -50,11 +50,11 @@ public class Procedure {
     )
     private String courseName;
     @Column(
-            name = "created_on",
+            name = "created_at",
             nullable = false
     )
     @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime createdOn;
+    private LocalDateTime createdAt;
     @Column(
             name = "last_updated_on",
             nullable = false
@@ -75,16 +75,16 @@ public class Procedure {
         this.university = university;
         this.courseName = courseName;
         this.status = Status.NEU;
-        this.createdOn = LocalDateTime.now();
-        this.lastUpdated = this.createdOn;
+        this.createdAt = LocalDateTime.now();
+        this.lastUpdated = this.createdAt;
     }
 
     public Procedure(String university, String courseName) {
         this.university = university;
         this.courseName = courseName;
         this.status = Status.NEU;
-        this.createdOn = LocalDateTime.now();
-        this.lastUpdated = this.createdOn;
+        this.createdAt = LocalDateTime.now();
+        this.lastUpdated = this.createdAt;
     }
 
     /*

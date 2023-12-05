@@ -10,29 +10,29 @@ public class ProcedureRequestDTO {
     private String id;
     private String procStatus;
     private String procAnnotation;
-    private LocalDateTime procCreatedOn;
+    private LocalDateTime procCreatedAt;
     private Integer requestId;
     private String externalModuleId;
     private String internalModuleId;
     private String reqAnnotation;
     private Integer creditPoints;
-    private LocalDateTime reqCreatedOn;
+    private LocalDateTime reqCreatedAt;
 
     // Constructors, Getters, and Setters
 
-    public ProcedureRequestDTO(String id, String procStatus, String procAnnotation, LocalDateTime procCreatedOn,
+    public ProcedureRequestDTO(String id, String procStatus, String procAnnotation, LocalDateTime procCreatedAt,
                                Integer requestId, String externalModuleId, String internalModuleId, String reqAnnotation,
                                Integer creditPoints, LocalDateTime reqCreatedOn) {
         this.id = id;
         this.procStatus = procStatus;
         this.procAnnotation = procAnnotation;
-        this.procCreatedOn = procCreatedOn;
+        this.procCreatedAt = procCreatedAt;
         this.requestId = requestId;
         this.externalModuleId = externalModuleId;
         this.internalModuleId = internalModuleId;
         this.reqAnnotation = reqAnnotation;
         this.creditPoints = creditPoints;
-        this.reqCreatedOn = reqCreatedOn;
+        this.reqCreatedAt = reqCreatedAt;
     }
 
     public String getId(){
@@ -44,8 +44,8 @@ public class ProcedureRequestDTO {
     public String getProcAnnotation(){
         return procAnnotation;
     }
-    public LocalDateTime getProcCreatedOn(){
-        return procCreatedOn;
+    public LocalDateTime getProcCreatedAt(){
+        return procCreatedAt;
     }
     public Integer getRequestId(){
         return requestId;
@@ -62,7 +62,7 @@ public class ProcedureRequestDTO {
     public Integer getCreditPoints() {
         return creditPoints;
     }
-    public LocalDateTime getReqCreatedOn() {
-        return reqCreatedOn;
+    public LocalDateTime getReqCreatedAt() {
+        return reqCreatedAt;
     }
 }
