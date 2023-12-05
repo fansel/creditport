@@ -34,6 +34,8 @@ public class SecurityConfig {
                                 .hasAuthority("ADMIN")
                                 .requestMatchers(API_VERSION+"/test-endpoint/open")
                                 .permitAll()
+                                .requestMatchers(API_VERSION + "/dto")
+                                .authenticated()
                                 .anyRequest()
                                 .permitAll())
                 .sessionManagement(
