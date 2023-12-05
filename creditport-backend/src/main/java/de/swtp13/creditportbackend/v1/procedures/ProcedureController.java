@@ -17,7 +17,7 @@ import java.util.List;
  * REST-Schnittstelle: /api/procedure
  */
 @RestController
-@RequestMapping("/procedure")
+@RequestMapping("/procedures")
 public class ProcedureController {
 
     @Autowired
@@ -37,7 +37,7 @@ public class ProcedureController {
      * POST
      * saves a new procedure in the database
      */
-    @PostMapping("/procedure")
+    @PostMapping("/procedures")
     public ResponseEntity<Procedure> createProcedure(
             @RequestParam("university") String university,
             @RequestParam("courseName") String courseName,
