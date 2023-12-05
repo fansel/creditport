@@ -135,7 +135,7 @@
     <tbody>
       {#each data.procedures as procedure}
         <tr>
-          <td>{format(new Date(procedure.createdOn), 'dd.MM.yyyy HH:mm')} </td>
+          <td>{format(new Date(procedure.procCreatedAt), 'dd.MM.yyyy HH:mm')} </td>
           <td>{procedure.university}</td>
 
           <td>{procedure.courseName}</td>

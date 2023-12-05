@@ -1,4 +1,5 @@
 <script>
+  import { enhance } from '$app/forms';
   import VirtualList from '@sveltejs/svelte-virtual-list';
 
   export let universities;
@@ -49,10 +50,14 @@
             {item.uniName}
           </div>
           <div class="col d-flex align-items-center">
-            <div class="btn-group">
-              <button class="btn btn-sm btn-outline-primary">Bearbeiten</button>
-              <button class="btn btn-sm btn-outline-danger">Löschen</button>
-            </div>
+            <form method="POST" use:enhance>
+              <input type="hidden" name="id" value={item.uniId} />
+
+              <div class="btn-group">
+                <button class="btn btn-sm btn-outline-primary">Bearbeiten</button>
+                <button class="btn btn-sm btn-outline-danger" type="submit" formaction="?/deleteUni">Löschen</button>
+              </div>
+            </form>
           </div>
         </div>
       </li>
@@ -71,6 +76,10 @@
 
   .font-sm {
     font-size: 0.875rem;
+  }
+
+  .uni-table {
+    list-style-type: none;
   }
 
   .uni-table-header {

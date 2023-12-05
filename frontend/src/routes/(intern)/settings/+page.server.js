@@ -52,5 +52,22 @@ export const actions = {
     }
 
     return { success: true };
+  },
+  deleteUni: async ({ locals, request }) => {
+    const data = await request.formData();
+
+    const schema = zfd.formData({
+      id: zfd.text()
+    });
+
+    const result = schema.safeParse(data);
+
+    if (!result.success) {
+      return fail(400, { errors: 'keine ID angegeben' });
+    }
+
+    const body = await api.del(`universities/${result.data.id}`, locals.user?.token, api.content_type.plain);
+
+    return { success: true };
   }
 };
