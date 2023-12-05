@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * @author Maike
  * Die Klasse ist ein Controller für die Vorgänge.
- * REST-Schnittstelle: /api/procedure
+ * REST-Schnittstelle: /api/v1/dto
  */
 
 @RestController
@@ -23,8 +23,7 @@ public class DTOController {
 
     @GetMapping
     public ResponseEntity<List<ProcedureRequestDTO>> getAllProceduresWithDetails() {
-        List<ProcedureRequestDTO> procedureRequestDTOs = dtoService.getProcedureRequests();
-        return ResponseEntity.ok(procedureRequestDTOs);
+        return ResponseEntity.ok(dtoService.getProcedureRequests());
     }
 
 }
