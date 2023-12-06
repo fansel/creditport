@@ -1,5 +1,6 @@
 <script>
   import { enhance } from '$app/forms';
+  import { page } from '$app/stores';
 
   export let showModal; // boolean
   export let action;
@@ -12,7 +13,7 @@
   function handleSubmit() {
     return async ({ update }) => {
       await update();
-      dialog.close();
+      if ($page.form?.success) dialog.close();
     };
   }
 
