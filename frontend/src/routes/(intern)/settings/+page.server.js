@@ -46,7 +46,8 @@ export const actions = {
     if (!result.success) {
       const data = {
         data: Object.fromEntries(formData),
-        errors: result.error.flatten().fieldErrors
+        errors: result.error.flatten().fieldErrors,
+        success: false
       };
       return fail(400, data);
     }
@@ -63,7 +64,7 @@ export const actions = {
     const result = schema.safeParse(data);
 
     if (!result.success) {
-      return fail(400, { errors: 'keine ID angegeben' });
+      return fail(400, { errors: 'keine ID angegeben', success: false });
     }
 
     const body = await api.del(`universities/${result.data.id}`, locals.user?.token, api.content_type.plain);
@@ -81,7 +82,7 @@ export const actions = {
     const result = schema.safeParse(data);
 
     if (!result.success) {
-      return fail(400, { erros: '' });
+      return fail(400, { erros: '', success: false });
     }
 
     const body = {
@@ -102,7 +103,7 @@ export const actions = {
     const result = schema.safeParse(data);
 
     if (!result.success) {
-      return fail(400, { erros: '' });
+      return fail(400, { erros: '', success: false });
     }
 
     const body = {

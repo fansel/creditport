@@ -1,6 +1,7 @@
 <script>
   import { enhance } from '$app/forms';
   import { page } from '$app/stores';
+  import { invalidateAll, goto } from '$app/navigation';
 
   export let showModal; // boolean
   export let action;
@@ -13,11 +14,12 @@
   function handleSubmit() {
     return async ({ update }) => {
       await update();
-      if ($page.form?.success) dialog.close();
+      if ($page.form?.success) closeDialog();
     };
   }
 
   export function closeDialog() {
+    invalidateAll();
     dialog.close();
   }
 </script>
@@ -26,7 +28,7 @@
 <dialog bind:this={dialog} on:close={() => (showModal = false)}>
   <div class="header border-bottom">
     <slot name="headline" />
-    <button class="btn-close" type="button" aria-label="Close" on:click={() => dialog.close()} />
+    <button class="btn-close" type="button" aria-label="Close" on:click={() => closeDialog()} />
   </div>
   <form {action} {method} use:enhance={handleSubmit}>
     <slot name="body" />
