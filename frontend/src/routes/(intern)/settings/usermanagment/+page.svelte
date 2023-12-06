@@ -1,7 +1,9 @@
 <script>
   import * as config from '$lib/config';
   import Modal from '$root/lib/components/InfoModal.svelte';
-  export let users;
+  export let data;
+
+  $: users = data.users;
 
   let showModal = false;
 </script>

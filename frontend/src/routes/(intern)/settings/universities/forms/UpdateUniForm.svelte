@@ -1,5 +1,5 @@
 <script>
-  import Modal from '$root/lib/components/FormModal.svelte';
+  import Modal from '$lib/components/FormModal.svelte';
   import { page } from '$app/stores';
 
   let dialog;

@@ -1,11 +1,13 @@
 <script>
   import { enhance } from '$app/forms';
   import VirtualList from '@sveltejs/svelte-virtual-list';
-  import DeleteUniForm from './Forms/DeleteUniForm.svelte';
-  import UpdateUniForm from './Forms/UpdateUniForm.svelte';
-  import AddUniForm from './Forms/AddUniForm.svelte';
+  import DeleteUniForm from './forms/DeleteUniForm.svelte';
+  import UpdateUniForm from './forms/UpdateUniForm.svelte';
+  import AddUniForm from './forms/AddUniForm.svelte';
 
-  export let universities;
+  export let data;
+
+  $: universities = data.universities;
 
   let start;
   let end;
