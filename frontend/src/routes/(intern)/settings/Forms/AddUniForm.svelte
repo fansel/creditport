@@ -1,5 +1,6 @@
 <script>
   import Modal from '$root/lib/components/FormModal.svelte';
+  import { page } from '$app/stores';
 
   let dialog;
 
@@ -14,7 +15,10 @@
         <label for="name" class="col-form-label">Name</label>
       </div>
       <div class="col">
-        <input type="text" name="name" placeholder="Neue Universität" class="form-control" />
+        <input type="text" name="name" placeholder="Neue Universität" class="form-control {$page.form?.errors?.name ? 'is-invalid' : ''}" value={$page.form?.data?.name ?? ''} />
+        {#if $page.form?.errors?.name}
+          <div class="invalid-feedback">{$page.form?.errors?.name}</div>
+        {/if}
       </div>
     </div>
   </div>

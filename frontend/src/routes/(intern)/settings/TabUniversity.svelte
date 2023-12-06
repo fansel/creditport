@@ -14,8 +14,7 @@
   let showUpdateModal = false;
   let showAddModal = false;
 
-  let selectedID;
-  let selectedName;
+  let selectedUni;
 
   let searchTerm = '';
   let searchResults;
@@ -41,8 +40,8 @@
     .sort(compareUniNames);
 </script>
 
-<DeleteUniForm id={selectedID} bind:showModal={showDeleteModal} />
-<UpdateUniForm id={selectedID} name={selectedName} bind:showModal={showUpdateModal} />
+<DeleteUniForm uni={selectedUni} bind:showModal={showDeleteModal} />
+<UpdateUniForm uni={selectedUni} bind:showModal={showUpdateModal} />
 <AddUniForm bind:showModal={showAddModal} />
 
 <div class="row mb-3">
@@ -83,8 +82,8 @@
               <input type="hidden" name="id" value={item.uniId} /> -->
 
             <div class="btn-group">
-              <button class="btn btn-sm btn-outline-primary" on:click={() => ((showUpdateModal = true), (selectedID = item.uniId), (selectedName = item.uniName))}>Bearbeiten</button>
-              <button class="btn btn-sm btn-outline-danger" on:click={() => ((showDeleteModal = true), (selectedID = item.uniId))}>Löschen</button>
+              <button class="btn btn-sm btn-outline-primary" on:click={() => ((showUpdateModal = true), (selectedUni = item))}>Bearbeiten</button>
+              <button class="btn btn-sm btn-outline-danger" on:click={() => ((showDeleteModal = true), (selectedUni = item))}>Löschen</button>
             </div>
             <!-- </form> -->
           </div>

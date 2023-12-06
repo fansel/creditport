@@ -6,19 +6,22 @@
   export let showModal; // boolean
   export let action;
   export let method = 'POST';
+  export let reset = true;
 
   let dialog; // HTMLDialogElement
+  let form; //HTMLFormElement
 
   $: if (dialog && showModal) dialog.showModal();
 
   function handleSubmit() {
-    return async ({ update }) => {
-      await update();
-      if ($page.form?.success) closeDialog();
+    return async ({ update, result }) => {
+      await update({ reset });
+      if (result.type === 'success') closeDialog();
     };
   }
 
   export function closeDialog() {
+    if (reset) form.reset();
     invalidateAll();
     dialog.close();
   }
@@ -30,7 +33,7 @@
     <slot name="headline" />
     <button class="btn-close" type="button" aria-label="Close" on:click={() => closeDialog()} />
   </div>
-  <form {action} {method} use:enhance={handleSubmit}>
+  <form {action} {method} use:enhance={handleSubmit} bind:this={form}>
     <slot name="body" />
     <slot name="footer" />
   </form>

@@ -4,14 +4,14 @@
   let dialog;
 
   export let showModal;
-  export let id;
+  export let uni;
 </script>
 
 <Modal bind:showModal bind:this={dialog} action="?/deleteUni">
   <h2 slot="headline" class="m-0">Löschen bestätigen</h2>
   <div slot="body" class="p-3">
-    <p>Willst du wirklich eine Universität unwiderruflich löschen?</p>
-    <input type="hidden" value={id} name="id" />
+    <p>Willst du wirklich <strong>{uni?.uniName}</strong> unwiderruflich löschen?</p>
+    <input type="hidden" value={uni?.uniId} name="id" />
   </div>
   <div slot="footer" class="p-3 d-flex justify-content-end align-items-center border-top">
     <button class="btn btn-outline-secondary me-3" on:click={() => dialog.closeDialog()} type="button">Abbrechen</button>

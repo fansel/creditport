@@ -34,14 +34,14 @@ export async function load({ params, locals, cookies }) {
 /** @type {import('./$types').Actions} */
 export const actions = {
   changePassword: async ({ cookies, request }) => {
-    const data = await request.formData();
+    const formData = await request.formData();
 
     const schema = zfd.formData({
       aktuellesPassword: zfd.text(z.string().optional()),
       neuesPassword: zfd.text(z.string().optional())
     });
 
-    const result = schema.safeParse(data);
+    const result = schema.safeParse(formData);
 
     if (!result.success) {
       const data = {
@@ -55,34 +55,38 @@ export const actions = {
     return { success: true };
   },
   deleteUni: async ({ locals, request }) => {
-    const data = await request.formData();
+    const formData = await request.formData();
 
     const schema = zfd.formData({
       id: zfd.text()
     });
 
-    const result = schema.safeParse(data);
+    const result = schema.safeParse(formData);
 
     if (!result.success) {
-      return fail(400, { errors: 'keine ID angegeben', success: false });
+      return fail(400, { errors: 'keine ID angegeben' });
     }
 
-    const body = await api.del(`universities/${result.data.id}`, locals.user?.token, api.content_type.plain);
+    const res = await api.del(`universities/${result.data.id}`, locals.user?.token, api.content_type.plain);
 
     return { success: true };
   },
   changeUni: async ({ locals, request }) => {
-    const data = await request.formData();
+    const formData = await request.formData();
 
     const schema = zfd.formData({
       id: zfd.text(),
-      name: zfd.text()
+      name: zfd.text(z.string({ required_error: 'Name darf nicht leer sein' }))
     });
 
-    const result = schema.safeParse(data);
+    const result = schema.safeParse(formData);
 
     if (!result.success) {
-      return fail(400, { erros: '', success: false });
+      const data = {
+        data: Object.fromEntries(formData),
+        errors: result.error.flatten().fieldErrors
+      };
+      return fail(400, data);
     }
 
     const body = {
@@ -94,16 +98,20 @@ export const actions = {
     return { success: true };
   },
   addUni: async ({ locals, request }) => {
-    const data = await request.formData();
+    const formData = await request.formData();
 
     const schema = zfd.formData({
       name: zfd.text()
     });
 
-    const result = schema.safeParse(data);
+    const result = schema.safeParse(formData);
 
     if (!result.success) {
-      return fail(400, { erros: '', success: false });
+      const data = {
+        data: Object.fromEntries(formData),
+        errors: result.error.flatten().fieldErrors
+      };
+      return fail(400, data);
     }
 
     const body = {

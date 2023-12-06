@@ -1,14 +1,14 @@
 <script>
   import Modal from '$root/lib/components/FormModal.svelte';
+  import { page } from '$app/stores';
 
   let dialog;
 
   export let showModal;
-  export let id;
-  export let name;
+  export let uni;
 </script>
 
-<Modal bind:showModal bind:this={dialog} action="?/changeUni">
+<Modal bind:showModal bind:this={dialog} action="?/changeUni" reset={false}>
   <h2 slot="headline" class="m-0">Universität bearbeiten</h2>
   <div slot="body" class="p-3">
     <div class="row">
@@ -16,9 +16,14 @@
         <label for="name" class="col-form-label"> Name </label>
       </div>
       <div class="col">
-        <input type="hidden" value={id} name="id" />
+        <input type="hidden" value={uni?.uniId} name="id" />
 
-        <input type="text" value={name} name="name" class="form-control" />
+        <input type="text" value={$page.form?.data?.name ?? uni?.uniName} name="name" class="form-control {$page.form?.errors?.name ? 'is-invalid' : ''}" />
+        {#if $page.form?.errors?.name}
+          <div class="invalid-feedback">
+            {$page.form?.errors?.name}
+          </div>
+        {/if}
       </div>
     </div>
   </div>
