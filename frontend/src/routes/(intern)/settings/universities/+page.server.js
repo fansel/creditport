@@ -1,4 +1,5 @@
 import * as api from '$lib/api.js';
+import * as config from '$lib/config.js';
 import { zfd } from 'zod-form-data';
 import { fail } from '@sveltejs/kit';
 import z from 'zod';
@@ -8,7 +9,7 @@ export async function load({ params, locals, cookies }) {
   let unilist;
 
   //Muss später noch auf die Rolle angepasst werden #TODO
-  if (locals.user.username == 'admin') {
+  if (locals.user.role == config.user_roles.ADMIN) {
     //Nutzerliste
     unilist = await api.get('universities');
   }

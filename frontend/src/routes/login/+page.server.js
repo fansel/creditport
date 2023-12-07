@@ -27,11 +27,14 @@ export const actions = {
     const user = {
       token: body.token,
       username: JSON.parse(atob(body.token.split('.')[1])).sub,
-      expires_at: new Date(Number(JSON.parse(atob(body.token.split('.')[1])).exp * 1000))
+      expires_at: new Date(Number(JSON.parse(atob(body.token.split('.')[1])).exp * 1000)),
+      role: body.role
     };
 
+    const maxAge = Math.floor((user.expires_at.getTime() - new Date().getTime()) / 1000);
+
     const value = btoa(JSON.stringify(user));
-    cookies.set('jwt', value, { secure: config.secure_connection, path: '/' });
+    cookies.set('jwt', value, { secure: config.secure_connection, path: '/', maxAge: maxAge });
 
     throw redirect(307, '/dashboard');
   }

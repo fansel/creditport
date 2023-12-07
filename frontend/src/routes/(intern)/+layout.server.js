@@ -13,6 +13,6 @@ export async function load({ locals, cookies }) {
   }
 
   return {
-    user: locals.user && { username: locals.user.username }
+    user: locals.user
   };
 }

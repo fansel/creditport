@@ -1,5 +1,6 @@
 <script>
   import { page } from '$app/stores';
+  import * as config from '$lib/config.js';
   export let data;
 </script>
 
@@ -17,7 +18,7 @@
     <a href="/settings/notifications" class="nav-link {$page.data.subtitle == 'Benachrichtigungen' ? 'active' : ''}">Benachrichtigungen</a>
   </li>
 
-  {#if data.user.username === 'admin'}
+  {#if $page.data.user.role == config.user_roles.ADMIN}
     <li class="nav-item">
       <a href="/settings/usermanagment" class="nav-link {$page.data.subtitle == 'Benutzer & Rollen' ? 'active' : ''}">Benutzer & Rollen</a>
     </li>
