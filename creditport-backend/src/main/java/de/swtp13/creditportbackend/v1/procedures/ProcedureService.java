@@ -3,9 +3,10 @@ package de.swtp13.creditportbackend.v1.procedures;
 import de.swtp13.creditportbackend.v1.procedures.util.IDGenerator;
 import de.swtp13.creditportbackend.v1.requests.RequestRepository;
 import de.swtp13.creditportbackend.v1.requests.Request;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,20 +23,21 @@ public class ProcedureService {
     @Autowired
     private RequestRepository requestRepository;
 
-    /**
-     * Die Methode generiert einen neuen Vorgang und setzt die ID.
-     * @return gibt den neuen Vorgang zurück.
-     */
-    public Procedure createProcedure() {
-        String id;
-        do {
-            id = IDGenerator.generateID();
-        } while (procedureRepository.existsById(id));
 
-        Procedure procedure = new Procedure();
 
-        procedure.setProcedureId(id);
-        procedureRepository.save(procedure);
+
+
+    @Transactional
+    public Procedure createProcedureWithRequests(Procedure procedure, List<Request> requests) {
+        procedure.setProcedureId(IDGenerator.generateID());
+        procedure.setCreatedAt(LocalDateTime.now());
+        procedure = procedureRepository.save(procedure);
+        for (Request request : requests) {
+            request.setProcedure(procedure);
+            request.setCreatedAt(LocalDateTime.now());
+            requestRepository.save(request);
+        }
+
         return procedure;
     }
 

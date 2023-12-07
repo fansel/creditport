@@ -34,32 +34,6 @@ public class ProcedureController {
     }
 
     /**
-     * POST
-     * saves a new procedure in the database
-     */
-    @PostMapping("/procedures")
-    public ResponseEntity<Procedure> createProcedure(
-            @RequestParam("university") String university,
-            @RequestParam("courseName") String courseName,
-            @RequestParam("externalModuleId") String externalModuleId,
-            @RequestParam("internalModuleId") String internalModuleId,
-            @RequestParam("annotation") String annotation,
-            @RequestParam("creditPoints") int creditPoints,
-            @RequestParam("moduleDescriptionFile") MultipartFile moduleDescriptionFile) {
-
-        byte[] pdfContent;
-        try {
-            pdfContent = moduleDescriptionFile.getBytes();
-        } catch (IOException e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-        Procedure newProcedure = procedureService.createProcedure();
-        return new ResponseEntity<>(newProcedure, HttpStatus.CREATED);
-    }
-
-
-    /**
      * GET
      * @return List of all procedures
      */

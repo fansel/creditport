@@ -9,6 +9,7 @@ import java.util.List;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity(name = "Procedures")
@@ -67,6 +68,7 @@ public class Procedure {
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime lastUpdated;
 
+    @Getter
     @Transient
     private List<Request> requests = new ArrayList<>();
 
@@ -93,10 +95,6 @@ public class Procedure {
         this.status = Status.NEU;
         this.createdAt = LocalDateTime.now();
         this.lastUpdated = this.createdAt;
-    }
-
-    public List<Request> getRequests() {
-        return requests;
     }
 
     public void setRequests(List<Request> requests) {
