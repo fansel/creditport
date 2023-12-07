@@ -1,7 +1,11 @@
 package de.swtp13.creditportbackend.v1.procedures;
 
 import de.swtp13.creditportbackend.v1.procedures.util.IDGenerator;
+import de.swtp13.creditportbackend.v1.requests.Request;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -55,12 +59,16 @@ public class Procedure {
     )
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime createdAt;
+
     @Column(
             name = "last_updated_on",
             nullable = false
     )
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime lastUpdated;
+
+    @Transient
+    private List<Request> requests = new ArrayList<>();
 
     // Benutzerdefinierter Konstruktor ohne ID
     public Procedure(Status status, String annotation) {
@@ -87,27 +95,11 @@ public class Procedure {
         this.lastUpdated = this.createdAt;
     }
 
-    /*
-{
-  "university": "String",
-  "course" : "String",
-  "requests" : [
-    {
-      "externalModules" :
-      [
-        {
-          "lp" : "Int",
-          "name" : "String",
-          "urlModulDescription" : "String",
-          "fileModulDescription" : "File",
-        },
+    public List<Request> getRequests() {
+        return requests;
+    }
 
-      ],
-      "internalModules" : [
-
-      ]
-    },
-  ],
-}
- */
+    public void setRequests(List<Request> requests) {
+        this.requests = requests;
+    }
 }
