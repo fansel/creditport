@@ -3,11 +3,11 @@
   <div class="offset-md-4 col">
     <div class="form-check mb-3">
       <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-      <label class="form-check-label" for="flexCheckDefault">Benachrichtigungen bei erfolgreichem X</label>
+      <label class="form-check-label" for="flexCheckDefault">Benachrichtigungen bei Fehlern</label>
     </div>
     <div class="form-check">
       <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" />
-      <label class="form-check-label" for="flexCheckDefault">Benachrichtigungen bei erfolgreichem Y</label>
+      <label class="form-check-label" for="flexCheckDefault">Benachrichtigungen bei erfolgreichem Aktionen</label>
     </div>
   </div>
 </div>

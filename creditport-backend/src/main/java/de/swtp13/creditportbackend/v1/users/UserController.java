@@ -61,10 +61,10 @@ public class UserController {
     }
 
     @PatchMapping("/update/password")
-    public ResponseEntity<?> updatePassword(
+    public ResponseEntity<String> updatePassword(
             @RequestParam(required = false) Integer id,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-            @RequestBody String newPass
+            @RequestBody UpdateRequest newPass
     ) {
         String jwt = token.substring(7);
         String result = managementService.updatePassword(id, jwt, newPass);
@@ -76,10 +76,10 @@ public class UserController {
 
     }
 
-    @PatchMapping("/update/username/{id}")
+    @PatchMapping("/update/username")
     public ResponseEntity<?> updateUsername(
-            @PathVariable int id,
-            @RequestBody String newUsername
+            @RequestParam int id,
+            @RequestBody UpdateRequest newUsername
     ) {
         if (managementService.updateUsername(id, newUsername)) {
             return ResponseEntity.ok().build();
@@ -88,10 +88,10 @@ public class UserController {
         }
     }
 
-    @PatchMapping("/update/role/{id}")
+    @PatchMapping("/update/role")
     public ResponseEntity<String> updateRole(
-            @PathVariable int id,
-            @RequestBody String newRole
+            @RequestParam int id,
+            @RequestBody UpdateRequest newRole
     ) {
         return ResponseEntity.status(managementService.updateRole(id, newRole)).build();
     }

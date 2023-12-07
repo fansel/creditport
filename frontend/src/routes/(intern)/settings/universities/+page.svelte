@@ -1,11 +1,22 @@
 <script>
   import { enhance } from '$app/forms';
   import VirtualList from '@sveltejs/svelte-virtual-list';
+  import DeleteUniForm from './forms/DeleteUniForm.svelte';
+  import UpdateUniForm from './forms/UpdateUniForm.svelte';
+  import AddUniForm from './forms/AddUniForm.svelte';
 
-  export let universities;
+  export let data;
+
+  $: universities = data.universities;
 
   let start;
   let end;
+
+  let showDeleteModal = false;
+  let showUpdateModal = false;
+  let showAddModal = false;
+
+  let selectedUni;
 
   let searchTerm = '';
   let searchResults;
@@ -18,15 +29,34 @@
   // - eigene Implementierung von VirtualList
   // - letztes Item hat doppelten Border-Bottom
 
+  function compareUniNames(a, b) {
+    return a.uniName.localeCompare(b.uniName);
+  }
+
   $: searchResultsCount = searchResults.length;
 
-  $: searchResults = universities.filter((uni) => {
-    return uni.uniName.includes(searchTerm);
-  });
+  $: searchResults = universities
+    .filter((uni) => {
+      return uni.uniName.includes(searchTerm);
+    })
+    .sort(compareUniNames);
 </script>
 
+<DeleteUniForm uni={selectedUni} bind:showModal={showDeleteModal} />
+<UpdateUniForm uni={selectedUni} bind:showModal={showUpdateModal} />
+<AddUniForm bind:showModal={showAddModal} />
+
 <div class="row mb-3">
-  <div class="col"><h4>Vorschlagliste</h4></div>
+  <div class="col">
+    <h4 class=" d-flex">
+      Vorschlagliste
+      <button class="btn btn-primary btn-sm ms-4" on:click={() => (showAddModal = true)}>
+        <i class="bi bi-plus-circle" />
+        Universität hinzufügen
+      </button>
+    </h4>
+  </div>
+
   <div class="col-8">
     <div class="form-inline d-flex align-items-center no-wrap">
       <input type="text" placeholder="Suche" class="form-control form-control-sm" bind:value={searchTerm} />
@@ -50,14 +80,14 @@
             {item.uniName}
           </div>
           <div class="col d-flex align-items-center">
-            <form method="POST" use:enhance>
-              <input type="hidden" name="id" value={item.uniId} />
+            <!-- <form method="POST" use:enhance>
+              <input type="hidden" name="id" value={item.uniId} /> -->
 
-              <div class="btn-group">
-                <button class="btn btn-sm btn-outline-primary">Bearbeiten</button>
-                <button class="btn btn-sm btn-outline-danger" type="submit" formaction="?/deleteUni">Löschen</button>
-              </div>
-            </form>
+            <div class="btn-group">
+              <button class="btn btn-sm btn-outline-primary" on:click={() => ((showUpdateModal = true), (selectedUni = item))}>Bearbeiten</button>
+              <button class="btn btn-sm btn-outline-danger" on:click={() => ((showDeleteModal = true), (selectedUni = item))}>Löschen</button>
+            </div>
+            <!-- </form> -->
           </div>
         </div>
       </li>

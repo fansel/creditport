@@ -1,74 +1,118 @@
 <script>
-  import TabGeneral from './TabGeneral.svelte';
-  import TabNotifcations from './TabNotifcations.svelte';
-  import TabUsermanagment from './TabUsermanagment.svelte';
-  import TabUniversity from './TabUniversity.svelte';
+  import { browser } from '$app/environment';
+  import { enhance } from '$app/forms';
+  import { invalidateAll } from '$app/navigation';
+  import { successToast } from '$root/lib/toast';
 
   export let data;
 
-  let activeSlide = 0;
+  let useSystemModeEnabled = data.settings.useSystemMode === 'true';
+  let darkModeEnabled = data.settings.darkMode === 'dark';
+  let pageCount = String(data.settings.pageCount);
+  let systemLanguage = 0;
+
+  // $: darkModeEnabled = settings.darkMode === 'dark';
+  // $: useSystemModeEnabled =
+
+  function setDarkMode() {
+    const theme = darkModeEnabled ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-bs-theme', theme);
+  }
+
+  function setFromSystemMode() {
+    if (browser) {
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        darkModeEnabled = true;
+        setDarkMode();
+      } else {
+        darkModeEnabled = false;
+        setDarkMode();
+      }
+    }
+  }
+
+  async function submitSettings(event) {
+    const data = {
+      darkMode: darkModeEnabled,
+      useSystemMode: useSystemModeEnabled,
+      pageCount: pageCount
+    };
+
+    const response = await fetch('', {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    const res = await response.json();
+
+    if (res.success) {
+      successToast('Erfolreich gespeichert');
+    } else {
+      failureToast('Leider ist ein Fehler aufgetreten');
+    }
+
+    await invalidateAll();
+  }
 </script>
 
-<div class="row py-3 mb-3 pb-md-1 border-bottom align-items-center">
-  <div class="col-md">
-    <h1>Einstellungen</h1>
+<h4 class="mb-3">Erscheinungsbild</h4>
+<div class="row mb-3">
+  <div class="col-md-4 col-form-label"><span>Anzeigesprache</span></div>
+  <div class="col">
+    <select name="language" id="languageSelect" class="form-select">
+      <option value="1">Deutsch</option>
+      <option value="2">English</option>
+    </select>
   </div>
 </div>
 
-<ul class="nav nav-tabs border-left border-right">
-  <li class="nav-item">
-    <button
-      class="nav-link {activeSlide == 0 ? 'active' : ''}"
-      on:click={() => {
-        activeSlide = 0;
-      }}>Allgemein</button
-    >
-  </li>
-  <li class="nav-item">
-    <button
-      class="nav-link {activeSlide == 1 ? 'active' : ''}"
-      on:click={() => {
-        activeSlide = 1;
-      }}>Benachrichtigungen</button
-    >
-  </li>
-
-  {#if data.user.username === 'admin'}
-    <li class="nav-item">
-      <button
-        class="nav-link {activeSlide == 2 ? 'active' : ''}"
-        on:click={() => {
-          activeSlide = 2;
-        }}>Benutzer & Rollen</button
-      >
-    </li>
-
-    <li class="nav-item">
-      <button
-        class="nav-link {activeSlide == 3 ? 'active' : ''}"
-        on:click={() => {
-          activeSlide = 3;
-        }}>Universitäten</button
-      >
-    </li>
-  {/if}
-</ul>
-
-<!-- Einstellungs INHALT -->
-<div class="tab-content border-start border-end p-3 border-bottom mb-3 shadow-sm">
-  {#if activeSlide === 0}
-    <TabGeneral settings={data.settings} />
-  {:else if activeSlide === 1}
-    <TabNotifcations />
-  {:else if activeSlide === 2}
-    <TabUsermanagment users={data.users} />
-  {:else if activeSlide === 3}
-    <TabUniversity universities={data.universities} />
-  {/if}
+<div class="row mb-3">
+  <div class="col-md-4 col-form-label"><span>Treffer pro Seite</span></div>
+  <div class="col">
+    <select name="pageCount" id="pageCountSelect" class="form-select" bind:value={pageCount}>
+      <option value="10">10</option>
+      <option value="25">25</option>
+      <option value="50">50</option>
+      <option value="100">100</option>
+    </select>
+  </div>
 </div>
 
-<style>
-  .nav-item {
-    font-size: 1rem;
-  }
-</style>
+<div class="row mb-3">
+  <div class="col-md-4 col-form-label"><span>Dunkler Modus</span></div>
+  <div class="col">
+    <div class="form-check mb-3">
+      <input class="form-check-input" type="checkbox" id="useSystemModeCheckbox" name="useSystemMode" bind:checked={useSystemModeEnabled} on:change={setFromSystemMode} />
+      <label class="form-check-label" for="useSystemModeCheckbox">Benutze Systemeinstellungen </label>
+    </div>
+
+    {#if !useSystemModeEnabled}
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="darkModeCheckbox" name="darkMode" bind:checked={darkModeEnabled} on:change={setDarkMode} />
+        <label class="form-check-label" for="darkModeCheckbox">aktivieren</label>
+      </div>
+    {/if}
+  </div>
+</div>
+
+<form action="?/changePassword" method="POST">
+  <h4 class="mb-3">Sicherheit</h4>
+  <div class="row mb-3">
+    <div class="col-md-4 col-form-label"><span>Passwort ändern</span></div>
+    <div class="col">
+      <div class="mb-3">
+        <label for="formAktuellesPassword" class="form-label">Aktuelles Passwort</label>
+        <input type="password" class="form-control" id="formAktuellesPassword" name="aktuellesPassword" />
+      </div>
+      <div class="mb-3">
+        <label for="formNeuesPassword" class="form-label">Neues Passwort</label>
+        <input type="password" class="form-control" id="formNeuesPassword" name="neuesPassword" />
+      </div>
+      <button class="btn btn-primary" type="submit">Passwort ändern</button>
+    </div>
+  </div>
+</form>
+
+<button class="btn btn-primary mt-2 mb-2" on:click={submitSettings}>Speichern</button>

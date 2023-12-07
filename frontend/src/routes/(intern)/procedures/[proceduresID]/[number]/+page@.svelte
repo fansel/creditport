@@ -1,7 +1,7 @@
 <!-- Hauptbearbeitungsseite mit PDF Vorschau -->
 <script>
   import { getStatus } from '$lib/status.js';
-  import Modal from '$lib/components/Modal.svelte';
+  import Modal from '$root/lib/components/FormModal.svelte';
   import Header from '$lib/components/InternHeader.svelte';
   import { format } from 'date-fns';
 

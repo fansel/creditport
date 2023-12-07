@@ -18,7 +18,7 @@ public class ManagementService {
         return DisplayedUser.of(userRepository.findById(id));
     }
 
-    public String updatePassword(Integer id, String token, String newPass) {
+    public String updatePassword(Integer id, String token, UpdateRequest newPass) {
         User user;
         if (id == null) {
             try {
@@ -36,15 +36,15 @@ public class ManagementService {
         } else {
             return null;
         }
-        user.setPassword(passwordEncoder.encode(newPass));
+        user.setPassword(passwordEncoder.encode(newPass.getValue()));
         userRepository.save(user);
         return jwtService.generateToken(user);
     }
 
-    public boolean updateUsername(int id, String newUsername) {
+    public boolean updateUsername(int id, UpdateRequest newUsername) {
         if (userRepository.existsById(id)) {
             var user = userRepository.findById(id).orElseThrow();
-            user.setUsername(newUsername);
+            user.setUsername(newUsername.getValue());
             userRepository.save(user);
             return true;
         } else {
@@ -52,14 +52,14 @@ public class ManagementService {
         }
     }
 
-    public int updateRole(int id, String newRole) {
+    public int updateRole(int id, UpdateRequest newRole) {
         if (userRepository.existsById(id)) {
             var user = userRepository.findById(id).orElseThrow();
-            if (newRole == null || newRole.isEmpty()) {
+            if (newRole.getValue() == null || newRole.getValue().isEmpty()) {
                 return 400;
             }
             try {
-                user.setRole(Role.valueOf(newRole));
+                user.setRole(Role.valueOf(newRole.getValue()));
             } catch (IllegalArgumentException iae) {
                 return 422;
             }
