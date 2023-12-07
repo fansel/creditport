@@ -1,11 +1,18 @@
 <script>
   import Modal from '$lib/components/FormModal.svelte';
   import { page } from '$app/stores';
+  import { onMount } from 'svelte';
 
   let dialog;
+  let input;
 
   export let showModal;
   export let uni;
+
+  //Wenn das Modal neu geöffnet wird werden alle relevanten Werte neue gesetzt
+  $: if (showModal) {
+    input.value = uni?.uniName;
+  }
 </script>
 
 <Modal bind:showModal bind:this={dialog} action="?/changeUni" reset={false}>
@@ -18,7 +25,7 @@
       <div class="col">
         <input type="hidden" value={uni?.uniId} name="id" />
 
-        <input type="text" value={$page.form?.data?.name ?? uni?.uniName} name="name" class="form-control {$page.form?.errors?.name ? 'is-invalid' : ''}" />
+        <input type="text" value={$page.form?.data?.name ?? uni?.uniName} name="name" class="form-control {$page.form?.errors?.name ? 'is-invalid' : ''}" bind:this={input} />
         {#if $page.form?.errors?.name}
           <div class="invalid-feedback">
             {$page.form?.errors?.name}

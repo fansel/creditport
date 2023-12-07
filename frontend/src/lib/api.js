@@ -33,10 +33,8 @@ async function send({ method, path, data, token, req_type = content_type.json, r
         return await res.json();
       case content_type.plain:
         return await res.text();
-      // case content_type.form_data:
-      //     re
-
-      //     break;
+      case content_type.form_data:
+        return await res.formData();
       default:
         return null;
     }
