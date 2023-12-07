@@ -10,7 +10,7 @@ export async function load({ params, locals, cookies }) {
   //Muss später noch auf die Rolle angepasst werden #TODO
   if (locals.user.username == 'admin') {
     //Nutzerliste
-    unilist = await api.get('universities', null, api.content_type.json);
+    unilist = await api.get('universities');
   }
 
   return {
@@ -35,7 +35,7 @@ export const actions = {
       return fail(400, { errors: 'keine ID angegeben' });
     }
 
-    const res = await api.del(`universities/${result.data.id}`, locals.user?.token, api.content_type.plain);
+    const res = await api.del(`universities/${result.data.id}`, locals.user?.token, { res_type: api.content_type.plain });
 
     return { success: true };
   },
@@ -61,7 +61,7 @@ export const actions = {
       uniName: result.data.name
     };
 
-    const res = await api.put(`universities/${result.data.id}`, body, locals.user?.token, api.content_type.json);
+    const res = await api.put(`universities/${result.data.id}`, body, locals.user?.token);
 
     return { success: true };
   },
@@ -86,7 +86,7 @@ export const actions = {
       uniName: result.data.name
     };
 
-    const res = await api.post(`universities`, body, locals.user?.token, api.content_type.json);
+    const res = await api.post(`universities`, body, locals.user?.token);
 
     return { success: true };
   }

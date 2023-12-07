@@ -1,27 +1,18 @@
 <script>
   import * as config from '$lib/config';
-  import Modal from '$root/lib/components/InfoModal.svelte';
+  import AddUserForm from './forms/AddUserForm.svelte';
   export let data;
 
   $: users = data.users;
 
-  let showModal = false;
+  let showAddModal = false;
 </script>
 
-<Modal bind:showModal>
-  <h2 slot="headline" class="m-0">Neuen Benutzer erstellen</h2>
-  <form action="" slot="body" class="p-3">
-    <p>Hallo</p>
-  </form>
-  <div slot="footer" class="p-3 d-flex justify-content-end align-items-center border-top">
-    <button class="btn btn-outline-secondary me-3">Abbrechen</button>
-    <button class="btn btn-primary">Speichern</button>
-  </div>
-</Modal>
+<AddUserForm bind:showModal={showAddModal} roles={config.user_roles} />
 
 <h4 class="mb-3 d-flex">
   Benutzer
-  <button class="btn btn-primary btn-sm ms-4" on:click={() => (showModal = true)}>
+  <button class="btn btn-primary btn-sm ms-4" on:click={() => (showAddModal = true)}>
     <i class="bi bi-plus-circle" />
     Benutzer hinzufügen
   </button>

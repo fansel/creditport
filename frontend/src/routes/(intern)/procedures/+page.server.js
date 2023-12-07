@@ -4,7 +4,7 @@ import { error } from '@sveltejs/kit';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ params, locals }) {
-  // const procedures = (await api.get('dto', locals.user?.token, api.content_type.json)) || [];
+  // const procedures = (await api.get('dto', locals.user?.token, { res_type: api.content_type.json })) || [];
 
   const procedures = [
     {
