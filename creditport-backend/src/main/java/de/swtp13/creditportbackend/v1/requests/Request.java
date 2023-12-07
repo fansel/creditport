@@ -1,5 +1,6 @@
 package de.swtp13.creditportbackend.v1.requests;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.swtp13.creditportbackend.v1.procedures.Procedure;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -30,6 +31,7 @@ public class Request {
             name = "procedure_id",
             nullable = false
     )
+    @JsonIgnore
     private Procedure procedure;
 
     @Column(
@@ -112,5 +114,4 @@ public class Request {
         this.createdAt = LocalDateTime.now();
         this.pdfContent = null; // oder ein Standard-PDF-Byte-Array, falls gewünscht
     }
-
 }
