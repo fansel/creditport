@@ -25,9 +25,9 @@ public class RequestController {
 
     // GET all requests
     @GetMapping
-    public List<Request> getAllRequests() {
+    public ResponseEntity<List<Request>> getAllRequests() {
         System.out.println("Get all requests");
-        return requestRepository.findAll();
+        return ResponseEntity.ok(requestRepository.findAll());
     }
 
     // GET Request by RequestID
@@ -46,9 +46,9 @@ public class RequestController {
 
     // POST: Create a new Request
     @PostMapping
-    public Request createRequest(@RequestBody Request request) {
+    public ResponseEntity<Request> createRequest(@RequestBody Request request) {
         //System.out.println("Create Request: " + request.getRequestId());
-        return requestRepository.save(request);
+        return ResponseEntity.ok(requestRepository.save(request));
     }
 
     // PUT: Update a Request

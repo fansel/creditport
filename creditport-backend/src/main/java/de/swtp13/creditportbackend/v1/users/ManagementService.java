@@ -4,6 +4,8 @@ import de.swtp13.creditportbackend.v1.config.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -18,7 +20,7 @@ public class ManagementService {
         return DisplayedUser.of(userRepository.findById(id));
     }
 
-    public String updatePassword(Integer id, String token, UpdateRequest newPass) {
+    public int updatePassword(Integer id, String token, UpdateRequest newPass) {
         User user;
         if (id == null) {
             try {
@@ -27,28 +29,34 @@ public class ManagementService {
                                 jwtService.extractUsername(token)
                         ).orElseThrow().getUserId()
                 ).orElseThrow();
-            } catch (IllegalArgumentException iae) {
-                return null;
+            } catch (NoSuchElementException nsee) {
+                return 404;
             }
 
         } else if (userRepository.existsById(id)) {
             user = userRepository.findById(id).orElseThrow();
         } else {
-            return null;
+            return 404;
+        }
+        if (newPass.getValue() == null || newPass.getValue().isEmpty()) {
+            return 400;
         }
         user.setPassword(passwordEncoder.encode(newPass.getValue()));
         userRepository.save(user);
-        return jwtService.generateToken(user);
+        return 204;
     }
 
-    public boolean updateUsername(int id, UpdateRequest newUsername) {
+    public int updateUsername(int id, UpdateRequest newUsername) {
         if (userRepository.existsById(id)) {
             var user = userRepository.findById(id).orElseThrow();
+            if (newUsername.getValue() == null || newUsername.getValue().isEmpty()) {
+                return 400;
+            }
             user.setUsername(newUsername.getValue());
             userRepository.save(user);
-            return true;
+            return 204;
         } else {
-            return false;
+            return 404;
         }
     }
 
@@ -64,15 +72,15 @@ public class ManagementService {
                 return 422;
             }
             userRepository.save(user);
-            return 200;
+            return 204;
         } else {
             return 404;
         }
     }
 
-    public boolean register(RegisterRequest request) {
+    public int register(RegisterRequest request) {
         if (userRepository.findByUsername(request.getUsername()).isPresent()) {
-            return false;
+            return 409;
         }
         var user = User.builder()
                 .username(request.getUsername())
@@ -80,7 +88,7 @@ public class ManagementService {
                 .role(Role.valueOf(request.getRole()))
                 .build();
         userRepository.save(user);
-        return true;
+        return 200;
     }
 
 

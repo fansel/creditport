@@ -1,5 +1,6 @@
 package de.swtp13.creditportbackend.v1.modules;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,8 +22,8 @@ public class ModuleController {
     private ModuleRepository moduleRepository;
 
     @GetMapping
-    public List<Module> getAllModules() {
+    public ResponseEntity<List<Module>> getAllModules() {
         System.out.println("Get all modules");
-        return moduleRepository.findAll();
+        return ResponseEntity.ok(moduleRepository.findAll());
     }
 }

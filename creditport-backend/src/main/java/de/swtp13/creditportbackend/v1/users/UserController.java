@@ -2,7 +2,6 @@ package de.swtp13.creditportbackend.v1.users;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,29 +51,25 @@ public class UserController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(
+    public ResponseEntity<DisplayedUser> register(
             @RequestBody RegisterRequest request
     ) {
-        if (managementService.register(request))
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-        else
-            return ResponseEntity.status(409).build();
+        return ResponseEntity.status(managementService.register(request))
+                .body(
+                        DisplayedUser.of(
+                                userRepository.findByUsername(request.getUsername()).orElseThrow()
+                        )
+                );
     }
 
     @PatchMapping("/update/password")
-    public ResponseEntity<String> updatePassword(
+    public ResponseEntity<?> updatePassword(
             @RequestParam(required = false) Integer id,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
             @RequestBody UpdateRequest newPass
     ) {
         String jwt = token.substring(7);
-        String result = managementService.updatePassword(id, jwt, newPass);
-        if (result == null) {
-            return ResponseEntity.notFound().build();
-        } else {
-            return ResponseEntity.ok(result);
-        }
-
+        return ResponseEntity.status(managementService.updatePassword(id, jwt, newPass)).build();
     }
 
     @PatchMapping("/update/username")
@@ -82,15 +77,12 @@ public class UserController {
             @RequestParam int id,
             @RequestBody UpdateRequest newUsername
     ) {
-        if (managementService.updateUsername(id, newUsername)) {
-            return ResponseEntity.ok().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.status(managementService.updateUsername(id, newUsername)).build();
     }
 
+
     @PatchMapping("/update/role")
-    public ResponseEntity<String> updateRole(
+    public ResponseEntity<?> updateRole(
             @RequestParam int id,
             @RequestBody UpdateRequest newRole
     ) {

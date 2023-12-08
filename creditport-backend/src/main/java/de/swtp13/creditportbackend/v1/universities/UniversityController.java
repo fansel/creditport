@@ -23,13 +23,13 @@ public class UniversityController {
 
     // GET all universities with optional name filter
     @GetMapping
-    public List<University> getAllUniversities(@RequestParam(required = false) String name) {
+    public ResponseEntity<List<University>> getAllUniversities(@RequestParam(required = false) String name) {
         if (name != null && !name.isEmpty()) {
             System.out.println("Get Universities with uniName like: " + name);
-            return universityRepository.findByUniNameContainingIgnoreCase(name);
+            return ResponseEntity.ok(universityRepository.findByUniNameContainingIgnoreCase(name));
         } else {
             System.out.println("Get all Universities");
-            return universityRepository.findAll();
+            return ResponseEntity.ok(universityRepository.findAll());
         }
     }
 
@@ -43,9 +43,9 @@ public class UniversityController {
 
     // POST: Create a new university
     @PostMapping
-    public University createUniversity(@RequestBody University university) {
+    public ResponseEntity<University> createUniversity(@RequestBody University university) {
         System.out.println("Create University: " + university.getUniName());
-        return universityRepository.save(university);
+        return ResponseEntity.ok(universityRepository.save(university));
     }
 
     // PUT: Update a university
