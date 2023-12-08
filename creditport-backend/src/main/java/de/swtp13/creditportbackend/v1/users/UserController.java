@@ -2,6 +2,7 @@ package de.swtp13.creditportbackend.v1.users;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,7 +56,7 @@ public class UserController {
             @RequestBody RegisterRequest request
     ) {
         if (managementService.register(request))
-            return ResponseEntity.ok().build();
+            return ResponseEntity.status(HttpStatus.CREATED).build();
         else
             return ResponseEntity.status(409).build();
     }
