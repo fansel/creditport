@@ -11,7 +11,7 @@ export async function load({ locals }) {
   //Muss später noch auf die Rolle angepasst werden #TODO
   if (locals.user.role == config.user_roles.ADMIN) {
     //Nutzerliste
-    userlist = await api.get('usermanagement/users', locals.user?.token);
+    userlist = await api.get('users', locals.user?.token);
   }
 
   return { title: 'Einstellungen', users: userlist, subtitle: 'Benutzer & Rollen' };
@@ -87,8 +87,7 @@ export const actions = {
       role: result.data.role
     };
 
-
-    const res = await api.post(`usermanagement/register`, body, locals.user?.token, { req_type: api.content_type.json, res_type: api.content_type.plain });
+    const res = await api.post(`users/register`, body, locals.user?.token, { req_type: api.content_type.json, res_type: api.content_type.plain });
 
     return { success: true };
   }
