@@ -28,9 +28,9 @@ public class SecurityConfig {
                         (authorizeHttpRequests) -> authorizeHttpRequests
                                 .requestMatchers(API_VERSION+"/test-endpoint/secure")
                                 .authenticated()
-                                .requestMatchers(API_VERSION+"/usermanagement/update/password")
+                                .requestMatchers(API_VERSION+"/users/update/password")
                                 .authenticated()
-                                .requestMatchers(API_VERSION+"/usermanagement/**")
+                                .requestMatchers(API_VERSION+"/users/**")
                                 .hasAuthority("ADMIN")
                                 .requestMatchers(API_VERSION+"/test-endpoint/open")
                                 .permitAll()

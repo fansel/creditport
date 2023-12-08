@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/usermanagement")
+@RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -18,7 +18,7 @@ public class UserController {
 
     private final ManagementService managementService;
 
-    @GetMapping("/users")
+    @GetMapping
     public List<DisplayedUser> getAllUsers() {
         System.out.println("Get all Users");
         ArrayList<User> userlist = new ArrayList<>(userRepository.findAll());
