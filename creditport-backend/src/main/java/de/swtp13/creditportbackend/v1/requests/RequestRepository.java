@@ -18,9 +18,17 @@ import java.util.Optional;
 public interface RequestRepository extends JpaRepository<Request,String> {
 
     Optional<Request> findByRequestId(int requestID);
+    //List<Request> findByRequestId(int requestId);
+
     @Query(value = "SELECT Requests FROM Requests r where r.procedure.procedureId = ?1")
     List<Request> findRequestsByProcedureId(String procedureId);
 
     @Query("SELECT r FROM Requests r")
     List<Request> findAllWithProcedure();
+
+    @Query("SELECT r.procedure FROM Requests r WHERE r.requestId = ?1")
+    Procedure findProcedureByRequestId(int requestId);
+
+    @Query("SELECT r.requestId FROM Requests r WHERE r.procedure.procedureId = ?1")
+    List<Integer> findAllRelatedRequests(String procedureId);
 }
