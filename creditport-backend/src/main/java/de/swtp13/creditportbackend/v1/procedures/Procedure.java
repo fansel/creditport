@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity(name = "Procedures")
 @Table(name = "procedures")
@@ -22,13 +23,19 @@ import lombok.NoArgsConstructor;
  */
 public class Procedure {
 
+    @Getter
     @Id
+    @GenericGenerator(
+            name = "id-generator",
+            type = IDGenerator.class
+    )
+    @GeneratedValue(generator = "id-generator")
     @Column(
             name = "id",
             columnDefinition = "INT",
             nullable = false
     )
-    private int procedureId = IDGenerator.generateID(); // Automatische Generierung einer eindeutigen ID bei Erstellung eines Procedure-Objekts
+    private int procedureId;
     @Column(
             name = "status",
             columnDefinition = "VARCHAR",
@@ -100,5 +107,4 @@ public class Procedure {
     public void setRequests(List<Request> requests) {
         this.requests = requests;
     }
-    public int getProcedureId(){return procedureId;}
 }
