@@ -12,7 +12,7 @@ import java.util.List;
  * Die Methoden sind in der Dokumentation von JpaRepository zu finden.
  * Zusätzlich sind auch selbst definierte Datenbankabfragen verfügbar.
  */
-public interface ProcedureRepository extends JpaRepository<Procedure, String> {
+public interface ProcedureRepository extends JpaRepository<Procedure, Integer> {
     /**
      * Liefert alle Vorgänge mit den entsprechenden Anträgen, Modulen und Universität zurück.
      * @return

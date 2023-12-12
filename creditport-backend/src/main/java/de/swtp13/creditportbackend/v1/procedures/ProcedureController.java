@@ -48,7 +48,7 @@ public class ProcedureController {
      * @return procedure with specific ID
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Procedure> getProcedureById(@PathVariable String procedureId) {
+    public ResponseEntity<Procedure> getProcedureById(@PathVariable int procedureId) {
         return procedureRepository.findById(procedureId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

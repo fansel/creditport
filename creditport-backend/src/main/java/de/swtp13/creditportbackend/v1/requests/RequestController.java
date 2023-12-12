@@ -50,10 +50,11 @@ public class RequestController {
 
     // GET: Request by ProcedureId
     @GetMapping("/procedure/{procedureId}")
-    public ResponseEntity<List<Request>> getRequestsByProcedure(@PathVariable String procedureId) {
+    public ResponseEntity<List<Request>> getRequestsByProcedure(@PathVariable int procedureId) {
         List<Request> requests = requestRepository.findRequestsByProcedureId(procedureId);
         return ResponseEntity.ok(requests);
     }
+
 
     // POST: Create a new Request
     @PostMapping

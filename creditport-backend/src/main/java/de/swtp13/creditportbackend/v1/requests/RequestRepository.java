@@ -15,13 +15,13 @@ import java.util.Optional;
  * Die Methoden sind in der Dokumentation von JpaRepository zu finden.
  */
 @Repository
-public interface RequestRepository extends JpaRepository<Request,String> {
+public interface RequestRepository extends JpaRepository<Request,Integer> {
 
     Optional<Request> findByRequestId(int requestID);
     //List<Request> findByRequestId(int requestId);
 
     @Query(value = "SELECT Requests FROM Requests r where r.procedure.procedureId = ?1")
-    List<Request> findRequestsByProcedureId(String procedureId);
+    List<Request> findRequestsByProcedureId(int procedureId);
 
     @Query("SELECT r FROM Requests r")
     List<Request> findAllWithProcedure();
@@ -30,5 +30,5 @@ public interface RequestRepository extends JpaRepository<Request,String> {
     Procedure findProcedureByRequestId(int requestId);
 
     @Query("SELECT r.requestId FROM Requests r WHERE r.procedure.procedureId = ?1")
-    List<Integer> findAllRelatedRequests(String procedureId);
+    List<Integer> findAllRelatedRequests(int procedureId);
 }

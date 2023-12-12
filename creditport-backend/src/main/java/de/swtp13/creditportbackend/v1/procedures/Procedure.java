@@ -100,4 +100,5 @@ public class Procedure {
     public void setRequests(List<Request> requests) {
         this.requests = requests;
     }
+    public int getProcedureId(){return procedureId;}
 }
