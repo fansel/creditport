@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Dieses Interface ist ein Repository für Vorgänge.
@@ -13,10 +14,5 @@ import java.util.List;
  * Zusätzlich sind auch selbst definierte Datenbankabfragen verfügbar.
  */
 public interface ProcedureRepository extends JpaRepository<Procedure, Integer> {
-    /**
-     * Liefert alle Vorgänge mit den entsprechenden Anträgen, Modulen und Universität zurück.
-     * @return
-     */
-    @Query(value = "SELECT * FROM procedures p", nativeQuery = true)
-    List<Procedure> findAllWithDetails();
+    Optional<Procedure> findByProcedureId(int procedureId);
 }
