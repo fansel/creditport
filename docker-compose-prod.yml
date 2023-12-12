@@ -12,9 +12,9 @@ services:
       POSTGRES_USER: admin
       POSTGRES_DB: production
     volumes:
-      - 'postgres_data:/var/lib/postgresql/data'
+      - 'creditport-db:/var/lib/postgresql/data'
     networks:
-      - application
+      - creditport-net
 
   javadoc:
     container_name: creditport-javadoc
@@ -36,7 +36,7 @@ services:
       - PUBLIC_SECURE_CONNECTION=false
       - ORIGIN=http://172.26.92.92:3000
     networks:
-      - application
+      - creditport-net
     restart: unless-stopped
     pull_policy: always
 
@@ -55,15 +55,18 @@ services:
     ports:
       - 8080:8080
     networks:
-      - application
+      - creditport-net
     restart: unless-stopped
     pull_policy: always
 
 
 networks:
-  application:
+  creditport-net:
     driver: bridge
+    name: creditport-net
+
 volumes:
-  postgres_data:
+  creditport-db:
+    name: creditport-db
 
     
