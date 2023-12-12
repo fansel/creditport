@@ -80,8 +80,6 @@ public class RequestController {
         } catch (NullPointerException e){
             return ResponseEntity.notFound().build();
         }
-
-
     }
 
     // GET: Request by ProcedureId
