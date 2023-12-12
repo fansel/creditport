@@ -37,7 +37,7 @@ public class ProcedureController {
      * GET
      * @return List of all procedures
      */
-    @GetMapping("/procedures")
+    @GetMapping
     public ResponseEntity<List<Procedure>> getProceduresWithRequests() {
         List<Procedure> proceduresWithRequests = procedureService.getProceduresWithRequests();
         return ResponseEntity.ok(proceduresWithRequests);
