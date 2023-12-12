@@ -44,7 +44,7 @@ public class ProcedureService {
 
     public List<Procedure> getProceduresWithRequests() {
         List<Request> requests = requestRepository.findAllWithProcedure();
-        Map<String, Procedure> procedureMap = new HashMap<>();
+        Map<Integer, Procedure> procedureMap = new HashMap<>();
         for (Request request : requests) {
             Procedure procedure = request.getProcedure();
             Procedure finalProcedure = procedureMap.computeIfAbsent(procedure.getProcedureId(), k -> {

@@ -25,10 +25,10 @@ public class Procedure {
     @Id
     @Column(
             name = "id",
-            columnDefinition = "VARCHAR",
+            columnDefinition = "INT",
             nullable = false
     )
-    private String procedureId = IDGenerator.generateID(); // Automatische Generierung einer eindeutigen ID bei Erstellung eines Procedure-Objekts
+    private int procedureId = IDGenerator.generateID(); // Automatische Generierung einer eindeutigen ID bei Erstellung eines Procedure-Objekts
     @Column(
             name = "status",
             columnDefinition = "VARCHAR",
