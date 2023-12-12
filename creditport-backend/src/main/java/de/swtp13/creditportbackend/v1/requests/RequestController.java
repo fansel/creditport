@@ -48,10 +48,34 @@ public class RequestController {
 
     // GET: related Requests by RequestID
     @GetMapping("/relatedRequests/{requestId}")
-    public ResponseEntity<List<Integer>> getRelatedRequestsById(@PathVariable int requestId){
+    public ResponseEntity<List<RelatedRequestDTO>> getRelatedRequestsById(@PathVariable int requestId){
+        RelatedRequestDTO relatedRequest = new RelatedRequestDTO();
+        List<RelatedRequestDTO> relatedRequestList = new ArrayList<>();
+
+        Optional<Request> req = requestRepository.findByRequestId(requestId);
+        Request request = req.orElse(null);
+
+        relatedRequest.setRequestId(request.getRequestId());
+        relatedRequest.setProcedureId(request.getProcedure().getProcedureId());
+        relatedRequest.setExternalModule(request.getExternalModuleId());
+        relatedRequest.setInternalModule(request.getInternalModuleId());
+        relatedRequest.setAnnotation(request.getAnnotation());
+        relatedRequest.setCreditPoints(request.getCreditPoints());
+        relatedRequest.setStatus(request.getStatus());
+        relatedRequest.setCreatedAt(request.getCreatedAt());
+        relatedRequest.setPdfContent(request.getPdfContent());
+
         Procedure proc = requestRepository.findProcedureByRequestId(requestId);
         List<Integer> requestIds = requestRepository.findAllRelatedRequests(proc.getProcedureId());
-        return ResponseEntity.ok(requestIds);
+
+        if (requestIds.contains(requestId)){
+            requestIds.remove(requestIds.indexOf(requestId));
+        }
+
+        relatedRequest.setRelatedRequests(requestIds);
+
+        relatedRequestList.add(relatedRequest);
+        return ResponseEntity.ok(relatedRequestList);
     }
 
     // GET: Request by ProcedureId
