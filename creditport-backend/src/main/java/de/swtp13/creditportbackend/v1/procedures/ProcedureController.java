@@ -47,7 +47,7 @@ public class ProcedureController {
      * GET by ID
      * @return procedure with specific ID
      */
-    @GetMapping("/{id}")
+    @GetMapping("/{procedureId}")
     public ResponseEntity<Procedure> getProcedureById(@PathVariable int procedureId) {
         return procedureRepository.findById(procedureId)
                 .map(ResponseEntity::ok)
