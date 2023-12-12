@@ -11,6 +11,7 @@ package de.swtp13.creditportbackend.v1.requests;
         import org.springframework.web.multipart.MultipartFile;
 
 
+        import java.util.ArrayList;
         import java.util.List;
         import java.util.Objects;
         import java.util.Optional;
@@ -54,28 +55,33 @@ public class RequestController {
 
         Optional<Request> req = requestRepository.findByRequestId(requestId);
         Request request = req.orElse(null);
+        try {
+            relatedRequest.setRequestId(request.getRequestId());
+            relatedRequest.setProcedureId(request.getProcedure().getProcedureId());
+            relatedRequest.setExternalModule(request.getExternalModuleId());
+            relatedRequest.setInternalModule(request.getInternalModuleId());
+            relatedRequest.setAnnotation(request.getAnnotation());
+            relatedRequest.setCreditPoints(request.getCreditPoints());
+            relatedRequest.setStatus(request.getStatus());
+            relatedRequest.setCreatedAt(request.getCreatedAt());
+            relatedRequest.setPdfContent(request.getPdfContent());
 
-        relatedRequest.setRequestId(request.getRequestId());
-        relatedRequest.setProcedureId(request.getProcedure().getProcedureId());
-        relatedRequest.setExternalModule(request.getExternalModuleId());
-        relatedRequest.setInternalModule(request.getInternalModuleId());
-        relatedRequest.setAnnotation(request.getAnnotation());
-        relatedRequest.setCreditPoints(request.getCreditPoints());
-        relatedRequest.setStatus(request.getStatus());
-        relatedRequest.setCreatedAt(request.getCreatedAt());
-        relatedRequest.setPdfContent(request.getPdfContent());
-
-        Procedure proc = requestRepository.findProcedureByRequestId(requestId);
-        List<Integer> requestIds = requestRepository.findAllRelatedRequests(proc.getProcedureId());
+            Procedure proc = requestRepository.findProcedureByRequestId(requestId);
+            List<Integer> requestIds = requestRepository.findAllRelatedRequests(proc.getProcedureId());
 
         if (requestIds.contains(requestId)){
             requestIds.remove(requestIds.indexOf(requestId));
         }
 
-        relatedRequest.setRelatedRequests(requestIds);
+            relatedRequest.setRelatedRequests(requestIds);
 
-        relatedRequestList.add(relatedRequest);
-        return ResponseEntity.ok(relatedRequestList);
+            relatedRequestList.add(relatedRequest);
+            return ResponseEntity.ok(relatedRequestList);
+        } catch (NullPointerException e){
+            return ResponseEntity.notFound().build();
+        }
+
+
     }
 
     // GET: Request by ProcedureId
