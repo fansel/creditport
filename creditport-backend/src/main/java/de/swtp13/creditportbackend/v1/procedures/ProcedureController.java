@@ -1,5 +1,7 @@
 package de.swtp13.creditportbackend.v1.procedures;
 
+import de.swtp13.creditportbackend.v1.procedures.dto.ProcedureRequestDTO;
+import de.swtp13.creditportbackend.v1.procedures.dto.ProcedureResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
@@ -67,4 +69,10 @@ public class ProcedureController {
         return ResponseEntity.ok(updatedProcedure);
     }
      */
+
+    @PostMapping
+    public ResponseEntity<ProcedureResponseDTO> createProcedure(@RequestBody ProcedureRequestDTO procedureRequestDTO) {
+        ProcedureResponseDTO response = procedureService.createProcedureFromDTO(procedureRequestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
 }

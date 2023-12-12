@@ -1,5 +1,6 @@
 package de.swtp13.creditportbackend.v1.procedures.util;
 
+import de.swtp13.creditportbackend.v1.procedures.ApplicationContextProvider;
 import de.swtp13.creditportbackend.v1.procedures.ProcedureRepository;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;

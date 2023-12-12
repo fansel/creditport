@@ -2,6 +2,7 @@ package de.swtp13.creditportbackend.v1.requests;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.swtp13.creditportbackend.v1.procedures.Procedure;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -66,6 +67,7 @@ public class Request {
             columnDefinition = "VARCHAR",
             nullable = false
     )
+
     @Enumerated(EnumType.STRING)
     private Status status;
 
@@ -77,7 +79,10 @@ public class Request {
     private LocalDateTime createdAt;
 
     @Lob
-    @Column(name = "pdf_content")
+    @Column(name = "pdf_content",
+    nullable = true)
+
+
     private byte[] pdfContent;
 
     // Überarbeiteter Konstruktor

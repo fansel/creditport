@@ -1,11 +1,17 @@
 package de.swtp13.creditportbackend.v1.procedures;
 
+import de.swtp13.creditportbackend.v1.procedures.dto.ProcedureRequestDTO;
+import de.swtp13.creditportbackend.v1.procedures.dto.ProcedureResponseDTO;
+import de.swtp13.creditportbackend.v1.procedures.dto.RequestDTO;
+import de.swtp13.creditportbackend.v1.procedures.dto.RequestResponseDTO;
 import de.swtp13.creditportbackend.v1.procedures.util.IDGenerator;
 import de.swtp13.creditportbackend.v1.requests.RequestRepository;
 import de.swtp13.creditportbackend.v1.requests.Request;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,6 +48,43 @@ public class ProcedureService {
         }
 
 
+    @Transactional
+    public ProcedureResponseDTO createProcedureFromDTO(ProcedureRequestDTO procedureRequestDTO) {
+        // Create a new Procedure entity
+        Procedure newProcedure = new Procedure();
 
+        newProcedure.setAnnotation(procedureRequestDTO.getAnnotation());
+        newProcedure.setCourseName(procedureRequestDTO.getCourseName());
+        newProcedure.setUniversity(procedureRequestDTO.getUniversity());
+        newProcedure.setStatus(Status.NEU);
+        newProcedure.setCreatedAt(LocalDateTime.now());
+        newProcedure.setLastUpdated(LocalDateTime.now());
+        newProcedure.setRequests(new ArrayList<>());
 
+        // Save the procedure to get an ID
+        newProcedure = procedureRepository.save(newProcedure);
+
+        // Process and save each request
+        List<RequestResponseDTO> requestResponseDTOs = new ArrayList<>();
+        for (RequestDTO requestDTO : procedureRequestDTO.getRequests()) {
+            Request newRequest = new Request();
+            newRequest.setExternalModuleId(requestDTO.getExternalModule());
+            newRequest.setInternalModuleId(requestDTO.getInternalModule());
+            newRequest.setAnnotation(requestDTO.getAnnotation());
+            newRequest.setCreditPoints(requestDTO.getCreditPoints());
+            newRequest.setProcedure(newProcedure);
+            newRequest.setStatus(de.swtp13.creditportbackend.v1.requests.Status.NICHT_BEARBEITET);
+            newRequest.setCreatedAt(LocalDateTime.now());
+            newRequest = requestRepository.save(newRequest);
+            RequestResponseDTO requestResponseDTO = new RequestResponseDTO();
+            requestResponseDTO.setRequestId(String.valueOf(newRequest.getRequestId()));
+            requestResponseDTOs.add(requestResponseDTO);
+        }
+
+        ProcedureResponseDTO responseDTO = new ProcedureResponseDTO();
+        responseDTO.setProcedureId(String.valueOf(newProcedure.getProcedureId()));
+        responseDTO.setRequests(requestResponseDTOs);
+
+        return responseDTO;
+    }
 }

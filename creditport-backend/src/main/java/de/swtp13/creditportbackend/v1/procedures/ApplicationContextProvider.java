@@ -1,4 +1,4 @@
-package de.swtp13.creditportbackend.v1.procedures.util;
+package de.swtp13.creditportbackend.v1.procedures;
 
 import lombok.NonNull;
 import org.springframework.context.ApplicationContext;
