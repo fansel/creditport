@@ -1,11 +1,13 @@
 package de.swtp13.creditportbackend.v1.requests;
 
 
+import de.swtp13.creditportbackend.v1.procedures.Procedure;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -37,6 +39,15 @@ public class RequestController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    // GET: related Requests by RequestID
+    @GetMapping("/relatedRequests/{requestId}")
+    public ResponseEntity<List<Integer>> getRelatedRequestsById(@PathVariable int requestId){
+        Procedure proc = requestRepository.findProcedureByRequestId(requestId);
+        List<Integer> requestIds = requestRepository.findAllRelatedRequests(proc.getProcedureId());
+        return ResponseEntity.ok(requestIds);
+    }
+
     // GET: Request by ProcedureId
     @GetMapping("/procedure/{procedureId}")
     public ResponseEntity<List<Request>> getRequestsByProcedure(@PathVariable String procedureId) {
