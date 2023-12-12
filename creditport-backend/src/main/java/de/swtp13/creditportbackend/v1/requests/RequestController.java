@@ -38,7 +38,7 @@ public class RequestController {
                 .orElse(ResponseEntity.notFound().build());
     }
     // GET: Request by ProcedureId
-    @GetMapping("/{procedureId}")
+    @GetMapping("/procedure/{procedureId}")
     public ResponseEntity<List<Request>> getRequestsByProcedure(@PathVariable String procedureId) {
         List<Request> requests = requestRepository.findRequestsByProcedureId(procedureId);
         return ResponseEntity.ok(requests);
