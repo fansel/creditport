@@ -11,11 +11,9 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Die Klasse enthält alle Methoden zu Vorgängen.
@@ -57,8 +55,8 @@ public class ProcedureService {
         newProcedure.setCourseName(procedureRequestDTO.getCourseName());
         newProcedure.setUniversity(procedureRequestDTO.getUniversity());
         newProcedure.setStatus(Status.NEU);
-        newProcedure.setCreatedAt(LocalDateTime.now());
-        newProcedure.setLastUpdated(LocalDateTime.now());
+        newProcedure.setCreatedAt(Instant.now());
+        newProcedure.setLastUpdated(newProcedure.getCreatedAt());
         newProcedure.setRequests(new ArrayList<>());
 
         // Save the procedure to get an ID
