@@ -138,10 +138,10 @@
         <tr>
           <td>{format(parseISO(procedure.createdAt), 'dd.MM.yyyy HH:mm')} </td>
           <td>{formatProcdureID(String(procedure.procedureId))} </td>
-          <td>{procedure.university}</td>
+          <td>{procedure.university ?? '-'}</td>
 
-          <td>{procedure.course}</td>
-          <td>{procedure.requests.length}</td>
+          <td>{procedure.courseName ?? '-'}</td>
+          <td>{procedure.requests.length ?? '-'}</td>
 
           <td><span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill">{procedure.status}</span></td>
 
