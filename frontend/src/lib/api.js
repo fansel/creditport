@@ -17,7 +17,22 @@ async function send({ method, path, data, token, req_type = content_type.json, r
 
   if (data) {
     opts.headers['Content-Type'] = req_type;
-    opts.body = JSON.stringify(data); //Hier muss noch auf die anderen Content Types eingegangen werden
+    switch (req_type) {
+      case content_type.json:
+        opts.body = JSON.stringify(data);
+        break;
+      case content_type.plain:
+        opts.body = data;
+        break;
+      case content_type.form_data:
+        const formData = new FormData();
+        // Assume data is a plain object
+        Object.entries(data).forEach(([key, value]) => {
+          formData.append(key, value);
+        });
+        opts.body = formData;
+        break;
+    }
   }
 
   if (token) {
@@ -40,7 +55,7 @@ async function send({ method, path, data, token, req_type = content_type.json, r
     }
   }
 
-  throw error(res.status);
+  return res.status;
 }
 
 /**
