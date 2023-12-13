@@ -1,5 +1,6 @@
 package de.swtp13.creditportbackend.v1.universities;
 
+import de.swtp13.creditportbackend.v1.config.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -45,8 +46,18 @@ public class UniversityController {
     @PostMapping
     public ResponseEntity<University> createUniversity(@RequestBody University university) {
         System.out.println("Create University: " + university.getUniName());
-        return ResponseEntity.ok(universityRepository.save(university));
+        //wenn authen dann was admin will sonst false
+        if (true) {
+
+        } else {
+            university.setVerified(false);
+        }
+
+        University savedUniversity = universityRepository.save(university);
+
+        return ResponseEntity.ok(savedUniversity);
     }
+
 
     // PUT: Update a university
     @PutMapping("/{id}")
@@ -69,4 +80,16 @@ public class UniversityController {
                     return ResponseEntity.ok().build();
                 }).orElse(ResponseEntity.notFound().build());
     }
+
+
+
+    // import university data from json file
+    @PostMapping("/import")
+    public ResponseEntity<String> importUniversities(@RequestBody List<University> universities) {
+        universityRepository.saveAll(universities);
+        return ResponseEntity.ok("Universities imported");
+    }
+
+
+
 }
