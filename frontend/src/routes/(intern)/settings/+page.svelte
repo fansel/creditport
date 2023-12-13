@@ -69,6 +69,16 @@
 </div>
 
 <div class="row mb-3">
+  <div class="col-md-4 col-form-label"><span>Zeitzone</span></div>
+  <div class="col">
+    <select name="timezone" id="timezoneSelect" class="form-select">
+      <option value="1">Europe/Berlin</option>
+      <option value="2">UTC</option>
+    </select>
+  </div>
+</div>
+
+<div class="row mb-3">
   <div class="col-md-4 col-form-label"><span>Treffer pro Seite</span></div>
   <div class="col">
     <select name="pageCount" id="pageCountSelect" class="form-select" bind:value={pageCount}>
