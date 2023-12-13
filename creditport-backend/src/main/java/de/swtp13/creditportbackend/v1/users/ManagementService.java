@@ -92,4 +92,23 @@ public class ManagementService {
     }
 
 
+    public boolean isAuthorized(String token) {
+        if (token == null || token.length() < 7) {
+            return false;
+        }
+        String jwt = token.substring(7);
+        if (jwt.trim().isEmpty()) {
+            return false;
+        }
+        try {
+            String username = jwtService.extractUsername(jwt);
+            return userRepository.findByUsername(username)
+                    .map(user -> jwtService.isTokenValid(jwt, user))
+                    .orElse(false);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+
 }

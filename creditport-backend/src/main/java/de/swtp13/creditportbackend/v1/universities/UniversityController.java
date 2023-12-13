@@ -1,7 +1,10 @@
 package de.swtp13.creditportbackend.v1.universities;
 
 import de.swtp13.creditportbackend.v1.config.JwtService;
+import de.swtp13.creditportbackend.v1.users.ManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +23,9 @@ public class UniversityController {
 
     @Autowired
     private UniversityRepository universityRepository;
+
+    @Autowired
+    private ManagementService managementService;
 
 
     // GET all universities with optional name filter
@@ -44,19 +50,18 @@ public class UniversityController {
 
     // POST: Create a new university
     @PostMapping
-    public ResponseEntity<University> createUniversity(@RequestBody University university) {
+    public ResponseEntity<?> createUniversity(
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false, defaultValue = "") String token,
+            @RequestBody University university) {
         System.out.println("Create University: " + university.getUniName());
-        //wenn authen dann was admin will sonst false
-        if (true) {
-
+        if (managementService.isAuthorized(token)) {
+            return ResponseEntity.ok(universityRepository.save(university));
         } else {
             university.setVerified(false);
+           return ResponseEntity.ok(universityRepository.save(university));
         }
-
-        University savedUniversity = universityRepository.save(university);
-
-        return ResponseEntity.ok(savedUniversity);
     }
+
 
 
     // PUT: Update a university
