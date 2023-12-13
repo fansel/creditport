@@ -81,9 +81,13 @@ public class Request {
     @Lob
     @Column(name = "pdf_content",
     nullable = true)
-
-
     private byte[] pdfContent;
+
+    @Column(name = "module_link", nullable = true)
+    private String moduleLink;
+
+
+
 
     // Überarbeiteter Konstruktor
     public Request(Procedure procedure, String externalModuleId, String internalModuleId, String annotation, int creditPoints, byte[] pdfContent) {

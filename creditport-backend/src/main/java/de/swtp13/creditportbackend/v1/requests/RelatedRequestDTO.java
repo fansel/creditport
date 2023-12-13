@@ -21,5 +21,6 @@ public class RelatedRequestDTO {
     private LocalDateTime createdAt;
     private byte[] pdfContent;
 
+
     private List<Integer> relatedRequests;
 }

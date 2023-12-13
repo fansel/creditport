@@ -7,6 +7,7 @@ public class RequestDTO {
     private String internalModule;
     private String annotation;
     private int creditPoints;
+    private String moduleLink;
 
 
 }
