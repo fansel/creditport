@@ -39,23 +39,28 @@ async function send({ method, path, data, token, req_type = content_type.json, r
     opts.headers['Authorization'] = `Bearer ${token}`;
   }
 
-  const res = await fetch(`${config.api_endpoint}/${path}`, opts);
+  try {
+    const res = await fetch(`${config.api_endpoint}/${path}`, opts);
 
-  if (res.ok || res.status === 422) {
-    //Hier fehlt noch Multipart
-    switch (res_type) {
-      case content_type.json:
-        return await res.json();
-      case content_type.plain:
-        return await res.text();
-      case content_type.form_data:
-        return await res.formData();
-      default:
-        return null;
+    if (res.ok || res.status === 422) {
+      //Hier fehlt noch Multipart
+      switch (res_type) {
+        case content_type.json:
+          return await res.json();
+        case content_type.plain:
+          return await res.text();
+        case content_type.form_data:
+          return await res.formData();
+        default:
+          return null;
+      }
     }
-  }
 
-  return res.status;
+    return res.status;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
 }
 
 /**
