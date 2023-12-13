@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 /**
@@ -76,7 +77,7 @@ public class Request {
             nullable = false
     )
     @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime createdAt;
+    private Instant createdAt;
 
     @Lob
     @Column(name = "pdf_content",
@@ -97,12 +98,12 @@ public class Request {
         this.annotation = annotation;
         this.creditPoints = creditPoints;
         this.status = Status.NICHT_BEARBEITET;
-        this.createdAt = LocalDateTime.now();
+        this.createdAt = Instant.now();
         this.pdfContent = pdfContent;
     }
 
     // Überarbeiteter Konstruktor mit 'createdAt'-Parameter
-    public Request(Procedure procedure, String externalModuleId, String internalModuleId, String annotation, int creditPoints, LocalDateTime createdAt, byte[] pdfContent) {
+    public Request(Procedure procedure, String externalModuleId, String internalModuleId, String annotation, int creditPoints, Instant createdAt, byte[] pdfContent) {
         this.procedure = procedure;
         this.externalModuleId = externalModuleId;
         this.internalModuleId = internalModuleId;
@@ -120,7 +121,7 @@ public class Request {
         this.annotation = annotation;
         this.creditPoints = creditPoints;
         this.status = Status.NICHT_BEARBEITET;
-        this.createdAt = LocalDateTime.now();
+        this.createdAt = Instant.now();
         this.pdfContent = null; // oder ein Standard-PDF-Byte-Array, falls gewünscht
     }
 }

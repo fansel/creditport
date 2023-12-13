@@ -72,7 +72,7 @@ public class ProcedureService {
             newRequest.setCreditPoints(requestDTO.getCreditPoints());
             newRequest.setProcedure(newProcedure);
             newRequest.setStatus(de.swtp13.creditportbackend.v1.requests.Status.NICHT_BEARBEITET);
-            newRequest.setCreatedAt(LocalDateTime.now());
+            newRequest.setCreatedAt(Instant.now());
             newRequest.setModuleLink(requestDTO.getModuleLink());
             newRequest = requestRepository.save(newRequest);
             RequestResponseDTO requestResponseDTO = new RequestResponseDTO();
