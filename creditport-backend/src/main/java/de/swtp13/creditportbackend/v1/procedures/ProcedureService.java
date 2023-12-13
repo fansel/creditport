@@ -26,6 +26,26 @@ public class ProcedureService {
     @Autowired
     private RequestRepository requestRepository;
 
+    public List<Procedure> getProceduresWithRequests() {
+        List<Request> requests = requestRepository.findAllWithProcedure();
+        Map<Integer, Procedure> procedureMap = new HashMap<>();
+        for (Request request : requests) {
+            Procedure procedure = request.getProcedure();
+            Procedure finalProcedure = procedureMap.computeIfAbsent(procedure.getProcedureId(), k -> {
+                Procedure newProcedure = new Procedure();
+                newProcedure.setProcedureId(procedure.getProcedureId());
+                newProcedure.setStatus(procedure.getStatus());
+                newProcedure.setAnnotation(procedure.getAnnotation());
+                newProcedure.setCreatedAt(procedure.getCreatedAt());
+                newProcedure.setRequests(new ArrayList<>());
+                return newProcedure;
+                });
+            finalProcedure.getRequests().add(request);
+        }
+        return new ArrayList<>(procedureMap.values());
+        }
+
+
     @Transactional
     public ProcedureResponseDTO createProcedureFromDTO(ProcedureRequestDTO procedureRequestDTO) {
         // Create a new Procedure entity
