@@ -1,6 +1,7 @@
 import { redirect, fail } from '@sveltejs/kit';
 import * as api from '$lib/api.js';
 import * as config from '$lib/config.js';
+import { parseJwt } from '$root/lib/util';
 
 /**@type {import('./$types').Actions} */
 export async function load({ locals }) {
@@ -26,9 +27,9 @@ export const actions = {
 
     const user = {
       token: body.token,
-      username: JSON.parse(atob(body.token.split('.')[1])).sub,
-      expires_at: new Date(Number(JSON.parse(atob(body.token.split('.')[1])).exp * 1000)),
-      role: body.role
+      username: parseJwt(body.token).sub,
+      expires_at: new Date(Number(parseJwt(body.token).exp * 1000)),
+      role: parseJwt(body.token).role
     };
 
     const maxAge = Math.floor((user.expires_at.getTime() - new Date().getTime()) / 1000);
