@@ -55,10 +55,10 @@
               </div>
             </div>
 
-            <div class="mb-3">
+            <!-- <div class="mb-3">
               <label for="formFile" class="form-label">Modulbeschreibung<i class="bi bi-question-circle ms-2" /> </label>
               <input class="form-control" type="file" name={`modulbeschreibung${index}`} id="formFile" />
-            </div>
+            </div> -->
 
             <div>
               <div class="mb-3">
