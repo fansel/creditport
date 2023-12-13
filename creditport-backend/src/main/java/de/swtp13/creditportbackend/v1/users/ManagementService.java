@@ -33,10 +33,14 @@ public class ManagementService {
                 return 404;
             }
 
-        } else if (userRepository.existsById(id)) {
-            user = userRepository.findById(id).orElseThrow();
+        } else if (jwtService.extractRole(token).equals("ADMIN")) {
+            if (userRepository.existsById(id)) {
+                user = userRepository.findById(id).orElseThrow();
+            } else {
+                return 404;
+            }
         } else {
-            return 404;
+            return 403;
         }
         if (newPass.getValue() == null || newPass.getValue().isEmpty()) {
             return 400;
