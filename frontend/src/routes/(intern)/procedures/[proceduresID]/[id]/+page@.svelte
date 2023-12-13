@@ -3,28 +3,42 @@
   import { getStatus } from '$lib/status.js';
   import Modal from '$root/lib/components/FormModal.svelte';
   import Header from '$lib/components/InternHeader.svelte';
-  import { format } from 'date-fns';
+  import { format, parseISO } from 'date-fns';
 
   export let data;
 
   const modules = data.modules;
+  const request = data.request;
   let selectedModul = 0;
 
   let showModal1 = false;
   let showModal2 = false;
 
+  // NAVBAR
+  function relatedRequests(request) {
+    let smaller = false;
+    let bigger = false;
+
+    if (request.relatedRequests[0] < request.requestId) {
+      return -1;
+    } else {
+      return 1;
+    }
+  }
+
   // APIs (Jetzt noch mit Testsatz, da API nicht steht)
 
-  let request = {
-    procedureID: 1234,
-    requestID: 1,
-    externalModule: 'Mathe I',
-    link: 'https://www.orimi.com/pdf-test.pdf',
-    status: 9,
-    comment: 'Der Bescheid wurde erfolgreich angenommen.',
-    createdAt: new Date(),
-    lastEditedAt: new Date()
-  };
+  // let request = {
+  //   procedureID: 1234,
+  //   requestID: 1,
+  //   externalModule: 'Mathe I',
+  //   link: 'https://www.orimi.com/pdf-test.pdf',
+  //   status: 9,
+  //   comment_studies_office: 'Für mich passt das alles soweit, einmal bestätigen',
+  //   comment_student: 'Der Bescheid wurde erfolgreich angenommen.',
+  //   createdAt: new Date(),
+  //   lastEditedAt: new Date()
+  // };
 
   $: statusColor = getStatus(request.status).statusColor;
   $: statusText = getStatus(request.status).statusText;
@@ -38,25 +52,40 @@
     var bootstrapDropdown = new bootstrap.Dropdown(dropdown);
     bootstrapDropdown.hide();
   }
+
+  // Bemerkungsfeld
 </script>
 
 <Header />
 
 <div class="border-bottom">
   <div class="col-md m-3">
-    <h1>Vorgangsnummer: {request.procedureID}</h1>
+    <h1>Vorgangsnummer: {request.procedureId}</h1>
   </div>
 </div>
 
 <div class="site position-fixed m-2 w-100">
   <div class="row px-3">
+    <!-- NAVBAR -->
     <div class="nav-bar my-3" width="100%">
-      <button type="button" class="btn btn-sm btn-outline-primary" onclick="window.location.href='https://google.com'">
-        <i class="bi bi-arrow-left" />
-      </button>
-      <button type="button" class="btn btn-sm btn-outline-primary" onclick="window.location.href='https://youtube.com'">
-        <i class="bi bi-arrow-right" />
-      </button>
+      {#if relatedRequests(request) != 1}
+        <button type="button" class="btn btn-sm btn-outline-primary" onclick="window.location.href=/procedures/1/5"><i class="bi bi-arrow-left" /> </button>
+      {/if}
+      {#if relatedRequests(request) != -1}
+        <button type="button" class="btn btn-sm btn-outline-primary" onclick="window.location.href='/procedures/1/6'">
+          <i class="bi bi-arrow-right" />
+        </button>
+      {/if}
+
+      <!-- {#if relatedRequests(request) != 1}
+        <button type="button" class="btn btn-sm btn-outline-primary" onclick="window.location.href=/procedures/1/{requestId - 1}"><i class="bi bi-arrow-left" /> </button>
+      {/if}
+      {#if relatedRequests(request) != -1}
+        <button type="button" class="btn btn-sm btn-outline-primary" onclick="window.location.href='/procedures/1/{requestId + 1}'">
+          <i class="bi bi-arrow-right" />
+        </button>
+      {/if} -->
+
       <div class="btn-group dropend">
         <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ähnliche Anträge</button>
         <div class="dropdown-menu">
@@ -64,21 +93,26 @@
           <a class="dropdown-item" on:click={() => (showModal2 = true)}>Akzeptierte Fremdmodule für Modulvorschlag</a>
         </div>
       </div>
-      <!-- <button type="button" class="btn btn-sm btn-outline-primary" on:click={() => (showModal = true)}> ähnliche Anträge </button> -->
     </div>
   </div>
   <div class="row px-3 w-100">
     <div class="col-8">
       <div class="pdf-container">
-        <div class="pdf-content"><iframe src={request.link} width="100%" height="800" /></div>
+        <div class="pdf-content">
+          {#if request.pdfContent === null}
+            <iframe src="https://www.orimi.com/pdf-test.pdf" width="100%" height="800" />
+          {:else}
+            <iframe src={request.pdfContent} width="100%" height="800" />
+          {/if}
+        </div>
       </div>
     </div>
 
     <div class="col-4">
       <form action="">
         <div class="row mb-3">
-          <div class="col-6"><strong>Antrag erstellt am </strong><br />{format(request.createdAt, 'dd.MM.yyyy HH:mm')}</div>
-          <div class="col-6"><strong>zuletzt bearbeitet am</strong><br />{format(request.lastEditedAt, 'dd.MM.yyyy HH:mm')}</div>
+          <div class="col-6"><strong>Antrag erstellt am </strong><br />{format(parseISO(request.createdAt), 'dd.MM.yyyy HH:mm')}</div>
+          <!-- <div class="col-6"><strong>zuletzt bearbeitet am</strong><br />{format(request.lastEditedAt, 'dd.MM.yyyy HH:mm')}</div> -->
         </div>
 
         <div class="mb-3">
@@ -132,9 +166,26 @@
         </div>
 
         <div class="form-row mb-2">
-          <div class="form-group col">
-            <label class="my-2"><strong>Bemerkungsfeld</strong></label>
-            <textarea class="form-control" id="input" placeholder="Begründen Sie Ihren Entscheid..." rows="4">{request.comment}</textarea>
+          <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="studi-tab" data-bs-toggle="tab" data-bs-target="#studi-tab-pane" type="button" role="tab" aria-controls="studi-tab-pane" aria-selected="true"
+                >Studierende</button
+              >
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="office-tab" data-bs-toggle="tab" data-bs-target="#office-tab-pane" type="button" role="tab" aria-controls="office-tab-pane" aria-selected="false"
+                >Prüfungsauschuss</button
+              >
+            </li>
+          </ul>
+
+          <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="studi-tab-pane" role="tabpanel" aria-labelledby="studi-tab" tabindex="0">
+              <textarea class="form-control" id="input" placeholder="Begründen Sie Ihren Entscheid..." rows="4" name="comment">{request.annotation}</textarea>
+            </div>
+            <div class="tab-pane fade" id="office-tab-pane" role="tabpanel" aria-labelledby="office-tab" tabindex="0">
+              <textarea class="form-control" id="input" placeholder="Begründen Sie Ihren Entscheid..." rows="4" name="comment">{request.comment_student}</textarea>
+            </div>
           </div>
         </div>
 
@@ -238,6 +289,11 @@
 </Modal>
 
 <style>
+  textarea#input {
+    border-top: none;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
   /* TODO : buttons in nav-bar müssen ein wenig mehr Abstand zueinander haben */
   .nav-bar {
     padding-right: 1rem;

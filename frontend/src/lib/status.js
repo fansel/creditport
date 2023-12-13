@@ -2,11 +2,11 @@ export function getStatus(status) {
   let statusText;
   let statusColor;
 
-  if (status === 1) {
+  if (status === 'NICHT_BEARBEITET') {
     statusText = 'Neu';
     statusColor = 'secondary';
   } else if (status === 2) {
-    statusText = 'Offen';
+    statusText = status;
     statusColor = 'secondary';
   } else if (status === 3) {
     statusText = 'in Bearbeitung';
