@@ -2,6 +2,7 @@ package de.swtp13.creditportbackend.v1.procedures;
 
 import de.swtp13.creditportbackend.v1.procedures.dto.ProcedureRequestDTO;
 import de.swtp13.creditportbackend.v1.procedures.dto.ProcedureResponseDTO;
+import de.swtp13.creditportbackend.v1.requests.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
@@ -40,9 +41,9 @@ public class ProcedureController {
      * @return List of all procedures
      */
     @GetMapping
-    public ResponseEntity<List<Procedure>> getProceduresWithRequests() {
-        List<Procedure> proceduresWithRequests = procedureService.getProceduresWithRequests();
-        return ResponseEntity.ok(proceduresWithRequests);
+    public ResponseEntity<List<Procedure>> getAllProcedures() {
+        System.out.println("Get all requests");
+        return ResponseEntity.ok(procedureRepository.findAll());
     }
 
     /**
