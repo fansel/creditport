@@ -46,8 +46,7 @@ public class ProcedureService {
             finalProcedure.getRequests().add(request);
         }
         return new ArrayList<>(procedureMap.values());
-        }
-
+    }
 
     @Transactional
     public ProcedureResponseDTO createProcedureFromDTO(ProcedureRequestDTO procedureRequestDTO) {
