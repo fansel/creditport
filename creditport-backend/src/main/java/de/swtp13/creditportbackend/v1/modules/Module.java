@@ -42,8 +42,10 @@ public class Module {
            columnDefinition = "VARCHAR"
     )
     private String moduleDescription;
-    @ManyToOne
-    @JoinColumn(name = "uni_id")
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(
+            name = "uni_id"
+    )
     private University university;
 
     public Module(String number,
