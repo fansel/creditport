@@ -4,6 +4,7 @@
   import { onMount } from 'svelte';
   import { formatProcdureID } from '$lib/util.js';
   import EditProcedureForm from './forms/EditProcedureForm.svelte';
+  import Status from '$lib/components/Status.svelte';
 
   export let data;
 
@@ -149,7 +150,7 @@
           <td>{procedure.courseName ?? '-'}</td>
           <td>{procedure.requests.length ?? '-'}</td>
 
-          <td><span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill">{procedure.status}</span></td>
+          <td><Status status={procedure.status} /></td>
 
           <td>
             <div class="btn-group text-nowrap float-end" role="group">
