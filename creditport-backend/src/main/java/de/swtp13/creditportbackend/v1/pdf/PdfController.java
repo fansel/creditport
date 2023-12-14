@@ -23,6 +23,7 @@ public class PdfController {
     @PostMapping("/upload/{requestId}")
     public ResponseEntity<String> uploadPdf(@PathVariable int requestId, @RequestParam("file") MultipartFile file) {
         if (file.isEmpty() || !Objects.equals(file.getContentType(), "application/pdf")) {
+
             return ResponseEntity.badRequest().body("Invalid file. Please upload a PDF file.");
         }
 
