@@ -57,9 +57,11 @@ public class PdfController {
 
                     return ResponseEntity.ok()
                             .contentType(MediaType.APPLICATION_PDF)
-                            .header("Content-Disposition", "attachment; filename=\"request_" + requestId + ".pdf\"")
+                            .header("Content-Disposition", "inline; filename=\"request_" + requestId + ".pdf\"")
                             .body(resource);
                 })
                 .orElse(ResponseEntity.notFound().build());
+    }
+
     }
 }
