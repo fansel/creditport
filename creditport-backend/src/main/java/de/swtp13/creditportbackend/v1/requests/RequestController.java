@@ -49,9 +49,8 @@ public class RequestController {
 
     // GET: related Requests by RequestID
     @GetMapping("/relatedRequests/{requestId}")
-    public ResponseEntity<List<RelatedRequestDTO>> getRelatedRequestsById(@PathVariable int requestId){
+    public ResponseEntity<RelatedRequestDTO> getRelatedRequestsById(@PathVariable int requestId){
         RelatedRequestDTO relatedRequest = new RelatedRequestDTO();
-        List<RelatedRequestDTO> relatedRequestList = new ArrayList<>();
 
         Optional<Request> req = requestRepository.findByRequestId(requestId);
         Request request = req.orElse(null);
@@ -69,14 +68,11 @@ public class RequestController {
             Procedure proc = requestRepository.findProcedureByRequestId(requestId);
             List<Integer> requestIds = requestRepository.findAllRelatedRequests(proc.getProcedureId());
 
-        if (requestIds.contains(requestId)){
-            requestIds.remove(requestIds.indexOf(requestId));
-        }
-
+            if (requestIds.contains(requestId)){
+                requestIds.remove((Integer) requestId);
+            }
             relatedRequest.setRelatedRequests(requestIds);
-
-            relatedRequestList.add(relatedRequest);
-            return ResponseEntity.ok(relatedRequestList);
+            return ResponseEntity.ok(relatedRequest);
         } catch (NullPointerException e){
             return ResponseEntity.notFound().build();
         }
