@@ -16,8 +16,8 @@ public class ManagementService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
-    public Optional<DisplayedUser> findUser(int id) {
-        return DisplayedUser.of(userRepository.findById(id));
+    public Optional<UserResponseDTO> findUser(int id) {
+        return UserResponseDTO.of(userRepository.findById(id));
     }
 
     public int updatePassword(Integer id, String token, UpdateRequest newPass) {
@@ -82,7 +82,7 @@ public class ManagementService {
         }
     }
 
-    public int register(RegisterRequest request) {
+    public int register(RegisterRequestDTO request) {
         if (userRepository.findByUsername(request.getUsername()).isPresent()) {
             return 409;
         }

@@ -18,19 +18,19 @@ public class UserController {
     private final ManagementService managementService;
 
     @GetMapping
-    public List<DisplayedUser> getAllUsers() {
+    public List<UserResponseDTO> getAllUsers() {
         System.out.println("Get all Users");
         ArrayList<User> userlist = new ArrayList<>(userRepository.findAll());
-        ArrayList<DisplayedUser> displayedUserList = new ArrayList<>();
+        ArrayList<UserResponseDTO> userResponseDTOList = new ArrayList<>();
         for (User user:
              userlist) {
-            displayedUserList.add(DisplayedUser.of(user));
+            userResponseDTOList.add(UserResponseDTO.of(user));
         }
-        return displayedUserList;
+        return userResponseDTOList;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DisplayedUser> getUser(
+    public ResponseEntity<UserResponseDTO> getUser(
             @PathVariable int id
     ) {
         return managementService.findUser(id)
@@ -51,12 +51,12 @@ public class UserController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<DisplayedUser> register(
-            @RequestBody RegisterRequest request
+    public ResponseEntity<UserResponseDTO> register(
+            @RequestBody RegisterRequestDTO request
     ) {
         return ResponseEntity.status(managementService.register(request))
                 .body(
-                        DisplayedUser.of(
+                        UserResponseDTO.of(
                                 userRepository.findByUsername(request.getUsername()).orElseThrow()
                         )
                 );
