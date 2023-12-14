@@ -1,5 +1,6 @@
 package de.swtp13.creditportbackend.v1.procedures;
 
+import de.swtp13.creditportbackend.v1.requests.Request;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -15,4 +16,6 @@ import java.util.Optional;
  */
 public interface ProcedureRepository extends JpaRepository<Procedure, Integer> {
     Optional<Procedure> findByProcedureId(int procedureId);
+    @Query("SELECT p.procedureId FROM Procedures p ")
+    List<Integer> findAllIds();
 }
