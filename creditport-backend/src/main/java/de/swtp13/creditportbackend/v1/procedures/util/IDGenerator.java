@@ -23,12 +23,17 @@ public class IDGenerator implements IdentifierGenerator {
 
     private int generateId() {
         StringBuilder id = new StringBuilder(ID_LENGTH);
-        for (int i = 0; i <= ID_LENGTH; i++) {
+
+        id.append(CHARACTERS.charAt(RANDOM.nextInt(CHARACTERS.length() - 1) + 1));
+
+        for (int i = 1; i < ID_LENGTH; i++) {
             int randomIndex = RANDOM.nextInt(CHARACTERS.length());
             id.append(CHARACTERS.charAt(randomIndex));
         }
+
         return Integer.parseInt(id.toString());
     }
+
 
     private int generateUniqueId() {
         int id = generateId();
