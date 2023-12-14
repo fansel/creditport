@@ -38,6 +38,7 @@ public class ProcedureService {
                 newProcedure.setAnnotation(procedure.getAnnotation());
                 newProcedure.setCourseName(procedure.getCourseName());
                 newProcedure.setUniversity(procedure.getUniversity());
+                newProcedure.setLastUpdated(procedure.getLastUpdated());
                 newProcedure.setCreatedAt(procedure.getCreatedAt());
                 newProcedure.setRequests(new ArrayList<>());
                 return newProcedure;
