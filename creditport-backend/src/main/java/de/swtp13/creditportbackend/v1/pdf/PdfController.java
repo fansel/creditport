@@ -57,13 +57,13 @@ public class PdfController {
                     headers.setContentType(MediaType.APPLICATION_PDF);
                     headers.setContentDisposition(ContentDisposition.builder("inline").filename("request_" + requestId + ".pdf").build());
                     headers.add("Access-Control-Allow-Origin", "*");
-                    headers.add("X-Frame-Options", "*");
-
+                    headers.add("Content-Security-Policy", "frame-ancestors 'self' http://localhost:*");
 
                     return new ResponseEntity<>(resource, headers, HttpStatus.OK);
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
+
 
     }
 
