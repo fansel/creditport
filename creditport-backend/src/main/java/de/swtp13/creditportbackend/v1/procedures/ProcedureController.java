@@ -9,10 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.multipart.MultipartFile;
 
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,7 +58,7 @@ public class ProcedureController {
         List<Request> requests = requestRepository.findRequestsByProcedureId(procedureId);
         Optional<Procedure> optionalProcedure = procedureRepository.findByProcedureId(procedureId);
         Procedure procedure = optionalProcedure.orElse(null);
-        try{
+        try {
             procedure.setRequests(requests);
         } catch(NullPointerException e){
             return ResponseEntity.notFound().build();
@@ -90,6 +88,9 @@ public class ProcedureController {
     @PostMapping
     public ResponseEntity<ProcedureResponseDTO> createProcedure(@RequestBody ProcedureRequestDTO procedureRequestDTO) {
         ProcedureResponseDTO response = procedureService.createProcedureFromDTO(procedureRequestDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        if (response == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        else
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }
