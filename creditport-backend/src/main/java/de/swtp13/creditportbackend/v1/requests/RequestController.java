@@ -114,7 +114,7 @@ public class RequestController {
                     return ResponseEntity.ok().build();
                 }).orElse(ResponseEntity.notFound().build());
     }
-    @PostMapping("/{requestId}/uploadPdf")
+    @PostMapping("/uploadPdf/{requestId}")
     public ResponseEntity<String> uploadRequestPdf(@PathVariable int requestId, @RequestParam("file") MultipartFile file) {
         if (file.isEmpty() || !Objects.equals(file.getContentType(), "application/pdf")) {
             return ResponseEntity.badRequest().body("Invalid file. Please upload a PDF file.");
@@ -134,7 +134,7 @@ public class RequestController {
                     .body("Error occurred while uploading the file: " + e.getMessage());
         }
     }
-    @GetMapping("/{requestId}/downloadPdf")
+    @GetMapping("/downloadPdf/{requestId}")
     public ResponseEntity<ByteArrayResource> downloadRequestPdf(@PathVariable int requestId) {
         try {
             Request request = requestRepository.findById(requestId)
