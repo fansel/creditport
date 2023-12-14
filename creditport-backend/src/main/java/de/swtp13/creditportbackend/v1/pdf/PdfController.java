@@ -4,9 +4,7 @@ import de.swtp13.creditportbackend.v1.requests.Request;
 import de.swtp13.creditportbackend.v1.requests.RequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -55,10 +53,13 @@ public class PdfController {
                     byte[] pdfContent = pdf.getPdfContent();
                     ByteArrayResource resource = new ByteArrayResource(pdfContent);
 
-                    return ResponseEntity.ok()
-                            .contentType(MediaType.APPLICATION_PDF)
-                            .header("Content-Disposition", "inline; filename=\"request_" + requestId + ".pdf\"")
-                            .body(resource);
+                    HttpHeaders headers = new HttpHeaders();
+                    headers.setContentType(MediaType.APPLICATION_PDF);
+                    headers.setContentDisposition(ContentDisposition.builder("inline").filename("request_" + requestId + ".pdf").build());
+                    headers.add("Access-Control-Allow-Origin", "*");
+                    // Note: X-Frame-Options header is not set
+
+                    return new ResponseEntity<>(resource, headers, HttpStatus.OK);
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
