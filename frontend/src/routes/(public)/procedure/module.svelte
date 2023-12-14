@@ -12,12 +12,12 @@
 
 <!-- Tab Module -->
 
-<h1>Überschrift</h1>
+<!-- <h1>Anträge zur Modulanrechnung von Modulen der {generalData.university}</h1> -->
 
 <form action="?/requests" method="POST" enctype="multipart/form-data" use:enhance id="requests" bind:this={modulesForm}>
   <input type="hidden" name="globalAnnotation" value={generalData.annotation} />
-  <input type="hidden" name="university" value={generalData.universitiy} />
-  <input type="hidden" name="courseName" value={generalData.externalCourseName} />
+  <input type="hidden" name="university" value={generalData.university} />
+  <input type="hidden" name="externalCourseName" value={generalData.externalCourseName} />
   <input type="hidden" name="modulesCount" bind:value={requests.length} />
   {#each requests as { moduleData }, index (index)}
     <div class="card w-100 mb-3" key={index}>
@@ -44,7 +44,7 @@
               <div class="col-md-10">
                 <div class="mb-3">
                   <label for="" class="mb-2">Name des Moduls</label>
-                  <input type="text" class="form-control" name={`externalModule${index}`} placeholder="Modellierung und Programmierung" />
+                  <input type="text" class="form-control" name={`externalModule${index}`} placeholder="Modellierung und Programmierung"/>
                 </div>
               </div>
               <div class="col-md-2">
@@ -55,15 +55,20 @@
               </div>
             </div>
 
-            <!-- <div class="mb-3">
+            <div class="mb-3">
               <label for="formFile" class="form-label">Modulbeschreibung<i class="bi bi-question-circle ms-2" /> </label>
-              <input class="form-control" type="file" name={`modulbeschreibung${index}`} id="formFile" />
-            </div> -->
+              <input class="form-control" type="file" name={`formFile${index}`} id="formFile" />
+            </div>
 
             <div>
+                <!-- <div class="mb-3">
+                <label for="formFile" class="form-label">Modulbeschreibung<i class="bi bi-question-circle ms-2" /> </label>
+                <input class="form-control" type="file" name={`modulbeschreibung${index}`} id="formFile" />
+              </div> -->
+
               <div class="mb-3">
                 <label for="" class="mb-2">Website zum Modul</label>
-                <input type="text" class="form-control" name={`website${index}`} placeholder="http://uni-leipzig.de/module_xyz" />
+                <input type="text" class="form-control" name={`moduleLink${index}`} placeholder="http://uni-leipzig.de/module_xyz" />
               </div>
             </div>
           </div>
@@ -95,7 +100,7 @@
   <button type="button" class="btn btn-primary" on:click={goToNextTab}>Weiter</button>
 
   <div class="w-100 d-inline-flex justify-content-center">
-    <button class="btn btn-primary" on:click={addRequest}>
+    <button class="btn btn-primary" type="button" on:click={addRequest}>
       <i class="bi bi-plus-circle" style="font-size: 2rem;" />
     </button>
   </div>

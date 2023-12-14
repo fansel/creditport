@@ -16,21 +16,25 @@ async function send({ method, path, data, token, req_type = content_type.json, r
   const opts = { method, headers: {} };
 
   if (data) {
-    opts.headers['Content-Type'] = req_type;
     switch (req_type) {
       case content_type.json:
         opts.body = JSON.stringify(data);
+        opts.headers['Content-Type'] = req_type;
+
         break;
       case content_type.plain:
         opts.body = data;
+        opts.headers['Content-Type'] = req_type;
+
         break;
       case content_type.form_data:
-        const formData = new FormData();
-        // Assume data is a plain object
-        Object.entries(data).forEach(([key, value]) => {
-          formData.append(key, value);
-        });
-        opts.body = formData;
+        // const formData = new FormData();
+        // // Assume data is a plain object
+        // Object.entries(data).forEach(([key, value]) => {
+        //   formData.append(key, value);
+        // });
+        // console.log(formData)
+        opts.body = data;
         break;
     }
   }

@@ -14,11 +14,11 @@
       </div>
       <div class="mb-3">
         <label for="" class="mb-2">Studiengang der anzurechnenden Module</label>
-        <input type="text" id="formerStudies" bind:value={generalData.formerStudies} class="form-control" placeholder="B.Sc. Informatik" />
+        <input type="text" id="formerStudies" bind:value={generalData.externalCourseName} class="form-control" placeholder="B.Sc. Informatik" />
       </div>
       <div class="mb-3">
         <label for="" class="mb-2">Studiengang der Universität Leipzig an dem die Anrechnung erfolgen soll</label>
-        <input type="text" id="futureStudies" bind:value={generalData.futureStudies} class="form-control" placeholder="B.Sc. Wirtschaftsinformatik" />
+        <input type="text" id="futureStudies" bind:value={generalData.internalCourseName} class="form-control" placeholder="B.Sc. Wirtschaftsinformatik" />
       </div>
       <div class="form-floating">
         <textarea class="form-control" placeholder="Leave a comment here" id="globalAnnotation" bind:value={generalData.annotation} style="height: 100px" />
