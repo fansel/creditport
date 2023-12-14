@@ -19,7 +19,7 @@
     let smaller = false;
     let bigger = false;
 
-    if (request.relatedRequests[0] < request.requestId) {
+    if (request.relatedRequests < request.requestId) {
       return -1;
     } else {
       return 1;

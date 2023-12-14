@@ -8,7 +8,7 @@ export async function load({ params }) {
 
   return {
     modules: modules,
-    request: requests[0]
+    request: requests
   };
 }
 
