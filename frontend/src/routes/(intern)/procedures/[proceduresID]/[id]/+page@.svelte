@@ -5,6 +5,7 @@
   import Header from '$lib/components/InternHeader.svelte';
   import { format, parseISO } from 'date-fns';
   import * as config from '$lib/config';
+  import { page } from '$app/stores';
 
   export let data;
 
@@ -59,7 +60,11 @@
   // Bemerkungsfeld
 </script>
 
-<Header />
+<svelte:head>
+  <title>{config.title} - {$page.data.title}</title>
+</svelte:head>
+
+<Header wide={true} />
 
 <div class="border-bottom">
   <div class="col-md m-3">
@@ -131,7 +136,8 @@
           <div class="row">
             <!-- studibüro -->
             <div class="col-6">
-              <label class="mb-1"><strong>Status</strong></label><br />
+              <p class="mb-1"><strong>Status</strong></p>
+              <br />
 
               <div class="btn-group dropend">
                 <button
@@ -144,19 +150,20 @@
                   {statusText}
                 </button>
                 <div class="dropdown-menu" id="myDropdown">
-                  <a class="dropdown-item" on:click={() => updateStatus(6)}>{getStatus(6).statusText}</a>
-                  <a class="dropdown-item" on:click={() => updateStatus(3)}>{getStatus(3).statusText}</a>
-                  <a class="dropdown-item" on:click={() => updateStatus(7)}>{getStatus(7).statusText}</a>
-                  <a class="dropdown-item" on:click={() => updateStatus(8)}>{getStatus(8).statusText}</a>
-                  <a class="dropdown-item" on:click={() => updateStatus(9)}>{getStatus(9).statusText}</a>
-                  <a class="dropdown-item" on:click={() => updateStatus(10)}>{getStatus(10).statusText}</a>
+                  <button class="dropdown-item" on:click={() => updateStatus(6)}>{getStatus(6).statusText}</button>
+                  <button class="dropdown-item" on:click={() => updateStatus(3)}>{getStatus(3).statusText}</button>
+                  <button class="dropdown-item" on:click={() => updateStatus(7)}>{getStatus(7).statusText}</button>
+                  <button class="dropdown-item" on:click={() => updateStatus(8)}>{getStatus(8).statusText}</button>
+                  <button class="dropdown-item" on:click={() => updateStatus(9)}>{getStatus(9).statusText}</button>
+                  <button class="dropdown-item" on:click={() => updateStatus(10)}>{getStatus(10).statusText}</button>
                 </div>
               </div>
             </div>
 
             <!-- studianzeige -->
             <div class="col-6">
-              <label class="mb-1"><strong>Auf Statusseite</strong></label><br />
+              <p class="mb-1"><strong>Auf Statusseite</strong></p>
+              <br />
 
               <div class="btn bg-{statusColor}-subtle border border-{statusColor}-subtle text-{statusColor}-emphasis rounded-pill">
                 {#if request.status === 7 || request.status === 8}

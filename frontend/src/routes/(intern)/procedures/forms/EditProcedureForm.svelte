@@ -21,31 +21,37 @@
   <h2 slot="headline" class="m-0">Vorgang bearbeiten</h2>
   <div slot="body" class="p-3">
     <div class="row">
-      <div class="col border-end">
-        <h4>Information</h4>
-        <div class="row">
-          <div class="col-3">
-            <label for="name" class="col-form-label"> Name </label>
-          </div>
-          <div class="col">
-            <input type="hidden" value={procedure?.procedureId} name="id" />
+      <div class="col">
+        <div class="mb-3">
+          <label for="name" class="col-form-label"> Vorgangsnummer </label>
 
-            <input type="text" value={$page.form?.data?.name ?? procedure?.procedureId} name="name" class="form-control {$page.form?.errors?.name ? 'is-invalid' : ''}" bind:this={input} />
-            {#if $page.form?.errors?.name}
-              <div class="invalid-feedback">
-                {$page.form?.errors?.name}
-              </div>
-            {/if}
-          </div>
+          <input type="text" value={$page.form?.data?.name ?? procedure?.procedureId} disabled name="name" class="form-control {$page.form?.errors?.name ? 'is-invalid' : ''}" bind:this={input} />
+          {#if $page.form?.errors?.name}
+            <div class="invalid-feedback">
+              {$page.form?.errors?.name}
+            </div>
+          {/if}
+        </div>
+        <div class="mb-3">
+          <label for="name" class="col-form-label"> Vorgangsnummer </label>
+
+          <input type="text" value={$page.form?.data?.name ?? procedure?.procedureId} disabled name="name" class="form-control {$page.form?.errors?.name ? 'is-invalid' : ''}" bind:this={input} />
+          {#if $page.form?.errors?.name}
+            <div class="invalid-feedback">
+              {$page.form?.errors?.name}
+            </div>
+          {/if}
         </div>
       </div>
       <div class="col">
-        <h4>Anträge</h4>
-
         <div class="list-group">
+          <div class="list-group-item d-inline-flex justify-content-between"><strong>Module</strong></div>
+
           {#if procedure}
             {#each procedure.requests as request}
-              <div class="list-group-item">{request.externalModuleId} -{request.internalModuleId} <a href="/procedures/{procedure.procedureId}/{request.requestId}">Link</a></div>
+              <div class="list-group-item d-inline-flex justify-content-between">
+                {request.externalModuleId} - {request.internalModuleId} <a href="/procedures/{procedure.procedureId}/{request.requestId}"><i class="bi bi-pencil-square" /></a>
+              </div>
             {/each}
           {/if}
         </div>

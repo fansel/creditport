@@ -10,7 +10,7 @@
   <title>{config.title} - {$page.data.title}</title>
 </svelte:head>
 
-<Header username={data.user.username} />
+<Header />
 
 <main class="container">
   <slot />

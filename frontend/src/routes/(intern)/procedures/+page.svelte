@@ -15,7 +15,6 @@
 
 <EditProcedureForm procedure={selectedProcedure} bind:showModal={showEditModal} />
 
-
 <div class="row py-3 mb-3 pb-md-1 border-bottom align-items-center">
   <div class="col-md">
     <h1>Vorgänge</h1>
@@ -156,7 +155,9 @@
             <div class="btn-group text-nowrap float-end" role="group">
               <form method="POST" action="?/delete" use:enhance>
                 <input type="hidden" name="id" value="1" />
-                <button type="button" on:click={() => ((showEditModal = true), (selectedProcedure = procedure))} class="btn btn-sm btn-primary btn-group-right"><i class="bi bi-pencil-square" /></button>
+                <button type="button" on:click={() => ((showEditModal = true), (selectedProcedure = procedure))} class="btn btn-sm btn-primary btn-group-right"
+                  ><i class="bi bi-pencil-square" /></button
+                >
               </form>
             </div>
           </td>

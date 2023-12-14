@@ -1,11 +1,11 @@
 <script>
   import { page } from '$app/stores';
 
-  export let username;
+  export let wide = false;
 </script>
 
 <nav class="navbar navbar-expand-md navbar-light shadow-sm p-3 sticky-top" aria-label="Fourth navbar example">
-  <div class="container">
+  <div class={wide ? 'container-fluid' : 'container'}>
     <a class="navbar-brand" href="/"><i class="bi bi-send" /> </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon" />
@@ -22,7 +22,7 @@
 
       <div class="dropdown profil-dropdown">
         <button class="profil-btn d-flex align-items-center link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-          <strong>{username}</strong>
+          <strong>{$page.data?.user?.username}</strong>
           <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle ms-2" />
         </button>
         <ul class="dropdown-menu text-small">
