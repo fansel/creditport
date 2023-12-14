@@ -36,6 +36,7 @@
     internalCouseName: '',
     annotation:'',
   };
+
   //Logik für Anträge
   let requests = [];
   let modulesForm;
@@ -59,6 +60,8 @@
   function removeRequest(index) {
     requests = requests.filter((_, i) => i !== index);
   }
+
+
 </script>
 
 <main>

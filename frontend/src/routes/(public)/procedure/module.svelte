@@ -16,8 +16,8 @@
 
 <form action="?/requests" method="POST" enctype="multipart/form-data" use:enhance id="requests" bind:this={modulesForm}>
   <input type="hidden" name="globalAnnotation" value={generalData.annotation} />
-  <input type="hidden" name="university" value={generalData.university} />
-  <input type="hidden" name="externalCourseName" value={generalData.externalCourseName} />
+  <input type="hidden" name="university" id="university" value={generalData.university} />
+  <input type="hidden" name="externalCourseName" id="externalCourseName" value={generalData.externalCourseName} />
   <input type="hidden" name="modulesCount" bind:value={requests.length} />
   {#each requests as { moduleData }, index (index)}
     <div class="card w-100 mb-3" key={index}>
@@ -44,41 +44,34 @@
               <div class="col-md-10">
                 <div class="mb-3">
                   <label for="" class="mb-2">Name des Moduls</label>
-                  <input type="text" class="form-control" name={`externalModule${index}`} placeholder="Modellierung und Programmierung"/>
+                  <input type="text" class="form-control" name={`externalModule${index}`} id={`externalModule${index}`} placeholder="Modellierung und Programmierung"/>
                 </div>
               </div>
               <div class="col-md-2">
                 <div class="mb-3">
                   <label for="" class="mb-2">LP</label>
-                  <input type="text" class="form-control" name={`creditPoints${index}`} placeholder="5" />
+                  <input type="text" class="form-control" name={`creditPoints${index}`} id={`creditPoints${index}`} placeholder="5" />
                 </div>
               </div>
             </div>
 
             <div class="mb-3">
               <label for="formFile" class="form-label">Modulbeschreibung<i class="bi bi-question-circle ms-2" /> </label>
-              <input class="form-control" type="file" name={`formFile${index}`} id="formFile" />
-            </div>
-
-            <div>
-                <!-- <div class="mb-3">
-                <label for="formFile" class="form-label">Modulbeschreibung<i class="bi bi-question-circle ms-2" /> </label>
-                <input class="form-control" type="file" name={`modulbeschreibung${index}`} id="formFile" />
-              </div> -->
+              <input class="form-control" type="file" name={`formFile${index}`} id={`formFile${index}`} />
 
               <div class="mb-3">
                 <label for="" class="mb-2">Website zum Modul</label>
-                <input type="text" class="form-control" name={`moduleLink${index}`} placeholder="http://uni-leipzig.de/module_xyz" />
+                <input type="text" class="form-control" name={`moduleLink${index}`} id={`moduleLink${index}`} placeholder="http://uni-leipzig.de/module_xyz" />
               </div>
             </div>
           </div>
           <div class="col-md">
-            <h2 class="h4">Modul Vorschlag</h2>
+            <h2 class="h4">Modulvorschlag</h2>
 
             <div class="mb-2" />
             <div class="mb-3">
               <label for="" class="mb-2">Name</label>
-              <select class="form-select" name={`internalModule${index}`} aria-label="Default select example" bind:value={moduleData.selectedModul}>
+              <select class="form-select" name={`internalModule${index}`} id={`internalModule${index}`} aria-label="Default select example" bind:value={moduleData.selectedModul}>
                 {#each modules as modul, index}
                   <option value={index}>{modul.moduleName}</option>
                 {/each}
@@ -89,8 +82,8 @@
           </div>
         </div>
         <div class="form-floating">
-          <textarea class="form-control" name={`annotation${index}`} placeholder="Leave a comment here" id="floatingTextarea" style="height: 100px" />
-          <label for="floatingTextarea">Kommentare</label>
+          <textarea class="form-control" name={`annotation${index}`} placeholder="Leave a comment here" id={`annotation${index}`} style="height: 100px" />
+          <label for={`annotation${index}`}>Kommentare</label>
         </div>
       </div>
       {activeTab === 'pills-general' ? 'active' : ''}
