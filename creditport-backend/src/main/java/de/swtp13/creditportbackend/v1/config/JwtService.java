@@ -59,6 +59,12 @@ public class JwtService {
         return claimsTFunction.apply(claims);
     }
 
+    public String extractRole(String token) {
+        final Claims claims = extractAllClaims(token);
+        final Function<Claims, String> extractRole = clm -> clm.get("role", String.class);
+        return extractRole.apply(claims);
+    }
+
     private Claims extractAllClaims(String token) {
         return Jwts
                 .parserBuilder()

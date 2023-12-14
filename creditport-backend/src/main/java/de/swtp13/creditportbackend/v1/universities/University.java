@@ -27,6 +27,13 @@ public class University {
     @Column(name = "uni_name", columnDefinition = "VARCHAR", nullable = false)
     private String uniName;
 
+
+    @Column(name = "is_verified", columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private boolean isVerified;
+
+
+
+
     public University(String uniName) {
         this.uniName = uniName;
     }

@@ -10,6 +10,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -29,26 +31,27 @@ public class AuthenticationService {
         } catch (AccountStatusException ase) {
             return AuthenticationResponse.builder()
                     .success(false)
-                    .errorMsg("Account locked or disabled")
+                    .errorMsg("Account locked or disabled.")
                     .build();
         } catch (BadCredentialsException bce) {
             return AuthenticationResponse.builder()
                     .success(false)
-                    .errorMsg("Login Details are incorrect")
+                    .errorMsg("Login Details are incorrect.")
                     .build();
         } catch (AuthenticationException ae) {
             return AuthenticationResponse.builder()
                     .success(false)
-                    .errorMsg("An Error has occured")
+                    .errorMsg("An Error has occured.")
                     .build();
         }
 
         var user = userRepository.findByUsername(request.getUsername()).orElseThrow();
-        var jwtToken = jwtService.generateToken(user);
+        HashMap<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("role", user.getRole().name());
+        var jwtToken = jwtService.generateToken(extraClaims, user);
         return AuthenticationResponse.builder()
                 .success(true)
                 .token(jwtToken)
-                .role(user.getRole().name())
                 .build();
     }
 }

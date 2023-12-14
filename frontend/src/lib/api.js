@@ -17,30 +17,50 @@ async function send({ method, path, data, token, req_type = content_type.json, r
 
   if (data) {
     opts.headers['Content-Type'] = req_type;
-    opts.body = JSON.stringify(data); //Hier muss noch auf die anderen Content Types eingegangen werden
+    switch (req_type) {
+      case content_type.json:
+        opts.body = JSON.stringify(data);
+        break;
+      case content_type.plain:
+        opts.body = data;
+        break;
+      case content_type.form_data:
+        const formData = new FormData();
+        // Assume data is a plain object
+        Object.entries(data).forEach(([key, value]) => {
+          formData.append(key, value);
+        });
+        opts.body = formData;
+        break;
+    }
   }
 
   if (token) {
     opts.headers['Authorization'] = `Bearer ${token}`;
   }
 
-  const res = await fetch(`${config.api_endpoint}/${path}`, opts);
+  try {
+    const res = await fetch(`${config.api_endpoint}/${path}`, opts);
 
-  if (res.ok || res.status === 422) {
-    //Hier fehlt noch Multipart
-    switch (res_type) {
-      case content_type.json:
-        return await res.json();
-      case content_type.plain:
-        return await res.text();
-      case content_type.form_data:
-        return await res.formData();
-      default:
-        return null;
+    if (res.ok || res.status === 422) {
+      //Hier fehlt noch Multipart
+      switch (res_type) {
+        case content_type.json:
+          return await res.json();
+        case content_type.plain:
+          return await res.text();
+        case content_type.form_data:
+          return await res.formData();
+        default:
+          return null;
+      }
     }
-  }
 
-  throw error(res.status);
+    return res.status;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
 }
 
 /**

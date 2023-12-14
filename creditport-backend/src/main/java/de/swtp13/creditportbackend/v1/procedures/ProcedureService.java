@@ -11,11 +11,9 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Die Klasse enthält alle Methoden zu Vorgängen.
@@ -57,8 +55,8 @@ public class ProcedureService {
         newProcedure.setCourseName(procedureRequestDTO.getCourseName());
         newProcedure.setUniversity(procedureRequestDTO.getUniversity());
         newProcedure.setStatus(Status.NEU);
-        newProcedure.setCreatedAt(LocalDateTime.now());
-        newProcedure.setLastUpdated(LocalDateTime.now());
+        newProcedure.setCreatedAt(Instant.now());
+        newProcedure.setLastUpdated(newProcedure.getCreatedAt());
         newProcedure.setRequests(new ArrayList<>());
 
         // Save the procedure to get an ID
@@ -74,7 +72,8 @@ public class ProcedureService {
             newRequest.setCreditPoints(requestDTO.getCreditPoints());
             newRequest.setProcedure(newProcedure);
             newRequest.setStatus(de.swtp13.creditportbackend.v1.requests.Status.NICHT_BEARBEITET);
-            newRequest.setCreatedAt(LocalDateTime.now());
+            newRequest.setCreatedAt(Instant.now());
+            newRequest.setModuleLink(requestDTO.getModuleLink());
             newRequest = requestRepository.save(newRequest);
             RequestResponseDTO requestResponseDTO = new RequestResponseDTO();
             requestResponseDTO.setRequestId(String.valueOf(newRequest.getRequestId()));

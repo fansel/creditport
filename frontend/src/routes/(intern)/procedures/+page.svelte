@@ -2,7 +2,7 @@
   import { format, parseISO } from 'date-fns';
   import { enhance } from '$app/forms';
   import { onMount } from 'svelte';
-  import * as api from '$lib/api.js';
+  import { formatProcdureID } from '$lib/util.js';
 
   export let data;
 
@@ -94,7 +94,7 @@
 
 <div class="d-flex flex-wrap gap-3 mb-3 justify-content-between align-items-center">
   <div class="d-flex align-center">
-    0 Vorgänge (gefiltert)
+    {procedures.length} Vorgänge (gefiltert)
     <button class="btn btn-link py-0"><i class="bi bi-x" />Filter zurücksetzen</button>
   </div>
 
@@ -124,6 +124,7 @@
     <thead>
       <tr>
         <th>Eingereicht am</th>
+        <th>Vorgangsnummer</th>
         <th>Universität</th>
         <th>Studiengang</th>
         <th>Anzahl der Anträge</th>
@@ -136,10 +137,11 @@
       {#each data.procedures as procedure}
         <tr>
           <td>{format(new Date(procedure.createdAt), 'dd.MM.yyyy HH:mm')} </td>
-          <td>{procedure.university}</td>
+          <td>{formatProcdureID(String(procedure.procedureId))} </td>
+          <td>{procedure.university ?? '-'}</td>
 
-          <td>{procedure.course}</td>
-          <td>{procedure.requestCount}</td>
+          <td>{procedure.courseName ?? '-'}</td>
+          <td>{procedure.requests.length ?? '-'}</td>
 
           <td><span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill">{procedure.status}</span></td>
 
@@ -147,7 +149,7 @@
             <div class="btn-group text-nowrap float-end" role="group">
               <form method="POST" action="?/delete" use:enhance>
                 <input type="hidden" name="id" value="1" />
-                <a type="button" href="/procedures/1/1" class="btn btn-sm btn-primary btn-group-right"><i class="bi bi-pencil-square" /></a>
+                <a type="button" href="/procedures/{procedure.procedureId}/1" class="btn btn-sm btn-primary btn-group-right"><i class="bi bi-pencil-square" /></a>
               </form>
             </div>
           </td>
@@ -159,7 +161,7 @@
 
 <div class="d-flex flex-wrap gap-3 mb-3 justify-content-between align-items-center">
   <div class="d-flex align-center">
-    0 Vorgänge (gefiltert)
+    {procedures.length} Vorgänge (gefiltert)
     <button class="btn btn-link py-0"><i class="bi bi-x" />Filter zurücksetzen</button>
   </div>
 

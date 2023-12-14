@@ -33,10 +33,14 @@ public class ManagementService {
                 return 404;
             }
 
-        } else if (userRepository.existsById(id)) {
-            user = userRepository.findById(id).orElseThrow();
+        } else if (jwtService.extractRole(token).equals("ADMIN")) {
+            if (userRepository.existsById(id)) {
+                user = userRepository.findById(id).orElseThrow();
+            } else {
+                return 404;
+            }
         } else {
-            return 404;
+            return 403;
         }
         if (newPass.getValue() == null || newPass.getValue().isEmpty()) {
             return 400;
@@ -89,6 +93,25 @@ public class ManagementService {
                 .build();
         userRepository.save(user);
         return 200;
+    }
+
+
+    public boolean isAuthorized(String token) {
+        if (token == null || token.length() < 7) {
+            return false;
+        }
+        String jwt = token.substring(7);
+        if (jwt.trim().isEmpty()) {
+            return false;
+        }
+        try {
+            String username = jwtService.extractUsername(jwt);
+            return userRepository.findByUsername(username)
+                    .map(user -> jwtService.isTokenValid(jwt, user))
+                    .orElse(false);
+        } catch (Exception e) {
+            return false;
+        }
     }
 
 
