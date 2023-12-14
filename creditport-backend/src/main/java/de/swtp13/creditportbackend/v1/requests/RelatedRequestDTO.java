@@ -20,7 +20,7 @@ public class RelatedRequestDTO {
     private int creditPoints;
     private Status status;
     private Instant createdAt;
-    private byte[] pdfContent;
+    private boolean pdfExists;
 
 
     private List<Integer> relatedRequests;

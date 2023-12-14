@@ -79,10 +79,8 @@ public class Request {
     @Temporal(TemporalType.TIMESTAMP)
     private Instant createdAt;
 
-    @Lob
-    @Column(name = "pdf_content",
-    nullable = true)
-    private byte[] pdfContent;
+    @Column(name = "pdf_exists", nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private boolean pdfExists;
 
     @Column(name = "module_link", nullable = true)
     private String moduleLink;
@@ -90,20 +88,9 @@ public class Request {
 
 
 
-    // Überarbeiteter Konstruktor
-    public Request(Procedure procedure, String externalModuleId, String internalModuleId, String annotation, int creditPoints, byte[] pdfContent) {
-        this.procedure = procedure;
-        this.externalModuleId = externalModuleId;
-        this.internalModuleId = internalModuleId;
-        this.annotation = annotation;
-        this.creditPoints = creditPoints;
-        this.status = Status.NICHT_BEARBEITET;
-        this.createdAt = Instant.now();
-        this.pdfContent = pdfContent;
-    }
 
     // Überarbeiteter Konstruktor mit 'createdAt'-Parameter
-    public Request(Procedure procedure, String externalModuleId, String internalModuleId, String annotation, int creditPoints, Instant createdAt, byte[] pdfContent) {
+    public Request(Procedure procedure, String externalModuleId, String internalModuleId, String annotation, int creditPoints, Instant createdAt) {
         this.procedure = procedure;
         this.externalModuleId = externalModuleId;
         this.internalModuleId = internalModuleId;
@@ -111,7 +98,6 @@ public class Request {
         this.creditPoints = creditPoints;
         this.createdAt = createdAt;
         this.status = Status.NICHT_BEARBEITET;
-        this.pdfContent = pdfContent;
     }
 
     public Request(Procedure procedure, String externalModuleId, String internalModuleId, String annotation, int creditPoints) {
@@ -122,6 +108,5 @@ public class Request {
         this.creditPoints = creditPoints;
         this.status = Status.NICHT_BEARBEITET;
         this.createdAt = Instant.now();
-        this.pdfContent = null; // oder ein Standard-PDF-Byte-Array, falls gewünscht
     }
 }

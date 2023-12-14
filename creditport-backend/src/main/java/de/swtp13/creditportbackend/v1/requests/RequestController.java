@@ -63,7 +63,7 @@ public class RequestController {
             relatedRequest.setCreditPoints(request.getCreditPoints());
             relatedRequest.setStatus(request.getStatus());
             relatedRequest.setCreatedAt(request.getCreatedAt());
-            relatedRequest.setPdfContent(request.getPdfContent());
+            relatedRequest.setPdfExists(request.isPdfExists());
 
             Procedure proc = requestRepository.findProcedureByRequestId(requestId);
             List<Integer> requestIds = requestRepository.findAllRelatedRequests(proc.getProcedureId());
@@ -114,47 +114,5 @@ public class RequestController {
                     return ResponseEntity.ok().build();
                 }).orElse(ResponseEntity.notFound().build());
     }
-    @PostMapping("/uploadPdf/{requestId}")
-    public ResponseEntity<String> uploadRequestPdf(@PathVariable int requestId, @RequestParam("file") MultipartFile file) {
-        if (file.isEmpty() || !Objects.equals(file.getContentType(), "application/pdf")) {
-            return ResponseEntity.badRequest().body("Invalid file. Please upload a PDF file.");
-        }
 
-        try {
-            Request request = requestRepository.findById(requestId)
-                    .orElseThrow(() -> new RuntimeException("Request not found with id: " + requestId));
-            request.setPdfContent(file.getBytes());
-
-            requestRepository.save(request);
-
-            return ResponseEntity.ok("File uploaded successfully");
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error occurred while uploading the file: " + e.getMessage());
-        }
-    }
-    @GetMapping("/downloadPdf/{requestId}")
-    public ResponseEntity<ByteArrayResource> downloadRequestPdf(@PathVariable int requestId) {
-        try {
-            Request request = requestRepository.findById(requestId)
-                    .orElseThrow(() -> new RuntimeException("Request not found with id: " + requestId));
-
-            byte[] pdfContent = request.getPdfContent();
-            if (pdfContent == null || pdfContent.length == 0) {
-                return ResponseEntity.notFound().build();
-            }
-
-            ByteArrayResource resource = new ByteArrayResource(pdfContent);
-
-            return ResponseEntity.ok()
-                    .contentType(MediaType.APPLICATION_PDF)
-                    .header("Content-Disposition", "attachment; filename=\"request_" + requestId + ".pdf\"")
-                    .body(resource);
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ByteArrayResource(new byte[0]));
-        }
-    }
 }
