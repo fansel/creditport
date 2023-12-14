@@ -3,11 +3,18 @@
   import { enhance } from '$app/forms';
   import { onMount } from 'svelte';
   import { formatProcdureID } from '$lib/util.js';
+  import EditProcedureForm from './forms/EditProcedureForm.svelte';
 
   export let data;
 
   $: procedures = data.procedures;
+
+  let showEditModal = false;
+  let selectedProcedure;
 </script>
+
+<EditProcedureForm procedure={selectedProcedure} bind:showModal={showEditModal} />
+
 
 <div class="row py-3 mb-3 pb-md-1 border-bottom align-items-center">
   <div class="col-md">
@@ -149,7 +156,7 @@
             <div class="btn-group text-nowrap float-end" role="group">
               <form method="POST" action="?/delete" use:enhance>
                 <input type="hidden" name="id" value="1" />
-                <a type="button" href="/procedures/{procedure.procedureId}/1" class="btn btn-sm btn-primary btn-group-right"><i class="bi bi-pencil-square" /></a>
+                <button type="button" on:click={() => ((showEditModal = true), (selectedProcedure = procedure))} class="btn btn-sm btn-primary btn-group-right"><i class="bi bi-pencil-square" /></button>
               </form>
             </div>
           </td>

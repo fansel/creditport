@@ -4,6 +4,7 @@
   import Modal from '$root/lib/components/FormModal.svelte';
   import Header from '$lib/components/InternHeader.svelte';
   import { format, parseISO } from 'date-fns';
+  import * as config from '$lib/config';
 
   export let data;
 
@@ -25,6 +26,8 @@
       return 1;
     }
   }
+
+  console.log(config.pdf_endpoint + request.requestId);
 
   // APIs (Jetzt noch mit Testsatz, da API nicht steht)
 
@@ -89,8 +92,8 @@
       <div class="btn-group dropend">
         <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ähnliche Anträge</button>
         <div class="dropdown-menu">
-          <a class="dropdown-item" on:click={() => (showModal1 = true)}>Module für aktuelles Fremdmodul</a>
-          <a class="dropdown-item" on:click={() => (showModal2 = true)}>Akzeptierte Fremdmodule für Modulvorschlag</a>
+          <button class="dropdown-item" on:click={() => (showModal1 = true)}>Module für aktuelles Fremdmodul</button>
+          <button class="dropdown-item" on:click={() => (showModal2 = true)}>Akzeptierte Fremdmodule für Modulvorschlag</button>
         </div>
       </div>
     </div>
@@ -99,10 +102,10 @@
     <div class="col-8">
       <div class="pdf-container">
         <div class="pdf-content">
-          {#if request.pdfContent === null}
-            <iframe src="https://www.orimi.com/pdf-test.pdf" width="100%" height="800" />
+          {#if request.pdfExists}
+            <iframe src={config.pdf_endpoint + request.requestId} width="100%" height="800" title="pdf" />
           {:else}
-            <iframe src={request.pdfContent} width="100%" height="800" />
+            <iframe src="https://www.orimi.com/pdf-test.pdf" width="100%" height="800" title="pdf" />
           {/if}
         </div>
       </div>
