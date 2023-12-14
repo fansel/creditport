@@ -67,6 +67,11 @@ public class ProcedureController {
         }
         return ResponseEntity.ok(procedure);
     }
+    @GetMapping("/ids")
+    public ResponseEntity<List<Integer>> getProcedureIds(){
+        List<Integer> ids = procedureRepository.findAllIds();
+        return ResponseEntity.ok(ids);
+    }
     /**
      * PUT by ID
      * updates a procedure with specific ID in the Database
@@ -80,6 +85,7 @@ public class ProcedureController {
         return ResponseEntity.ok(updatedProcedure);
     }
      */
+
 
     @PostMapping
     public ResponseEntity<ProcedureResponseDTO> createProcedure(@RequestBody ProcedureRequestDTO procedureRequestDTO) {
