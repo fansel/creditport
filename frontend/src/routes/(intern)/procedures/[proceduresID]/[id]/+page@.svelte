@@ -54,8 +54,8 @@
 
 <Header wide={true} />
 
-<RelatedRequestsExtern bind:showmodal={showModalExtern} />
-<RelatedRequestsIntern bind:showmodal={showModalIntern} />
+<RelatedRequestsExtern bind:showModal={showModalExtern} />
+<RelatedRequestsIntern bind:showModal={showModalIntern} />
 
 <div class="border-bottom">
   <div class="col-md m-3">

@@ -20,7 +20,7 @@
   // }
 </script>
 
-<Modal bind:showModal bind:this={dialog} action="?/changeUni" reset={false} min_width="75rem">
+<Modal bind:showModal bind:this={dialog} action="?/editProcedure" reset={false} min_width="75rem">
   <h2 slot="headline" class="m-0">Vorgang bearbeiten</h2>
   <div slot="body" class="p-3">
     {#if showModal}

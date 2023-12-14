@@ -1,5 +1,5 @@
 <script>
-  import Modal from '$lib/components/InfoModal.svelte'
+  import Modal from '$lib/components/InfoModal.svelte';
 
   export let showModal;
 </script>
