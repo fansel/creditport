@@ -65,7 +65,7 @@ test_backend:
 build_javadoc:
   stage: build
   needs: ['test_backend']
-  # when: manual
+  when: manual
   image:
     name: gcr.io/kaniko-project/executor:v1.14.0-debug
     entrypoint: ['']
@@ -117,6 +117,7 @@ build_frontend:
 deploy_javadoc:
   stage: deploy
   needs: ['build_javadoc']
+  when: manual
   image: nginx:1.25.3-alpine
   variables:
     DOCKER_HOST: ssh://$DEPLOY_USER@$DEPLOY_SERVER

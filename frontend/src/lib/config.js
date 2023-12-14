@@ -4,6 +4,7 @@ export const title = 'Anrechungsportal';
 
 export const api_endpoint = env.PUBLIC_API_ENDPOINT || 'http://backend:8080/api/v1';
 export const secure_connection = env.PUBLIC_SECURE_CONNECTION === 'true';
+export const pdf_endpoint = env.PUBLIC_PDF_ENDPOINT || api_endpoint + '/request/downloadPdf';
 
 export const user_roles = {
   ADMIN: 'ADMIN',

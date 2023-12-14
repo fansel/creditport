@@ -78,6 +78,9 @@
         <div class="row">
           <div class="col-8 d-flex align-items-center">
             {item.uniName}
+            {#if item.verified}
+              <i class="bi bi-check-circle ms-2 text-primary"></i>
+            {/if}
           </div>
           <div class="col d-flex align-items-center">
             <!-- <form method="POST" use:enhance>
