@@ -57,7 +57,8 @@ public class PdfController {
                     headers.setContentType(MediaType.APPLICATION_PDF);
                     headers.setContentDisposition(ContentDisposition.builder("inline").filename("request_" + requestId + ".pdf").build());
                     headers.add("Access-Control-Allow-Origin", "*");
-                    // Note: X-Frame-Options header is not set
+                    headers.add("X-Frame-Options", "*");
+
 
                     return new ResponseEntity<>(resource, headers, HttpStatus.OK);
                 })
