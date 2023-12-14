@@ -8,6 +8,3 @@ public class UpdateRequest {
 }
 
 
-
-/api/v1/requests/77/related
-/api/v1/requests/relatedRequest/77
