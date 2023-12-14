@@ -5,6 +5,7 @@
   import Header from '$lib/components/InternHeader.svelte';
   import { format, parseISO } from 'date-fns';
   import * as config from '$lib/config';
+  import { getNachfolger, getVorgänger } from '$lib/util';
   import { page } from '$app/stores';
 
   export let data;
@@ -15,20 +16,6 @@
 
   let showModal1 = false;
   let showModal2 = false;
-
-  // NAVBAR
-  function relatedRequests(request) {
-    let smaller = false;
-    let bigger = false;
-
-    if (request.relatedRequests < request.requestId) {
-      return -1;
-    } else {
-      return 1;
-    }
-  }
-
-  console.log(config.pdf_endpoint + request.requestId);
 
   // APIs (Jetzt noch mit Testsatz, da API nicht steht)
 
@@ -76,13 +63,17 @@
   <div class="row px-3">
     <!-- NAVBAR -->
     <div class="nav-bar my-3" width="100%">
-      {#if relatedRequests(request) != 1}
-        <button type="button" class="btn btn-sm btn-outline-primary" onclick="window.location.href=/procedures/1/5"><i class="bi bi-arrow-left" /> </button>
-      {/if}
-      {#if relatedRequests(request) != -1}
-        <button type="button" class="btn btn-sm btn-outline-primary" onclick="window.location.href='/procedures/1/6'">
-          <i class="bi bi-arrow-right" />
-        </button>
+      {#if request.relatedRequests.length > 0}
+        {#if getVorgänger(request.requestId, request.relatedRequests) != null}
+          <a type="button" class="btn btn-sm btn-outline-primary" rel="external" href="/procedures/{request.procedureId}/{getVorgänger(request.requestId, request.relatedRequests)}">
+            <i class="bi bi-arrow-left" />
+          </a>
+        {/if}
+        {#if getNachfolger(request.requestId, request.relatedRequests) != null}
+          <a type="button" class="btn btn-sm btn-outline-primary" rel="external" href="/procedures/{request.procedureId}/{getNachfolger(request.requestId, request.relatedRequests)}">
+            <i class="bi bi-arrow-right" />
+          </a>
+        {/if}
       {/if}
 
       <!-- {#if relatedRequests(request) != 1}
@@ -108,9 +99,9 @@
       <div class="pdf-container">
         <div class="pdf-content">
           {#if request.pdfExists}
-            <iframe src={config.pdf_endpoint + request.requestId} width="100%" height="800" title="pdf" />
+            <iframe src="{config.pdf_endpoint + request.requestId}#zoom=FitH" class="pdf-iframe" title="pdf" />
           {:else}
-            <iframe src="https://www.orimi.com/pdf-test.pdf" width="100%" height="800" title="pdf" />
+            <iframe src="https://www.orimi.com/pdf-test.pdf#zoom=FitH" class="pdf-iframe" title="pdf" />
           {/if}
         </div>
       </div>
@@ -119,7 +110,7 @@
     <div class="col-4">
       <form action="">
         <div class="row mb-3">
-          <div class="col-6"><strong>Antrag erstellt am </strong><br />{format(parseISO(request.createdAt), 'dd.MM.yyyy HH:mm')}</div>
+          <div class="col-6"><strong>Antrag erstellt am </strong><br />{format(new Date(request.createdAt), 'dd.MM.yyyy HH:mm')}</div>
           <!-- <div class="col-6"><strong>zuletzt bearbeitet am</strong><br />{format(request.lastEditedAt, 'dd.MM.yyyy HH:mm')}</div> -->
         </div>
 
@@ -191,10 +182,10 @@
 
           <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="studi-tab-pane" role="tabpanel" aria-labelledby="studi-tab" tabindex="0">
-              <textarea class="form-control" id="input" placeholder="Begründen Sie Ihren Entscheid..." rows="4" name="comment">{request.annotation}</textarea>
+              <textarea class="form-control" id="input" placeholder="Begründen Sie Ihren Entscheid..." rows="4" name="comment">{request.annotation ?? ''}</textarea>
             </div>
             <div class="tab-pane fade" id="office-tab-pane" role="tabpanel" aria-labelledby="office-tab" tabindex="0">
-              <textarea class="form-control" id="input" placeholder="Begründen Sie Ihren Entscheid..." rows="4" name="comment">{request.comment_student}</textarea>
+              <textarea class="form-control" id="input" placeholder="Begründen Sie Ihren Entscheid..." rows="4" name="comment">{request.comment_student ?? ''}</textarea>
             </div>
           </div>
         </div>
@@ -310,4 +301,8 @@
   }
 
   /* pdf */
+  .pdf-iframe {
+    width: 100%;
+    height: calc(100vh - 250px);
+  }
 </style>
