@@ -6,3 +6,5 @@ import lombok.Data;
 public class UpdateRequest {
     private String value;
 }
+
+

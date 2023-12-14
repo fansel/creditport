@@ -2,8 +2,11 @@ package de.swtp13.creditportbackend.v1.procedures;
 
 import de.swtp13.creditportbackend.v1.procedures.util.IDGenerator;
 import de.swtp13.creditportbackend.v1.requests.Request;
+
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import jakarta.persistence.*;
@@ -61,19 +64,19 @@ public class Procedure {
             nullable = false
     )
     private String courseName;
-    @Column(
+   /* @Column(
             name = "created_at",
-            nullable = false
+            nullable = false,
+            columnDefinition = "INT"
     )
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime createdAt;
+    private long createdAt;
 
     @Column(
             name = "last_updated_on",
-            nullable = false
+            nullable = false,
+            columnDefinition = "INT"
     )
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime lastUpdated;
+    private long lastUpdated;
 
     @Getter
     @Transient
@@ -92,7 +95,8 @@ public class Procedure {
         this.university = university;
         this.courseName = courseName;
         this.status = Status.NEU;
-        this.createdAt = LocalDateTime.now();
+        Date now = new Date();
+        this.createdAt = now.getTime();
         this.lastUpdated = this.createdAt;
     }
 
@@ -100,11 +104,50 @@ public class Procedure {
         this.university = university;
         this.courseName = courseName;
         this.status = Status.NEU;
-        this.createdAt = LocalDateTime.now();
+        Date now = new Date();
+        this.createdAt = now.getTime();
+        this.lastUpdated = this.createdAt;
+    }*/
+    @Column(
+            name = "created_at",
+            nullable = false
+    )
+    @Temporal(TemporalType.TIMESTAMP)
+    private Instant createdAt;
+
+    @Column(
+            name = "last_updated_on",
+            nullable = false
+    )
+    @Temporal(TemporalType.TIMESTAMP)
+    private Instant lastUpdated;
+
+    @Getter
+    @Transient
+    private List<Request> requests = new ArrayList<>();
+
+    // Benutzerdefinierter Konstruktor ohne ID
+    public Procedure(Status status, String annotation) {
+        this.university = "Universität Leipzig";
+        this.courseName = "Informatik Bachelor";
+        this.status = status;
+        this.annotation = annotation;
+    }
+
+    public Procedure(String annotation, String university, String courseName) {
+        this.annotation = annotation;
+        this.university = university;
+        this.courseName = courseName;
+        this.status = Status.NEU;
+        this.createdAt = Instant.now();
         this.lastUpdated = this.createdAt;
     }
 
-    public void setRequests(List<Request> requests) {
-        this.requests = requests;
+    public Procedure(String university, String courseName) {
+        this.university = university;
+        this.courseName = courseName;
+        this.status = Status.NEU;
+        this.createdAt =Instant.now();
+        this.lastUpdated = this.createdAt;
     }
 }

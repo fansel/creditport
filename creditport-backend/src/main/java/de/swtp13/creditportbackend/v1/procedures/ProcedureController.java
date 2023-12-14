@@ -2,6 +2,8 @@ package de.swtp13.creditportbackend.v1.procedures;
 
 import de.swtp13.creditportbackend.v1.procedures.dto.ProcedureRequestDTO;
 import de.swtp13.creditportbackend.v1.procedures.dto.ProcedureResponseDTO;
+import de.swtp13.creditportbackend.v1.requests.Request;
+import de.swtp13.creditportbackend.v1.requests.RequestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Maike
@@ -25,6 +28,8 @@ public class ProcedureController {
     @Autowired
     private ProcedureRepository procedureRepository;
     private final ProcedureService procedureService;
+    @Autowired
+    private RequestRepository requestRepository;
 
     /**
      * Constructs a {@code ProcedureController} with the necessary service.
@@ -49,13 +54,19 @@ public class ProcedureController {
      * GET by ID
      * @return procedure with specific ID
      */
+
     @GetMapping("/{procedureId}")
     public ResponseEntity<Procedure> getProcedureById(@PathVariable int procedureId) {
-        return procedureRepository.findById(procedureId)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        List<Request> requests = requestRepository.findRequestsByProcedureId(procedureId);
+        Optional<Procedure> optionalProcedure = procedureRepository.findByProcedureId(procedureId);
+        Procedure procedure = optionalProcedure.orElse(null);
+        try{
+            procedure.setRequests(requests);
+        } catch(NullPointerException e){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(procedure);
     }
-
     /**
      * PUT by ID
      * updates a procedure with specific ID in the Database

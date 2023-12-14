@@ -9,20 +9,20 @@ import java.util.Optional;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DisplayedUser {
+public class UserResponseDTO {
     private int userId;
     private String username;
     private String role;
 
-    public static DisplayedUser of(User user) {
-        return new DisplayedUser(user.getUserId(), user.getUsername(), user.getRole().name());
+    public static UserResponseDTO of(User user) {
+        return new UserResponseDTO(user.getUserId(), user.getUsername(), user.getRole().name());
     }
 
-    public static Optional<DisplayedUser> of(Optional<User> user) {
+    public static Optional<UserResponseDTO> of(Optional<User> user) {
         if (user.isEmpty()) {
             return Optional.empty();
         } else {
-            return Optional.of(DisplayedUser.of(user.orElseThrow()));
+            return Optional.of(UserResponseDTO.of(user.orElseThrow()));
         }
     }
 

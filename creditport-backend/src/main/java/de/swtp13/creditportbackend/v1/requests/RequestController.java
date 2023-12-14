@@ -49,9 +49,8 @@ public class RequestController {
 
     // GET: related Requests by RequestID
     @GetMapping("/relatedRequests/{requestId}")
-    public ResponseEntity<List<RelatedRequestDTO>> getRelatedRequestsById(@PathVariable int requestId){
+    public ResponseEntity<RelatedRequestDTO> getRelatedRequestsById(@PathVariable int requestId){
         RelatedRequestDTO relatedRequest = new RelatedRequestDTO();
-        List<RelatedRequestDTO> relatedRequestList = new ArrayList<>();
 
         Optional<Request> req = requestRepository.findByRequestId(requestId);
         Request request = req.orElse(null);
@@ -69,14 +68,11 @@ public class RequestController {
             Procedure proc = requestRepository.findProcedureByRequestId(requestId);
             List<Integer> requestIds = requestRepository.findAllRelatedRequests(proc.getProcedureId());
 
-        if (requestIds.contains(requestId)){
-            requestIds.remove(requestIds.indexOf(requestId));
-        }
-
+            if (requestIds.contains(requestId)){
+                requestIds.remove((Integer) requestId);
+            }
             relatedRequest.setRelatedRequests(requestIds);
-
-            relatedRequestList.add(relatedRequest);
-            return ResponseEntity.ok(relatedRequestList);
+            return ResponseEntity.ok(relatedRequest);
         } catch (NullPointerException e){
             return ResponseEntity.notFound().build();
         }
@@ -118,7 +114,7 @@ public class RequestController {
                     return ResponseEntity.ok().build();
                 }).orElse(ResponseEntity.notFound().build());
     }
-    @PostMapping("/{requestId}/uploadPdf")
+    @PostMapping("/uploadPdf/{requestId}")
     public ResponseEntity<String> uploadRequestPdf(@PathVariable int requestId, @RequestParam("file") MultipartFile file) {
         if (file.isEmpty() || !Objects.equals(file.getContentType(), "application/pdf")) {
             return ResponseEntity.badRequest().body("Invalid file. Please upload a PDF file.");
@@ -138,7 +134,7 @@ public class RequestController {
                     .body("Error occurred while uploading the file: " + e.getMessage());
         }
     }
-    @GetMapping("/{requestId}/downloadPdf")
+    @GetMapping("/downloadPdf/{requestId}")
     public ResponseEntity<ByteArrayResource> downloadRequestPdf(@PathVariable int requestId) {
         try {
             Request request = requestRepository.findById(requestId)

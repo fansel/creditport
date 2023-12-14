@@ -136,7 +136,7 @@
     <tbody>
       {#each data.procedures as procedure}
         <tr>
-          <td>{format(parseISO(procedure.createdAt), 'dd.MM.yyyy HH:mm')} </td>
+          <td>{format(new Date(procedure.createdAt), 'dd.MM.yyyy HH:mm')} </td>
           <td>{formatProcdureID(String(procedure.procedureId))} </td>
           <td>{procedure.university ?? '-'}</td>
 
