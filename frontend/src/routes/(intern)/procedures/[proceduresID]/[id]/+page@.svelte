@@ -105,7 +105,7 @@
       <div class="pdf-container">
         <div class="pdf-content">
           {#if request.pdfExists}
-            <iframe src="{config.pdf_endpoint + request.requestId}" class="pdf-iframe" title="pdf" />
+            <iframe src="{config.pdf_endpoint + request.requestId}#zoom=FitH" class="pdf-iframe" title="pdf" />
           {:else}
             <iframe src="https://www.orimi.com/pdf-test.pdf#zoom=FitH" class="pdf-iframe" title="pdf" />
           {/if}
