@@ -19,7 +19,6 @@
       </div>
       <div class="card-body">
         <a href="/procedures" class="btn btn-sm btn-outline-secondary">Zu den Vorgängen</a>
-        <a href="/procedures" class="btn btn-sm btn-outline-secondary float-end">Bearbeiten</a>
       </div>
     </div>
   </div>
@@ -31,7 +30,6 @@
       </div>
       <div class="card-body">
         <a href="/procedures" class="btn btn-sm btn-outline-secondary">Zu den Vorgängen</a>
-        <a href="/procedures" class="btn btn-sm btn-outline-secondary float-end">Neu</a>
       </div>
     </div>
   </div>
@@ -43,7 +41,6 @@
       </div>
       <div class="card-body">
         <a href="/procedures" class="btn btn-sm btn-outline-secondary">Zu den Jobs</a>
-        <a href="/procedures" class="btn btn-sm btn-outline-secondary float-end">Neu</a>
       </div>
     </div>
   </div>

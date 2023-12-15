@@ -91,7 +91,9 @@
                   </select>
                 </div>
 
-                <p>{modules[moduleData.selectedModul].moduleDescription ?? ''}</p>
+                {#if modules[moduleData.selectedModul].moduleDescription}
+                <p class="moduleDescription border p-3 rounded">{modules[moduleData.selectedModul].moduleDescription ?? ''}</p>
+                {/if}
               </div>
             </div>
             <div class="form-floating">
@@ -130,6 +132,11 @@
     background-color: var(--bs-accordion-bg);
     /* border-bottom: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important; */
     box-shadow: none;
+  }
+
+  .moduleDescription {
+    max-height: 155px;
+    overflow-y: auto;
   }
 
 
