@@ -70,7 +70,7 @@
 
                 <div class="mb-3">
                   <label for="formFile" class="form-label">Modulbeschreibung<i class="bi bi-question-circle ms-2" /> </label>
-                  <input class="form-control" type="file" name={`formFile${index}`} id={`formFile${index}`} />
+                  <input class="form-control" type="file" name={`formFile${index}`} id={`formFile${index}`} accept="application/pdf" />
                 </div>
 
                 <div class="mb-3">
@@ -92,7 +92,7 @@
                 </div>
 
                 {#if modules[moduleData.selectedModul].moduleDescription}
-                <p class="moduleDescription border p-3 rounded">{modules[moduleData.selectedModul].moduleDescription ?? ''}</p>
+                  <p class="moduleDescription border p-3 rounded">{modules[moduleData.selectedModul].moduleDescription ?? ''}</p>
                 {/if}
               </div>
             </div>
@@ -138,7 +138,6 @@
     max-height: 155px;
     overflow-y: auto;
   }
-
 
   /* .form-control::placeholder {
     color: red;
