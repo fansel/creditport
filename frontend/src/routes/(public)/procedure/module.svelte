@@ -43,26 +43,30 @@
             <div class="row">
               <div class="col-md-10">
                 <div class="mb-3">
-                  <label for="" class="mb-2">Name des Moduls</label>
-                  <input type="text" class="form-control" name={`externalModule${index}`} id={`externalModule${index}`} placeholder="Modellierung und Programmierung"/>
+                  <label for={`externalModule${index}`} class="mb-2">Name des Moduls</label>
+                  <input type="text" class="form-control" name={`externalModule${index}`} id={`externalModule${index}`} placeholder="Modellierung und Programmierung" />
                 </div>
               </div>
               <div class="col-md-2">
                 <div class="mb-3">
-                  <label for="" class="mb-2">LP</label>
+                  <label for={`creditPoints${index}`} class="mb-2">LP</label>
                   <input type="text" class="form-control" name={`creditPoints${index}`} id={`creditPoints${index}`} placeholder="5" />
                 </div>
               </div>
             </div>
 
-            <div class="mb-3">
-              <label for="formFile" class="form-label">Modulbeschreibung<i class="bi bi-question-circle ms-2" /> </label>
-              <input class="form-control" type="file" name={`formFile${index}`} id={`formFile${index}`} />
+              <div class="mb-3 col-md">
+              <label for={`formFile${index}`} class="form-label">Modulbeschreibung<i class="bi bi-question-circle ms-2" /> </label>
+              <input class="form-control mb-3" type="file" name={`formFile${index}`} id={`formFile${index}`} />
+              <div />
 
-              <div class="mb-3">
-                <label for="" class="mb-2">Website zum Modul</label>
+              <div class="row md-3" >
+              <div class="mb-3 col-md">
+                <label for={`moduleLink${index}`} class="form-label">Website zum Modul</label>
                 <input type="text" class="form-control" name={`moduleLink${index}`} id={`moduleLink${index}`} placeholder="http://uni-leipzig.de/module_xyz" />
               </div>
+            </div>
+
             </div>
           </div>
           <div class="col-md">
@@ -70,7 +74,7 @@
 
             <div class="mb-2" />
             <div class="mb-3">
-              <label for="" class="mb-2">Name</label>
+              <label for={`internalModule${index}`} class="mb-2">Name des Moduls</label>
               <select class="form-select" name={`internalModule${index}`} id={`internalModule${index}`} aria-label="Default select example" bind:value={moduleData.selectedModul}>
                 {#each modules as modul, index}
                   <option value={index}>{modul.moduleName}</option>
