@@ -14,7 +14,7 @@
 
   $: modules = data.modules;
 
-  $: console.log($tabProcedureForm);
+  // $: console.log($tabProcedureForm);
 
   //Logik zum wechseln des Tabs
   const tabOrder = ['pills-general', 'pills-module', 'pills-send'];

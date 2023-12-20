@@ -4,7 +4,6 @@
 
   let fields = [];
 
-  $: console.log(uuid);
 
   function clear($event) {
     $event.target.value = '';

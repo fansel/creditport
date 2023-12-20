@@ -25,7 +25,7 @@
       <div class="accordion-item">
         <h2 class="accordion-header" id="headingOne">
           <button class="accordion-button position-relative" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{index}" aria-expanded="false" aria-controls="collapseOne">
-            <h4 class="m-0">{moduleData.title ?? 'Neues Modul'}</h4>
+            <h4 class="m-0">{moduleData.title ? `${moduleData.title} - ${modules[moduleData.selectedModul].moduleName}`: 'Neues Modul'}</h4>
             <button class="btn p-0 position-absolute top-50 end-0 translate-middle-y me-5" on:click={() => removeRequest(index)} type="button"><i class="bi bi-trash3-fill" /> </button>
           </button>
         </h2>
