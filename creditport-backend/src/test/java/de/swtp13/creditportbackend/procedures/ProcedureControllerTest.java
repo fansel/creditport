@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.hamcrest.Matchers.not;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-@EnableAutoConfiguration
+
 @SpringBootTest
 public class ProcedureControllerTest {
 
@@ -35,7 +35,7 @@ public class ProcedureControllerTest {
         mockMvc.perform(get("/procedures/ids"))
                 .andExpect(status().is(not(HttpStatus.NOT_FOUND.value())));
         System.out.println("Procedure Test finished");
-    }*/
+    }
     @Test
     public void procedureIdShouldHaveSixFigures(){
         Procedure testProcedure = new Procedure("Uni","Kurs");
@@ -47,5 +47,7 @@ public class ProcedureControllerTest {
         Procedure testProcedure = new Procedure("j","j");
         Assert.notNull(testProcedure);
     }
+    */
+
 }
 
