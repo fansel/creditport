@@ -1,11 +1,14 @@
 package de.swtp13.creditportbackend.v1.pdf;
 
-import com.itextpdf.kernel.colors.Color;
+import com.google.zxing.WriterException;
+import com.itextpdf.barcodes.BarcodeQRCode;
+import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.colors.DeviceRgb;
 import com.itextpdf.kernel.pdf.*;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.Style;
 import com.itextpdf.layout.element.*;
+import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.properties.*;
 import com.itextpdf.io.source.ByteArrayOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,9 @@ import de.swtp13.creditportbackend.v1.procedures.ProcedureRepository;
 import de.swtp13.creditportbackend.v1.requests.Request;
 import de.swtp13.creditportbackend.v1.requests.RequestRepository;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -47,6 +53,7 @@ public class PdfService {
             setDocumentMargins(document);
             addHeadingToDocument(document, procedure);
             addTableToDocument(document, requests);
+            generateQRCodeImage(document,"http://localhost:5173/status/"+procedureId);
             addFooterToDocument(document, procedure);
 
             document.close();
@@ -54,6 +61,8 @@ public class PdfService {
         } catch (IOException e) {
             System.err.println("Error while creating PDF: " + e.getMessage());
             return Optional.empty();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -140,5 +149,21 @@ public class PdfService {
                 .add(new Paragraph(content))
                 .addStyle(cellStyle);
     }
+
+    //addQRCodeToDocument(document, procedure);
+
+
+    private void generateQRCodeImage(Document document, String url) throws Exception {
+        int qrCodeSize = 100; // Higher resolution for initial QR code
+        BarcodeQRCode barcodeQRCode = new BarcodeQRCode(url);
+        Image qrCodeImage = new Image(barcodeQRCode.createFormXObject(document.getPdfDocument()))
+                .setHorizontalAlignment(HorizontalAlignment.CENTER)
+                .setWidth(qrCodeSize)
+                .setHeight(qrCodeSize);
+
+        document.add(qrCodeImage);
+    }
+
+
 }
 
