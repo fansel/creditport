@@ -1,5 +1,8 @@
 <script>
   import { format } from 'date-fns';
+  import Status from '$lib/components/Status.svelte';
+
+  export let data;
 </script>
 
 <h1 class="my-3">Dashboard</h1>
@@ -11,36 +14,33 @@
     mb-3"
     >
       <div class="card-header">
-        <h2 class="fs-1">2</h2>
+        <h2 class="fs-1">{data.open_procedures}</h2>
         <p>Offen</p>
       </div>
       <div class="card-body">
         <a href="/procedures" class="btn btn-sm btn-outline-secondary">Zu den Vorgängen</a>
-        <a href="/procedures" class="btn btn-sm btn-outline-secondary float-end">Bearbeiten</a>
       </div>
     </div>
   </div>
   <div class="col-md">
     <div class="card mb-3">
       <div class="card-header">
-        <h2 class="fs-1">2</h2>
+        <h2 class="fs-1">{data.processing_procdures}</h2>
         <p>In Bearbeitung</p>
       </div>
       <div class="card-body">
         <a href="/procedures" class="btn btn-sm btn-outline-secondary">Zu den Vorgängen</a>
-        <a href="/procedures" class="btn btn-sm btn-outline-secondary float-end">Neu</a>
       </div>
     </div>
   </div>
   <div class="col-md">
     <div class="card mb-3">
       <div class="card-header">
-        <h2 class="fs-1">2</h2>
+        <h2 class="fs-1">{data.archived_procedures}</h2>
         <p>Archiviert</p>
       </div>
       <div class="card-body">
         <a href="/procedures" class="btn btn-sm btn-outline-secondary">Zu den Jobs</a>
-        <a href="/procedures" class="btn btn-sm btn-outline-secondary float-end">Neu</a>
       </div>
     </div>
   </div>
@@ -55,15 +55,16 @@
       <div class="card-body overflow-y-auto p-0">
         <table class="log-table text-left table-responsive">
           <tbody>
+            {#each data.procedures as procedure}
             <tr>
-              <td>{format(new Date(), 'dd-MM-yyyy')}</td>
-              <td>{format(new Date(), 'HH:mm')}</td>
+              <td>{format(new Date(procedure.createdAt), 'dd-MM-yyyy')}</td>
+              <td>{format(new Date(procedure.createdAt), 'HH:mm')}</td>
 
-              <td>Universität Halle</td>
+              <td>{procedure.university ?? '-'}</td>
 
-              <td>Bachelor Informatik</td>
-              <td><span class="badge bg-primary rounded-pill">5 Anträge</span></td>
-              <td><span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill">eingereicht</span></td>
+              <td>{procedure.courseName ?? '-'}</td>
+              <td><span class="badge bg-primary rounded-pill">{procedure.requests.length} Anträge</span></td>
+              <td><Status status={procedure.status} /></td>
 
               <td class="float-end">
                 <a type="button" href="/procedures" class="btn btn-sm btn-outline-primary ms-2 me-2">
@@ -71,6 +72,7 @@
                 </a>
               </td>
             </tr>
+            {/each}
           </tbody>
         </table>
 

@@ -4,7 +4,6 @@ import de.swtp13.creditportbackend.v1.procedures.dto.ProcedureRequestDTO;
 import de.swtp13.creditportbackend.v1.procedures.dto.ProcedureResponseDTO;
 import de.swtp13.creditportbackend.v1.procedures.dto.RequestDTO;
 import de.swtp13.creditportbackend.v1.procedures.dto.RequestResponseDTO;
-import de.swtp13.creditportbackend.v1.procedures.util.IDGenerator;
 import de.swtp13.creditportbackend.v1.requests.RequestRepository;
 import de.swtp13.creditportbackend.v1.requests.Request;
 import jakarta.transaction.Transactional;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -50,6 +48,9 @@ public class ProcedureService {
 
     @Transactional
     public ProcedureResponseDTO createProcedureFromDTO(ProcedureRequestDTO procedureRequestDTO) {
+        if (procedureRequestDTO.getRequests() == null || procedureRequestDTO.getRequests().isEmpty())
+            return null;
+
         // Create a new Procedure entity
         Procedure newProcedure = new Procedure();
 

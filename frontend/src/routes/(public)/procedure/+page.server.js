@@ -1,90 +1,103 @@
 import * as api from '$lib/api.js';
-import { zfd } from 'zod-form-data';
+import { file, zfd } from 'zod-form-data';
 import z from 'zod';
-import { fail } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ params }) {
   const modules = await api.get('modules');
 
   return {
-    modules: modules
+    modules: modules,
+    title: 'Vorgang erstellen'
   };
 }
 
-/** @type {import('./$types').Actions} */
-//Einträge
-function createMultipleEntries(numEntries) {
-  const entries = [];
-  for (let i = 0; i < numEntries; i++) {
-    const entry = {
-      ['creditPoints' + i]: zfd.text(), // vielleicht besser als Zahl
-      // ['modulbeschreibung' + i]: zfd.file(z.instanceof(File).optional()),
-      ['externalModule' + i]: zfd.text(),
-      ['internalModule' + i]: zfd.text(),
-      ['moduleWbsite' + i]: zfd.text(),
-      ['annotation' + i]: zfd.text()
-    };
-    entries.push(entry);
+function createDynamicSchema(count) {
+  const dynamicFields = {};
+
+  for (let i = 0; i < count; i++) {
+    const creditPoints = `creditPoints${i}`;
+    const externalModule = `externalModule${i}`;
+    const internalModule = `internalModule${i}`;
+    const moduleLink = `moduleLink${i}`;
+    const annotation = `annotation${i}`;
+    const formFile = `formFile${i}`;
+
+    dynamicFields[creditPoints] = zfd.numeric(); // Hier kannst du den Validatortyp anpassen
+    dynamicFields[externalModule] = zfd.text();
+    dynamicFields[internalModule] = zfd.text();
+    dynamicFields[moduleLink] = zfd.text(z.string().optional());
+    dynamicFields[annotation] = zfd.text(z.string().optional());
+    dynamicFields[formFile] = zfd.file(z.instanceof(File).optional());
   }
-  return entries;
+
+  return zfd.formData({
+    globalAnnotation: zfd.text(z.string().optional()),
+    university: zfd.text(),
+    externalCourseName: zfd.text(),
+    ...dynamicFields
+  });
 }
 
+/** @type {import('./$types').Actions} */
 export const actions = {
   requests: async ({ request }) => {
     const formData = await request.formData();
 
     const modulesCount = formData.get('modulesCount') || 0;
-
-    console.log(modulesCount);
-
-    // console.log(createMultipleEntries(2))
-
-    const schema = zfd.formData({
-      globalAnnotation: zfd.text()
-      //university: zfd.text(),
-      //courseName: zfd.text()
-      // ...createMultipleEntries(1),
-    });
-
+    const schema = createDynamicSchema(modulesCount);
     const result = schema.safeParse(formData);
-    console.log(result.success);
+
     if (!result.success) {
-      const data = {
-        data: Object.fromEntries(formData),
-        errors: result.error.flatten().fieldErrors
-      };
-      console.log(data);
-      return fail(400, data);
+      // const data = {
+      //   data: Object.fromEntries(formData),
+      //   errors: result.error.flatten().fieldErrors
+      // };
+      return fail(400, {});
     }
 
-    // console.log(result.data)
+    function createBody(count) {
+      const bodyFields = [];
 
-    //result.data.text
-    //result.data.pdf ->
+      for (let i = 0; i < count; i++) {
+        const field = {
+          externalModule: result.data[`externalModule${i}`],
+          internalModule: result.data[`internalModule${i}`],
+          annotation: result.data[`annotation${i}`],
+          creditPoints: result.data[`creditPoints${i}`],
+          moduleLink: result.data[`moduleLink${i}`]
+        };
 
-    //const fileUpload1 = { file: result.data.file };
+        bodyFields.push(field);
+      }
 
-    //http://localhost:8080/api/v1/ + path
-    //const body = result.data
-    const body = {
-      annotation: 'test',
-      university: 'test1',
-      courseName: 'test2',
-      requests: [
-        {
-          externalModule: 'Module 1',
-          internalModule: 'Internal Module 1',
-          annotation: 'Test annotation for request 1',
-          creditPoints: 5
-        }
-      ]
-    };
+      return {
+        annotation: result.data.globalAnnotation,
+        university: result.data.university,
+        courseName: result.data.externalCourseName,
+        requests: bodyFields
+      };
+    }
+
+    const body = createBody(modulesCount);
 
     const res = await api.post('procedures', body, null, { req_type: api.content_type.json, res_type: api.content_type.json });
+
     console.log(res);
 
-    return { success: true, procedureId: res.procedureId };
+    for (let i = 0; i < modulesCount; i++) {
+      // Nur wenn eine PDF vorhanden ist soll auch eine abgeschickt werden
+      if (result.data[`formFile${i}`]) {
+        const fileUpload = new FormData();
+        fileUpload.append('file', result.data[`formFile${i}`]);
+        const resPDF = await api.post(`pdf/upload/${res.requests[i].requestId}`, fileUpload, null, { req_type: api.content_type.form_data, res_type: api.content_type.plain });
+        console.log(resPDF);
+      }
+    }
+
+    throw redirect(302, `/status/${res.procedureId}`);
+    // return { success: true, procedureId: res.procedureId };
     //zugriff $page.form.procesureId
   }
 };

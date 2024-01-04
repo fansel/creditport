@@ -7,6 +7,7 @@
   export let action;
   export let method = 'POST';
   export let reset = true;
+  export let min_width = '50rem';
 
   let dialog; // HTMLDialogElement
   let form; //HTMLFormElement
@@ -28,7 +29,7 @@
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
-<dialog bind:this={dialog} on:close={() => (showModal = false)}>
+<dialog bind:this={dialog} on:close={() => (showModal = false)} style="min-width: {min_width};">
   <div class="header border-bottom">
     <slot name="headline" />
     <button class="btn-close" type="button" aria-label="Close" on:click={() => closeDialog()} />
@@ -54,9 +55,9 @@
     padding: 0;
   }
 
-  @media screen and (max-width: 450px) {
+  @media screen and (max-width: 1200px) {
     dialog {
-      min-width: calc(100vw - 3rem);
+      min-width: calc(100vw - 3rem) !important ;
     }
   }
 

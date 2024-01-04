@@ -4,6 +4,7 @@
 
   let fields = [];
 
+
   function clear($event) {
     $event.target.value = '';
   }
@@ -53,7 +54,7 @@
 
   function submit() {
     //Baue noch einen Check ein ob auch wirklich alle Felder eingetragen sind
-
+    uuid = '';
     fields.forEach((field, index) => {
       uuid += field.value;
       field.disabled = true;
@@ -75,7 +76,7 @@
   <h1 class="display-4 fw-bold text-body-emphasis">Statusabfrage</h1>
   <p class="lead">Gib deine Vorgangsnummer an und erhalte alle Infos zum aktuellen Bearbeitungsstand deines Vorgangs.</p>
 
-  <div class="mt mb-4">
+  <div class="mt p-4">
     <div class="digit-field mb-4">
       {#each [1, 2, 3, 4, 5, 6] as nb, index}
         <input type="text" class="digit" maxlength="1" bind:this={fields[index]} on:focus={clear} on:keydown={clear} on:paste={onPaste} on:keyup={onKeyUp} />

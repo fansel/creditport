@@ -5,98 +5,150 @@
   export let removeRequest;
   export let generalData;
   export let modules;
-  export let activeTab;
+  // export let activeTab;
   export let goToNextTab;
   export let addRequest;
 </script>
 
 <!-- Tab Module -->
 
-<h1>Überschrift</h1>
+<!-- <h1>Anträge zur Modulanrechnung von Modulen der {generalData.university}</h1> -->
 
-<form action="?/requests" method="POST" enctype="multipart/form-data" use:enhance id="requests" bind:this={modulesForm}>
+<form action="?/requests" method="POST" enctype="multipart/form-data" id="requests" bind:this={modulesForm} use:enhance>
   <input type="hidden" name="globalAnnotation" value={generalData.annotation} />
-  <input type="hidden" name="university" value={generalData.universitiy} />
-  <input type="hidden" name="courseName" value={generalData.externalCourseName} />
+  <input type="hidden" name="university" id="university" value={generalData.university} />
+  <input type="hidden" name="externalCourseName" id="externalCourseName" value={generalData.externalCourseName} />
   <input type="hidden" name="modulesCount" bind:value={requests.length} />
-  {#each requests as { moduleData }, index (index)}
+
+  <div class="accordion" id="accordionExample">
+    {#each requests as { moduleData }, index (index)}
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingOne">
+          <button class="accordion-button position-relative" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{index}" aria-expanded="false" aria-controls="collapseOne">
+            <h4 class="m-0">{moduleData.title ? `${moduleData.title} - ${modules[moduleData.selectedModul].moduleName}`: 'Neues Modul'}</h4>
+            <button class="btn p-0 position-absolute top-50 end-0 translate-middle-y me-5" on:click={() => removeRequest(index)} type="button"><i class="bi bi-trash3-fill" /> </button>
+          </button>
+        </h2>
+        <div id="collapse{index}" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+          <div class="accordion-body">
+            <div class="row">
+              <div class="col-md">
+                <h2 class="h4">Fremdmodul</h2>
+
+                <!-- <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="" class="mb-2">Universität</label>
+                  <input type="text" class="form-control" name={`fremduni${index}`} value={generalData.uni} />
+                </div>
+                <div class="col-md-6">
+                  <label for="" class="mb-2">Studiengang</label>
+                  <input type="text" class="form-control" name={`fremdstudiengang${index}`} value={generalData.formerStudies} />
+                </div>
+              </div> -->
+
+                <div class="row">
+                  <div class="col-md-10">
+                    <div class="mb-3">
+                      <label for="" class="mb-2">Name des Moduls</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        name={`externalModule${index}`}
+                        id={`externalModule${index}`}
+                        placeholder="Modellierung und Programmierung"
+                        bind:value={moduleData.title}
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="mb-3">
+                      <label for="" class="mb-2">LP</label>
+                      <input type="number" class="form-control" name={`creditPoints${index}`} id={`creditPoints${index}`} placeholder="5" />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="formFile" class="form-label">Modulbeschreibung<i class="bi bi-question-circle ms-2" /> </label>
+                  <input class="form-control" type="file" name={`formFile${index}`} id={`formFile${index}`} accept="application/pdf" />
+                </div>
+
+                <div class="mb-3">
+                  <label for="" class="mb-2">Website zum Modul</label>
+                  <input type="text" class="form-control" name={`moduleLink${index}`} id={`moduleLink${index}`} placeholder="http://uni-leipzig.de/module_xyz" />
+                </div>
+              </div>
+              <div class="col-md">
+                <h2 class="h4">Modulvorschlag</h2>
+
+                <div class="mb-2" />
+                <div class="mb-3">
+                  <label for="" class="mb-2">Name</label>
+                  <select class="form-select" name={`internalModule${index}`} id={`internalModule${index}`} aria-label="Default select example" bind:value={moduleData.selectedModul}>
+                    {#each modules as modul, index}
+                      <option value={index}>{modul.moduleName}</option>
+                    {/each}
+                  </select>
+                </div>
+
+                {#if modules[moduleData.selectedModul].moduleDescription}
+                  <p class="moduleDescription border p-3 rounded">{modules[moduleData.selectedModul].moduleDescription ?? ''}</p>
+                {/if}
+              </div>
+            </div>
+            <div class="form-floating">
+              <textarea class="form-control" name={`annotation${index}`} placeholder="Leave a comment here" id={`annotation${index}`} style="height: 100px" />
+              <label for={`annotation${index}`}>Kommentare</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    {/each}
+  </div>
+
+  <!-- {#each requests as { moduleData }, index (index)}
     <div class="card w-100 mb-3" key={index}>
       <div class="card-body">
         <div class="position-relative">
           <button class="btn btn-primary position-absolute top-0 end-0" on:click={() => removeRequest(index)} type="button">Antrag löschen</button>
         </div>
-        <div class="row">
-          <div class="col-md">
-            <h2 class="h4">Fremdmodul</h2>
-
-            <!-- <div class="row">
-              <div class="col-md-6 mb-3">
-                <label for="" class="mb-2">Universität</label>
-                <input type="text" class="form-control" name={`fremduni${index}`} value={generalData.uni} />
-              </div>
-              <div class="col-md-6">
-                <label for="" class="mb-2">Studiengang</label>
-                <input type="text" class="form-control" name={`fremdstudiengang${index}`} value={generalData.formerStudies} />
-              </div>
-            </div> -->
-
-            <div class="row">
-              <div class="col-md-10">
-                <div class="mb-3">
-                  <label for="" class="mb-2">Name des Moduls</label>
-                  <input type="text" class="form-control" name={`externalModule${index}`} placeholder="Modellierung und Programmierung" />
-                </div>
-              </div>
-              <div class="col-md-2">
-                <div class="mb-3">
-                  <label for="" class="mb-2">LP</label>
-                  <input type="text" class="form-control" name={`creditPoints${index}`} placeholder="5" />
-                </div>
-              </div>
-            </div>
-
-            <!-- <div class="mb-3">
-              <label for="formFile" class="form-label">Modulbeschreibung<i class="bi bi-question-circle ms-2" /> </label>
-              <input class="form-control" type="file" name={`modulbeschreibung${index}`} id="formFile" />
-            </div> -->
-
-            <div>
-              <div class="mb-3">
-                <label for="" class="mb-2">Website zum Modul</label>
-                <input type="text" class="form-control" name={`website${index}`} placeholder="http://uni-leipzig.de/module_xyz" />
-              </div>
-            </div>
-          </div>
-          <div class="col-md">
-            <h2 class="h4">Modul Vorschlag</h2>
-
-            <div class="mb-2" />
-            <div class="mb-3">
-              <label for="" class="mb-2">Name</label>
-              <select class="form-select" name={`internalModule${index}`} aria-label="Default select example" bind:value={moduleData.selectedModul}>
-                {#each modules as modul, index}
-                  <option value={index}>{modul.moduleName}</option>
-                {/each}
-              </select>
-            </div>
-
-            <p>{modules[moduleData.selectedModul].moduleDescription ?? ''}</p>
-          </div>
-        </div>
-        <div class="form-floating">
-          <textarea class="form-control" name={`annotation${index}`} placeholder="Leave a comment here" id="floatingTextarea" style="height: 100px" />
-          <label for="floatingTextarea">Kommentare</label>
-        </div>
       </div>
-      {activeTab === 'pills-general' ? 'active' : ''}
     </div>
-  {/each}
-  <hr />
-  <button type="button" class="btn btn-primary" on:click={goToNextTab}>Weiter</button>
+  {/each} -->
+  <div class="my-3 d-flex justify-content-between">
+    <button class="btn btn-primary d-inline-flex align-items-center" type="button" on:click={addRequest}>Modul hinzufügen<i class="ms-2 bi bi-plus-circle" /></button>
+    <!-- <button type="button" class="btn btn-primary">Alle ausklappen</button> -->
 
-  <div class="w-100 d-inline-flex justify-content-center">
-    <button class="btn btn-primary" on:click={addRequest}>
-      <i class="bi bi-plus-circle" style="font-size: 2rem;" />
-    </button>
+    <button type="button" class="btn btn-primary" on:click={goToNextTab}>Weiter</button>
   </div>
 </form>
+
+<style>
+  .accordion-button:focus {
+    box-shadow: none;
+  }
+
+  .accordion-button:not(.collapsed) {
+    background-color: var(--bs-accordion-bg);
+    /* border-bottom: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important; */
+    box-shadow: none;
+  }
+
+  .moduleDescription {
+    max-height: 155px;
+    overflow-y: auto;
+  }
+
+  /* .form-control::placeholder {
+    color: red;
+    opacity: 1; 
+  }
+
+  .form-control:-ms-input-placeholder {
+    color: red;
+  }
+
+  .form-control::-ms-input-placeholder {
+    color: red;
+  } */
+</style>
