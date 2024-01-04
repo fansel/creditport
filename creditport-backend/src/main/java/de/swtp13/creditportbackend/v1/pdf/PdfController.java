@@ -8,6 +8,7 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Objects;
 
 @RestController
@@ -72,7 +73,7 @@ public class PdfController {
 
     //create overview pdf for an procedure with all requests
     @GetMapping("/overview/{procedureId}")
-    public ResponseEntity<ByteArrayResource> overview(@PathVariable int procedureId) {
+    public ResponseEntity<ByteArrayResource> overview(@PathVariable int procedureId) throws IOException {
         return pdfService.createOverview(procedureId)
                 .map(pdfContent -> {
                     ByteArrayResource resource = new ByteArrayResource(pdfContent);
@@ -85,7 +86,6 @@ public class PdfController {
 
                     return new ResponseEntity<>(resource, headers, HttpStatus.OK);
                 })
-               // return the error message if the procedure is not found
                 .orElse(ResponseEntity.notFound().build());
     }
 
