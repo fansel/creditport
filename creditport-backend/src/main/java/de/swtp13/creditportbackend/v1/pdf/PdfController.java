@@ -20,6 +20,9 @@ public class PdfController {
     @Autowired
     private RequestRepository requestRepository;
 
+    @Autowired
+    private PdfService pdfService;
+
     @PostMapping("/upload/{requestId}")
     public ResponseEntity<String> uploadPdf(@PathVariable int requestId, @RequestParam("file") MultipartFile file) {
         if (file.isEmpty() || !Objects.equals(file.getContentType(), "application/pdf")) {
@@ -64,6 +67,29 @@ public class PdfController {
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
+
+
+
+    //create overview pdf for an procedure with all requests
+    @GetMapping("/overview/{procedureId}")
+    public ResponseEntity<ByteArrayResource> overview(@PathVariable int procedureId) {
+        return pdfService.createOverview(procedureId)
+                .map(pdfContent -> {
+                    ByteArrayResource resource = new ByteArrayResource(pdfContent);
+
+                    HttpHeaders headers = new HttpHeaders();
+                    headers.setContentType(MediaType.APPLICATION_PDF);
+                    headers.setContentDisposition(ContentDisposition.builder("inline").filename("procedure_" + procedureId + ".pdf").build());
+                    headers.add("Access-Control-Allow-Origin", "*");
+                    headers.add("Content-Security-Policy", "frame-ancestors 'self' http://localhost:*");
+
+                    return new ResponseEntity<>(resource, headers, HttpStatus.OK);
+                })
+               // return the error message if the procedure is not found
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+
 
 
     }
