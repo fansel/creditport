@@ -1,9 +1,11 @@
 package de.swtp13.creditportbackend.v1.pdf;
 
-import com.google.zxing.WriterException;
 import com.itextpdf.barcodes.BarcodeQRCode;
+import com.itextpdf.io.font.constants.StandardFonts;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.colors.DeviceRgb;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.pdf.*;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.Style;
@@ -35,6 +37,9 @@ public class PdfService {
     @Autowired
     private RequestRepository requestRepository;
 
+    public PdfService() throws IOException {
+    }
+
     public Optional<byte[]> createOverview(int procedureId) {
         Optional<Procedure> procedureOptional = procedureRepository.findById(procedureId);
         if (!procedureOptional.isPresent()) {
@@ -53,7 +58,7 @@ public class PdfService {
             setDocumentMargins(document);
             addHeadingToDocument(document, procedure);
             addTableToDocument(document, requests);
-            generateQRCodeImage(document,"http://localhost:5173/status/"+procedureId);
+            addQRCodeWithBox(document,"http://localhost:5173/status/"+procedureId);
             addFooterToDocument(document, procedure);
 
             document.close();
@@ -74,15 +79,15 @@ public class PdfService {
     }
 
     private void setDocumentMargins(Document document) {
-        document.setMargins(200, 20, 20, 20);
+        document.setMargins(150, 20, 20, 20);
     }
 
     private void addHeadingToDocument(Document document, Procedure procedure) {
-        Style headingStyle = new Style()
-                .setFontSize(16)
-                .setBold();
-        Paragraph heading = new Paragraph("Dein Antrag: " + procedure.getProcedureId())
-                .setTextAlignment(TextAlignment.LEFT)
+        String firstHaldOfProcedureId = (String.valueOf(procedure.getProcedureId())).substring(0, 3);
+        String secondHaldOfProcedureId = (String.valueOf(procedure.getProcedureId())).substring(3);
+        String procedureIdShow = firstHaldOfProcedureId + "-" + secondHaldOfProcedureId;
+        Paragraph heading = new Paragraph("Dein Antrag: " + procedureIdShow )
+                .setTextAlignment(TextAlignment.CENTER)
                 .addStyle(headingStyle);
         document.add(heading);
     }
@@ -97,6 +102,7 @@ public class PdfService {
                 procedure.getCreatedAt() +
                 " und zuletzt geändert am " +
                 procedure.getLastUpdated())
+                .addStyle(normalStyle)
                 .setTextAlignment(TextAlignment.RIGHT);
         document.add(footer);
     }
@@ -112,7 +118,8 @@ public class PdfService {
     }
 
     private void addHeadersToTable(Table table) {
-        String[] headers = {"Module External", "LP Internal", "Module Internal", "LP External"};
+
+        String[] headers = {"Modul Name (fremd)", "LP", "Modul Name", "LP"};
         for (String header : headers) {
             table.addCell(createHeaderCell(header));
         }
@@ -129,9 +136,11 @@ public class PdfService {
 
     private Cell createHeaderCell(String content) {
         Style headerStyle = new Style()
+                .setBackgroundColor(new DeviceRgb(200, 200, 200)) // Grauer Hintergrund
                 .setBold()
                 .setTextAlignment(TextAlignment.CENTER)
                 .setVerticalAlignment(VerticalAlignment.MIDDLE)
+                .setFont(font)
                 .setFontSize(12);
 
         return new Cell()
@@ -153,16 +162,47 @@ public class PdfService {
     //addQRCodeToDocument(document, procedure);
 
 
-    private void generateQRCodeImage(Document document, String url) throws Exception {
-        int qrCodeSize = 100; // Higher resolution for initial QR code
+    private void addQRCodeWithBox(Document document, String url) throws Exception {
         BarcodeQRCode barcodeQRCode = new BarcodeQRCode(url);
         Image qrCodeImage = new Image(barcodeQRCode.createFormXObject(document.getPdfDocument()))
-                .setHorizontalAlignment(HorizontalAlignment.CENTER)
-                .setWidth(qrCodeSize)
-                .setHeight(qrCodeSize);
+                .setWidth(100)
+                .setHeight(100)
+                .setBorderRadius(new BorderRadius(10))
+                .setHorizontalAlignment(HorizontalAlignment.RIGHT);
+        Paragraph qrText = new Paragraph("Deinen Status abfragen:")
+                .setFontSize(14)
+                .setBold()
+                .setTextAlignment(TextAlignment.LEFT);  // Text linksbündig
 
-        document.add(qrCodeImage);
+        Div qrCodeContainer = new Div()
+                .add(qrCodeImage).setHorizontalAlignment(HorizontalAlignment.RIGHT)
+                .add(qrText).setVerticalAlignment(VerticalAlignment.MIDDLE).setHorizontalAlignment(HorizontalAlignment.LEFT)
+                .setMarginTop(20)
+                .setBorderRadius(new BorderRadius(10))
+                .setBackgroundColor(new DeviceRgb(200, 200, 200))
+                .setPadding(10)
+                .setMarginLeft(10)
+                .setHeight(100); // Abstand zwischen Text und QR-Code
+
+
+
+        document.add(qrCodeContainer);
     }
+
+
+
+    PdfFont font = PdfFontFactory.createFont(StandardFonts.HELVETICA);
+    Style normalStyle = new Style()
+            .setFont(font)
+            .setFontSize(12);
+
+    Style headingStyle = new Style()
+            .setFont(font)
+            .setFontSize(16)
+            .setBold();
+
+
+
 
 
 }
