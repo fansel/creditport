@@ -8,6 +8,7 @@
   import { format, parseISO } from 'date-fns';
   import { getNachfolger, getVorgänger } from '$lib/util';
   import { page } from '$app/stores';
+  import Comment from './Comment.svelte';
 
   export let data;
 
@@ -82,15 +83,6 @@
         {/if}
       {/if}
 
-      <!-- {#if relatedRequests(request) != 1}
-        <button type="button" class="btn btn-sm btn-outline-primary" onclick="window.location.href=/procedures/1/{requestId - 1}"><i class="bi bi-arrow-left" /> </button>
-      {/if}
-      {#if relatedRequests(request) != -1}
-        <button type="button" class="btn btn-sm btn-outline-primary" onclick="window.location.href='/procedures/1/{requestId + 1}'">
-          <i class="bi bi-arrow-right" />
-        </button>
-      {/if} -->
-
       <div class="btn-group dropend">
         <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ähnliche Anträge</button>
         <div class="dropdown-menu">
@@ -135,67 +127,14 @@
             <div class="col">
               <p class="mb-1"><strong>Status</strong> <Status status={request.status} /></p>
 
-              <!-- 
-              <div class="btn-group dropend">
-                <button
-                  type="button"
-                  class="btn bg-{statusColor}-subtle border border-{statusColor}-subtle text-{statusColor}-emphasis rounded-pill dropdown-toggle"
-                  data-bs-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  {statusText}
-                </button>
-                <div class="dropdown-menu" id="myDropdown">
-                  <button class="dropdown-item" on:click={() => updateStatus(6)}>{getStatus(6).statusText}</button>
-                  <button class="dropdown-item" on:click={() => updateStatus(3)}>{getStatus(3).statusText}</button>
-                  <button class="dropdown-item" on:click={() => updateStatus(7)}>{getStatus(7).statusText}</button>
-                  <button class="dropdown-item" on:click={() => updateStatus(8)}>{getStatus(8).statusText}</button>
-                  <button class="dropdown-item" on:click={() => updateStatus(9)}>{getStatus(9).statusText}</button>
-                  <button class="dropdown-item" on:click={() => updateStatus(10)}>{getStatus(10).statusText}</button>
-                </div>
-              </div>
-            </div> -->
-
               <!-- studianzeige -->
               <div class="col">
                 <p class="mb-1"><strong>Auf Statusseite</strong><Status status={request.status} extern={true} /></p>
-
-                <!--               
-
-              <div class="btn bg-{statusColor}-subtle border border-{statusColor}-subtle text-{statusColor}-emphasis rounded-pill">
-                {#if request.status === 7 || request.status === 8}
-                  {getStatus(3).statusText}
-                {:else}{statusText}
-                {/if}
-              </div> -->
               </div>
             </div>
           </div>
 
-          <div class="form-row mb-2">
-            <ul class="nav nav-tabs" id="myTab" role="tablist">
-              <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="studi-tab" data-bs-toggle="tab" data-bs-target="#studi-tab-pane" type="button" role="tab" aria-controls="studi-tab-pane" aria-selected="true"
-                  >Studierende</button
-                >
-              </li>
-              <li class="nav-item" role="presentation">
-                <button class="nav-link" id="office-tab" data-bs-toggle="tab" data-bs-target="#office-tab-pane" type="button" role="tab" aria-controls="office-tab-pane" aria-selected="false"
-                  >Prüfungsauschuss</button
-                >
-              </li>
-            </ul>
-
-            <div class="tab-content" id="myTabContent">
-              <div class="tab-pane fade show active" id="studi-tab-pane" role="tabpanel" aria-labelledby="studi-tab" tabindex="0">
-                <textarea class="form-control" id="input" placeholder="Begründen Sie Ihren Entscheid..." rows="4" name="comment">{request.annotation ?? ''}</textarea>
-              </div>
-              <div class="tab-pane fade" id="office-tab-pane" role="tabpanel" aria-labelledby="office-tab" tabindex="0">
-                <textarea class="form-control" id="input" placeholder="Begründen Sie Ihren Entscheid..." rows="4" name="comment">{request.comment_student ?? ''}</textarea>
-              </div>
-            </div>
-          </div>
+          <Comment bind:request={data.request} />
 
           <div class="btn btn-primary">Speichern</div>
           <div class="btn btn-outline-secondary">Abbrechen</div>
