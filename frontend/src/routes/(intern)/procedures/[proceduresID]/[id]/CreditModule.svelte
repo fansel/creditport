@@ -1,4 +1,4 @@
-<script>
+<!-- <script>
   import { page } from '$app/stores';
 
   export let modules = $page.data.modules;
@@ -11,4 +11,4 @@
       <option value={index}>{modul.moduleName}</option>
     {/each}
   </select>
-</div>
+</div> -->

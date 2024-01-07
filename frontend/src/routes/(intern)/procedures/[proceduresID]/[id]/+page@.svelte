@@ -64,7 +64,7 @@
           <div class="col-6"><strong>Antrag erstellt am </strong><br />{format(new Date(request.createdAt), 'dd.MM.yyyy HH:mm')}</div>
         </div>
 
-        <CreditModule />
+        <!-- <CreditModule /> -->
 
         <div class="col mb-3">
           <div class="row">
