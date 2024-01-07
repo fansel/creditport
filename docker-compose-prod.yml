@@ -35,6 +35,7 @@ services:
       - PUBLIC_ENV=production
       - PUBLIC_SECURE_CONNECTION=false
       - ORIGIN=http://172.26.92.92:3000
+      - PUBLIC_PDF_ENDPOINT=http://172.26.92.92:8080/pdf/download/
     networks:
       - creditport-net
     restart: unless-stopped

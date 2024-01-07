@@ -12,7 +12,7 @@
   let dialog;
   let input;
 
-  $: console.log(procedure);
+  // $: console.log(procedure);
 
   //Wenn das Modal neu geöffnet wird werden alle relevanten Werte neue gesetzt
   // $: if (showModal) {

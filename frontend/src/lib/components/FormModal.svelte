@@ -55,9 +55,9 @@
     padding: 0;
   }
 
-  @media screen and (max-width: 450px) {
+  @media screen and (max-width: 1200px) {
     dialog {
-      min-width: calc(100vw - 3rem);
+      min-width: calc(100vw - 3rem) !important ;
     }
   }
 
