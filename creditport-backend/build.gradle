@@ -29,9 +29,11 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'org.postgresql:postgresql'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'com.itextpdf:itext7-core:8.0.0'
 	//lombok can be used to reduce boilerplate code
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+
 
 
 

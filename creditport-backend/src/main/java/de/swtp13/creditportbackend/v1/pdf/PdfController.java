@@ -8,6 +8,7 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Objects;
 
 @RestController
@@ -19,6 +20,9 @@ public class PdfController {
 
     @Autowired
     private RequestRepository requestRepository;
+
+    @Autowired
+    private PdfService pdfService;
 
     @PostMapping("/upload/{requestId}")
     public ResponseEntity<String> uploadPdf(@PathVariable int requestId, @RequestParam("file") MultipartFile file) {
@@ -64,6 +68,28 @@ public class PdfController {
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
+
+
+
+    //create overview pdf for an procedure with all requests
+    @GetMapping("/overview/{procedureId}")
+    public ResponseEntity<ByteArrayResource> overview(@PathVariable int procedureId) throws IOException {
+        return pdfService.createOverview(procedureId)
+                .map(pdfContent -> {
+                    ByteArrayResource resource = new ByteArrayResource(pdfContent);
+
+                    HttpHeaders headers = new HttpHeaders();
+                    headers.setContentType(MediaType.APPLICATION_PDF);
+                    headers.setContentDisposition(ContentDisposition.builder("inline").filename("procedure_" + procedureId + ".pdf").build());
+                    headers.add("Access-Control-Allow-Origin", "*");
+                    headers.add("Content-Security-Policy", "frame-ancestors 'self' http://localhost:*");
+
+                    return new ResponseEntity<>(resource, headers, HttpStatus.OK);
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+
 
 
     }
