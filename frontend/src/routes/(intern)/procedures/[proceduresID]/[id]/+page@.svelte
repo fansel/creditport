@@ -1,4 +1,3 @@
-<!-- Hauptbearbeitungsseite mit PDF Vorschau -->
 <script>
   import Status from '$lib/components/Status.svelte';
   import RelatedRequestsExtern from './forms/RelatedRequestsExtern.svelte';
@@ -10,6 +9,7 @@
   import Comment from './Comment.svelte';
   import PDF from './PDF.svelte';
   import Navbar from './Navbar.svelte';
+  import CreditModule from './CreditModule.svelte';
 
   export let data;
 
@@ -62,17 +62,9 @@
       <form action="">
         <div class="row mb-3">
           <div class="col-6"><strong>Antrag erstellt am </strong><br />{format(new Date(request.createdAt), 'dd.MM.yyyy HH:mm')}</div>
-          <!-- <div class="col-6"><strong>zuletzt bearbeitet am</strong><br />{format(request.lastEditedAt, 'dd.MM.yyyy HH:mm')}</div> -->
         </div>
 
-        <div class="mb-3">
-          <label for="" class="mb-2"><strong>Anrechnungsmodul</strong></label>
-          <select class="form-select" aria-label="Default select example" bind:value={selectedModul}>
-            {#each modules as modul, index}
-              <option value={index}>{modul.moduleName}</option>
-            {/each}
-          </select>
-        </div>
+        <CreditModule />
 
         <div class="col mb-3">
           <div class="row">
@@ -102,15 +94,5 @@
     border-top: none;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
-  }
-  /* TODO : buttons in nav-bar müssen ein wenig mehr Abstand zueinander haben */
-  .nav-bar {
-    padding-right: 1rem;
-  }
-
-  /* pdf */
-  .pdf-iframe {
-    width: 100%;
-    height: calc(100vh - 250px);
   }
 </style>
