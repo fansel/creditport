@@ -6,9 +6,10 @@
   import Header from '$lib/components/InternHeader.svelte';
   import * as config from '$lib/config';
   import { format, parseISO } from 'date-fns';
-  import { getNachfolger, getVorgänger } from '$lib/util';
   import { page } from '$app/stores';
   import Comment from './Comment.svelte';
+  import PDF from './PDF.svelte';
+  import Navbar from './Navbar.svelte';
 
   export let data;
 
@@ -16,25 +17,9 @@
   const request = data.request;
   let selectedModul = 0;
 
-  let showModalExtern = false;
-  let showModalIntern = false;
+  export let showModalExtern;
+  export let showModalIntern;
 
-  // APIs (Jetzt noch mit Testsatz, da API nicht steht)
-
-  // let request = {
-  //   procedureID: 1234,
-  //   requestID: 1,
-  //   externalModule: 'Mathe I',
-  //   link: 'https://www.orimi.com/pdf-test.pdf',
-  //   status: 9,
-  //   comment_studies_office: 'Für mich passt das alles soweit, einmal bestätigen',
-  //   comment_student: 'Der Bescheid wurde erfolgreich angenommen.',
-  //   createdAt: new Date(),
-  //   lastEditedAt: new Date()
-  // };
-
-  // $: statusColor = getStatus(request.status).statusColor;
-  // $: statusText = getStatus(request.status).statusText;
   function updateStatus(status) {
     request.status = status;
     closeDropdown();
@@ -45,8 +30,6 @@
     var bootstrapDropdown = new bootstrap.Dropdown(dropdown);
     bootstrapDropdown.hide();
   }
-
-  // Bemerkungsfeld
 </script>
 
 <svelte:head>
@@ -66,43 +49,13 @@
 
 <div class="site position-fixed m-2 w-100">
   <div class="row px-3">
-    <div class="col" />
-
-    <!-- NAVBAR -->
-    <div class="nav-bar my-3" width="100%">
-      {#if request.relatedRequests.length > 0}
-        {#if getVorgänger(request.requestId, request.relatedRequests) != null}
-          <a type="button" class="btn btn-sm btn-outline-primary" rel="external" href="/procedures/{request.procedureId}/{getVorgänger(request.requestId, request.relatedRequests)}">
-            <i class="bi bi-arrow-left" />
-          </a>
-        {/if}
-        {#if getNachfolger(request.requestId, request.relatedRequests) != null}
-          <a type="button" class="btn btn-sm btn-outline-primary" rel="external" href="/procedures/{request.procedureId}/{getNachfolger(request.requestId, request.relatedRequests)}">
-            <i class="bi bi-arrow-right" />
-          </a>
-        {/if}
-      {/if}
-
-      <div class="btn-group dropend">
-        <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ähnliche Anträge</button>
-        <div class="dropdown-menu">
-          <button class="dropdown-item" on:click={() => (showModalExtern = true)}>Module für aktuelles Fremdmodul</button>
-          <button class="dropdown-item" on:click={() => (showModalIntern = true)}>Akzeptierte Fremdmodule für Modulvorschlag</button>
-        </div>
-      </div>
+    <div class="col">
+      <Navbar bind:showModalExtern bind:showModalIntern></Navbar>
     </div>
   </div>
   <div class="row px-3 w-100">
     <div class="col-8">
-      <div class="pdf-container">
-        <div class="pdf-content">
-          {#if request.pdfExists}
-            <iframe src="{config.pdf_endpoint + request.requestId}#zoom=FitH" class="pdf-iframe" title="pdf" />
-          {:else}
-            <iframe src="https://www.orimi.com/pdf-test.pdf#zoom=FitH" class="pdf-iframe" title="pdf" />
-          {/if}
-        </div>
-      </div>
+      <PDF />
     </div>
 
     <div class="col-4">
@@ -134,7 +87,7 @@
             </div>
           </div>
 
-          <Comment bind:request={data.request} />
+          <Comment />
 
           <div class="btn btn-primary">Speichern</div>
           <div class="btn btn-outline-secondary">Abbrechen</div>

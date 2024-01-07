@@ -1,5 +1,7 @@
 <script>
-  export let request;
+  import { page } from '$app/stores';
+
+  export let request = $page.data.request;
 </script>
 
 <div class="form-row mb-2">
