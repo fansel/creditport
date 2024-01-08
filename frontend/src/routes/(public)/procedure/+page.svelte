@@ -6,7 +6,7 @@
 
   export let data;
 
-  //Components
+  //components
   import General from './general.svelte';
   import Tabs from './tabs.svelte';
   import Module from './module.svelte';

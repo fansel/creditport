@@ -23,28 +23,24 @@
   <div class="accordion" id="accordionExample">
     {#each requests as { moduleData }, index (index)}
       <div class="accordion-item">
-        <h2 class="accordion-header" id="headingOne">
-          <button class="accordion-button position-relative" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{index}" aria-expanded="false" aria-controls="collapseOne">
-            <h4 class="m-0">{moduleData.title ? `${moduleData.title} - ${modules[moduleData.selectedModul].moduleName}`: 'Neues Modul'}</h4>
-            <button class="btn p-0 position-absolute top-50 end-0 translate-middle-y me-5" on:click={() => removeRequest(index)} type="button"><i class="bi bi-trash3-fill" /> </button>
-          </button>
-        </h2>
+        <div class="row">
+          <h2 class="accordion-header" id="headingOne">
+            <button class="accordion-button position-relative" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{index}" aria-expanded="false" aria-controls="collapseOne">
+              <div class="col-md col-md-62">
+                <h6 class="h6">{moduleData.title ? `${moduleData.title} ` : 'Neues Modul'}</h6>
+              </div>
+              <div class="col-md">
+                <h6 class="h6">{moduleData.title ? `${modules[moduleData.selectedModul].moduleName}` : 'Neues Modul'}</h6>
+                <button class="btn p-0 position-absolute top-50 end-0 translate-middle-y me-5" on:click={() => removeRequest(index)} type="button"><i class="bi bi-trash3-fill" /> </button>
+              </div>
+            </button>
+          </h2>
+        </div>
         <div id="collapse{index}" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
           <div class="accordion-body">
             <div class="row">
               <div class="col-md">
-                <h2 class="h4">Fremdmodul</h2>
-
-                <!-- <div class="row">
-                <div class="col-md-6 mb-3">
-                  <label for="" class="mb-2">Universität</label>
-                  <input type="text" class="form-control" name={`fremduni${index}`} value={generalData.uni} />
-                </div>
-                <div class="col-md-6">
-                  <label for="" class="mb-2">Studiengang</label>
-                  <input type="text" class="form-control" name={`fremdstudiengang${index}`} value={generalData.formerStudies} />
-                </div>
-              </div> -->
+                <h5 class="h5">Fremdmodul</h5>
 
                 <div class="row">
                   <div class="col-md-10">
@@ -78,22 +74,30 @@
                   <input type="text" class="form-control" name={`moduleLink${index}`} id={`moduleLink${index}`} placeholder="http://uni-leipzig.de/module_xyz" />
                 </div>
               </div>
+
               <div class="col-md">
-                <h2 class="h4">Modulvorschlag</h2>
-
-                <div class="mb-2" />
-                <div class="mb-3">
-                  <label for={`internalModule${index}`} class="mb-2">Name</label>
-                  <select class="form-select" name={`internalModule${index}`} id={`internalModule${index}`} aria-label="Default select example" bind:value={moduleData.selectedModul}>
-                    {#each modules as modul, index}
-                      <option value={index}>{modul.moduleName}</option>
-                    {/each}
-                  </select>
+                <h5 class="h5">Modulvorschlag</h5>
+                <div class="row">
+                  <div class="" />
+                  <div class="mb-3 col-md-10">
+                    <label for={`internalModule${index}`} class="mb-2">Name</label>
+                    <select class="form-select" name={`internalModule${index}`} id={`internalModule${index}`} aria-label="Default select example" bind:value={moduleData.selectedModul}>
+                      {#each modules as modul, index}
+                        <option value={index}>{modul.moduleName}</option>
+                      {/each}
+                    </select>
+                  </div>
+                  <div class="col-md-2">
+                    {#if modules[moduleData.selectedModul].creditPoints}
+                      <p>{modules[moduleData.selectedModul].creditPoints ?? ''}</p>
+                    {/if}
+                  </div>
+                  <div class="col-md">
+                    {#if modules[moduleData.selectedModul].moduleDescription}
+                      <p class="moduleDescription border p-3 rounded">{modules[moduleData.selectedModul].moduleDescription ?? ''}</p>
+                    {/if}
+                  </div>
                 </div>
-
-                {#if modules[moduleData.selectedModul].moduleDescription}
-                  <p class="moduleDescription border p-3 rounded">{modules[moduleData.selectedModul].moduleDescription ?? ''}</p>
-                {/if}
               </div>
             </div>
             <div class="form-floating">
@@ -137,6 +141,10 @@
   .moduleDescription {
     max-height: 155px;
     overflow-y: auto;
+  }
+
+  .col-md-62 {
+    margin-right: 45px;
   }
 
   /* .form-control::placeholder {
