@@ -1,5 +1,6 @@
 <script>
   import { page } from '$app/stores';
+  import * as config from '$lib/config';
 
   export let request = $page.data.request;
 </script>
