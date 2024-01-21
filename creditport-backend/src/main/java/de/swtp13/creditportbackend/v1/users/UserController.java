@@ -2,6 +2,7 @@ package de.swtp13.creditportbackend.v1.users;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,7 +45,7 @@ public class UserController {
         return userRepository.findById(id)
                 .map(user -> {
             userRepository.delete(user);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }).orElse(ResponseEntity.notFound().build());
     }
 
@@ -71,7 +72,7 @@ public class UserController {
         return ResponseEntity.status(managementService.updatePassword(id, jwt, newPass)).build();
     }
 
-    @PatchMapping("/update")
+    @PutMapping("/update")
     public ResponseEntity<?> updateUser(
             @RequestBody UserDTO updatedUser
     ) {
