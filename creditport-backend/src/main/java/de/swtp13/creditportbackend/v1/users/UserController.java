@@ -18,19 +18,18 @@ public class UserController {
     private final ManagementService managementService;
 
     @GetMapping
-    public List<UserResponseDTO> getAllUsers() {
+    public List<UserDTO> getAllUsers() {
         System.out.println("Get all Users");
         ArrayList<User> userlist = new ArrayList<>(userRepository.findAll());
-        ArrayList<UserResponseDTO> userResponseDTOList = new ArrayList<>();
-        for (User user:
-             userlist) {
-            userResponseDTOList.add(UserResponseDTO.of(user));
+        ArrayList<UserDTO> userDTOList = new ArrayList<>();
+        for (User user: userlist) {
+            userDTOList.add(UserDTO.of(user));
         }
-        return userResponseDTOList;
+        return userDTOList;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> getUser(
+    public ResponseEntity<UserDTO> getUser(
             @PathVariable int id
     ) {
         return managementService.findUser(id)
@@ -51,18 +50,18 @@ public class UserController {
 
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponseDTO> register(
+    public ResponseEntity<UserDTO> register(
             @RequestBody RegisterRequestDTO request
     ) {
         return ResponseEntity.status(managementService.register(request))
                 .body(
-                        UserResponseDTO.of(
+                        UserDTO.of(
                                 userRepository.findByUsername(request.getUsername()).orElseThrow()
                         )
                 );
     }
 
-    @PatchMapping("/update/password")
+    @PostMapping("/update/password")
     public ResponseEntity<?> updatePassword(
             @RequestParam(required = false) Integer id,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
@@ -72,20 +71,11 @@ public class UserController {
         return ResponseEntity.status(managementService.updatePassword(id, jwt, newPass)).build();
     }
 
-    @PatchMapping("/update/username")
-    public ResponseEntity<?> updateUsername(
-            @RequestParam int id,
-            @RequestBody UpdateRequest newUsername
+    @PatchMapping("/update")
+    public ResponseEntity<?> updateUser(
+            @RequestBody UserDTO updatedUser
     ) {
-        return ResponseEntity.status(managementService.updateUsername(id, newUsername)).build();
+        return ResponseEntity.status(managementService.updateUser(updatedUser)).build();
     }
 
-
-    @PatchMapping("/update/role")
-    public ResponseEntity<?> updateRole(
-            @RequestParam int id,
-            @RequestBody UpdateRequest newRole
-    ) {
-        return ResponseEntity.status(managementService.updateRole(id, newRole)).build();
-    }
 }

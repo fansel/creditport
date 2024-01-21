@@ -16,8 +16,8 @@ public class ManagementService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
-    public Optional<UserResponseDTO> findUser(int id) {
-        return UserResponseDTO.of(userRepository.findById(id));
+    public Optional<UserDTO> findUser(int id) {
+        return UserDTO.of(userRepository.findById(id));
     }
 
     public int updatePassword(Integer id, String token, UpdateRequest newPass) {
@@ -50,28 +50,16 @@ public class ManagementService {
         return 204;
     }
 
-    public int updateUsername(int id, UpdateRequest newUsername) {
+    public int updateUser(UserDTO updatedUser) {
+        int id = updatedUser.getUserId();
         if (userRepository.existsById(id)) {
             var user = userRepository.findById(id).orElseThrow();
-            if (newUsername.getValue() == null || newUsername.getValue().isEmpty()) {
+            if (updatedUser.getUsername() == null || updatedUser.getUsername().isEmpty()) {
                 return 400;
             }
-            user.setUsername(newUsername.getValue());
-            userRepository.save(user);
-            return 204;
-        } else {
-            return 404;
-        }
-    }
-
-    public int updateRole(int id, UpdateRequest newRole) {
-        if (userRepository.existsById(id)) {
-            var user = userRepository.findById(id).orElseThrow();
-            if (newRole.getValue() == null || newRole.getValue().isEmpty()) {
-                return 400;
-            }
+            user.setUsername(updatedUser.getUsername());
             try {
-                user.setRole(Role.valueOf(newRole.getValue()));
+                user.setRole(Role.valueOf(updatedUser.getRole()));
             } catch (IllegalArgumentException iae) {
                 return 422;
             }

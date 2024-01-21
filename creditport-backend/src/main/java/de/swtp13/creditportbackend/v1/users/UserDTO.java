@@ -9,20 +9,20 @@ import java.util.Optional;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserResponseDTO {
+public class UserDTO {
     private int userId;
     private String username;
     private String role;
 
-    public static UserResponseDTO of(User user) {
-        return new UserResponseDTO(user.getUserId(), user.getUsername(), user.getRole().name());
+    public static UserDTO of(User user) {
+        return new UserDTO(user.getUserId(), user.getUsername(), user.getRole().name());
     }
 
-    public static Optional<UserResponseDTO> of(Optional<User> user) {
+    public static Optional<UserDTO> of(@SuppressWarnings("OptionalUsedAsFieldOrParameterType") Optional<User> user) {
         if (user.isEmpty()) {
             return Optional.empty();
         } else {
-            return Optional.of(UserResponseDTO.of(user.orElseThrow()));
+            return Optional.of(UserDTO.of(user.orElseThrow()));
         }
     }
 
