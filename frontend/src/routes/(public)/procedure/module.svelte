@@ -8,6 +8,10 @@
   // export let activeTab;
   export let goToNextTab;
   export let addRequest;
+  export let addTitleToRequest;
+  export let addModuleToRequest;
+  export let removeTitleFromRequest;
+  export let removeModuleFromRequest;
 </script>
 
 <!-- Tab Module -->
@@ -22,15 +26,23 @@
 
   <div class="accordion" id="accordionExample">
     {#each requests as { moduleData }, index (index)}
-      <div class="accordion-item">
+      <div class="accordion-item border-5">
         <div class="row">
           <h2 class="accordion-header" id="headingOne">
             <button class="accordion-button position-relative" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{index}" aria-expanded="false" aria-controls="collapseOne">
               <div class="col-md col-md-62">
-                <h6 class="h6">{moduleData.title ? `${moduleData.title} ` : 'Neues Modul'}</h6>
+                {#each moduleData.title as title, titleIndex}
+                  <h6 class="h6" key={titleIndex}>{title ? `${title} ` : 'Neuer Antrag'}</h6>
+                {/each}
               </div>
               <div class="col-md">
-                <h6 class="h6">{moduleData.title ? `${modules[moduleData.selectedModul].moduleName}` : 'Neues Modul'}</h6>
+                {#each moduleData.selectedModul as selectedModul, selectedModulIndex}
+                {#if selectedModul !== undefined}
+                <h6 class="h6" key={selectedModulIndex}>
+                  {selectedModul !== undefined ? `${modules[selectedModul].moduleName}` : 'Neuer Antrag'}
+                </h6>
+              {/if}
+                {/each}
                 <button class="btn p-0 position-absolute top-50 end-0 translate-middle-y me-5" on:click={() => removeRequest(index)} type="button"><i class="bi bi-trash3-fill" /> </button>
               </div>
             </button>
@@ -40,66 +52,101 @@
           <div class="accordion-body">
             <div class="row">
               <div class="col-md">
-                <h5 class="h5">Fremdmodul</h5>
+                <h5 class="h5">Externe Modul(e)</h5>
 
-                <div class="row">
-                  <div class="col-md-10">
+                {#each moduleData.title as title, titleIndex}
+                  <!-- <div class="accordion-item"> -->
+                  <div class=" border mb-5 border-3 rounded p-2">
+                    <div class="row">
+                      <div class="col-md-10">
+                        <div class="mb-3">
+                          <div class="row">
+                            <label for={`externalModule${titleIndex}`} class="mb-2"
+                              >Name des Moduls
+                              <button class="btn p-0 me-3" on:click={() => removeTitleFromRequest(index, titleIndex)} type="button">
+                                <i class="bi bi-trash3-fill" />
+                              </button>
+                            </label>
+                          </div>
+
+                          <input
+                            type="text"
+                            class="form-control"
+                            name={`externalModule${titleIndex}`}
+                            id={`externalModule${titleIndex}`}
+                            placeholder="Modellierung und Programmierung"
+                            bind:value={moduleData.title[titleIndex]}
+                          />
+                        </div>
+                      </div>
+                      <div class="col-md-2">
+                        <div class="mb-3">
+                          <label for={`creditPoints${titleIndex}`} class="mb-2">LP</label>
+                          <input type="number" class="form-control" name={`creditPoints${titleIndex}`} id={`creditPoints${titleIndex}`} placeholder="5" />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="mb-3 col-md">
+                      <label for={`formFile${titleIndex}`} class="form-label">Modulbeschreibung<i class="bi bi-question-circle ms-2" /> </label>
+                      <input class="form-control mb-3" type="file" name={`formFile${titleIndex}`} id={`formFile${titleIndex}`} accept="application/pdf" />
+                    </div>
+
                     <div class="mb-3">
-                      <label for={`externalModule${index}`} class="mb-2">Name des Moduls</label>
-                      <input
-                        type="text"
-                        class="form-control"
-                        name={`externalModule${index}`}
-                        id={`externalModule${index}`}
-                        placeholder="Modellierung und Programmierung"
-                        bind:value={moduleData.title}
-                      />
+                      <label for={`moduleLink${titleIndex}`} class="mb-2">Website zum Modul</label>
+                      <input type="text" class="form-control" name={`moduleLink${titleIndex}`} id={`moduleLink${titleIndex}`} placeholder="http://uni-leipzig.de/module_xyz" />
                     </div>
                   </div>
-                  <div class="col-md-2">
-                    <div class="mb-3">
-                      <label for={`creditPoints${index}`} class="mb-2">LP</label>
-                      <input type="number" class="form-control" name={`creditPoints${index}`} id={`creditPoints${index}`} placeholder="5" />
-                    </div>
-                  </div>
-                </div>
+                {/each}
 
-                <div class="mb-3 col-md">
-                  <label for={`formFile${index}`} class="form-label">Modulbeschreibung<i class="bi bi-question-circle ms-2" /> </label>
-                  <input class="form-control mb-3" type="file" name={`formFile${index}`} id={`formFile${index}`} accept="application/pdf" />
-                </div>
-
-                <div class="mb-3">
-                  <label for={`moduleLink${index}`} class="mb-2">Website zum Modul</label>
-                  <input type="text" class="form-control" name={`moduleLink${index}`} id={`moduleLink${index}`} placeholder="http://uni-leipzig.de/module_xyz" />
-                </div>
+                <button class="mb-3 btn btn-primary d-inline-flex align-items-center" type="button" on:click={addTitleToRequest(index)}>Fremdmodul<i class="ms-2 bi bi-plus-circle" /></button>
               </div>
 
               <div class="col-md">
-                <h5 class="h5">Modulvorschlag</h5>
-                <div class="row">
-                  <div class="" />
-                  <div class="mb-3 col-md-10">
-                    <label for={`internalModule${index}`} class="mb-2">Name</label>
-                    <select class="form-select" name={`internalModule${index}`} id={`internalModule${index}`} aria-label="Default select example" bind:value={moduleData.selectedModul}>
-                      {#each modules as modul, index}
-                        <option value={index}>{modul.moduleName}</option>
-                      {/each}
-                    </select>
+                <h5 class="h5">Interne Modul(e)</h5>
+                {#each moduleData.selectedModul as selectedModul, selectedModulIndex}
+                  <div class="border mb-5 border-3 rounded p-2">
+                    <div class="row">
+                      <div class="" />
+                      <div class="mb-3 col-md-10">
+                        <label for={`internalModule${selectedModulIndex}`} class="mb-2"
+                          >Name
+                          <button class="btn p-0 me-3" on:click={() => removeModuleFromRequest(index, selectedModulIndex)} type="button">
+                            <i class="bi bi-trash3-fill" />
+                          </button>
+                        </label>
+                        <select
+                          class="form-select"
+                          name={`internalModule${selectedModulIndex}`}
+                          id={`internalModule${selectedModulIndex}`}
+                          aria-label="Default select example"
+                          bind:value={moduleData.selectedModul[selectedModulIndex]}
+                          
+                        >
+                          {#each modules as modul, index}
+                            <option value={index}>{modul.moduleName}</option>
+                          {/each}
+                        </select>
+                      </div>
+                      <div class="col-md-2">
+                        {#if modules[moduleData.selectedModul[selectedModulIndex]].creditPoints}
+                          <p>{modules[moduleData.selectedModul[selectedModulIndex]].creditPoints ?? ''}</p>
+                        {/if}
+                      </div>
+                      <div class="col-md">
+                        <p class="moduleDescription border p-3 rounded">
+                          {#if modules[moduleData.selectedModul[selectedModulIndex]].moduleDescription}
+                            {modules[moduleData.selectedModul[selectedModulIndex]].moduleDescription}
+                          {/if}
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                  <div class="col-md-2">
-                    {#if modules[moduleData.selectedModul].creditPoints}
-                      <p>{modules[moduleData.selectedModul].creditPoints ?? ''}</p>
-                    {/if}
-                  </div>
-                  <div class="col-md">
-                    {#if modules[moduleData.selectedModul].moduleDescription}
-                      <p class="moduleDescription border p-3 rounded">{modules[moduleData.selectedModul].moduleDescription ?? ''}</p>
-                    {/if}
-                  </div>
-                </div>
+                {/each}
+                <button class="mb-3 btn btn-primary d-inline-flex align-items-center" type="button" on:click={addModuleToRequest(index)}>Modul Leipzig<i class="ms-2 bi bi-plus-circle" /></button>
               </div>
             </div>
+
             <div class="form-floating">
               <textarea class="form-control" name={`annotation${index}`} placeholder="Leave a comment here" id={`annotation${index}`} style="height: 100px" />
               <label for={`annotation${index}`}>Kommentare</label>
@@ -120,7 +167,7 @@
     </div>
   {/each} -->
   <div class="my-3 d-flex justify-content-between">
-    <button class="btn btn-primary d-inline-flex align-items-center" type="button" on:click={addRequest}>Modul hinzufügen<i class="ms-2 bi bi-plus-circle" /></button>
+    <button class="btn btn-primary d-inline-flex align-items-center" type="button" on:click={addRequest}>Antrag Hinzufügen<i class="ms-2 bi bi-plus-circle" /></button>
     <!-- <button type="button" class="btn btn-primary">Alle ausklappen</button> -->
 
     <button type="button" class="btn btn-primary" on:click={goToNextTab}>Weiter</button>
@@ -139,7 +186,7 @@
   }
 
   .moduleDescription {
-    max-height: 155px;
+    height: 155px;
     overflow-y: auto;
   }
 

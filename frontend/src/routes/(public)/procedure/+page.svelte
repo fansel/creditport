@@ -56,6 +56,8 @@
   onMount(() => {
     // Füge einen initialen Request hinzu
     addRequest();
+    //addModuleToRequest(0)
+    //addTitleToRequest(0)
   });
 
   function addRequest() {
@@ -63,13 +65,40 @@
       ...requests,
       {
         moduleData: {
-          selectedModul: 0,
-          title: null
+          selectedModul: [0],
+          title: [null] // Ein Array für die Titel
         }
       }
     ];
   }
 
+  function addTitleToRequest(requestIndex) {
+    requests[requestIndex].moduleData.title = [
+      ...requests[requestIndex].moduleData.title,
+      null // Füge einen weiteren Titel hinzu (initial null, kann nach Bedarf angepasst werden)
+    ];
+  }
+
+  function addModuleToRequest(requestIndex) {
+    requests[requestIndex].moduleData.selectedModul = [
+      ...requests[requestIndex].moduleData.selectedModul,
+      0 // Füge einen weiteren selectedModul hinzu (initial 0, kann nach Bedarf angepasst werden)
+    ];
+  }
+
+  function removeTitleFromRequest(requestIndex, titleIndex) {
+    const request = requests[requestIndex];
+    const titles = [...request.moduleData.title];
+    titles.splice(titleIndex, 1);
+    requests[requestIndex].moduleData.title = titles;
+  }
+
+  function removeModuleFromRequest(requestIndex, moduleIndex) {
+    const request = requests[requestIndex];
+    const selectedModuls = [...request.moduleData.selectedModul];
+    selectedModuls.splice(moduleIndex, 1);
+    requests[requestIndex].moduleData.selectedModul = selectedModuls;
+  }
   function removeRequest(index) {
     if (requests.length > 1) requests = requests.filter((_, i) => i !== index);
   }
@@ -84,7 +113,20 @@
   </div>
 
   <div class={activeTab == 'pills-module' ? '' : 'visually-hidden'}>
-    <Module bind:modulesForm {requests} {removeRequest} bind:generalData {modules} {activeTab} {goToNextTab} {addRequest} />
+    <Module
+      bind:modulesForm
+      {removeModuleFromRequest}
+      {removeTitleFromRequest}
+      {addTitleToRequest}
+      {addModuleToRequest}
+      {requests}
+      {removeRequest}
+      bind:generalData
+      {modules}
+      {activeTab}
+      {goToNextTab}
+      {addRequest}
+    />
   </div>
 
   <div class={activeTab == 'pills-send' ? '' : 'visually-hidden'}>
