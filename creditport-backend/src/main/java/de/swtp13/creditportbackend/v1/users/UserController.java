@@ -2,6 +2,7 @@ package de.swtp13.creditportbackend.v1.users;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,19 +19,18 @@ public class UserController {
     private final ManagementService managementService;
 
     @GetMapping
-    public List<UserResponseDTO> getAllUsers() {
+    public List<UserDTO> getAllUsers() {
         System.out.println("Get all Users");
         ArrayList<User> userlist = new ArrayList<>(userRepository.findAll());
-        ArrayList<UserResponseDTO> userResponseDTOList = new ArrayList<>();
-        for (User user:
-             userlist) {
-            userResponseDTOList.add(UserResponseDTO.of(user));
+        ArrayList<UserDTO> userDTOList = new ArrayList<>();
+        for (User user: userlist) {
+            userDTOList.add(UserDTO.of(user));
         }
-        return userResponseDTOList;
+        return userDTOList;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> getUser(
+    public ResponseEntity<UserDTO> getUser(
             @PathVariable int id
     ) {
         return managementService.findUser(id)
@@ -45,24 +45,24 @@ public class UserController {
         return userRepository.findById(id)
                 .map(user -> {
             userRepository.delete(user);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }).orElse(ResponseEntity.notFound().build());
     }
 
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponseDTO> register(
+    public ResponseEntity<UserDTO> register(
             @RequestBody RegisterRequestDTO request
     ) {
         return ResponseEntity.status(managementService.register(request))
                 .body(
-                        UserResponseDTO.of(
+                        UserDTO.of(
                                 userRepository.findByUsername(request.getUsername()).orElseThrow()
                         )
                 );
     }
 
-    @PatchMapping("/update/password")
+    @PostMapping("/update/password")
     public ResponseEntity<?> updatePassword(
             @RequestParam(required = false) Integer id,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
@@ -72,20 +72,11 @@ public class UserController {
         return ResponseEntity.status(managementService.updatePassword(id, jwt, newPass)).build();
     }
 
-    @PatchMapping("/update/username")
-    public ResponseEntity<?> updateUsername(
-            @RequestParam int id,
-            @RequestBody UpdateRequest newUsername
+    @PutMapping("/update")
+    public ResponseEntity<?> updateUser(
+            @RequestBody UserDTO updatedUser
     ) {
-        return ResponseEntity.status(managementService.updateUsername(id, newUsername)).build();
+        return ResponseEntity.status(managementService.updateUser(updatedUser)).build();
     }
 
-
-    @PatchMapping("/update/role")
-    public ResponseEntity<?> updateRole(
-            @RequestParam int id,
-            @RequestBody UpdateRequest newRole
-    ) {
-        return ResponseEntity.status(managementService.updateRole(id, newRole)).build();
-    }
 }

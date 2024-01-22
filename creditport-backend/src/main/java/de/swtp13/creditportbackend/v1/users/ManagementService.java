@@ -2,6 +2,7 @@ package de.swtp13.creditportbackend.v1.users;
 
 import de.swtp13.creditportbackend.v1.config.JwtService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +17,11 @@ public class ManagementService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
-    public Optional<UserResponseDTO> findUser(int id) {
-        return UserResponseDTO.of(userRepository.findById(id));
+    public Optional<UserDTO> findUser(int id) {
+        return UserDTO.of(userRepository.findById(id));
     }
 
-    public int updatePassword(Integer id, String token, UpdateRequest newPass) {
+    public HttpStatus updatePassword(Integer id, String token, UpdateRequest newPass) {
         User user;
         if (id == null) {
             try {
@@ -30,61 +31,49 @@ public class ManagementService {
                         ).orElseThrow().getUserId()
                 ).orElseThrow();
             } catch (NoSuchElementException nsee) {
-                return 404;
+                return HttpStatus.NOT_FOUND;
             }
 
         } else if (jwtService.extractRole(token).equals("ADMIN")) {
             if (userRepository.existsById(id)) {
                 user = userRepository.findById(id).orElseThrow();
             } else {
-                return 404;
+                return HttpStatus.NOT_FOUND;
             }
         } else {
-            return 403;
+            return HttpStatus.FORBIDDEN;
         }
         if (newPass.getValue() == null || newPass.getValue().isEmpty()) {
-            return 400;
+            return HttpStatus.BAD_REQUEST;
         }
         user.setPassword(passwordEncoder.encode(newPass.getValue()));
         userRepository.save(user);
-        return 204;
+        return HttpStatus.NO_CONTENT;
     }
 
-    public int updateUsername(int id, UpdateRequest newUsername) {
+    public HttpStatus updateUser(UserDTO updatedUser) {
+        int id = updatedUser.getUserId();
         if (userRepository.existsById(id)) {
             var user = userRepository.findById(id).orElseThrow();
-            if (newUsername.getValue() == null || newUsername.getValue().isEmpty()) {
-                return 400;
+            if (updatedUser.getUsername() == null || updatedUser.getUsername().isEmpty()) {
+                return HttpStatus.BAD_REQUEST;
             }
-            user.setUsername(newUsername.getValue());
-            userRepository.save(user);
-            return 204;
-        } else {
-            return 404;
-        }
-    }
-
-    public int updateRole(int id, UpdateRequest newRole) {
-        if (userRepository.existsById(id)) {
-            var user = userRepository.findById(id).orElseThrow();
-            if (newRole.getValue() == null || newRole.getValue().isEmpty()) {
-                return 400;
-            }
+            user.setUsername(updatedUser.getUsername());
             try {
-                user.setRole(Role.valueOf(newRole.getValue()));
+                user.setRole(Role.valueOf(updatedUser.getRole()));
             } catch (IllegalArgumentException iae) {
-                return 422;
+                return HttpStatus.UNPROCESSABLE_ENTITY;
             }
             userRepository.save(user);
-            return 204;
+            return HttpStatus.NO_CONTENT;
         } else {
-            return 404;
+            return HttpStatus.NOT_FOUND;
         }
     }
 
-    public int register(RegisterRequestDTO request) {
+    public HttpStatus register(RegisterRequestDTO request) {
         if (userRepository.findByUsername(request.getUsername()).isPresent()) {
-            return 409;
+            return HttpStatus.CONFLICT;
         }
         var user = User.builder()
                 .username(request.getUsername())
@@ -92,7 +81,7 @@ public class ManagementService {
                 .role(Role.valueOf(request.getRole()))
                 .build();
         userRepository.save(user);
-        return 200;
+        return HttpStatus.OK;
     }
 
 
