@@ -11,12 +11,12 @@
 <div class="nav-bar my-3" width="100%">
   {#if request.relatedRequests.length > 0}
     {#if getVorgänger(request.requestId, request.relatedRequests) != null}
-      <a type="button" class="btn btn-sm btn-outline-primary" rel="external" href="/procedures/{request.procedureId}/{getVorgänger(request.requestId, request.relatedRequests)}">
+      <a type="button" class="btn btn-sm btn-outline-primary" rel="external" href="/procedures/{getVorgänger(request.requestId, request.relatedRequests)}">
         <i class="bi bi-arrow-left" />
       </a>
     {/if}
     {#if getNachfolger(request.requestId, request.relatedRequests) != null}
-      <a type="button" class="btn btn-sm btn-outline-primary" rel="external" href="/procedures/{request.procedureId}/{getNachfolger(request.requestId, request.relatedRequests)}">
+      <a type="button" class="btn btn-sm btn-outline-primary" rel="external" href="/procedures/{getNachfolger(request.requestId, request.relatedRequests)}">
         <i class="bi bi-arrow-right" />
       </a>
     {/if}

@@ -4,7 +4,7 @@
   import { onMount } from 'svelte';
   import * as config from '$lib/config';
   import { format, parseISO } from 'date-fns';
-  import Status from '$lib/components/Status.svelte'
+  import Status from '$lib/components/Status.svelte';
 
   export let showModal;
   export let procedure;
@@ -94,7 +94,7 @@
                     {request.externalModuleId}
                     <Status status={request.status} />
                   </div>
-                  <a href="/procedures/{procedure.procedureId}/{request.requestId}"><i class="bi bi-pencil-square" /></a>
+                  <a href="/procedures/{request.requestId}"><i class="bi bi-pencil-square" /></a>
                 </div>
               {/each}
             {/if}

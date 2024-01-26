@@ -2,6 +2,7 @@
   import { page } from '$app/stores';
 
   export let request = $page.data.request;
+  export let annotation;
 </script>
 
 <div class="form-row mb-2">

@@ -17,6 +17,7 @@ export async function load({ params, locals }) {
 
   const modules = await api.get('modules');
   const request = await api.get(`requests/relatedRequests/${id}`);
+  // const request = await api.get(`requests/${uuid}`)
 
   if (!request || request == 500 || request == 404) {
     throw error(404, { message: 'Antrag existiert nicht' });
@@ -32,11 +33,13 @@ export async function load({ params, locals }) {
 
 /** @type {import('./$types').Actions} */
 export const actions = {
-  deleteUni: async ({ locals, request }) => {
+  changeRequest: async ({ locals, request }) => {
     const formData = await request.formData();
 
     const schema = zfd.formData({
-      id: zfd.text()
+      // status: zfd.text(),
+      annotation: zfd.text(),
+      internalModuleId: zfd.text()
     });
 
     const result = schema.safeParse(formData);
@@ -45,16 +48,17 @@ export const actions = {
       return fail(400, { errors: 'keine ID angegeben' });
     }
 
-    const res = await api.del(`universities/${result.data.id}`, locals.user?.token, { res_type: api.content_type.plain });
+    const res = await api.put(`procedures/${result.data}`, locals.user?.token, { res_type: api.content_type.plain });
 
     return { success: true };
   },
-  changeUni: async ({ locals, request }) => {
+  putRequest: async ({ locals, request }) => {
     const formData = await request.formData();
 
     const schema = zfd.formData({
       id: zfd.text(),
-      name: zfd.text(z.string({ required_error: 'Name darf nicht leer sein' }))
+      annotation: zfd.text(),
+      status: zfd.text(z.string({ required_error: 'Status darf nicht leer sein' }))
     });
 
     const result = schema.safeParse(formData);
@@ -68,36 +72,24 @@ export const actions = {
     }
 
     const body = {
-      uniName: result.data.name
+    //   "requestId": 1,
+    // "externalModuleId": "10-201-2001-2",
+    // "internalModuleId": "testId",
+    // "annotation": "Algorithmen und Datenstrukturen",
+    // "creditPoints": 5,
+    // "status": "NICHT_BEARBEITET",
+    // "createdAt": "2024-01-26T10:06:15.343687Z",
+    // "pdfExists": true,
+    // "moduleLink": null
+      
+      annotation: result.data.annotation,
+      status: result.data.status
+      // annotation: result.data.annotation
+      // annotation: result.data.annotation
     };
 
-    const res = await api.put(`universities/${result.data.id}`, body, locals.user?.token);
+    const res = await api.put(`requests/${id}`, body, locals.user?.token);
 
     return { success: true };
   },
-  addUni: async ({ locals, request }) => {
-    const formData = await request.formData();
-
-    const schema = zfd.formData({
-      name: zfd.text()
-    });
-
-    const result = schema.safeParse(formData);
-
-    if (!result.success) {
-      const data = {
-        data: Object.fromEntries(formData),
-        errors: result.error.flatten().fieldErrors
-      };
-      return fail(400, data);
-    }
-
-    const body = {
-      uniName: result.data.name
-    };
-
-    const res = await api.post(`universities`, body, locals.user?.token);
-
-    return { success: true };
-  }
 };

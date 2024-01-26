@@ -16,9 +16,10 @@
   const modules = data.modules;
   const request = data.request;
   let selectedModul = 0;
+  let annotation;
 
-  export let showModalExtern;
-  export let showModalIntern;
+  let showModalExtern;
+  let showModalIntern;
 
   function updateStatus(status) {
     request.status = status;
@@ -59,12 +60,15 @@
     </div>
 
     <div class="col-4">
-      <form action="">
+      <form method="PUT" action="?/putRequest">
+        <!-- hidden input form um requestId und pdfExists -->
+        <input name="requestId" value={request.requestId} type="hidden" />
+        <input name="pdfExists" value={request.pdfExists} type="hidden" />
         <div class="row mb-3">
           <div class="col-6"><strong>Antrag erstellt am </strong><br />{format(new Date(request.createdAt), 'dd.MM.yyyy HH:mm')}</div>
         </div>
 
-        <!-- <CreditModule /> -->
+        <CreditModule />
 
         <div class="col mb-3">
           <div class="row">
@@ -79,9 +83,9 @@
             </div>
           </div>
 
-          <Comment />
+          <Comment bind:annotation={request.annotation} />
 
-          <div class="btn btn-primary">Speichern</div>
+          <button type="submit" class="btn btn-primary">Speichern</button>
           <div class="btn btn-outline-secondary">Abbrechen</div>
         </div>
       </form>
