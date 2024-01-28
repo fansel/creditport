@@ -99,6 +99,12 @@ public class RequestController {
         return requestRepository.findByRequestId(requestId)
                 .map(Request -> {
                     Request.setStatus(RequestDetails.getStatus());
+                    Request.setExternalModuleId(RequestDetails.getExternalModuleId());
+                    Request.setInternalModuleId(RequestDetails.getInternalModuleId());
+                    Request.setAnnotation(RequestDetails.getAnnotation());
+                    Request.setCreditPoints(RequestDetails.getCreditPoints());
+                    Request.setPdfExists(RequestDetails.isPdfExists());
+                    Request.setModuleLink(RequestDetails.getModuleLink());
                     // Add other fields to update if needed
                     Request updatedRequest = requestRepository.save(Request);
                     return ResponseEntity.ok(updatedRequest);
