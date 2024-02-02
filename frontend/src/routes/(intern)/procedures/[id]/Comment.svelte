@@ -1,8 +1,14 @@
 <script>
   import { page } from '$app/stores';
+  import { createEventDispatcher } from 'svelte';
 
   export let request = $page.data.request;
   export let annotation;
+
+  const dispatch = createEventDispatcher();
+  function handleAnnotationChange(event) {
+    dispatch('annotationchange', { annotation: event.target.value });
+  }
 </script>
 
 <div class="form-row mb-2">
@@ -21,7 +27,7 @@
 
   <div class="tab-content" id="myTabContent">
     <div class="tab-pane fade show active" id="studi-tab-pane" role="tabpanel" aria-labelledby="studi-tab" tabindex="0">
-      <textarea class="form-control" id="input" placeholder="Begründen Sie Ihren Entscheid..." rows="4" name="comment">{request.annotation ?? ''}</textarea>
+      <textarea on:input={handleAnnotationChange} class="form-control" id="input" placeholder="Begründen Sie Ihren Entscheid..." rows="4" name="comment">{request.annotation ?? ''}</textarea>
     </div>
     <div class="tab-pane fade" id="office-tab-pane" role="tabpanel" aria-labelledby="office-tab" tabindex="0">
       <textarea class="form-control" id="input" placeholder="Begründen Sie Ihren Entscheid..." rows="4" name="comment">{request.comment_student ?? ''}</textarea>

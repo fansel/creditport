@@ -61,13 +61,15 @@
 
     <div class="col-4">
       <form method="PUT" action="?/putRequest">
-        <!-- hidden input form um requestId und pdfExists -->
+        <!-- hidden input für Daten die sich nicht ändern sollten -->
         <input name="requestId" value={request.requestId} type="hidden" />
         <input name="pdfExists" value={request.pdfExists} type="hidden" />
+        <input name="createdAt" value={request.createdAt} type="hidden" />
         <div class="row mb-3">
           <div class="col-6"><strong>Antrag erstellt am </strong><br />{format(new Date(request.createdAt), 'dd.MM.yyyy HH:mm')}</div>
         </div>
 
+        <!-- input für ausgewähltes Modul handlen -->
         <CreditModule />
 
         <div class="col mb-3">

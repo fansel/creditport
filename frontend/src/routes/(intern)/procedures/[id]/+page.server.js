@@ -54,15 +54,27 @@ export const actions = {
   },
   putRequest: async ({ locals, request }) => {
     const formData = await request.formData();
-
+  
     const schema = zfd.formData({
-      id: zfd.text(),
+      requestId: zfd.text().transform((value) => {
+        const parsed = parseInt(value, 10);
+        if (isNaN(parsed)) {
+          throw new Error("requestId must be a valid integer");
+        }
+        return parsed;
+      }),
+      externalModuleId: zfd.text(),
+      internalModuleId: zfd.text(),
       annotation: zfd.text(),
-      status: zfd.text(z.string({ required_error: 'Status darf nicht leer sein' }))
+      creditPoints: zfd.text().transform((value) => parseInt(value, 10)),
+      status: zfd.text(z.string({ required_error: 'Status darf nicht leer sein' })),
+      createdAt: zfd.text(),
+      pdfExists: zfd.text(), //.transform((value) => value === 'true'), // Vielleicht sinnvoller in +page.svelte zu handlen?
+      moduleLink: zfd.text().optional(),
     });
-
+  
     const result = schema.safeParse(formData);
-
+  
     if (!result.success) {
       const data = {
         data: Object.fromEntries(formData),
@@ -70,26 +82,22 @@ export const actions = {
       };
       return fail(400, data);
     }
-
+  
     const body = {
-    //   "requestId": 1,
-    // "externalModuleId": "10-201-2001-2",
-    // "internalModuleId": "testId",
-    // "annotation": "Algorithmen und Datenstrukturen",
-    // "creditPoints": 5,
-    // "status": "NICHT_BEARBEITET",
-    // "createdAt": "2024-01-26T10:06:15.343687Z",
-    // "pdfExists": true,
-    // "moduleLink": null
-      
+      requestId: result.data.requestId,
+      externalModuleId: result.data.externalModuleId,
+      internalModuleId: result.data.internalModuleId,
       annotation: result.data.annotation,
-      status: result.data.status
-      // annotation: result.data.annotation
-      // annotation: result.data.annotation
+      creditPoints: result.data.creditPoints,
+      status: result.data.status,
+      createdAt: result.data.createdAt,
+      pdfExists: result.data.pdfExists,
+      moduleLink: result.data.moduleLink, 
     };
-
+  
     const res = await api.put(`requests/${id}`, body, locals.user?.token);
-
+  
     return { success: true };
-  },
+  }
+  ,
 };
