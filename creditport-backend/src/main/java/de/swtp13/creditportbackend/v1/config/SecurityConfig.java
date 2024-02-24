@@ -17,7 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
-    private static final String API_VERSION = "/v1";
+    private static final String API_VERSION = "";
     private final AuthenticationProvider authenticationProvider;
 
     @Bean
