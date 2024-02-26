@@ -26,7 +26,7 @@
 
   <div class="accordion" id="accordionExample">
     {#each requests as { moduleData }, index (index)}
-      <div class="accordion-item border-5">
+      <div class="accordion-item full-border">
         <div class="row">
           <h2 class="accordion-header" id="headingOne">
             <button class="accordion-button position-relative" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{index}" aria-expanded="false" aria-controls="collapseOne">
@@ -37,11 +37,11 @@
               </div>
               <div class="col-md">
                 {#each moduleData.selectedModul as selectedModul, selectedModulIndex}
-                {#if selectedModul !== undefined}
-                <h6 class="h6" key={selectedModulIndex}>
-                  {selectedModul !== undefined ? `${modules[selectedModul].moduleName}` : 'Neuer Antrag'}
-                </h6>
-              {/if}
+                  {#if selectedModul !== undefined}
+                    <h6 class="h6" key={selectedModulIndex}>
+                      {selectedModul !== undefined ? `${modules[selectedModul].moduleName}` : 'Neuer Antrag'}
+                    </h6>
+                  {/if}
                 {/each}
                 <button class="btn p-0 position-absolute top-50 end-0 translate-middle-y me-5" on:click={() => removeRequest(index)} type="button"><i class="bi bi-trash3-fill" /> </button>
               </div>
@@ -121,7 +121,6 @@
                           id={`internalModule${selectedModulIndex}`}
                           aria-label="Default select example"
                           bind:value={moduleData.selectedModul[selectedModulIndex]}
-                          
                         >
                           {#each modules as modul, index}
                             <option value={index}>{modul.moduleName}</option>
@@ -153,7 +152,9 @@
             </div>
           </div>
         </div>
+        
       </div>
+      <br>
     {/each}
   </div>
 
@@ -193,6 +194,10 @@
   .col-md-62 {
     margin-right: 45px;
   }
+
+  .full-border {
+    border: 5px solid #dee2e6; /* Ändere die Breite und den Stil nach Bedarf */
+  } 
 
   /* .form-control::placeholder {
     color: red;
