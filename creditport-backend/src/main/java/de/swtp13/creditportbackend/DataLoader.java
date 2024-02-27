@@ -26,8 +26,8 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Arrays;
 
-@Component  // Diese Annotation gibt an, dass diese Klasse ein Component ist, und von Spring automatisch erkannt und instanziiert wird.
-public class DataLoader implements CommandLineRunner {
+//@Component  // Diese Annotation gibt an, dass diese Klasse ein Component ist, und von Spring automatisch erkannt und instanziiert wird.
+public class DataLoader /*implements CommandLineRunner*/ {/*
 
     @Autowired  // Diese Annotation ermöglicht die Injektion des ProcedureRepository.
     private ProcedureRepository procedureRepository;
@@ -55,8 +55,8 @@ public class DataLoader implements CommandLineRunner {
      * @param args Argumente der Kommandozeile. Nicht verwendet in dieser Implementierung.
      * @throws Exception wenn ein Fehler während der Ausführung auftritt.
      */
-    @Override
-    public void run(String... args) throws Exception {
+   // @Override
+    public void run(/*String... args*/) throws Exception {/*
         System.out.println("DataLoader is being executed!");
 
         System.out.println("Test procedure is being created!");
@@ -750,6 +750,6 @@ public class DataLoader implements CommandLineRunner {
         userRepository.save(examComittee);
         System.out.println("Users were saved in the database!");
 
-
+*/
     }
 }
