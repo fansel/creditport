@@ -96,21 +96,23 @@ public class Request {
 
 
     // Überarbeiteter Konstruktor mit 'createdAt'-Parameter
-    public Request(Procedure procedure, String externalModuleId, String internalModuleId, String annotation, int creditPoints, Instant createdAt) {
+    public Request(Procedure procedure, String externalModuleId, String internalModuleId, String annotationCommittee, String annotationStudent, int creditPoints, Instant createdAt) {
         this.procedure = procedure;
         this.externalModuleId = externalModuleId;
         this.internalModuleId = internalModuleId;
-        this.annotation = annotation;
+        this.annotationStudent = annotationStudent;
+        this.annotationCommittee = annotationCommittee;
         this.creditPoints = creditPoints;
         this.createdAt = createdAt;
         this.status = Status.NICHT_BEARBEITET;
     }
 
-    public Request(Procedure procedure, String externalModuleId, String internalModuleId, String annotation, int creditPoints) {
+    public Request(Procedure procedure, String externalModuleId, String internalModuleId, String annotationStudent, String annotationCommittee, int creditPoints) {
         this.procedure = procedure;
         this.externalModuleId = externalModuleId;
         this.internalModuleId = internalModuleId;
-        this.annotation = annotation;
+        this.annotationStudent = annotationStudent;
+        this.annotationCommittee = annotationCommittee;
         this.creditPoints = creditPoints;
         this.status = Status.NICHT_BEARBEITET;
         this.createdAt = Instant.now();
