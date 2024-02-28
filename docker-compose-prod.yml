@@ -26,6 +26,7 @@ services:
       - "5050:5050"
     volumes:
       - "pgadmin-data:/var/lib/pgadmin"
+      - ./servers.json:/var/lib/pgadmin/servers.json
     networks:
         - creditport-net
 
