@@ -59,13 +59,14 @@
     //addModuleToRequest(0)
     //addTitleToRequest(0)
   });
-
+ 
+  
   function addRequest() {
     requests = [
       ...requests,
       {
         moduleData: {
-          selectedModul: [0],
+          selectedModul:[0],
           title: [null] // Ein Array für die Titel
         }
       }

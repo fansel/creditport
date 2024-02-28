@@ -12,11 +12,9 @@
   export let addModuleToRequest;
   export let removeTitleFromRequest;
   export let removeModuleFromRequest;
+
 </script>
 
-<!-- Tab Module -->
-
-<!-- <h1>Anträge zur Modulanrechnung von Modulen der {generalData.university}</h1> -->
 
 <form action="?/requests" method="POST" enctype="multipart/form-data" id="requests" bind:this={modulesForm} use:enhance>
   <input type="hidden" name="globalAnnotation" value={generalData.annotation} />
@@ -32,16 +30,15 @@
             <button class="accordion-button position-relative" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{index}" aria-expanded="false" aria-controls="collapseOne">
               <div class="col-md col-md-62">
                 {#each moduleData.title as title, titleIndex}
-                  <h6 class="h6" key={titleIndex}>{title ? `${title} ` : 'Neuer Antrag'}</h6>
+                  <h6 class="h6" key={titleIndex}>{title ? `${title} ` : 'Neues Modul'}</h6>
                 {/each}
               </div>
               <div class="col-md">
                 {#each moduleData.selectedModul as selectedModul, selectedModulIndex}
-                  {#if selectedModul !== undefined}
                     <h6 class="h6" key={selectedModulIndex}>
-                      {selectedModul !== undefined ? `${modules[selectedModul].moduleName}` : 'Neuer Antrag'}
+                    <!-- selectedModul == 0 ist Auswahl "nichts" siehe select" -->
+                      {selectedModul !== 0 ? `${modules[selectedModul-1].moduleName}` : 'Neues Modul'}
                     </h6>
-                  {/if}
                 {/each}
                 <button class="btn p-0 position-absolute top-50 end-0 translate-middle-y me-5" on:click={() => removeRequest(index)} type="button"><i class="bi bi-trash3-fill" /> </button>
               </div>
@@ -55,7 +52,6 @@
                 <h5 class="h5">Externe Modul(e)</h5>
 
                 {#each moduleData.title as title, titleIndex}
-                  <!-- <div class="accordion-item"> -->
                   <div class=" border mb-5 border-3 rounded p-2">
                     <div class="row">
                       <div class="col-md-10">
@@ -104,6 +100,9 @@
 
               <div class="col-md">
                 <h5 class="h5">Interne Modul(e)</h5>
+
+
+           
                 {#each moduleData.selectedModul as selectedModul, selectedModulIndex}
                   <div class="border mb-5 border-3 rounded p-2">
                     <div class="row">
@@ -122,8 +121,9 @@
                           aria-label="Default select example"
                           bind:value={moduleData.selectedModul[selectedModulIndex]}
                         >
+                        <option value={0} disabled selected hidden>Bitte treffen Sie eine Auswahl</option>
                           {#each modules as modul, index}
-                            <option value={index}>{modul.moduleName}</option>
+                          <option value={index+1} >{modul.moduleName}</option>         
                           {/each}
                         </select>
                       </div>
@@ -142,6 +142,7 @@
                     </div>
                   </div>
                 {/each}
+                
                 <button class="mb-3 btn btn-primary d-inline-flex align-items-center" type="button" on:click={addModuleToRequest(index)}>Modul Leipzig<i class="ms-2 bi bi-plus-circle" /></button>
               </div>
             </div>
@@ -158,15 +159,7 @@
     {/each}
   </div>
 
-  <!-- {#each requests as { moduleData }, index (index)}
-    <div class="card w-100 mb-3" key={index}>
-      <div class="card-body">
-        <div class="position-relative">
-          <button class="btn btn-primary position-absolute top-0 end-0" on:click={() => removeRequest(index)} type="button">Antrag löschen</button>
-        </div>
-      </div>
-    </div>
-  {/each} -->
+  
   <div class="my-3 d-flex justify-content-between">
     <button class="btn btn-primary d-inline-flex align-items-center" type="button" on:click={addRequest}>Antrag Hinzufügen<i class="ms-2 bi bi-plus-circle" /></button>
     <!-- <button type="button" class="btn btn-primary">Alle ausklappen</button> -->
