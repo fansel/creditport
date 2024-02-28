@@ -3,12 +3,13 @@
   import { createEventDispatcher } from 'svelte';
 
   export let request = $page.data.request;
-  export let annotation;
+  // export let annotation;
 
-  const dispatch = createEventDispatcher();
-  function handleAnnotationChange(event) {
-    dispatch('annotationchange', { annotation: event.target.value });
-  }
+  // const dispatch = createEventDispatcher();
+  // function handleAnnotationChange(event) {
+  //   dispatch('annotationchange', { annotation: event.target.value });
+  // }
+  // on:input={handleAnnotationChange}
 </script>
 
 <div class="form-row mb-2">
@@ -27,10 +28,10 @@
 
   <div class="tab-content" id="myTabContent">
     <div class="tab-pane fade show active" id="studi-tab-pane" role="tabpanel" aria-labelledby="studi-tab" tabindex="0">
-      <textarea on:input={handleAnnotationChange} class="form-control" id="input" placeholder="Begründen Sie Ihren Entscheid..." rows="4" name="comment">{request.annotation ?? ''}</textarea>
+      <textarea class="form-control" id="input" placeholder="Begründen Sie Ihren Entscheid..." rows="4" name="comment">{request.annotationStudent ?? ''}</textarea>
     </div>
     <div class="tab-pane fade" id="office-tab-pane" role="tabpanel" aria-labelledby="office-tab" tabindex="0">
-      <textarea class="form-control" id="input" placeholder="Begründen Sie Ihren Entscheid..." rows="4" name="comment">{request.comment_student ?? ''}</textarea>
+      <textarea class="form-control" id="input" placeholder="Begründen Sie Ihren Entscheid..." rows="4" name="comment">{request.annotationCommittee ?? ''}</textarea>
     </div>
   </div>
 </div>

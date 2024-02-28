@@ -68,7 +68,8 @@ export const actions = {
       }),
       externalModuleId: zfd.text(),
       internalModuleId: zfd.text(),
-      annotation: zfd.text(),
+      annotationStudent: zfd.text(),
+      annotationCommittee: zfd.text(),
       creditPoints: zfd.text().transform((value) => parseInt(value, 10)),
       status: zfd.text(z.string({ required_error: 'Status darf nicht leer sein' })),
       createdAt: zfd.text(),
@@ -77,7 +78,7 @@ export const actions = {
     });
   
     const result = schema.safeParse(formData);
-    console.log(result.success);
+    console.log("schema.success is " + result.success);
     if (!result.success) {
       const data = {
         data: Object.fromEntries(formData),
@@ -91,7 +92,8 @@ export const actions = {
       requestId: result.data.requestId,
       externalModuleId: result.data.externalModuleId,
       internalModuleId: result.data.internalModuleId,
-      annotation: result.data.annotation,
+      annotationStudent: result.data.annotationStudent,
+      annotationCommittee: result.data.annotationCommittee,
       creditPoints: result.data.creditPoints,
       status: result.data.status,
       createdAt: result.data.createdAt,
