@@ -154,6 +154,6 @@ deploy:
     - chmod 644 ~/.ssh/known_hosts
   script:
     - echo $CI_REGISTRY_TOKEN | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
-    - docker compose -f docker-compose-prod.yml stop frontend backend db
-    - docker compose rm -f frontend backend db
-    - docker compose -f docker-compose-prod.yml up -d frontend backend db
+    - docker compose -f docker-compose-prod.yml stop frontend backend db db-gui
+    - docker compose rm -f frontend backend db db-gui
+    - docker compose -f docker-compose-prod.yml up -d frontend backend db db-gui
