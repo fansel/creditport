@@ -5,7 +5,8 @@ import lombok.Data;
 public class RequestDTO {
     private String externalModule;
     private String internalModule;
-    private String annotation;
+    private String annotationStudent;
+    private String annotationCommittee;
     private int creditPoints;
     private String moduleLink;
 
