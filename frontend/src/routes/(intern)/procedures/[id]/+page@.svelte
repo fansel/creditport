@@ -6,6 +6,7 @@
   import * as config from '$lib/config';
   import { format, parseISO } from 'date-fns';
   import { page } from '$app/stores';
+  import { enhance } from '$app/forms';
   import Comment from './Comment.svelte';
   import PDF from './PDF.svelte';
   import Navbar from './Navbar.svelte';
@@ -17,6 +18,7 @@
   const request = data.request;
   let selectedModul = 0;
   let annotation;
+  let testAnnotation = 'Test';
 
   let showModalExtern;
   let showModalIntern;
@@ -60,11 +62,19 @@
     </div>
 
     <div class="col-4">
-      <form method="PUT" action="?/putRequest">
+      <form method="POST" action="?/updateRequest" use:enhance>
         <!-- hidden input für Daten die sich nicht ändern sollten -->
-        <input name="requestId" value={request.requestId} type="hidden" />
-        <input name="pdfExists" value={request.pdfExists} type="hidden" />
-        <input name="createdAt" value={request.createdAt} type="hidden" />
+        <input name="requestId" bind:value={request.requestId} type="hidden" />
+        <input name="externalModuleId" bind:value={request.externalModule} type="hidden" />
+        <input name="internalModuleId" bind:value={request.internalModule} type="hidden" />
+        <input name="creditPoints" bind:value={request.creditPoints} type="hidden" />
+        <input name="status" bind:value={request.status} type="hidden" />
+        <input name="createdAt" bind:value={request.createdAt} type="hidden" />
+        <input name="pdfExists" bind:value={request.pdfExists} type="hidden" />
+        <input name="moduleLink" value="google.com" type="hidden" />
+
+        <input name="annotation" bind:value={testAnnotation} type="hidden" />
+
         <div class="row mb-3">
           <div class="col-6"><strong>Antrag erstellt am </strong><br />{format(new Date(request.createdAt), 'dd.MM.yyyy HH:mm')}</div>
         </div>

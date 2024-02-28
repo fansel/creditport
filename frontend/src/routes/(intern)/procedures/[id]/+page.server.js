@@ -1,5 +1,8 @@
 import * as api from '$lib/api.js';
 import { error } from '@sveltejs/kit';
+import { zfd } from 'zod-form-data';
+import {z} from 'zod';
+import {fail} from '@sveltejs/kit';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ params, locals }) {
@@ -52,7 +55,7 @@ export const actions = {
 
     return { success: true };
   },
-  putRequest: async ({ locals, request }) => {
+  updateRequest: async ({ locals, request }) => {
     const formData = await request.formData();
   
     const schema = zfd.formData({
@@ -74,12 +77,13 @@ export const actions = {
     });
   
     const result = schema.safeParse(formData);
-  
+    console.log(result.success);
     if (!result.success) {
       const data = {
         data: Object.fromEntries(formData),
         errors: result.error.flatten().fieldErrors
       };
+      console.log(data);
       return fail(400, data);
     }
   
@@ -95,7 +99,7 @@ export const actions = {
       moduleLink: result.data.moduleLink, 
     };
   
-    const res = await api.put(`requests/${id}`, body, locals.user?.token);
+    const res = await api.put(`requests/${result.data.requestId}`, body, locals.user?.token);
   
     return { success: true };
   }
