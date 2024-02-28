@@ -59,7 +59,8 @@ public class RequestController {
             relatedRequest.setProcedureId(request.getProcedure().getProcedureId());
             relatedRequest.setExternalModule(request.getExternalModuleId());
             relatedRequest.setInternalModule(request.getInternalModuleId());
-            relatedRequest.setAnnotation(request.getAnnotation());
+            relatedRequest.setAnnotationStudent(request.getAnnotationStudent());
+            relatedRequest.setAnnotationCommittee(request.getAnnotationCommittee());
             relatedRequest.setCreditPoints(request.getCreditPoints());
             relatedRequest.setStatus(request.getStatus());
             relatedRequest.setCreatedAt(request.getCreatedAt());
@@ -101,7 +102,8 @@ public class RequestController {
                     Request.setStatus(RequestDetails.getStatus());
                     Request.setExternalModuleId(RequestDetails.getExternalModuleId());
                     Request.setInternalModuleId(RequestDetails.getInternalModuleId());
-                    Request.setAnnotation(RequestDetails.getAnnotation());
+                    Request.setAnnotationStudent(RequestDetails.getAnnotationStudent());
+                    Request.setAnnotationCommittee(RequestDetails.getAnnotationCommittee());
                     Request.setCreditPoints(RequestDetails.getCreditPoints());
                     Request.setPdfExists(RequestDetails.isPdfExists());
                     Request.setModuleLink(RequestDetails.getModuleLink());
