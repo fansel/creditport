@@ -15,7 +15,17 @@ services:
       - 'creditport-db:/var/lib/postgresql/data'
     networks:
       - creditport-net
-
+  db-gui:
+    image: elestio/pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@creditport.de"
+      PGADMIN_DEFAULT_PASSWORD: "admin"
+      PGADMIN_LISTEN_PORT: 5050
+    ports:
+      - "5050:5050"
+    volumes:
+      - "pgadmin-data:/var/lib/pgadmin"
   javadoc:
     container_name: creditport-javadoc
     image: swtp202313/creditport:javadoc-latest
