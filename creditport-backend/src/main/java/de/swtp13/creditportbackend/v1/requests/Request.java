@@ -51,10 +51,16 @@ public class Request {
     private String internalModuleId;
 
     @Column(
-            name = "annotation",
+            name = "annotation_student",
             columnDefinition = "TEXT"
     )
-    private String annotation;
+    private String annotationStudent;
+
+    @Column(
+            name = "annotation_committee",
+            columnDefinition = "TEXT"
+    )
+    private String annotationCommittee;
 
     @Column(
             name = "credit_points",
