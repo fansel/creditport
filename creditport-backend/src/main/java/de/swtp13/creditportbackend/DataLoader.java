@@ -74,14 +74,14 @@ public class DataLoader implements CommandLineRunner {
         System.out.println("Procedures were saved in the database!");
         List<Request> requests = Arrays.asList(
             new Request(procedure,"10-201-2001-2",
-                        "testId","Algorithmen und Datenstrukturen 1",5),
+                        "testId","Algorithmen und Datenstrukturen 1","an",5),
             new Request(procedure,"10-201-1011",
-                "12345","Analysis für Informatiker",10)
+                "12345","Analysis für Informatiker","an",10)
         );
-        Request request1 = new Request(procedure3, "123", "124", "Anmerkung Antrag 1/ Vorgang 3", 10);
-        Request request2 = new Request(procedure3, "125", "126", "Anmerkung Antrag 2/ Vorgang 3", 10);
-        Request request3 = new Request(procedure2, "123", "124", "Anmerkung Antrag 1/ Vorgang 2", 5);
-        Request request4 = new Request(procedure2, "101", "404", "Anmerkung Antrag 2/ Vorgang 2", 10);
+        Request request1 = new Request(procedure3, "123", "124", "Anmerkung Antrag 1/ Vorgang 3", "an", 10);
+        Request request2 = new Request(procedure3, "125", "126", "Anmerkung Antrag 2/ Vorgang 3","an", 10);
+        Request request3 = new Request(procedure2, "123", "124", "Anmerkung Antrag 1/ Vorgang 2","an", 5);
+        Request request4 = new Request(procedure2, "101", "404", "Anmerkung Antrag 2/ Vorgang 2","an", 10);
         //Erstelle einen neuen Antrag
         requestRepository.saveAll(requests);
         requestRepository.save(request1);
