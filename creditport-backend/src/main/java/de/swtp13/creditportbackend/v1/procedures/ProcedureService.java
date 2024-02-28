@@ -71,7 +71,8 @@ public class ProcedureService {
             Request newRequest = new Request();
             newRequest.setExternalModuleId(requestDTO.getExternalModule());
             newRequest.setInternalModuleId(requestDTO.getInternalModule());
-            newRequest.setAnnotation(requestDTO.getAnnotation());
+            newRequest.setAnnotationStudent(requestDTO.getAnnotationStudent());
+            newRequest.setAnnotationCommittee(requestDTO.getAnnotationCommittee());
             newRequest.setCreditPoints(requestDTO.getCreditPoints());
             newRequest.setProcedure(newProcedure);
             newRequest.setStatus(de.swtp13.creditportbackend.v1.requests.Status.NICHT_BEARBEITET);
