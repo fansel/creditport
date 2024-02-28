@@ -16,7 +16,8 @@ public class RelatedRequestDTO {
     private int requestId;
     private String externalModule;
     private String internalModule;
-    private String annotation;
+    private String annotationStudent;
+    private String annotationCommittee;
     private int creditPoints;
     private Status status;
     private Instant createdAt;
