@@ -71,10 +71,7 @@
         <input name="status" bind:value={request.status} type="hidden" />
         <input name="createdAt" bind:value={request.createdAt} type="hidden" />
         <input name="pdfExists" bind:value={request.pdfExists} type="hidden" />
-        <input name="moduleLink" value="google.com" type="hidden" />
-
-        <input name="annotationStudent" value={testAnnotation} type="hidden" />
-        <input name="annotationCommittee" value={testAnnotation} type="hidden" />
+        <input name="moduleLink" value=" " type="hidden" />
 
         <div class="row mb-3">
           <div class="col-6"><strong>Antrag erstellt am </strong><br />{format(new Date(request.createdAt), 'dd.MM.yyyy HH:mm')}</div>
@@ -96,9 +93,7 @@
             </div>
           </div>
 
-          <!-- <Comment bind:annotation={request.annotation} /> -->
           <Comment />
-
           <button type="submit" class="btn btn-primary">Speichern</button>
           <div class="btn btn-outline-secondary">Abbrechen</div>
         </div>
