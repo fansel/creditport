@@ -28,9 +28,26 @@
   let sortingByField = 'createdAt';
   let sortingDirection = false; //true DESC - false ASC
   let filtered = false;
-  let date = null;
 
-  $: filtered = !(searchTerm == '');
+  let startDateCreatedAt = null;
+  let endDateCreatedAt = null;
+  let startDateLastUpdated = null;
+  let endDateLastUpdated = null;
+
+  let createdAtFilter = { start: null, end: null };
+  let lastUpdatedFilter = { start: null, end: null };
+
+  let statusFilter = Object.fromEntries(STATUS.map(({ match }) => [match, false]));
+  $: filteredByStatus = Object.values(statusFilter).some((value) => value === true);
+
+  $: filtered = !(
+    searchTerm == '' &&
+    Object.values(statusFilter).every((value) => value === false) &&
+    createdAtFilter.start == null &&
+    createdAtFilter.end == null &&
+    lastUpdatedFilter.start == null &&
+    lastUpdatedFilter.end == null
+  );
 
   /**
    * Erstellt eine Vergleichsfunktion für die Sortierung von Objekten nach einer bestimmten Eigenschaft.
@@ -50,8 +67,12 @@
   // Filter zurücksetzen
   function resetFilters() {
     searchTerm = '';
+    statusFilter = Object.fromEntries(STATUS.map(({ match }) => [match, false])); // Alle Werte auf false setzten
+    createdAtFilter = { start: null, end: null };
+    lastUpdatedFilter = { start: null, end: null };
   }
 
+  // Eine Funktion die zählt wie oft ein gewisser Status (Bsp: NEU) in procedures vorkommt
   function countStatus(arr, status) {
     // Zähler für Status 1 initialisieren
     let count = 0;
@@ -69,12 +90,21 @@
     return count;
   }
 
+  // Erweitert die Procedure Objekte um ein neues Attribut searchIndex in dem in Kleinbuchstaben alle wichtigen Suchfelder aneinandergehängt werden
   const createSearchIndex = (arr) => arr.map((obj) => ({ ...obj, searchIndex: `${obj.procedureId}${obj.status}${obj.university}${obj.createdAt}${obj.courseName}`.toLowerCase() }));
 
   $: searchResultsCount = searchResults.length;
   $: searchResults = proceduresSearchIndex
     .filter((proc) => {
-      return proc.searchIndex.includes(searchTerm);
+      const filterBySearch = proc.searchIndex.includes(searchTerm);
+
+      let filterByStatus = true;
+      if (statusFilter && filteredByStatus) filterByStatus = statusFilter[proc.status];
+
+      let filterByCreatedAt = true;
+      let filterBylastUpdateAt = true;
+
+      return filterBySearch && filterByStatus && filterByCreatedAt && filterBylastUpdateAt;
     })
     .sort(compareByProperty(sortingByField, sortingDirection));
 </script>
@@ -142,13 +172,13 @@
           <!-- svelte-ignore a11y-no-static-element-interactions -->
           <div class="dropdown-item date-picker-holder" on:click|stopPropagation>
             <label for="" class="mb-1">Nach</label>
-            <DateInput bind:value={date} closeOnSelection={true} {locale} format="dd.MM.yyyy" placeholder="dd.mm.yyyy" />
+            <DateInput bind:value={startDateCreatedAt} closeOnSelection={true} {locale} format="dd.MM.yyyy" placeholder="dd.mm.yyyy" />
           </div>
           <!-- svelte-ignore a11y-click-events-have-key-events -->
           <!-- svelte-ignore a11y-no-static-element-interactions -->
           <div class="dropdown-item date-picker-holder" on:click|stopPropagation>
             <label for="" class="mb-1">Vor</label>
-            <DateInput bind:value={date} closeOnSelection={true} {locale} format="dd.MM.yyyy" placeholder="dd.mm.yyyy" />
+            <DateInput bind:value={endDateCreatedAt} closeOnSelection={true} {locale} format="dd.MM.yyyy" placeholder="dd.mm.yyyy" />
           </div>
         </div>
       </div>
@@ -164,13 +194,13 @@
           <!-- svelte-ignore a11y-no-static-element-interactions -->
           <div class="dropdown-item date-picker-holder" on:click|stopPropagation>
             <label for="" class="mb-1">Nach</label>
-            <DateInput bind:value={date} closeOnSelection={true} {locale} format="dd.MM.yyyy" placeholder="dd.mm.yyyy" />
+            <DateInput bind:value={startDateLastUpdated} closeOnSelection={true} {locale} format="dd.MM.yyyy" placeholder="dd.mm.yyyy" />
           </div>
           <!-- svelte-ignore a11y-click-events-have-key-events -->
           <!-- svelte-ignore a11y-no-static-element-interactions -->
           <div class="dropdown-item date-picker-holder" on:click|stopPropagation>
             <label for="" class="mb-1">Vor</label>
-            <DateInput bind:value={date} closeOnSelection={true} {locale} format="dd.MM.yyyy" placeholder="dd.mm.yyyy" />
+            <DateInput bind:value={endDateLastUpdated} closeOnSelection={true} {locale} format="dd.MM.yyyy" placeholder="dd.mm.yyyy" />
           </div>
         </div>
       </div>
@@ -180,10 +210,17 @@
           <button class="dropdown-toggle btn btn-outline-secondary btn-sm" type="button" data-bs-toggle="dropdown">Status</button>
 
           <div class="shadow dropdown-menu-right dropdown-menu bordered-dropdown">
-            {#each STATUS as status}
-              <button class="dropdown-item d-inline-flex justify-content-between align-items-center" tabindex="0" disabled={countStatus(searchResults, status.match) < 1}
-                >{status.text_intern} <span class="badge bg-secondary-subtle text-dark text-end ms-3">{countStatus(searchResults, status.match)}</span></button
+            {#each STATUS as status, index}
+              <input type="checkbox" class="btn-check" id="statusCheckbox{status.text_intern}" bind:checked={statusFilter[status.match]} disabled={countStatus(procedures, status.match) < 1} />
+              <label
+                for="statusCheckbox{status.text_intern}"
+                class="dropdown-item d-inline-flex justify-content-between align-items-center {countStatus(procedures, status.match) < 1 ? 'disabled' : ''} {statusFilter[status.match]
+                  ? 'active'
+                  : 'false'}"
               >
+                {status.text_intern}
+                <span class="badge bg-secondary-subtle text-dark text-end ms-3">{countStatus(procedures, status.match)}</span>
+              </label>
             {/each}
           </div>
         </div>
@@ -302,7 +339,4 @@
     color: var(--bs-dropdown-link-color);
   }
 
-  .dropdown-text-sm {
-    font-size: 0.875rem;
-  }
 </style>
