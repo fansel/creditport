@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -19,7 +18,7 @@ public class RelatedRequestDTO {
     private String annotationStudent;
     private String annotationCommittee;
     private int creditPoints;
-    private Status status;
+    private StatusRequest statusRequest;
     private Instant createdAt;
     private boolean pdfExists;
 
