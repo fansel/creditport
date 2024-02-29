@@ -1,7 +1,5 @@
 package de.swtp13.creditportbackend.v1.internalmodules;
 
-import de.swtp13.creditportbackend.v1.modules.Module;
-import de.swtp13.creditportbackend.v1.universities.University;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,11 +14,10 @@ import java.util.UUID;
  */
 @Entity(name = "InternalModules")
 @Table(name = "internal_modules")
-
 @Data // Erstellt Getter, Setter und toString automatisch
 @NoArgsConstructor // Erstellt den Standardkonstruktor
 @AllArgsConstructor // Erstellt einen Konstruktor mit allen Feldern als Parameter
-public class InternalModule extends Module {
+public class InternalModule {
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -52,7 +49,11 @@ public class InternalModule extends Module {
     )
     private String moduleDescription;
 
-
+    public InternalModule(String number, String moduleName, String moduleDescription){
+        this.moduleDescription = moduleDescription;
+        this.moduleName = moduleName;
+        this.number = number;
+    }
 
 
 
