@@ -92,7 +92,7 @@
                 <div class="list-group-item d-inline-flex justify-content-between">
                   <div class="d-inline-flex align-item-center">
                     {request.externalModuleId}
-                    <Status status={request.status} />
+                    <Status status={request.statusRequest} />
                   </div>
                   <a href="/procedures/{request.requestId}"><i class="bi bi-pencil-square" /></a>
                 </div>

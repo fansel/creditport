@@ -52,6 +52,23 @@
     searchTerm = '';
   }
 
+  function countStatus(arr, status) {
+    // Zähler für Status 1 initialisieren
+    let count = 0;
+
+    // Durch das Array iterieren
+    arr.forEach((obj) => {
+      // Überprüfen, ob das Statusattribut gleich 1 ist
+      if (obj.status === status) {
+        // Wenn ja, erhöhe den Zähler um 1
+        count++;
+      }
+    });
+
+    // Die Anzahl der Vorkommen von Status 1 zurückgeben
+    return count;
+  }
+
   const createSearchIndex = (arr) => arr.map((obj) => ({ ...obj, searchIndex: `${obj.procedureId}${obj.status}${obj.university}${obj.createdAt}${obj.courseName}`.toLowerCase() }));
 
   $: searchResultsCount = searchResults.length;
@@ -161,10 +178,13 @@
       <div class="d-flex flex-wrap">
         <div class="btn-group flex-fill dropwdown">
           <button class="dropdown-toggle btn btn-outline-secondary btn-sm" type="button" data-bs-toggle="dropdown">Status</button>
+
           <div class="shadow dropdown-menu-right dropdown-menu bordered-dropdown">
-            <button class="dropdown-item d-inline-flex justify-content-between" tabindex="0">offen <span class="badge bg-secondary-subtle text-dark text-end">24</span></button>
-            <button class="dropdown-item d-inline-flex justify-content-between" tabindex="0">bearbeitet <span class="badge bg-secondary-subtle text-dark text-end">24</span></button>
-            <button class="dropdown-item d-inline-flex justify-content-between" tabindex="0">archiviert <span class="badge bg-secondary-subtle text-dark text-end">24</span></button>
+            {#each STATUS as status}
+              <button class="dropdown-item d-inline-flex justify-content-between align-items-center" tabindex="0" disabled={countStatus(searchResults, status.match) < 1}
+                >{status.text_intern} <span class="badge bg-secondary-subtle text-dark text-end ms-3">{countStatus(searchResults, status.match)}</span></button
+              >
+            {/each}
           </div>
         </div>
       </div>
@@ -280,5 +300,9 @@
   .dropdown-item.date-picker-holder:active {
     background-color: transparent;
     color: var(--bs-dropdown-link-color);
+  }
+
+  .dropdown-text-sm {
+    font-size: 0.875rem;
   }
 </style>
