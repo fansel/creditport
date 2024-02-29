@@ -1,10 +1,12 @@
 package de.swtp13.creditportbackend.v1.modules;
+import de.swtp13.creditportbackend.v1.internalmodules.InternalModule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author Felix
@@ -14,14 +16,14 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping("/modules")
-public class ModuleController {
+@RequestMapping("/modules/external")
+public class ExternalModuleController {
 
     @Autowired
-    private ModuleRepository moduleRepository;
+    private ExternalModuleRepository moduleRepository;
 
     @GetMapping
-    public ResponseEntity<List<Module>> getAllModules() {
+    public ResponseEntity<List<ExternalModule>> getAllModules() {
         System.out.println("Get all modules");
         return ResponseEntity.ok(moduleRepository.findAll());
     }
@@ -29,38 +31,38 @@ public class ModuleController {
     @PostMapping
     public ResponseEntity<?> createModule(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false, defaultValue = "") String token,
-            @RequestBody Module Module) {
+            @RequestBody ExternalModule Module) {
         System.out.println("Create Module: " + Module.getModuleName());
         return ResponseEntity.ok(moduleRepository.save(Module));
     }
 
 
     // PUT: Update a Module
-    @PutMapping("/{number}")
-    public ResponseEntity<Module> updateModule(@PathVariable String number, @RequestBody Module ModuleDetails) {
-        return moduleRepository.findById(number)
+    @PutMapping("/{moduleId}")
+    public ResponseEntity<ExternalModule> updateModule(@PathVariable UUID moduleId, @RequestBody ExternalModule ModuleDetails) {
+        return moduleRepository.findById(moduleId)
                 .map(Module -> {
                     Module.setModuleName(ModuleDetails.getModuleName());
                     Module.setModuleDescription(ModuleDetails.getModuleDescription());
                     Module.setUniversity(ModuleDetails.getUniversity());
-                    Module updatedModule = moduleRepository.save(Module);
+                    ExternalModule updatedModule = moduleRepository.save(Module);
                     return ResponseEntity.ok(updatedModule);
                 }).orElse(ResponseEntity.notFound().build());
     }
 
     // DELETE: Delete a Module
-    @DeleteMapping("/{number}")
-    public ResponseEntity<?> deleteModule(@PathVariable String number) {
-        return moduleRepository.findById(number)
+    @DeleteMapping("/{moduleId}")
+    public ResponseEntity<?> deleteModule(@PathVariable UUID moduleId) {
+        return moduleRepository.findById(moduleId)
                 .map(Module -> {
                     moduleRepository.delete(Module);
                     return ResponseEntity.ok().build();
                 }).orElse(ResponseEntity.notFound().build());
     }
 
-    // import Module data from json fil
+    // import Module data from json file
     @PostMapping("/import")
-    public ResponseEntity<List<Module>> importUniversities(@RequestBody List<Module> modules) {
+    public ResponseEntity<List<ExternalModule>> importUniversities(@RequestBody List<ExternalModule> modules) {
         moduleRepository.saveAll(modules);
         return ResponseEntity.ok(modules);
     }

@@ -2,6 +2,8 @@ package de.swtp13.creditportbackend.v1.modules;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.UUID;
+
 /**
  * @author Felix
  * Dieses Interface ist ein Repository für Module.
@@ -10,5 +12,5 @@ import org.springframework.stereotype.Repository;
  * Die Methoden sind in der Dokumentation von JpaRepository zu finden.
  */
 @Repository
-public interface ModuleRepository extends JpaRepository<Module, String> {
+public interface ExternalModuleRepository extends JpaRepository<ExternalModule, UUID> {
 }
