@@ -24,8 +24,8 @@ public class UserController {
     private final ManagementService managementService;
 
     @Operation(summary = "returns a list of all users, only usable by admin", responses = {
-            @ApiResponse(responseCode = "200", description = "successfully returns users",
-            content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = UserDTO.class)))),
+            @ApiResponse(responseCode = "200",
+                    content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = UserDTO.class)))),
             @ApiResponse(responseCode = "403", description = "Missing admin authentification", content = @Content)
     })
     @GetMapping
@@ -93,7 +93,8 @@ public class UserController {
 
     @Operation(summary = "updates password of the calling user or a given user id",
             description = "Updates the password of the calling user. Should the caller be an admin, " +
-                    "they can specify a user id as an optional parameter whose password to update instead.",
+                    "they can specify a user id as an optional parameter whose password to update instead." +
+                    "the required user details are taken from the Authorization header.",
             responses = {
             @ApiResponse(responseCode = "204", content = @Content),
             @ApiResponse(responseCode = "400", description = "New password is null or empty",
