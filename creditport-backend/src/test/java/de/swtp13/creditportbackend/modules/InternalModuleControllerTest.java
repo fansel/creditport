@@ -20,7 +20,7 @@ public class InternalModuleControllerTest {
 
     @Test
     public void endpointShouldExist() throws Exception {
-        mockMvc.perform(get("/modules"))
+        mockMvc.perform(get("/modules/internal"))
                 .andExpect(status().is(not(HttpStatus.NOT_FOUND.value())));
     }
 
