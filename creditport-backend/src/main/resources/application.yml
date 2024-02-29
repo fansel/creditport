@@ -25,3 +25,7 @@ management:
     exposure:
       include: "*"
 
+springdoc:
+  api-docs:
+    path: "/openapi"
+
