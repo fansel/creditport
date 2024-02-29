@@ -1,5 +1,10 @@
 package de.swtp13.creditportbackend.v1.users;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -18,6 +23,11 @@ public class UserController {
 
     private final ManagementService managementService;
 
+    @Operation(summary = "returns a list of all users, only usable by admin", responses = {
+            @ApiResponse(responseCode = "200", description = "successfully returns users",
+            content = @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = UserDTO.class)))),
+            @ApiResponse(responseCode = "403", description = "Missing admin authentification", content = @Content)
+    })
     @GetMapping
     public List<UserDTO> getAllUsers() {
         System.out.println("Get all Users");
@@ -29,6 +39,13 @@ public class UserController {
         return userDTOList;
     }
 
+    @Operation(summary = "returns a single user, only usable by admin", responses = {
+            @ApiResponse(responseCode = "200",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDTO.class))),
+            @ApiResponse(responseCode = "403", description = "Missing admin authentification", content = @Content),
+            @ApiResponse(responseCode = "404", description = "User id not found",
+                    content = @Content)
+    })
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> getUser(
             @PathVariable int id
@@ -38,6 +55,11 @@ public class UserController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @Operation(summary = "deletes a user from the database, only usable by admin", responses = {
+            @ApiResponse(responseCode = "204", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Missing admin authentification", content = @Content),
+            @ApiResponse(responseCode = "404", description = "User id not found", content = @Content)
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(
             @PathVariable int id
@@ -50,6 +72,13 @@ public class UserController {
     }
 
 
+    @Operation(summary = "adds a user to the database, only usable by admin", responses = {
+            @ApiResponse(responseCode = "200",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDTO.class))),
+            @ApiResponse(responseCode = "403", description = "Missing admin authentification", content = @Content),
+            @ApiResponse(responseCode = "409", description = "Username already taken, returns existing user",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDTO.class)))
+    })
     @PostMapping("/register")
     public ResponseEntity<UserDTO> register(
             @RequestBody RegisterRequestDTO request
@@ -62,6 +91,18 @@ public class UserController {
                 );
     }
 
+    @Operation(summary = "updates password of the calling user or a given user id",
+            description = "Updates the password of the calling user. Should the caller be an admin, " +
+                    "they can specify a user id as an optional parameter whose password to update instead.",
+            responses = {
+            @ApiResponse(responseCode = "204", content = @Content),
+            @ApiResponse(responseCode = "400", description = "New password is null or empty",
+                    content = @Content),
+            @ApiResponse(responseCode = "403",
+                    description = "User is not authenticated or an id has been given but the user is not an admin",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "User id not found", content = @Content)
+            })
     @PostMapping("/update/password")
     public ResponseEntity<?> updatePassword(
             @RequestParam(required = false) Integer id,
@@ -72,6 +113,14 @@ public class UserController {
         return ResponseEntity.status(managementService.updatePassword(id, jwt, newPass)).build();
     }
 
+    @Operation(summary = "updates a user, only usable by admin", responses = {
+            @ApiResponse(responseCode = "204", content = @Content),
+            @ApiResponse(responseCode = "400", description = "New username is null or empty", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Missing admin authentification", content = @Content),
+            @ApiResponse(responseCode = "404", description = "User id not found", content = @Content),
+            @ApiResponse(responseCode = "409", description = "New username is already taken", content = @Content),
+            @ApiResponse(responseCode = "422", description = "Invalid role has been given", content = @Content)
+    })
     @PutMapping("/update")
     public ResponseEntity<?> updateUser(
             @RequestBody UserDTO updatedUser
