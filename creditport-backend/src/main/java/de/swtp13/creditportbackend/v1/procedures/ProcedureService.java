@@ -70,8 +70,8 @@ public class ProcedureService {
         List<RequestResponseDTO> requestResponseDTOs = new ArrayList<>();
         for (RequestDTO requestDTO : procedureRequestDTO.getRequests()) {
             Request newRequest = new Request();
-            newRequest.setExternalModuleId(requestDTO.getExternalModuleId());
-            newRequest.setInternalModuleId(requestDTO.getInternalModuleId());
+            newRequest.setExternalModule(requestDTO.getExternalModule());
+            newRequest.setInternalModule(requestDTO.getInternalModule());
             newRequest.setAnnotationStudent(requestDTO.getAnnotationStudent());
             newRequest.setAnnotationCommittee(requestDTO.getAnnotationCommittee());
             newRequest.setCreditPoints(requestDTO.getCreditPoints());

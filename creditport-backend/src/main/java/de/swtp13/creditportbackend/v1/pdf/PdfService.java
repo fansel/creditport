@@ -127,9 +127,9 @@ public class PdfService {
 
     private void addDataRowsToTable(Table table, List<Request> requests) {
         for (Request request : requests) {
-            table.addCell(createCell(request.getExternalModuleId()));
+            table.addCell(createCell(String.valueOf(request.getExternalModule().getModuleId())));
             table.addCell(createCell(String.valueOf(request.getCreditPoints())));
-            table.addCell(createCell(request.getInternalModuleId()));
+            table.addCell(createCell(String.valueOf(request.getInternalModule().getModuleId())));
             table.addCell(createCell(String.valueOf(request.getCreditPoints()))); // LP External
         }
     }

@@ -51,8 +51,8 @@ public class RequestController {
         try {
             relatedRequest.setRequestId(request.getRequestId());
             relatedRequest.setProcedureId(request.getProcedure().getProcedureId());
-            relatedRequest.setExternalModule(request.getExternalModuleId());
-            relatedRequest.setInternalModule(request.getInternalModuleId());
+            relatedRequest.setExternalModule(request.getExternalModule());
+            relatedRequest.setInternalModule(request.getInternalModule());
             relatedRequest.setAnnotationStudent(request.getAnnotationStudent());
             relatedRequest.setAnnotationCommittee(request.getAnnotationCommittee());
             relatedRequest.setCreditPoints(request.getCreditPoints());
@@ -94,8 +94,8 @@ public class RequestController {
         return requestRepository.findByRequestId(requestId)
                 .map(Request -> {
                     Request.setStatusRequest(RequestDetails.getStatusRequest());
-                    Request.setExternalModuleId(RequestDetails.getExternalModuleId());
-                    Request.setInternalModuleId(RequestDetails.getInternalModuleId());
+                    Request.setExternalModule(RequestDetails.getExternalModule());
+                    Request.setInternalModule(RequestDetails.getInternalModule());
                     Request.setAnnotationStudent(RequestDetails.getAnnotationStudent());
                     Request.setAnnotationCommittee(RequestDetails.getAnnotationCommittee());
                     Request.setCreditPoints(RequestDetails.getCreditPoints());
