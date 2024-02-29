@@ -3,17 +3,11 @@ package de.swtp13.creditportbackend.v1.requests;
 
         import de.swtp13.creditportbackend.v1.procedures.Procedure;
         import org.springframework.beans.factory.annotation.Autowired;
-        import org.springframework.core.io.ByteArrayResource;
-        import org.springframework.http.MediaType;
         import org.springframework.http.ResponseEntity;
         import org.springframework.web.bind.annotation.*;
-        import org.springframework.http.HttpStatus;
-        import org.springframework.web.multipart.MultipartFile;
 
 
-        import java.util.ArrayList;
         import java.util.List;
-        import java.util.Objects;
         import java.util.Optional;
 
 
@@ -62,7 +56,7 @@ public class RequestController {
             relatedRequest.setAnnotationStudent(request.getAnnotationStudent());
             relatedRequest.setAnnotationCommittee(request.getAnnotationCommittee());
             relatedRequest.setCreditPoints(request.getCreditPoints());
-            relatedRequest.setStatus(request.getStatus());
+            relatedRequest.setStatusRequest(request.getStatusRequest());
             relatedRequest.setCreatedAt(request.getCreatedAt());
             relatedRequest.setPdfExists(request.isPdfExists());
 
@@ -99,7 +93,7 @@ public class RequestController {
     public ResponseEntity<Request> updateRequestStatus(@PathVariable int requestId, @RequestBody Request RequestDetails) {
         return requestRepository.findByRequestId(requestId)
                 .map(Request -> {
-                    Request.setStatus(RequestDetails.getStatus());
+                    Request.setStatusRequest(RequestDetails.getStatusRequest());
                     Request.setExternalModuleId(RequestDetails.getExternalModuleId());
                     Request.setInternalModuleId(RequestDetails.getInternalModuleId());
                     Request.setAnnotationStudent(RequestDetails.getAnnotationStudent());

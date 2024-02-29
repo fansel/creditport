@@ -83,5 +83,8 @@ networks:
 volumes:
   creditport-db:
     name: creditport-db
+  pgadmin-data:
+    name: pgadmin-data
+
 
     

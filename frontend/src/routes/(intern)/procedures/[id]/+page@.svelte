@@ -16,9 +16,6 @@
 
   const modules = data.modules;
   const request = data.request;
-  let selectedModul = 0;
-  let annotation;
-  let testAnnotation = 'Test';
 
   let showModalExtern;
   let showModalIntern;
