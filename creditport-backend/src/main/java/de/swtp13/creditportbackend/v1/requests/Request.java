@@ -2,14 +2,12 @@ package de.swtp13.creditportbackend.v1.requests;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.swtp13.creditportbackend.v1.procedures.Procedure;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 
 /**
  * Die Klasse repräsentiert einen Antrag.
@@ -76,7 +74,7 @@ public class Request {
     )
 
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private StatusRequest statusRequest;
 
     @Column(
             name = "created_at",
@@ -96,7 +94,7 @@ public class Request {
 
 
     // Überarbeiteter Konstruktor mit 'createdAt'-Parameter
-    public Request(Procedure procedure, String externalModuleId, String internalModuleId, String annotationCommittee, String annotationStudent, int creditPoints, Instant createdAt) {
+    public Request(Procedure procedure, String externalModuleId, String internalModuleId, String annotationStudent, String annotationCommittee, int creditPoints, Instant createdAt) {
         this.procedure = procedure;
         this.externalModuleId = externalModuleId;
         this.internalModuleId = internalModuleId;
@@ -104,7 +102,7 @@ public class Request {
         this.annotationCommittee = annotationCommittee;
         this.creditPoints = creditPoints;
         this.createdAt = createdAt;
-        this.status = Status.NICHT_BEARBEITET;
+        this.statusRequest = StatusRequest.NICHT_BEARBEITET;
     }
 
     public Request(Procedure procedure, String externalModuleId, String internalModuleId, String annotationStudent, String annotationCommittee, int creditPoints) {
@@ -114,7 +112,7 @@ public class Request {
         this.annotationStudent = annotationStudent;
         this.annotationCommittee = annotationCommittee;
         this.creditPoints = creditPoints;
-        this.status = Status.NICHT_BEARBEITET;
+        this.statusRequest = StatusRequest.NICHT_BEARBEITET;
         this.createdAt = Instant.now();
     }
 }
