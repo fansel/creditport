@@ -6,6 +6,7 @@ import de.swtp13.creditportbackend.v1.procedures.dto.RequestDTO;
 import de.swtp13.creditportbackend.v1.procedures.dto.RequestResponseDTO;
 import de.swtp13.creditportbackend.v1.requests.RequestRepository;
 import de.swtp13.creditportbackend.v1.requests.Request;
+import de.swtp13.creditportbackend.v1.requests.StatusRequest;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -69,13 +70,13 @@ public class ProcedureService {
         List<RequestResponseDTO> requestResponseDTOs = new ArrayList<>();
         for (RequestDTO requestDTO : procedureRequestDTO.getRequests()) {
             Request newRequest = new Request();
-            newRequest.setExternalModuleId(requestDTO.getExternalModule());
-            newRequest.setInternalModuleId(requestDTO.getInternalModule());
+            newRequest.setExternalModuleId(requestDTO.getExternalModuleId());
+            newRequest.setInternalModuleId(requestDTO.getInternalModuleId());
             newRequest.setAnnotationStudent(requestDTO.getAnnotationStudent());
             newRequest.setAnnotationCommittee(requestDTO.getAnnotationCommittee());
             newRequest.setCreditPoints(requestDTO.getCreditPoints());
             newRequest.setProcedure(newProcedure);
-            newRequest.setStatus(de.swtp13.creditportbackend.v1.requests.Status.NICHT_BEARBEITET);
+            newRequest.setStatusRequest(StatusRequest.NICHT_BEARBEITET);
             newRequest.setCreatedAt(Instant.now());
             newRequest.setModuleLink(requestDTO.getModuleLink());
             newRequest = requestRepository.save(newRequest);
@@ -90,4 +91,34 @@ public class ProcedureService {
 
         return responseDTO;
     }
+/* Vorbereitung für Statusänderungen
+    public void setStatusInBearbeitung(Procedure procedure){
+        boolean bearbeitet = false;
+        List<Request> requests = requestRepository.findRequestsByProcedureId(procedure.getProcedureId());
+        for (Request request : requests){
+            if (request.getStatusRequest().equals(StatusRequest.BEARBEITET)) {
+                bearbeitet = true;
+                break;
+            }
+        }
+        if (procedure.getStatus().equals(Status.OFFEN)){
+            procedure.setStatus(Status.IN_BEARBEITUNG);
+        }
+    }
+
+    public void setStatusVollstaendig(Procedure procedure){
+        boolean bearbeitet = true;
+        List<Request> requests = requestRepository.findRequestsByProcedureId(procedure.getProcedureId());
+        for (Request request : requests){
+            if (!(request.getStatusRequest().equals(StatusRequest.ABGELEHNT)) && !(request.getStatusRequest().equals(StatusRequest.ANGENOMMEN))) {
+                bearbeitet = false;
+                break;
+            }
+        }
+        if (procedure.getStatus().equals(Status.WEITERGELEITET)){
+            procedure.setStatus(Status.VOLLSTÄNDIG);
+        }
+    }
+
+ */
 }

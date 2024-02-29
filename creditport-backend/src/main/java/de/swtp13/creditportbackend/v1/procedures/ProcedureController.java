@@ -84,6 +84,20 @@ public class ProcedureController {
     }
      */
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Procedure> updateProcedure(@PathVariable("id") int procedureId, @RequestBody Procedure ProcedureDetails) {
+        return procedureRepository.findByProcedureId(procedureId)
+                .map(Procedure -> {
+                    Procedure.setStatus(ProcedureDetails.getStatus());
+                    Procedure.setAnnotation(ProcedureDetails.getAnnotation());
+                    Procedure.setUniversity(ProcedureDetails.getUniversity());
+                    Procedure.setCourseName(ProcedureDetails.getCourseName());
+                    // Add other fields to update if needed
+                    Procedure updatedProcedure = procedureRepository.save(Procedure);
+                    return ResponseEntity.ok(updatedProcedure);
+                }).orElse(ResponseEntity.notFound().build());
+    }
+
 
     @PostMapping
     public ResponseEntity<ProcedureResponseDTO> createProcedure(@RequestBody ProcedureRequestDTO procedureRequestDTO) {
