@@ -1,4 +1,4 @@
-package de.swtp13.creditportbackend.v1.modules;
+package de.swtp13.creditportbackend.v1.externalmodules;
 
 
 import de.swtp13.creditportbackend.v1.universities.University;
@@ -16,11 +16,10 @@ import java.util.UUID;
  */
 @Entity(name = "ExternalModules")
 @Table(name = "external_modules")
-
 @Data // Erstellt Getter, Setter und toString automatisch
 @NoArgsConstructor // Erstellt den Standardkonstruktor
 @AllArgsConstructor // Erstellt einen Konstruktor mit allen Feldern als Parameter
-public class ExternalModule extends Module{
+public class ExternalModule {
 
     @Id
     @GeneratedValue(generator = "UUID")
@@ -51,9 +50,10 @@ public class ExternalModule extends Module{
             columnDefinition = "VARCHAR"
     )
     private String moduleDescription;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(
-            name = "uni_id"
+            name = "uni_id",
+            nullable = false
     )
     private University university;
 
@@ -64,7 +64,6 @@ public class ExternalModule extends Module{
         this.moduleNumber=number;
         this.moduleName= moduleName;
         this.university = university;
-        //später: als uni leipzig initialisieren
     }
 
 }
