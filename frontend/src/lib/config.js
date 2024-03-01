@@ -14,12 +14,12 @@ export const user_roles = {
 
 // Status die ein Vorgang haben kann, Reihenfolge ist wichtig
 export const status_procedures = [
-  { text_intern: 'Neu', color: '#6c757d', text_color: 'white', text_extern: 'in Bearbeitung', match: 'NEU' },
-  { text_intern: 'Offen', color: '#6c757d', text_color: 'white', text_extern: 'in Bearbeitung', match: 'OFFEN' },
-  { text_intern: 'in Bearbeitung', color: '#6c757d', text_color: 'white', text_extern: 'in Bearbeitung', match: 'IN_BEARBEITUNG' },
-  { text_intern: 'Weitergeleitet', color: '#6c757d', text_color: 'white', text_extern: 'in Bearbeitung', match: 'WEITERGELEITET' },
-  { text_intern: 'Vollständig', color: '#6c757d', text_color: 'white', text_extern: 'Vollständig', match: 'VOLLSTÄNDIG' },
-  { text_intern: 'Archiviert', color: '#6c757d', text_color: 'white', text_extern: 'Vollständig', match: 'ARCHIVIERT' } // Achtung, im Backend noch nicht implementiert
+  { text_intern: 'Neu', color: '#6c757d', text_color: 'white', text_extern: 'in Bearbeitung', match: 'NEU', hide: true },
+  { text_intern: 'Offen', color: '#6c757d', text_color: 'white', text_extern: 'in Bearbeitung', match: 'OFFEN', hide: true },
+  { text_intern: 'in Bearbeitung', color: '#6c757d', text_color: 'white', text_extern: 'in Bearbeitung', match: 'IN_BEARBEITUNG', hide: true },
+  { text_intern: 'Weitergeleitet', color: '#6c757d', text_color: 'white', text_extern: 'in Bearbeitung', match: 'WEITERGELEITET', hide: true },
+  { text_intern: 'Vollständig', color: '#6c757d', text_color: 'white', text_extern: 'Vollständig', match: 'VOLLSTÄNDIG', hide: true },
+  { text_intern: 'Archiviert', color: '#6c757d', text_color: 'white', text_extern: 'Vollständig', match: 'ARCHIVIERT', hide: true } // Achtung, im Backend noch nicht implementiert
 ];
 
 // Status die ein Antrag haben kann, Reihenfolge ist wichtig

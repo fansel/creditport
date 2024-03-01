@@ -94,7 +94,14 @@
                     {request.externalModuleId}
                     <RequestStatus status={request.statusRequest} />
                   </div>
-                  <a href="/procedures/{request.requestId}"><i class="bi bi-pencil-square" /></a>
+                  <div class="d-flex align-items-center">
+                    <form action="?/favoriteRequest" method="POST" class="d-flex align-items-center">
+                      <input type="hidden" name="id" value={request.requestId} />
+                      <button class="btn p-0 me-2"> <i class="bi bi-star" /> </button>
+                    </form>
+
+                    <a href="/procedures/{request.requestId}"><i class="bi bi-pencil-square" /></a>
+                  </div>
                 </div>
               {/each}
             {/if}

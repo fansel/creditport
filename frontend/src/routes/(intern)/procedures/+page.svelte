@@ -55,6 +55,7 @@
   - Filtern nach Erstellt am
   - Filtern nach Bearbeitet am
   - PUT Request für Procedure
+  - Archivierte per default nicht anzeigen
   
   */
 
@@ -295,7 +296,9 @@
 
           <td>
             <div class="btn-group text-nowrap float-end" role="group">
-              <form method="POST" action="?/delete" use:enhance>
+              <form method="POST" use:enhance>
+                <button class="text-danger btn p-1 me-2" formaction="?/archiv"> <i class="bi bi-archive " /> </button>
+
                 <input type="hidden" name="id" value="1" />
                 <button type="button" on:click={() => ((showEditModal = true), (selectedProcedure = procedure))} class="btn btn-sm btn-primary btn-group-right"
                   ><i class="bi bi-pencil-square" /></button
