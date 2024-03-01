@@ -1,4 +1,4 @@
-<script>
+<!-- <script>
   import { getStatus } from '$lib/config';
   export let status;
   export let extern = false;
@@ -10,4 +10,4 @@
   {:else}
     {getStatus(status).text_intern}
   {/if}
-</div>
+</div> -->

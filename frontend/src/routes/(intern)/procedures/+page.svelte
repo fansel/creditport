@@ -3,10 +3,10 @@
   import { enhance } from '$app/forms';
   import { onMount } from 'svelte';
   import { formatProcdureID } from '$lib/util.js';
-  import { STATUS } from '$lib/config';
+  import { status_procedures } from '$lib/config';
 
   import EditProcedureForm from './forms/EditProcedureForm.svelte';
-  import Status from '$lib/components/Status.svelte';
+  import ProcedureStatus from '$lib/components/ProcedureStatus.svelte';
 
   /* https://www.npmjs.com/package/date-picker-svelte */
   import { DateInput, localeFromDateFnsLocale } from 'date-picker-svelte';
@@ -37,7 +37,7 @@
   let createdAtFilter = { start: null, end: null };
   let lastUpdatedFilter = { start: null, end: null };
 
-  let statusFilter = Object.fromEntries(STATUS.map(({ match }) => [match, false]));
+  let statusFilter = Object.fromEntries(status_procedures.map(({ match }) => [match, false]));
   $: filteredByStatus = Object.values(statusFilter).some((value) => value === true);
 
   $: filtered = !(
@@ -48,6 +48,15 @@
     lastUpdatedFilter.start == null &&
     lastUpdatedFilter.end == null
   );
+
+  /* TODO
+  - Pagination
+  - Anzahl der Treffer pro Seite
+  - Filtern nach Erstellt am
+  - Filtern nach Bearbeitet am
+  - PUT Request für Procedure
+  
+  */
 
   /**
    * Erstellt eine Vergleichsfunktion für die Sortierung von Objekten nach einer bestimmten Eigenschaft.
@@ -67,7 +76,7 @@
   // Filter zurücksetzen
   function resetFilters() {
     searchTerm = '';
-    statusFilter = Object.fromEntries(STATUS.map(({ match }) => [match, false])); // Alle Werte auf false setzten
+    statusFilter = Object.fromEntries(status_procedures.map(({ match }) => [match, false])); // Alle Werte auf false setzten
     createdAtFilter = { start: null, end: null };
     lastUpdatedFilter = { start: null, end: null };
   }
@@ -210,7 +219,7 @@
           <button class="dropdown-toggle btn btn-outline-secondary btn-sm" type="button" data-bs-toggle="dropdown">Status</button>
 
           <div class="shadow dropdown-menu-right dropdown-menu bordered-dropdown">
-            {#each STATUS as status, index}
+            {#each status_procedures as status, index}
               <input type="checkbox" class="btn-check" id="statusCheckbox{status.text_intern}" bind:checked={statusFilter[status.match]} disabled={countStatus(procedures, status.match) < 1} />
               <label
                 for="statusCheckbox{status.text_intern}"
@@ -282,7 +291,7 @@
           <td>{procedure.courseName ?? '-'}</td>
           <td>{procedure.requests.length ?? '-'}</td>
 
-          <td><Status status={procedure.status} /></td>
+          <td><ProcedureStatus status={procedure.status} /></td>
 
           <td>
             <div class="btn-group text-nowrap float-end" role="group">
@@ -338,5 +347,4 @@
     background-color: transparent;
     color: var(--bs-dropdown-link-color);
   }
-
 </style>
