@@ -299,7 +299,7 @@
               <form method="POST" use:enhance>
                 <button class="text-danger btn p-1 me-2" formaction="?/archiv"> <i class="bi bi-archive " /> </button>
 
-                <input type="hidden" name="id" value="1" />
+                <input type="hidden" name="id" value={procedure.procedureId} />
                 <button type="button" on:click={() => ((showEditModal = true), (selectedProcedure = procedure))} class="btn btn-sm btn-primary btn-group-right"
                   ><i class="bi bi-pencil-square" /></button
                 >
