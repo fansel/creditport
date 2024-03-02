@@ -7,6 +7,30 @@ export const content_type = {
   form_data: 'multipart/form-data'
 };
 
+// /**
+//  * Übersicht aller api routes
+//  * TODO alle ergänzen
+//  */
+// export const routes = {
+//   /**
+//    * ----------------------------------------------------------------------
+//    * USERMANAGMENT
+//    * ----------------------------------------------------------------------
+//    */
+//   login: '/',
+//   change_password: '/',
+//   all_users: '/',
+//   register: '/',
+
+//   /**
+//    * ----------------------------------------------------------------------
+//    * PROCEDURES
+//    * ----------------------------------------------------------------------
+//    */
+//   procedure_by_id: (id) => `procedures/${id}`,
+//   procedure_all: 'procedures'
+// };
+
 /**
  * @param req_type Content Typ mit dem der request gesendet wird (muss immer gesetzt sein)
  * @param res_type Content Typ der von der response erwartet wird (zb. application/json)

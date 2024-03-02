@@ -1,9 +1,8 @@
 <script>
+  import * as api from '$lib/api';
   let uuid = '';
   let inputSuccess = false;
-
   let fields = [];
-
 
   function clear($event) {
     $event.target.value = '';
@@ -52,17 +51,26 @@
     }
   }
 
-  function submit() {
+  async function submit() {
     //Baue noch einen Check ein ob auch wirklich alle Felder eingetragen sind
     uuid = '';
     fields.forEach((field, index) => {
       uuid += field.value;
-      field.disabled = true;
     });
 
-    //Zusätlich sollte serverseitig angefragt werden ob diese uuid überhaupt exisitert
+    // Wenn alle Zeichen eingetragen sind
+    if (uuid.length == 6) {
 
-    inputSuccess = true;
+      //Zusätlich sollte serverseitig angefragt werden ob diese uuid überhaupt exisitert
+      const res = await fetch('uuid-lookup', { method: 'POST', body: JSON.stringify({ uuid }) });
+      const content = await res.json();
+
+      console.log(content.success)
+      if(content.success) {
+        inputSuccess = true;
+      }
+    
+    }
   }
 
   function checkNumber(number) {
@@ -79,11 +87,11 @@
   <div class="mt p-4">
     <div class="digit-field mb-4">
       {#each [1, 2, 3, 4, 5, 6] as nb, index}
-        <input type="text" class="digit" maxlength="1" bind:this={fields[index]} on:focus={clear} on:keydown={clear} on:paste={onPaste} on:keyup={onKeyUp} />
+        <input type="text" class="digit {inputSuccess ? 'success' : ''}" maxlength="1" bind:this={fields[index]} on:focus={clear} on:keydown={clear} on:paste={onPaste} on:keyup={onKeyUp} disabled={inputSuccess} />
       {/each}
     </div>
   </div>
-  <a class="btn btn-primary {inputSuccess ? '' : 'disabled'}" href="/status/{uuid}">Status abfragen</a>
+  <a class="btn btn-primary {inputSuccess ? '' : 'disabled'}" href="/status/{uuid}" data-sveltekit-preload-data="tap">Status abfragen</a>
 </div>
 
 <style>
@@ -118,8 +126,15 @@
     margin: 0 3rem 0 0;
   }
 
-  .digit:disabled {
+  /* .digit:disabled {
     opacity: 0.3;
+  } */
+
+  .digit.success:disabled {
+    color: var(--bs-success-rgb);
+    font-weight: 700;
+    box-shadow: 0 0 0 .25rem rgba(var(--bs-success-rgb),.5);
+    outline: none;
   }
 
   @media screen and (max-width: 768px) {
