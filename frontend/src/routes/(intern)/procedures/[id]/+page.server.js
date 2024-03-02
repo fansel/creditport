@@ -71,7 +71,7 @@ export const actions = {
       annotationStudent: zfd.text(),
       annotationCommittee: zfd.text(),
       creditPoints: zfd.text().transform((value) => parseInt(value, 10)),
-      status: zfd.text(z.string({ required_error: 'Status darf nicht leer sein' })),
+      statusRequest: zfd.text(z.string({ required_error: 'Status darf nicht leer sein' })),
       createdAt: zfd.text(),
       pdfExists: zfd.text(), //.transform((value) => value === 'true'), // Vielleicht sinnvoller in +page.svelte zu handlen?
       moduleLink: zfd.text().optional(),
@@ -95,7 +95,7 @@ export const actions = {
       annotationStudent: result.data.annotationStudent,
       annotationCommittee: result.data.annotationCommittee,
       creditPoints: result.data.creditPoints,
-      status: result.data.status,
+      statusRequest: result.data.status,
       createdAt: result.data.createdAt,
       pdfExists: result.data.pdfExists,
       moduleLink: result.data.moduleLink, 

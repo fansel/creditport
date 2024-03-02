@@ -1,5 +1,5 @@
 <script>
-  import { getRequestStatus } from '$lib/config';
+  import { getProcedureStatus, getRequestStatus } from '$lib/config';
   export let status;
   export let extern = false;
 

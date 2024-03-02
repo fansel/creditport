@@ -65,7 +65,7 @@
         <input name="externalModuleId" bind:value={request.externalModule} type="hidden" />
         <input name="internalModuleId" bind:value={request.internalModule} type="hidden" />
         <input name="creditPoints" bind:value={request.creditPoints} type="hidden" />
-        <input name="status" bind:value={request.status} type="hidden" />
+        <input name="statusRequest" bind:value={request.statusRequest} type="hidden" />
         <input name="createdAt" bind:value={request.createdAt} type="hidden" />
         <input name="pdfExists" bind:value={request.pdfExists} type="hidden" />
         <input name="moduleLink" value=" " type="hidden" />
