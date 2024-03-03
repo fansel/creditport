@@ -30,8 +30,8 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.UUID;
 
-//@Component  // Diese Annotation gibt an, dass diese Klasse ein Component ist, und von Spring automatisch erkannt und instanziiert wird.
-public class DataLoader /*implements CommandLineRunner*/ {/*
+@Component  // Diese Annotation gibt an, dass diese Klasse ein Component ist, und von Spring automatisch erkannt und instanziiert wird.
+public class DataLoader implements CommandLineRunner {
 
     @Autowired  // Diese Annotation ermöglicht die Injektion des ProcedureRepository.
     private ProcedureRepository procedureRepository;
@@ -62,13 +62,13 @@ public class DataLoader /*implements CommandLineRunner*/ {/*
      * @param args Argumente der Kommandozeile. Nicht verwendet in dieser Implementierung.
      * @throws Exception wenn ein Fehler während der Ausführung auftritt.
      */
-   /* @Override
+    @Override
     public void run(String... args) throws Exception {
         System.out.println("DataLoader is being executed!");
 
 
-        InternalModule internalModule1 = new InternalModule("10-201-2012", "Einführung in die objektorientierte Modellierung und Programmierung","");
-        InternalModule internalModule2 = new InternalModule("10-201-2005-2", "Programmierparadigmen","");
+        InternalModule internalModule1 = new InternalModule("10-201-2012", "Einführung in die objektorientierte Modellierung und Programmierung", "");
+        InternalModule internalModule2 = new InternalModule("10-201-2005-2", "Programmierparadigmen", "");
 
         internalModuleRepository.save(internalModule1);
         internalModuleRepository.save(internalModule2);
@@ -158,7 +158,7 @@ public class DataLoader /*implements CommandLineRunner*/ {/*
                                 "    Endliche Automaten und reguläre Sprachen\n" +
                                 "    Keller-Automaten und kontextfreie Sprachen\n" +
                                 "    Kontextsensitive Sprachen."),
-                new InternalModule("10-201-2009","Berechenbarkeit",
+                new InternalModule("10-201-2009", "Berechenbarkeit",
                         "Nach der Teilnahme am Modul \"Berechenbarkeit\" erwerben die Studierenden die Fähigkeit:\n" +
                                 "    Grundlegende Begriffe und Konzepte aus der Algorithmentheorie und der Komplexitätstheorie präzise zu formalisieren.\n" +
                                 "    Mathematische Aussagen bezüglich Berechenbarkeitskonzepten zu überprüfen, nachzuweisen oder zu widerlegen.\n" +
@@ -267,26 +267,26 @@ public class DataLoader /*implements CommandLineRunner*/ {/*
                                 "    Beispiele für Wahrscheinlichkeitsverteilungen, " +
                                 "    das Gesetz der Großen Zahlen und der Satz von Moivre-Laplace, " +
                                 "    Einführende Betrachtungen zur mathematischen Statistik, einschließlich Schätztheorie, Konfidenzbereiche und Testtheorie."),
-                new InternalModule("", "Seminarmodule (Wahlpflichtfach)",""),
-                new InternalModule("", "Kermodul (Wahlpflichtfach)",""),
-                new InternalModule("", "Vertiefungsmodul (Wahlpflichtfach)",""),
-                new InternalModule("", "Ergänzungsbereich (Wahlpflichtfach)",""),
-                new InternalModule("", "Schlüsselqualifikation (Wahlpflichtfach)",""),
-                new InternalModule("10-201-2108-1", "Bachelorseminar","Nach der  Teilnahme am Bachelorseminar erlangen die Studierenden folgende Fähigkeiten:\n"+
+                new InternalModule("", "Seminarmodule (Wahlpflichtfach)", ""),
+                new InternalModule("", "Kermodul (Wahlpflichtfach)", ""),
+                new InternalModule("", "Vertiefungsmodul (Wahlpflichtfach)", ""),
+                new InternalModule("", "Ergänzungsbereich (Wahlpflichtfach)", ""),
+                new InternalModule("", "Schlüsselqualifikation (Wahlpflichtfach)", ""),
+                new InternalModule("10-201-2108-1", "Bachelorseminar", "Nach der  Teilnahme am Bachelorseminar erlangen die Studierenden folgende Fähigkeiten:\n" +
                         "Selbständige Einarbeitung in ein wissenschaftliches Thema der Informatik\n" +
                         "Vorbereitung auf die Bachelorarbeit\n" +
                         "Präsentation selbst erarbeiteten Wissens")
         );
         internalModuleRepository.saveAll(internalModules);
         System.out.println("Test procedure is being created!");
-        University testuni = new University(new UUID(1,8),"hibh",true);
+        University testuni = new University(new UUID(1, 8), "hibh", true);
         universityRepository.save(testuni);
 
         // Erstelle einen neuen Vorgang mit Antrag 1
         Procedure procedure = new Procedure("only a test procedure",
-                testuni,"Informatik Bachelor");
+                testuni, "Informatik Bachelor");
         Procedure procedure2 = new Procedure(testuni, "Data Science Master");
-        Procedure procedure3 = new Procedure ("Das ist eine Bemerkung", testuni, "Info");
+        Procedure procedure3 = new Procedure("Das ist eine Bemerkung", testuni, "Info");
         // Speichern des Vorgangs in der Datenbank
         procedureRepository.save(procedure);
         procedureRepository.save(procedure2);
@@ -720,26 +720,26 @@ public class DataLoader /*implements CommandLineRunner*/ {/*
                 new University("Zeppelin Universität – Hochschule zwischen Wirtschaft, Kultur und Politik")
         );
 
-        //universityRepository.saveAll(unis);
+        universityRepository.saveAll(unis);
         System.out.println("Universities were saved in the database!");
 
         University newuni = new University("name");
         universityRepository.save(newuni);
 
-        ExternalModule externalModule1 = new ExternalModule("20.300a","Informatik101","Informatik für Studienanfänger",testuni);
-        ExternalModule externalModule2 = new ExternalModule("20.300b","Informatik102","Informatik für Fortgeschrittene",testuni);
+        ExternalModule externalModule1 = new ExternalModule("20.300a", "Informatik101", "Informatik für Studienanfänger", testuni);
+        ExternalModule externalModule2 = new ExternalModule("20.300b", "Informatik102", "Informatik für Fortgeschrittene", testuni);
         externalModuleRepository.save(externalModule2);
         externalModuleRepository.save(externalModule1);
         List<Request> requests = Arrays.asList(
-                new Request(procedure,externalModule1,
-                        internalModule1,"Algorithmen und Datenstrukturen 1","an",5),
-                new Request(procedure,externalModule2,
-                        internalModule2,"Analysis für Informatiker","an",10)
+                new Request(procedure, externalModule1,
+                        internalModule1, "Algorithmen und Datenstrukturen 1", "an", 5),
+                new Request(procedure, externalModule2,
+                        internalModule2, "Analysis für Informatiker", "an", 10)
         );
         Request request1 = new Request(procedure3, externalModule1, internalModule1, "Anmerkung Antrag 1/ Vorgang 3", "an", 10);
-        Request request2 = new Request(procedure3, externalModule1, internalModule2, "Anmerkung Antrag 2/ Vorgang 3","an", 10);
-        Request request3 = new Request(procedure2, externalModule2, internalModule1, "Anmerkung Antrag 1/ Vorgang 2","an", 5);
-        Request request4 = new Request(procedure2, externalModule2, internalModule2, "Anmerkung Antrag 2/ Vorgang 2","an", 10);
+        Request request2 = new Request(procedure3, externalModule1, internalModule2, "Anmerkung Antrag 2/ Vorgang 3", "an", 10);
+        Request request3 = new Request(procedure2, externalModule2, internalModule1, "Anmerkung Antrag 1/ Vorgang 2", "an", 5);
+        Request request4 = new Request(procedure2, externalModule2, internalModule2, "Anmerkung Antrag 2/ Vorgang 2", "an", 10);
         //Erstelle einen neuen Antrag
         requestRepository.saveAll(requests);
         requestRepository.save(request1);
@@ -772,7 +772,7 @@ public class DataLoader /*implements CommandLineRunner*/ {/*
         userRepository.save(studyOffice);
         userRepository.save(examComittee);
         System.out.println("Users were saved in the database!");
-*/
 
+    }
     }
 
