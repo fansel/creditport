@@ -4,12 +4,12 @@
   export let statusCount;
   export let header;
   export let body;
-  export let color;
+  export let colorTag;
 </script>
 
 <div class="col-md">
   <div class="card">
-    <div class="card-header" style="background-color: {color};">
+    <div class="card-header bg-{colorTag}">
       {header}
     </div>
     <div class="card-body">{statusCount}</div>

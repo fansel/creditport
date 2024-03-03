@@ -1,4 +1,5 @@
 <script>
+  import ProcedureStatus from '$root/lib/components/ProcedureStatus.svelte';
   import RequestStatus from '$root/lib/components/RequestStatus.svelte';
   import Detail from './Detail.svelte';
   import StatusComponent from './StatusComponent.svelte';
@@ -7,10 +8,7 @@
 
   const requests = data.procedure.requests;
 
-  // colors
-  let green = '#28a745';
-  let yellow = '#ffc107';
-  let red = '#dc3545';
+
 
   // function to count request within procedure
   function countRequests(procedure, status) {
@@ -31,12 +29,12 @@
 </script>
 
 <div class="card mt-5">
-  <div class="card-header"><RequestStatus status={data.procedure.status} /> und TOTAL COUNT Anträge {requests.length}</div>
+  <div class="card-header"><ProcedureStatus status={data.procedure.status} /> und TOTAL COUNT Anträge {requests.length}</div>
   <div class="card-body status-container">
     <StatusComponent header="NICHT BEARBEITET" statusCount={countRequests(data.procedure, 'NICHT_BEARBEITET')} />
-    <StatusComponent header="IN BEARBEITUNG" statusCount={countRequests(data.procedure, 'IN_BEARBEITET')} bind:color={yellow} />
-    <StatusComponent header="ANGENOMMEN" statusCount={countRequests(data.procedure, 'ANGENOMMEN')} bind:color={green} />
-    <StatusComponent header="ABGELEHNT" statusCount={countRequests(data.procedure, 'ABGELEHNT')} bind:color={red} />
+    <StatusComponent header="IN BEARBEITUNG" statusCount={countRequests(data.procedure, 'IN_BEARBEITET')} colorTag='warning' />
+    <StatusComponent header="ANGENOMMEN" statusCount={countRequests(data.procedure, 'ANGENOMMEN')} colorTag='success' />
+    <StatusComponent header="ABGELEHNT" statusCount={countRequests(data.procedure, 'ABGELEHNT')} colorTag='danger' />
   </div>
   <div class="my-1">
     {#each requests as antrag}

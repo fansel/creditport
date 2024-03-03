@@ -36,6 +36,9 @@
   </button>
   <div class={`dropdown-content ${isOpen ? 'show' : ''}`}>
     {#each options as option}
+      <!-- svelte-ignore a11y-click-events-have-key-events -->
+      <!-- svelte-ignore a11y-no-static-element-interactions -->
+      <!-- svelte-ignore a11y-missing-attribute -->
       <a class="option" on:click={() => selectOption(option)}>
         {option.moduleName}
       </a>

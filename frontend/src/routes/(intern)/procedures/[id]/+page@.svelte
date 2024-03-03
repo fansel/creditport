@@ -14,7 +14,6 @@
 
   export let data;
 
-  const modules = data.modules;
   const request = data.request;
 
   let showModalExtern;
@@ -25,14 +24,26 @@
     closeDropdown();
   }
 
+  async function submitForm(event) {
+    const body = request;
+    delete body.relatedRequests;
+    const res = await fetch('/update-request', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: JSON.stringify(body)
+    });
+    console.log(res);
+  }
+
   function closeDropdown() {
     var dropdown = document.getElementById('myDropdown');
     var bootstrapDropdown = new bootstrap.Dropdown(dropdown);
     bootstrapDropdown.hide();
   }
 
-  console.log(modules);
-  $: console.log(request);
 </script>
 
 <svelte:head>
@@ -53,7 +64,7 @@
 <div class="site position-fixed m-2 w-100">
   <div class="row px-3">
     <div class="col">
-      <Navbar bind:showModalExtern bind:showModalIntern></Navbar>
+      <Navbar bind:showModalExtern bind:showModalIntern />
     </div>
   </div>
   <div class="row px-3 w-100">
@@ -62,7 +73,7 @@
     </div>
 
     <div class="col-4">
-      <form method="POST" action="?/updateRequest" use:enhance>
+      <div >
         <!-- hidden input für Daten die sich nicht ändern sollten -->
         <!-- <input name="requestId" bind:value={request.requestId} type="hidden" />
         <input name="externalModuleId" bind:value={request.externalModule} type="hidden" />
@@ -78,7 +89,7 @@
         </div>
 
         <!-- input für ausgewähltes Modul handlen -->
-        <!-- <CreditModule /> -->
+        <CreditModule />
 
         <div class="col mb-3">
           <div class="row">
@@ -93,11 +104,11 @@
             </div>
           </div>
 
-          <Comment />
-          <button type="submit" class="btn btn-primary">Speichern</button>
+          <Comment bind:annotationCommittee={request.annotationCommittee} bind:annotationStudent={request.annotationStudent} />
+          <button type="submit" class="btn btn-primary" on:click={submitForm}>Speichern</button>
           <div class="btn btn-outline-secondary">Abbrechen</div>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 </div>

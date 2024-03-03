@@ -66,3 +66,20 @@ export function getVorgänger(number, array) {
 
   return maxVorgänger;
 }
+
+/**
+ * Schneidet einen Text ab, wenn er länger als die angegebene maximale Länge ist.
+ * @param {string} text - Der Text, der abgeschnitten werden soll.
+ * @param {number} maxLength - Die maximale Länge des abgeschnittenen Texts.
+ * @returns {string} - Der abgeschnittene Text, gegebenenfalls mit "..." am Ende.
+ */
+export function truncateText(text, maxLength) {
+  // Überprüfen, ob die Länge des Texts größer als die maximale Länge ist
+  if (text.length > maxLength) {
+      // Wenn ja, schneide den Text ab und füge "..." hinzu
+      return text.substring(0, maxLength) + "...";
+  } else {
+      // Andernfalls gebe den unveränderten Text zurück
+      return text;
+  }
+}

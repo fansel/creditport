@@ -1,7 +1,8 @@
 <script>
   import { page } from '$app/stores';
 
-  export let request = $page.data.request;
+  export let annotationStudent;
+  export let annotationCommittee;
 </script>
 
 <div class="form-row mb-2">
@@ -20,10 +21,10 @@
 
   <div class="tab-content" id="myTabContent">
     <div class="tab-pane fade show active" id="studi-tab-pane" role="tabpanel" aria-labelledby="studi-tab" tabindex="0">
-      <textarea class="form-control" id="input" placeholder="Begründen Sie Ihren Entscheid..." rows="4" name="annotationStudent" bind:value={request.annotationStudent}></textarea>
+      <textarea class="form-control" id="input" placeholder="Begründen Sie Ihren Entscheid..." rows="4" name="annotationStudent" bind:value={annotationStudent}></textarea>
     </div>
     <div class="tab-pane fade" id="office-tab-pane" role="tabpanel" aria-labelledby="office-tab" tabindex="0">
-      <textarea class="form-control" id="input" placeholder="Begründen Sie Ihren Entscheid..." rows="4" name="annotationCommittee" bind:value={request.annotationCommittee}></textarea>
+      <textarea class="form-control" id="input" placeholder="Begründen Sie Ihren Entscheid..." rows="4" name="annotationCommittee" bind:value={annotationCommittee}></textarea>
     </div>
   </div>
 </div>

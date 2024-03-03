@@ -3,6 +3,7 @@
   import { page } from '$app/stores';
   import { onMount } from 'svelte';
   import * as config from '$lib/config';
+  import { truncateText } from '$lib/util';
   import { format, parseISO } from 'date-fns';
   import RequestStatus from '$lib/components/RequestStatus.svelte';
 
@@ -44,7 +45,13 @@
               <label for="university" class="col-form-label"> Universität </label>
             </div>
             <div class="col">
-              <input type="text" value={$page.form?.data?.university ?? procedure?.university} disabled name="university" class="form-control {$page.form?.errors?.university ? 'is-invalid' : ''}" />
+              <input
+                type="text"
+                value={$page.form?.data?.university.uniName ?? procedure?.university.uniName}
+                disabled
+                name="university"
+                class="form-control {$page.form?.errors?.university ? 'is-invalid' : ''}"
+              />
               {#if $page.form?.errors?.university}
                 <div class="invalid-feedback">
                   {$page.form?.errors?.university}
@@ -91,7 +98,7 @@
               {#each procedure.requests as request}
                 <div class="list-group-item d-inline-flex justify-content-between">
                   <div class="d-inline-flex align-item-center">
-                    {request.externalModuleId}
+                    {request.externalModule.moduleName} - {truncateText(request.internalModule.moduleName, 20)}
                     <RequestStatus status={request.statusRequest} />
                   </div>
                   <div class="d-flex align-items-center">

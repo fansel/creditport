@@ -60,7 +60,7 @@
               <td>{format(new Date(procedure.createdAt), 'dd-MM-yyyy')}</td>
               <td>{format(new Date(procedure.createdAt), 'HH:mm')}</td>
 
-              <td>{procedure.university ?? '-'}</td>
+              <td>{procedure.university.uniName ?? '-'}</td>
 
               <td>{procedure.courseName ?? '-'}</td>
               <td><span class="badge bg-primary rounded-pill">{procedure.requests.length} Anträge</span></td>

@@ -287,7 +287,7 @@
         <tr>
           <td>{format(new Date(procedure.createdAt), 'dd.MM.yyyy HH:mm')} </td>
           <td>{formatProcdureID(String(procedure.procedureId))} </td>
-          <td>{procedure.university ?? '-'}</td>
+          <td>{procedure.university.uniName ?? '-'}</td>
 
           <td>{procedure.courseName ?? '-'}</td>
           <td>{procedure.requests.length ?? '-'}</td>
