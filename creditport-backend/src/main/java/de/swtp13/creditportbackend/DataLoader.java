@@ -727,9 +727,7 @@ public class DataLoader implements CommandLineRunner {
         universityRepository.save(newuni);
 
         ExternalModule externalModule1 = new ExternalModule("20.300a","Informatik101","Informatik für Studienanfänger",testuni);
-        System.out.println("EXMOD1 SUCCEEDED!!!");
         ExternalModule externalModule2 = new ExternalModule("20.300b","Informatik102","Informatik für Fortgeschrittene",testuni);
-        System.out.println("YAY");
         externalModuleRepository.save(externalModule2);
         externalModuleRepository.save(externalModule1);
         List<Request> requests = Arrays.asList(
