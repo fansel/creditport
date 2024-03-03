@@ -1,5 +1,4 @@
-package de.swtp13.creditportbackend.v1.modules;
-import de.swtp13.creditportbackend.v1.internalmodules.InternalModule;
+package de.swtp13.creditportbackend.v1.externalmodules;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;

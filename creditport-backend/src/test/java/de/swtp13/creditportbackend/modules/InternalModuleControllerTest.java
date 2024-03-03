@@ -13,14 +13,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class ModuleControllerTest {
+public class InternalModuleControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @Test
     public void endpointShouldExist() throws Exception {
-        mockMvc.perform(get("/modules"))
+        mockMvc.perform(get("/modules/internal"))
                 .andExpect(status().is(not(HttpStatus.NOT_FOUND.value())));
     }
 

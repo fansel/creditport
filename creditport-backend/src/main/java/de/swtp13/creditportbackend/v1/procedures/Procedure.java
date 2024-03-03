@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import de.swtp13.creditportbackend.v1.universities.University;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -52,12 +53,12 @@ public class Procedure {
             columnDefinition = "TEXT"
     )
     private String annotation;
-    @Column(
-            name = "university",
-            columnDefinition = "VARCHAR",
+    @ManyToOne
+    @JoinColumn(
+            name = "uni_id",
             nullable = false
     )
-    private String university;
+    private University university;
     @Column(
             name = "course_name",
             columnDefinition = "VARCHAR",
@@ -127,14 +128,9 @@ public class Procedure {
     private List<Request> requests = new ArrayList<>();
 
     // Benutzerdefinierter Konstruktor ohne ID
-    public Procedure(Status status, String annotation) {
-        this.university = "Universität Leipzig";
-        this.courseName = "Informatik Bachelor";
-        this.status = status;
-        this.annotation = annotation;
-    }
 
-    public Procedure(String annotation, String university, String courseName) {
+
+    public Procedure(String annotation, University university, String courseName) {
         this.annotation = annotation;
         this.university = university;
         this.courseName = courseName;
@@ -143,7 +139,7 @@ public class Procedure {
         this.lastUpdated = this.createdAt;
     }
 
-    public Procedure(String university, String courseName) {
+    public Procedure(University university, String courseName) {
         this.university = university;
         this.courseName = courseName;
         this.status = Status.NEU;
