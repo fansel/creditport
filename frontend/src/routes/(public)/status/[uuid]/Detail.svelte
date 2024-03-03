@@ -10,11 +10,15 @@
 
 <div class="card">
   <div class="card-header d-flex justify-content-between">
-    <div class="FM-M">{request.externalModuleId} → {request.internalModuleId}</div>
+    <div class="FM-M">{request.externalModule.moduleName} → {request.internalModule.moduleName}</div>
     <div class="CP">LP: {request.creditPoints}</div>
   </div>
   <div class="card-body d-flex justify-content-between">
-    {request.annotationStudent}
+    <div class="comment">
+      {request.annotationStudent}
+      <i class="bi bi-chat-fill"></i>
+    </div>
+
     <RequestStatus status={request.statusRequest} />
   </div>
 </div>

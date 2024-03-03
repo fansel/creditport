@@ -30,6 +30,9 @@
     var bootstrapDropdown = new bootstrap.Dropdown(dropdown);
     bootstrapDropdown.hide();
   }
+
+  console.log(modules);
+  $: console.log(request);
 </script>
 
 <svelte:head>
@@ -61,21 +64,21 @@
     <div class="col-4">
       <form method="POST" action="?/updateRequest" use:enhance>
         <!-- hidden input für Daten die sich nicht ändern sollten -->
-        <input name="requestId" bind:value={request.requestId} type="hidden" />
+        <!-- <input name="requestId" bind:value={request.requestId} type="hidden" />
         <input name="externalModuleId" bind:value={request.externalModule} type="hidden" />
         <input name="internalModuleId" bind:value={request.internalModule} type="hidden" />
         <input name="creditPoints" bind:value={request.creditPoints} type="hidden" />
         <input name="statusRequest" bind:value={request.statusRequest} type="hidden" />
         <input name="createdAt" bind:value={request.createdAt} type="hidden" />
         <input name="pdfExists" bind:value={request.pdfExists} type="hidden" />
-        <input name="moduleLink" value=" " type="hidden" />
+        <input name="moduleLink" value=" " type="hidden" /> -->
 
         <div class="row mb-3">
           <div class="col-6"><strong>Antrag erstellt am </strong><br />{format(new Date(request.createdAt), 'dd.MM.yyyy HH:mm')}</div>
         </div>
 
         <!-- input für ausgewähltes Modul handlen -->
-        <CreditModule />
+        <!-- <CreditModule /> -->
 
         <div class="col mb-3">
           <div class="row">

@@ -36,46 +36,27 @@ export async function load({ params, locals }) {
 
 /** @type {import('./$types').Actions} */
 export const actions = {
-  changeRequest: async ({ locals, request }) => {
-    const formData = await request.formData();
-
-    const schema = zfd.formData({
-      // status: zfd.text(),
-      annotation: zfd.text(),
-      internalModuleId: zfd.text()
-    });
-
-    const result = schema.safeParse(formData);
-
-    if (!result.success) {
-      return fail(400, { errors: 'keine ID angegeben' });
-    }
-
-    const res = await api.put(`procedures/${result.data}`, locals.user?.token, { res_type: api.content_type.plain });
-
-    return { success: true };
-  },
   updateRequest: async ({ locals, request }) => {
     const formData = await request.formData();
   
-    const schema = zfd.formData({
-      requestId: zfd.text().transform((value) => {
-        const parsed = parseInt(value, 10);
-        if (isNaN(parsed)) {
-          throw new Error("requestId must be a valid integer");
-        }
-        return parsed;
-      }),
-      externalModuleId: zfd.text(),
-      internalModuleId: zfd.text(),
-      annotationStudent: zfd.text(),
-      annotationCommittee: zfd.text(),
-      creditPoints: zfd.text().transform((value) => parseInt(value, 10)),
-      statusRequest: zfd.text(z.string({ required_error: 'Status darf nicht leer sein' })),
-      createdAt: zfd.text(),
-      pdfExists: zfd.text(), //.transform((value) => value === 'true'), // Vielleicht sinnvoller in +page.svelte zu handlen?
-      moduleLink: zfd.text().optional(),
-    });
+    // const schema = zfd.formData({
+    //   requestId: zfd.text().transform((value) => {
+    //     const parsed = parseInt(value, 10);
+    //     if (isNaN(parsed)) {
+    //       throw new Error("requestId must be a valid integer");
+    //     }
+    //     return parsed;
+    //   }),
+    //   externalModuleId: zfd.text(),
+    //   internalModuleId: zfd.text(),
+    //   annotationStudent: zfd.text(),
+    //   annotationCommittee: zfd.text(),
+    //   creditPoints: zfd.text().transform((value) => parseInt(value, 10)),
+    //   statusRequest: zfd.text(z.string({ required_error: 'Status darf nicht leer sein' })),
+    //   createdAt: zfd.text(),
+    //   pdfExists: zfd.text(), //.transform((value) => value === 'true'), // Vielleicht sinnvoller in +page.svelte zu handlen?
+    //   moduleLink: zfd.text().optional(),
+    // });
   
     const result = schema.safeParse(formData);
     console.log("schema.success is " + result.success);
