@@ -11,7 +11,7 @@
   }
 </script>
 
-<div class="mt-5 d-flex justify-content-center">
+<div class="mt-5 d-flex justify-content-center mx-3">
   <form data-bitwarden-watching="1" class="border rounded-3 p-4 login-form" method="POST" use:enhance>
     <h1 class="display-6 fw-bold mb-4 text-center">Einloggen</h1>
 

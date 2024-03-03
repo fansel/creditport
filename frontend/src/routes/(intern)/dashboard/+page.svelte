@@ -1,6 +1,6 @@
 <script>
   import { format } from 'date-fns';
-  import Status from '$lib/components/Status.svelte';
+  import ProcedureStatus from '$lib/components/ProcedureStatus.svelte';
 
   export let data;
 </script>
@@ -64,7 +64,7 @@
 
               <td>{procedure.courseName ?? '-'}</td>
               <td><span class="badge bg-primary rounded-pill">{procedure.requests.length} Anträge</span></td>
-              <td><Status status={procedure.status} /></td>
+              <td><ProcedureStatus status={procedure.status} /></td>
 
               <td class="float-end">
                 <a type="button" href="/procedures" class="btn btn-sm btn-outline-primary ms-2 me-2">

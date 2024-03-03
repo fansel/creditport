@@ -1,6 +1,5 @@
 <script>
   import { page } from '$app/stores';
-  import { createEventDispatcher } from 'svelte';
 
   export let request = $page.data.request;
 </script>
@@ -34,5 +33,10 @@
     border-top: none;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
+  }
+  textarea#input:focus {
+    outline: none !important;
+    border-color: #ced4da !important;
+    box-shadow: none !important;
   }
 </style>

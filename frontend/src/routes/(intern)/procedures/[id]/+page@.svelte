@@ -1,5 +1,5 @@
 <script>
-  import Status from '$lib/components/Status.svelte';
+  import RequestStatus from '$lib/components/RequestStatus.svelte';
   import RelatedRequestsExtern from './forms/RelatedRequestsExtern.svelte';
   import RelatedRequestsIntern from './forms/RelatedRequestsIntern.svelte';
   import Header from '$lib/components/InternHeader.svelte';
@@ -65,7 +65,7 @@
         <input name="externalModuleId" bind:value={request.externalModule} type="hidden" />
         <input name="internalModuleId" bind:value={request.internalModule} type="hidden" />
         <input name="creditPoints" bind:value={request.creditPoints} type="hidden" />
-        <input name="status" bind:value={request.status} type="hidden" />
+        <input name="statusRequest" bind:value={request.statusRequest} type="hidden" />
         <input name="createdAt" bind:value={request.createdAt} type="hidden" />
         <input name="pdfExists" bind:value={request.pdfExists} type="hidden" />
         <input name="moduleLink" value=" " type="hidden" />
@@ -81,11 +81,11 @@
           <div class="row">
             <!-- studibüro -->
             <div class="col">
-              <p class="mb-1"><strong>Status</strong> <Status status={request.status} /></p>
+              <p class="mb-1"><strong>Status</strong> <RequestStatus status={request.statusRequest} /></p>
 
               <!-- studianzeige -->
               <div class="col">
-                <p class="mb-1"><strong>Auf Statusseite</strong><Status status={request.status} extern={true} /></p>
+                <p class="mb-1"><strong>Auf Statusseite</strong><RequestStatus status={request.statusRequest} extern={true} /></p>
               </div>
             </div>
           </div>
