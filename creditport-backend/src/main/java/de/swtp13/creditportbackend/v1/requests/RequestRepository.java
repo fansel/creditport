@@ -20,7 +20,7 @@ public interface RequestRepository extends JpaRepository<Request,Integer> {
     Optional<Request> findByRequestId(int requestID);
     //List<Request> findByRequestId(int requestId);
 
-    @Query(value = "SELECT r FROM Requests r where r.procedure.procedureId = ?1")
+    @Query(value = "SELECT r FROM Requests r where r.procedures.procedureId = ?1")
     List<Request> findRequestsByProcedureId(int procedureId);
 
     @Query("SELECT r FROM Requests r")

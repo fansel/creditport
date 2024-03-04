@@ -40,7 +40,7 @@ public class RequestController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-
+/*
     // GET: related Requests by RequestID
     @GetMapping("/relatedRequests/{requestId}")
     public ResponseEntity<RelatedRequestDTO> getRelatedRequestsById(@PathVariable int requestId){
@@ -50,7 +50,7 @@ public class RequestController {
         Request request = req.orElse(null);
         try {
             relatedRequest.setRequestId(request.getRequestId());
-            relatedRequest.setProcedureId(request.getProcedure().getProcedureId());
+            relatedRequest.setProcedureIds(request.getProcedureIds());
             relatedRequest.setExternalModules(request.getExternalModules());
             relatedRequest.setInternalModules(request.getInternalModules());
             relatedRequest.setAnnotationStudent(request.getAnnotationStudent());
@@ -72,7 +72,7 @@ public class RequestController {
             return ResponseEntity.notFound().build();
         }
     }
-
+*/
     // GET: Request by ProcedureId
     @GetMapping("/procedure/{procedureId}")
     public ResponseEntity<List<Request>> getRequestsByProcedure(@PathVariable int procedureId) {

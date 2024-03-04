@@ -35,7 +35,7 @@ public class Procedure {
     )
     @GeneratedValue(generator = "id-generator")
     @Column(
-            name = "id",
+            name = "procedure_id",
             columnDefinition = "INT",
             nullable = false
     )
@@ -65,50 +65,7 @@ public class Procedure {
             nullable = false
     )
     private String courseName;
-   /* @Column(
-            name = "created_at",
-            nullable = false,
-            columnDefinition = "INT"
-    )
-    private long createdAt;
 
-    @Column(
-            name = "last_updated_on",
-            nullable = false,
-            columnDefinition = "INT"
-    )
-    private long lastUpdated;
-
-    @Getter
-    @Transient
-    private List<Request> requests = new ArrayList<>();
-
-    // Benutzerdefinierter Konstruktor ohne ID
-    public Procedure(Status status, String annotation) {
-        this.university = "Universität Leipzig";
-        this.courseName = "Informatik Bachelor";
-        this.status = status;
-        this.annotation = annotation;
-    }
-
-    public Procedure(String annotation, String university, String courseName) {
-        this.annotation = annotation;
-        this.university = university;
-        this.courseName = courseName;
-        this.status = Status.NEU;
-        Date now = new Date();
-        this.createdAt = now.getTime();
-        this.lastUpdated = this.createdAt;
-    }
-
-    public Procedure(String university, String courseName) {
-        this.university = university;
-        this.courseName = courseName;
-        this.status = Status.NEU;
-        Date now = new Date();
-        this.createdAt = now.getTime();
-        this.lastUpdated = this.createdAt;
-    }*/
     @Column(
             name = "created_at",
             nullable = false
@@ -123,9 +80,8 @@ public class Procedure {
     @Temporal(TemporalType.TIMESTAMP)
     private Instant lastUpdated;
 
-    @Getter
-    @Transient
-    private List<Request> requests = new ArrayList<>();
+    @ManyToMany(mappedBy = "procedures")
+    private List<Request> requests;
 
     // Benutzerdefinierter Konstruktor ohne ID
 
@@ -138,7 +94,24 @@ public class Procedure {
         this.createdAt = Instant.now();
         this.lastUpdated = this.createdAt;
     }
+    public Procedure(String annotation, University university, String courseName, List<Request> requests) {
+        this.annotation = annotation;
+        this.university = university;
+        this.courseName = courseName;
+        this.status = Status.NEU;
+        this.createdAt = Instant.now();
+        this.lastUpdated = this.createdAt;
+        this.requests = requests;
+    }
 
+    public Procedure(University university, String courseName, List<Request> requests) {
+        this.university = university;
+        this.courseName = courseName;
+        this.status = Status.NEU;
+        this.createdAt =Instant.now();
+        this.lastUpdated = this.createdAt;
+        this.requests = requests;
+    }
     public Procedure(University university, String courseName) {
         this.university = university;
         this.courseName = courseName;

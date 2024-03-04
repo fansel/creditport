@@ -24,13 +24,13 @@ public class ProcedureService {
     private ProcedureRepository procedureRepository;
     @Autowired
     private RequestRepository requestRepository;
-
+/*
     public List<Procedure> getProceduresWithRequests() {
         List<Request> requests = requestRepository.findAllWithProcedure();
         Map<Integer, Procedure> procedureMap = new HashMap<>();
         for (Request request : requests) {
-            Procedure procedure = request.getProcedure();
-            Procedure finalProcedure = procedureMap.computeIfAbsent(procedure.getProcedureId(), k -> {
+            List<Procedure> procedures = request.getProcedures();
+            List<Procedure> finalProcedures = procedureMap.computeIfAbsent(procedures.getProcedureIds(), k -> {
                 Procedure newProcedure = new Procedure();
                 newProcedure.setProcedureId(procedure.getProcedureId());
                 newProcedure.setStatus(procedure.getStatus());
