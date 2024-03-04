@@ -14,7 +14,8 @@
 
   export let data;
 
-  const request = data.request;
+  let request = data.request;
+  let requestBackup = JSON.parse(JSON.stringify(data.request));
 
   let showModalExtern;
   let showModalIntern;
@@ -36,6 +37,12 @@
       body: JSON.stringify(body)
     });
     console.log(res);
+    requestBackup = JSON.parse(JSON.stringify(request));
+  }
+
+  async function cancelChanges(event) {
+    request = requestBackup;
+    submitForm();
   }
 
   function closeDropdown() {
@@ -43,7 +50,6 @@
     var bootstrapDropdown = new bootstrap.Dropdown(dropdown);
     bootstrapDropdown.hide();
   }
-
 </script>
 
 <svelte:head>
@@ -73,17 +79,7 @@
     </div>
 
     <div class="col-4">
-      <div >
-        <!-- hidden input für Daten die sich nicht ändern sollten -->
-        <!-- <input name="requestId" bind:value={request.requestId} type="hidden" />
-        <input name="externalModuleId" bind:value={request.externalModule} type="hidden" />
-        <input name="internalModuleId" bind:value={request.internalModule} type="hidden" />
-        <input name="creditPoints" bind:value={request.creditPoints} type="hidden" />
-        <input name="statusRequest" bind:value={request.statusRequest} type="hidden" />
-        <input name="createdAt" bind:value={request.createdAt} type="hidden" />
-        <input name="pdfExists" bind:value={request.pdfExists} type="hidden" />
-        <input name="moduleLink" value=" " type="hidden" /> -->
-
+      <div>
         <div class="row mb-3">
           <div class="col-6"><strong>Antrag erstellt am </strong><br />{format(new Date(request.createdAt), 'dd.MM.yyyy HH:mm')}</div>
         </div>
@@ -106,7 +102,7 @@
 
           <Comment bind:annotationCommittee={request.annotationCommittee} bind:annotationStudent={request.annotationStudent} />
           <button type="submit" class="btn btn-primary" on:click={submitForm}>Speichern</button>
-          <div class="btn btn-outline-secondary">Abbrechen</div>
+          <div class="btn btn-outline-secondary" on:click={cancelChanges}>Abbrechen</div>
         </div>
       </div>
     </div>
