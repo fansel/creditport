@@ -39,6 +39,7 @@ public class Request {
             joinColumns = @JoinColumn(name = "request_id"),
             inverseJoinColumns = @JoinColumn(name = "procedure_id")
     )
+    @JsonIgnore
     private List<Procedure> procedures;
 
     @ManyToMany()
