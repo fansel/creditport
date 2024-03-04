@@ -26,6 +26,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
 import java.util.UUID;
@@ -726,20 +727,27 @@ public class DataLoader implements CommandLineRunner {
         University newuni = new University("name");
         universityRepository.save(newuni);
 
+        List<InternalModule> internalModules1 = Arrays.asList(internalModule1,internalModule2);
+        List<InternalModule> internalModules2 = Arrays.asList(internalModule2);
+
         ExternalModule externalModule1 = new ExternalModule("20.300a", "Informatik101", "Informatik für Studienanfänger", testuni);
         ExternalModule externalModule2 = new ExternalModule("20.300b", "Informatik102", "Informatik für Fortgeschrittene", testuni);
+        List<ExternalModule> externalModules1 = Arrays.asList(externalModule1,externalModule2);
+        List<ExternalModule> externalModules2 = Arrays.asList(externalModule2);
+
         externalModuleRepository.save(externalModule2);
         externalModuleRepository.save(externalModule1);
         List<Request> requests = Arrays.asList(
-                new Request(procedure, externalModule1,
-                        internalModule1, "Algorithmen und Datenstrukturen 1", "an", 5),
-                new Request(procedure, externalModule2,
-                        internalModule2, "Analysis für Informatiker", "an", 10)
+                new Request(procedure, externalModules1,
+                        internalModules1, "Algorithmen und Datenstrukturen 1", "an", 5),
+                new Request(procedure, externalModules2,
+                        internalModules2, "Analysis für Informatiker", "an", 10)
         );
-        Request request1 = new Request(procedure3, externalModule1, internalModule1, "Anmerkung Antrag 1/ Vorgang 3", "an", 10);
-        Request request2 = new Request(procedure3, externalModule1, internalModule2, "Anmerkung Antrag 2/ Vorgang 3", "an", 10);
-        Request request3 = new Request(procedure2, externalModule2, internalModule1, "Anmerkung Antrag 1/ Vorgang 2", "an", 5);
-        Request request4 = new Request(procedure2, externalModule2, internalModule2, "Anmerkung Antrag 2/ Vorgang 2", "an", 10);
+
+        Request request1 = new Request(procedure3, externalModules1, internalModules1, "Anmerkung Antrag 1/ Vorgang 3", "an", 10);
+        Request request2 = new Request(procedure3, externalModules1, internalModules2, "Anmerkung Antrag 2/ Vorgang 3", "an", 10);
+        Request request3 = new Request(procedure2, externalModules2, internalModules1, "Anmerkung Antrag 1/ Vorgang 2", "an", 5);
+        Request request4 = new Request(procedure2, externalModules2, internalModules2, "Anmerkung Antrag 2/ Vorgang 2", "an", 10);
         //Erstelle einen neuen Antrag
         requestRepository.saveAll(requests);
         requestRepository.save(request1);

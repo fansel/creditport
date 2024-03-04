@@ -12,6 +12,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Die Klasse repräsentiert einen Antrag.
@@ -37,18 +40,20 @@ public class Request {
     )
     @JsonIgnore
     private Procedure procedure;
-    @ManyToOne()
-    @JoinColumn(
-            name = "external_module_id",
-            nullable = false
+    @ManyToMany()
+    @JoinTable(
+            name = "extmod_request",
+            joinColumns = @JoinColumn(name = "request_id"),
+            inverseJoinColumns = @JoinColumn(name = "external_module_id" )
     )
-    private ExternalModule externalModule;
-    @ManyToOne()
-    @JoinColumn(
-            name = "internal_module_id",
-            nullable = false
+    private List<ExternalModule> externalModules;
+    @ManyToMany()
+    @JoinTable(
+            name = "intmod_request",
+            joinColumns = @JoinColumn(name = "request_id"),
+            inverseJoinColumns = @JoinColumn(name = "internal_module_id" )
     )
-    private InternalModule internalModule;
+    private List<InternalModule> internalModules;
 
     @Column(
             name = "annotation_student",
@@ -90,15 +95,27 @@ public class Request {
     @Column(name = "module_link", nullable = true)
     private String moduleLink;
 
-
-
+    public List<UUID> getInternalModuleIds(){
+        List<UUID> internalModuleIds = new ArrayList<>();
+        for (InternalModule internalModule: internalModules){
+            internalModuleIds.add(internalModule.getModuleId());
+        }
+        return internalModuleIds;
+    }
+    public List<UUID> getExternalModuleIds(){
+        List<UUID> externalModuleIds = new ArrayList<>();
+        for (ExternalModule externalModule: externalModules){
+            externalModuleIds.add(externalModule.getModuleId());
+        }
+        return externalModuleIds;
+    }
 
 
     // Überarbeiteter Konstruktor mit 'createdAt'-Parameter
-    public Request(Procedure procedure, ExternalModule externalModule, InternalModule internalModule, String annotationCommittee, String annotationStudent, int creditPoints, Instant createdAt) {
+    public Request(Procedure procedure, List<ExternalModule> externalModules, List<InternalModule> internalModules, String annotationCommittee, String annotationStudent, int creditPoints, Instant createdAt) {
         this.procedure = procedure;
-        this.externalModule = externalModule;
-        this.internalModule = internalModule;
+        this.externalModules = externalModules;
+        this.internalModules = internalModules;
         this.annotationStudent = annotationStudent;
         this.annotationCommittee = annotationCommittee;
         this.creditPoints = creditPoints;
@@ -106,10 +123,10 @@ public class Request {
         this.statusRequest = StatusRequest.NICHT_BEARBEITET;
     }
 
-    public Request(Procedure procedure, ExternalModule externalModule, InternalModule internalModule, String annotationStudent, String annotationCommittee, int creditPoints) {
+    public Request(Procedure procedure, List<ExternalModule> externalModules, List<InternalModule> internalModules, String annotationStudent, String annotationCommittee, int creditPoints) {
         this.procedure = procedure;
-        this.externalModule = externalModule;
-        this.internalModule = internalModule;
+        this.externalModules = externalModules;
+        this.internalModules = internalModules;
         this.annotationStudent = annotationStudent;
         this.annotationCommittee = annotationCommittee;
         this.creditPoints = creditPoints;

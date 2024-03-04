@@ -15,8 +15,8 @@ import java.util.List;
 public class RelatedRequestDTO {
     private int procedureId;
     private int requestId;
-    private ExternalModule externalModule;
-    private InternalModule internalModule;
+    private List<ExternalModule> externalModules;
+    private List<InternalModule> internalModules;
     private String annotationStudent;
     private String annotationCommittee;
     private int creditPoints;
