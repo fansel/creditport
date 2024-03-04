@@ -55,14 +55,14 @@ public class ProcedureController {
 
     @GetMapping("/{procedureId}")
     public ResponseEntity<Procedure> getProcedureById(@PathVariable int procedureId) {
-        List<Request> requests = requestRepository.findRequestsByProcedureId(procedureId);
+       // List<Request> requests = requestRepository.findRequestsByProcedureId(procedureId);
         Optional<Procedure> optionalProcedure = procedureRepository.findByProcedureId(procedureId);
         Procedure procedure = optionalProcedure.orElse(null);
-        try {
+        /*try {
             procedure.setRequests(requests);
         } catch(NullPointerException e){
             return ResponseEntity.notFound().build();
-        }
+        }*/
         return ResponseEntity.ok(procedure);
     }
     @GetMapping("/ids")

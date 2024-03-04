@@ -20,15 +20,15 @@ public interface RequestRepository extends JpaRepository<Request,Integer> {
     Optional<Request> findByRequestId(int requestID);
     //List<Request> findByRequestId(int requestId);
 
-    @Query(value = "SELECT r FROM Requests r where r.procedures.procedureId = ?1")
-    List<Request> findRequestsByProcedureId(int procedureId);
+    //@Query(value = "SELECT r FROM Requests r where r.procedures.procedureId = ?1")
+   // List<Request> findRequestsByProcedureId(int procedureId);
 
     @Query("SELECT r FROM Requests r")
     List<Request> findAllWithProcedure();
 
-    @Query("SELECT r.procedure FROM Requests r WHERE r.requestId = ?1")
-    Procedure findProcedureByRequestId(int requestId);
+    //@Query("SELECT r.procedure FROM Requests r WHERE r.requestId = ?1")
+    //Procedure findProcedureByRequestId(int requestId);
 
-    @Query("SELECT r.requestId FROM Requests r WHERE r.procedure.procedureId = ?1")
-    List<Integer> findAllRelatedRequests(int procedureId);
+    //@Query("SELECT r.requestId FROM Requests r WHERE r.procedure.procedureId = ?1")
+   // List<Integer> findAllRelatedRequests(int procedureId);
 }
