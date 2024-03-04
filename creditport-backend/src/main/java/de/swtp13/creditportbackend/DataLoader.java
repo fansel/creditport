@@ -294,9 +294,9 @@ public class DataLoader implements CommandLineRunner {
         procedureRepository.save(procedure2);
         procedureRepository.save(procedure3);
 
-        List<Procedure> procedures1 = Arrays.asList(procedure2,procedure3);
-        List<Procedure> procedures2 = Arrays.asList(procedure,procedure3);
-        List<Procedure> procedures3 = Arrays.asList(procedure2,procedure);
+        List<Procedure> procedures1 = Arrays.asList(procedure);
+        List<Procedure> procedures2 = Arrays.asList(procedure2);
+        List<Procedure> procedures3 = Arrays.asList(procedure3);
 
         System.out.println("Procedures were saved in the database!");
 
