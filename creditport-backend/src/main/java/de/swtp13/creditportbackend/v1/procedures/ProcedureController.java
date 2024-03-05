@@ -70,10 +70,7 @@ public class ProcedureController {
         List<Integer> ids = procedureRepository.findAllIds();
         return ResponseEntity.ok(ids);
     }
-    /**
-     * PUT by ID
-     * updates a procedure with specific ID in the Database
-     */
+
     /*@PutMapping("/{id}")
     public ResponseEntity<Procedure> updateProcedure(@PathVariable String procedureId, @RequestBody Procedure procedure) {
         if (!procedureService.existsById(procedureId)) {
@@ -83,7 +80,10 @@ public class ProcedureController {
         return ResponseEntity.ok(updatedProcedure);
     }
      */
-
+    /**
+     * PUT by ID
+     * updates a procedure with specific ID in the Database
+     */
     @PutMapping("/{id}")
     public ResponseEntity<Procedure> updateProcedure(@PathVariable("id") int procedureId, @RequestBody Procedure ProcedureDetails) {
         return procedureRepository.findByProcedureId(procedureId)
