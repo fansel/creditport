@@ -6,15 +6,17 @@
   import * as config from '$lib/config';
   import { format, parseISO } from 'date-fns';
   import { page } from '$app/stores';
-  import { enhance } from '$app/forms';
+  import { successToast } from '$root/lib/toast';
   import Comment from './Comment.svelte';
   import PDF from './PDF.svelte';
   import Navbar from './Navbar.svelte';
   import CreditModule from './CreditModule.svelte';
 
   export let data;
+  console.log(data.modules);
 
-  const request = data.request;
+  let request = data.request;
+  let requestBackup = JSON.parse(JSON.stringify(data.request));
 
   let showModalExtern;
   let showModalIntern;
@@ -35,7 +37,15 @@
       },
       body: JSON.stringify(body)
     });
+    // successToast('Erfolreich gespeichert');
+
     console.log(res);
+    requestBackup = JSON.parse(JSON.stringify(request));
+  }
+
+  async function cancelChanges(event) {
+    request = requestBackup;
+    submitForm();
   }
 
   function closeDropdown() {
@@ -43,11 +53,11 @@
     var bootstrapDropdown = new bootstrap.Dropdown(dropdown);
     bootstrapDropdown.hide();
   }
-
 </script>
 
 <svelte:head>
-  <title>{config.title} - {$page.data.title}</title>
+  <!-- <title>{config.title} - {$page.data.title}</title> -->
+  <title>{$page.data.title}</title>
 </svelte:head>
 
 <Header wide={true} />
@@ -73,23 +83,14 @@
     </div>
 
     <div class="col-4">
-      <div >
-        <!-- hidden input für Daten die sich nicht ändern sollten -->
-        <!-- <input name="requestId" bind:value={request.requestId} type="hidden" />
-        <input name="externalModuleId" bind:value={request.externalModule} type="hidden" />
-        <input name="internalModuleId" bind:value={request.internalModule} type="hidden" />
-        <input name="creditPoints" bind:value={request.creditPoints} type="hidden" />
-        <input name="statusRequest" bind:value={request.statusRequest} type="hidden" />
-        <input name="createdAt" bind:value={request.createdAt} type="hidden" />
-        <input name="pdfExists" bind:value={request.pdfExists} type="hidden" />
-        <input name="moduleLink" value=" " type="hidden" /> -->
-
+      <div>
         <div class="row mb-3">
-          <div class="col-6"><strong>Antrag erstellt am </strong><br />{format(new Date(request.createdAt), 'dd.MM.yyyy HH:mm')}</div>
+          <!-- <div class="col-6"><strong>Antrag erstellt am </strong><br />{format(new Date(request.createdAt), 'dd.MM.yyyy HH:mm')}</div> -->
+          <div class="col-6"><strong>Antrag erstellt am </strong><br />{format(new Date(request.createdAt), 'dd.MM.yyyy')}</div>
         </div>
 
         <!-- input für ausgewähltes Modul handlen -->
-        <CreditModule />
+        <CreditModule bind:selectedOption={request.internalModule} />
 
         <div class="col mb-3">
           <div class="row">
@@ -106,7 +107,7 @@
 
           <Comment bind:annotationCommittee={request.annotationCommittee} bind:annotationStudent={request.annotationStudent} />
           <button type="submit" class="btn btn-primary" on:click={submitForm}>Speichern</button>
-          <div class="btn btn-outline-secondary">Abbrechen</div>
+          <div class="btn btn-outline-secondary" on:click={cancelChanges}>Abbrechen</div>
         </div>
       </div>
     </div>

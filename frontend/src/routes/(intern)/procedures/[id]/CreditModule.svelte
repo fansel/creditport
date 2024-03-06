@@ -3,13 +3,18 @@
   import { onMount } from 'svelte';
 
   export let modules = $page.data.modules;
-  export let selectedModul;
+  export let selectedOption;
 
+  let currentModule = $page.data.request.internalModule;
   let isOpen = false;
-  let selectedOption = modules[0];
   let dropdown;
 
   const options = modules;
+
+  // DELETE
+  $: {
+    console.log(selectedOption);
+  }
 
   function selectOption(option) {
     selectedOption = option;
@@ -32,7 +37,11 @@
 
 <div class="dropdown pb-2" bind:this={dropdown}>
   <button on:click={() => (isOpen = !isOpen)}>
-    {selectedOption.moduleName} <span class="bi-chevron-down small" style="margin-left: auto;"></span>
+    {#if !selectedOption}
+      {currentModule.moduleName} <span class="bi-chevron-down small" style="margin-left: auto;"></span>
+    {:else}
+      {selectedOption.moduleName} <span class="bi-chevron-down small" style="margin-left: auto;"></span>
+    {/if}
   </button>
   <div class={`dropdown-content ${isOpen ? 'show' : ''}`}>
     {#each options as option}
