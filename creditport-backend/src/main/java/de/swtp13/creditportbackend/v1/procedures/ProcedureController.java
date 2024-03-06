@@ -44,8 +44,8 @@ public class ProcedureController {
      */
     @GetMapping
     public ResponseEntity<List<Procedure>> getProceduresWithRequests() {
-        List<Procedure> proceduresWithRequests = procedureService.getProceduresWithRequests();
-        return ResponseEntity.ok(proceduresWithRequests);
+        //List<Procedure> proceduresWithRequests = procedureService.getProceduresWithRequests();
+        return ResponseEntity.ok(procedureRepository.findAll());
     }
 
     /**
@@ -55,14 +55,14 @@ public class ProcedureController {
 
     @GetMapping("/{procedureId}")
     public ResponseEntity<Procedure> getProcedureById(@PathVariable int procedureId) {
-        List<Request> requests = requestRepository.findRequestsByProcedureId(procedureId);
+       // List<Request> requests = requestRepository.findRequestsByProcedureId(procedureId);
         Optional<Procedure> optionalProcedure = procedureRepository.findByProcedureId(procedureId);
         Procedure procedure = optionalProcedure.orElse(null);
-        try {
+        /*try {
             procedure.setRequests(requests);
         } catch(NullPointerException e){
             return ResponseEntity.notFound().build();
-        }
+        }*/
         return ResponseEntity.ok(procedure);
     }
     @GetMapping("/ids")
@@ -70,10 +70,7 @@ public class ProcedureController {
         List<Integer> ids = procedureRepository.findAllIds();
         return ResponseEntity.ok(ids);
     }
-    /**
-     * PUT by ID
-     * updates a procedure with specific ID in the Database
-     */
+
     /*@PutMapping("/{id}")
     public ResponseEntity<Procedure> updateProcedure(@PathVariable String procedureId, @RequestBody Procedure procedure) {
         if (!procedureService.existsById(procedureId)) {
@@ -83,7 +80,10 @@ public class ProcedureController {
         return ResponseEntity.ok(updatedProcedure);
     }
      */
-
+    /**
+     * PUT by ID
+     * updates a procedure with specific ID in the Database
+     */
     @PutMapping("/{id}")
     public ResponseEntity<Procedure> updateProcedure(@PathVariable("id") int procedureId, @RequestBody Procedure ProcedureDetails) {
         return procedureRepository.findByProcedureId(procedureId)
@@ -92,6 +92,7 @@ public class ProcedureController {
                     Procedure.setAnnotation(ProcedureDetails.getAnnotation());
                     Procedure.setUniversity(ProcedureDetails.getUniversity());
                     Procedure.setCourseName(ProcedureDetails.getCourseName());
+                    Procedure.setRequests(ProcedureDetails.getRequests());
                     // Add other fields to update if needed
                     Procedure updatedProcedure = procedureRepository.save(Procedure);
                     return ResponseEntity.ok(updatedProcedure);
@@ -100,11 +101,15 @@ public class ProcedureController {
 
 
     @PostMapping
-    public ResponseEntity<ProcedureResponseDTO> createProcedure(@RequestBody ProcedureRequestDTO procedureRequestDTO) {
-        ProcedureResponseDTO response = procedureService.createProcedureFromDTO(procedureRequestDTO);
-        if (response == null)
+    public ResponseEntity<Procedure> createProcedure(@RequestBody Procedure procedure) {
+        Procedure newProcedure = new Procedure(
+                procedure.getAnnotation(),
+                procedure.getUniversity(),
+                procedure.getCourseName(),
+                procedure.getRequests());
+        if (newProcedure == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         else
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+            return ResponseEntity.status(HttpStatus.CREATED).body(newProcedure);
     }
 }

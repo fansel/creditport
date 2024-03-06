@@ -33,13 +33,15 @@ public class Request {
     )
     private int requestId;
 
-    @ManyToOne()
-    @JoinColumn(
-            name = "procedure_id",
-            nullable = false
+    @ManyToMany
+    @JoinTable(
+            name = "request_procedure",
+            joinColumns = @JoinColumn(name = "request_id"),
+            inverseJoinColumns = @JoinColumn(name = "procedure_id")
     )
     @JsonIgnore
-    private Procedure procedure;
+    private List<Procedure> procedures;
+
     @ManyToMany()
     @JoinTable(
             name = "extmod_request",
@@ -109,11 +111,17 @@ public class Request {
         }
         return externalModuleIds;
     }
-
+    public List<Integer> getProcedureIds(){
+        List<Integer> procedureIds = new ArrayList<>();
+        for (Procedure procedure: procedures){
+            procedureIds.add(procedure.getProcedureId());
+        }
+        return procedureIds;
+    }
 
     // Überarbeiteter Konstruktor mit 'createdAt'-Parameter
-    public Request(Procedure procedure, List<ExternalModule> externalModules, List<InternalModule> internalModules, String annotationCommittee, String annotationStudent, int creditPoints, Instant createdAt) {
-        this.procedure = procedure;
+    public Request(List<Procedure> procedures, List<ExternalModule> externalModules, List<InternalModule> internalModules, String annotationCommittee, String annotationStudent, int creditPoints, Instant createdAt) {
+        this.procedures = procedures;
         this.externalModules = externalModules;
         this.internalModules = internalModules;
         this.annotationStudent = annotationStudent;
@@ -123,8 +131,8 @@ public class Request {
         this.statusRequest = StatusRequest.NICHT_BEARBEITET;
     }
 
-    public Request(Procedure procedure, List<ExternalModule> externalModules, List<InternalModule> internalModules, String annotationStudent, String annotationCommittee, int creditPoints) {
-        this.procedure = procedure;
+    public Request(List<Procedure> procedures, List<ExternalModule> externalModules, List<InternalModule> internalModules, String annotationStudent, String annotationCommittee, int creditPoints) {
+        this.procedures = procedures;
         this.externalModules = externalModules;
         this.internalModules = internalModules;
         this.annotationStudent = annotationStudent;

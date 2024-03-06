@@ -47,7 +47,7 @@ public class PdfService {
         }
 
         Procedure procedure = procedureOptional.get();
-        List<Request> requests = requestRepository.findRequestsByProcedureId(procedureId);
+        //List<Request> requests = requestRepository.findRequestsByProcedureId(procedureId);
 
         try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
              PdfWriter writer = new PdfWriter(byteArrayOutputStream);
@@ -57,7 +57,7 @@ public class PdfService {
             applyTemplateToDocument(document);
             setDocumentMargins(document);
             addHeadingToDocument(document, procedure);
-            addTableToDocument(document, requests);
+            addTableToDocument(document, procedure.getRequests());
             addQRCodeWithBox(document,"http://localhost:5173/status/"+procedureId);
             addFooterToDocument(document, procedure);
 

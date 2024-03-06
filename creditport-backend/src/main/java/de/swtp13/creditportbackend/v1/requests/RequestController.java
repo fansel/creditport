@@ -1,14 +1,15 @@
 package de.swtp13.creditportbackend.v1.requests;
 
 
-        import de.swtp13.creditportbackend.v1.procedures.Procedure;
-        import org.springframework.beans.factory.annotation.Autowired;
-        import org.springframework.http.ResponseEntity;
-        import org.springframework.web.bind.annotation.*;
+import de.swtp13.creditportbackend.v1.procedures.Procedure;
+import de.swtp13.creditportbackend.v1.procedures.ProcedureRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 
-        import java.util.List;
-        import java.util.Optional;
+import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -23,7 +24,8 @@ public class RequestController {
 
     @Autowired
     private RequestRepository requestRepository;
-
+    @Autowired
+    private ProcedureRepository procedureRepository;
 
 
     // GET all requests
@@ -40,7 +42,7 @@ public class RequestController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-
+/*
     // GET: related Requests by RequestID
     @GetMapping("/relatedRequests/{requestId}")
     public ResponseEntity<RelatedRequestDTO> getRelatedRequestsById(@PathVariable int requestId){
@@ -50,7 +52,7 @@ public class RequestController {
         Request request = req.orElse(null);
         try {
             relatedRequest.setRequestId(request.getRequestId());
-            relatedRequest.setProcedureId(request.getProcedure().getProcedureId());
+            relatedRequest.setProcedureIds(request.getProcedureIds());
             relatedRequest.setExternalModules(request.getExternalModules());
             relatedRequest.setInternalModules(request.getInternalModules());
             relatedRequest.setAnnotationStudent(request.getAnnotationStudent());
@@ -72,12 +74,13 @@ public class RequestController {
             return ResponseEntity.notFound().build();
         }
     }
-
+*/
     // GET: Request by ProcedureId
     @GetMapping("/procedure/{procedureId}")
     public ResponseEntity<List<Request>> getRequestsByProcedure(@PathVariable int procedureId) {
-        List<Request> requests = requestRepository.findRequestsByProcedureId(procedureId);
-        return ResponseEntity.ok(requests);
+
+        //List<Request> requests = requestRepository.findRequestsByProcedureId(procedureId);
+        return ResponseEntity.ok(procedureRepository.findByProcedureId(procedureId).get().getRequests());
     }
 
 
