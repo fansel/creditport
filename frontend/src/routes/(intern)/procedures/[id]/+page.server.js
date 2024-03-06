@@ -40,51 +40,6 @@ export const actions = {
     const formData = await request.json();
     console.log(formData);
 
-    // const schema = zfd.formData({
-    //   requestId: zfd.text().transform((value) => {
-    //     const parsed = parseInt(value, 10);
-    //     if (isNaN(parsed)) {
-    //       throw new Error("requestId must be a valid integer");
-    //     }
-    //     return parsed;
-    //   }),
-    //   externalModuleId: zfd.text(),
-    //   internalModuleId: zfd.text(),
-    //   annotationStudent: zfd.text(),
-    //   annotationCommittee: zfd.text(),
-    //   creditPoints: zfd.text().transform((value) => parseInt(value, 10)),
-    //   statusRequest: zfd.text(z.string({ required_error: 'Status darf nicht leer sein' })),
-    //   createdAt: zfd.text(),
-    //   pdfExists: zfd.text(), //.transform((value) => value === 'true'), // Vielleicht sinnvoller in +page.svelte zu handlen?
-    //   moduleLink: zfd.text().optional(),
-    // });
-
-    // const result = schema.safeParse(formData);
-    // console.log('schema.success is ' + result.success);
-    // if (!result.success) {
-    //   const data = {
-    //     data: Object.fromEntries(formData),
-    //     errors: result.error.flatten().fieldErrors
-    //   };
-    //   console.log(data);
-    //   return fail(400, data);
-    // }
-
-    // const body = {
-    //   requestId: result.data.requestId,
-    //   externalModuleId: result.data.externalModuleId,
-    //   internalModuleId: result.data.internalModuleId,
-    //   annotationStudent: result.data.annotationStudent,
-    //   annotationCommittee: result.data.annotationCommittee,
-    //   creditPoints: result.data.creditPoints,
-    //   statusRequest: result.data.status,
-    //   createdAt: result.data.createdAt,
-    //   pdfExists: result.data.pdfExists,
-    //   moduleLink: result.data.moduleLink
-    // };
-
-    // const res = await api.put(`requests/${result.data.requestId}`, body, locals.user?.token);
-
     return { success: true };
   }
 };

@@ -6,13 +6,14 @@
   import * as config from '$lib/config';
   import { format, parseISO } from 'date-fns';
   import { page } from '$app/stores';
-  import { enhance } from '$app/forms';
+  import { successToast } from '$root/lib/toast';
   import Comment from './Comment.svelte';
   import PDF from './PDF.svelte';
   import Navbar from './Navbar.svelte';
   import CreditModule from './CreditModule.svelte';
 
   export let data;
+  console.log(data.modules);
 
   let request = data.request;
   let requestBackup = JSON.parse(JSON.stringify(data.request));
@@ -36,6 +37,8 @@
       },
       body: JSON.stringify(body)
     });
+    // successToast('Erfolreich gespeichert');
+
     console.log(res);
     requestBackup = JSON.parse(JSON.stringify(request));
   }
@@ -53,7 +56,8 @@
 </script>
 
 <svelte:head>
-  <title>{config.title} - {$page.data.title}</title>
+  <!-- <title>{config.title} - {$page.data.title}</title> -->
+  <title>{$page.data.title}</title>
 </svelte:head>
 
 <Header wide={true} />
@@ -81,11 +85,12 @@
     <div class="col-4">
       <div>
         <div class="row mb-3">
-          <div class="col-6"><strong>Antrag erstellt am </strong><br />{format(new Date(request.createdAt), 'dd.MM.yyyy HH:mm')}</div>
+          <!-- <div class="col-6"><strong>Antrag erstellt am </strong><br />{format(new Date(request.createdAt), 'dd.MM.yyyy HH:mm')}</div> -->
+          <div class="col-6"><strong>Antrag erstellt am </strong><br />{format(new Date(request.createdAt), 'dd.MM.yyyy')}</div>
         </div>
 
         <!-- input für ausgewähltes Modul handlen -->
-        <CreditModule />
+        <CreditModule bind:selectedOption={request.internalModule} />
 
         <div class="col mb-3">
           <div class="row">
