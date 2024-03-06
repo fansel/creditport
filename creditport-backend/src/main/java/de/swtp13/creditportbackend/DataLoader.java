@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
 import java.util.UUID;
-
+/*
 @Component  // Diese Annotation gibt an, dass diese Klasse ein Component ist, und von Spring automatisch erkannt und instanziiert wird.
 public class DataLoader implements CommandLineRunner {
 
@@ -64,7 +64,7 @@ public class DataLoader implements CommandLineRunner {
      * @param args Argumente der Kommandozeile. Nicht verwendet in dieser Implementierung.
      * @throws Exception wenn ein Fehler während der Ausführung auftritt.
      */
-    @Override
+    /*@Override
     public void run(String... args) throws Exception {
         System.out.println("DataLoader is being executed!");
 
@@ -786,6 +786,7 @@ public class DataLoader implements CommandLineRunner {
         userRepository.save(examComittee);
         System.out.println("Users were saved in the database!");
 
-    }
-    }
+    }}*/
+public class DataLoader { }
+
 
