@@ -3,6 +3,11 @@ package de.swtp13.creditportbackend.v1.requests;
 
 import de.swtp13.creditportbackend.v1.procedures.Procedure;
 import de.swtp13.creditportbackend.v1.procedures.ProcedureRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +33,12 @@ public class RequestController {
     private ProcedureRepository procedureRepository;
 
 
-    // GET all requests
+    @Operation(summary = "returns a list of all requests", responses = {
+            @ApiResponse(responseCode = "200" //content = @Content(
+                    //mediaType = "application/json",
+                    //array = @ArraySchema(schema = @Schema(implementation = Request.class))
+            )//)
+    })
     @GetMapping
     public ResponseEntity<List<Request>> getAllRequests() {
         System.out.println("Get all requests");
@@ -36,6 +46,12 @@ public class RequestController {
     }
 
     // GET Request by RequestID
+    @Operation(summary = "returns a single request", responses = {
+            @ApiResponse(responseCode = "200",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Request.class))),
+            @ApiResponse(responseCode = "404", description = "Request id not found",
+                    content = @Content)
+    })
     @GetMapping("/{requestId}")
     public ResponseEntity<Request> getRequestById(@PathVariable int requestId) {
         return requestRepository.findByRequestId(requestId)
@@ -76,15 +92,26 @@ public class RequestController {
     }
 */
     // GET: Request by ProcedureId
+    @Operation(summary = "returns a list of requests for the given procedure", responses = {
+            @ApiResponse(responseCode = "200",
+                    content = @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = Request.class)))),
+            @ApiResponse(responseCode = "404", description = "Procedure id not found",
+                    content = @Content)
+    })
     @GetMapping("/procedure/{procedureId}")
     public ResponseEntity<List<Request>> getRequestsByProcedure(@PathVariable int procedureId) {
-
+        Optional<Procedure> procedure = procedureRepository.findByProcedureId(procedureId);
+        return procedure.map(value -> ResponseEntity.ok(value.getRequests())).orElseGet(() -> ResponseEntity.notFound().build());
         //List<Request> requests = requestRepository.findRequestsByProcedureId(procedureId);
-        return ResponseEntity.ok(procedureRepository.findByProcedureId(procedureId).get().getRequests());
+
     }
 
 
     // POST: Create a new Request
+    @Operation(summary = "creates a Request", responses = {
+            @ApiResponse(responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Request.class)))
+    })
     @PostMapping
     public ResponseEntity<Request> createRequest(@RequestBody Request request) {
         //System.out.println("Create Request: " + request.getRequestId());
@@ -92,6 +119,10 @@ public class RequestController {
     }
 
     // PUT: Update a Request
+    @Operation(summary = "updates the request with the given id", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Request.class))),
+            @ApiResponse(responseCode = "404", description = "Request id not found", content = @Content)
+    })
     @PutMapping("/{requestId}")
     public ResponseEntity<Request> updateRequestStatus(@PathVariable int requestId, @RequestBody Request RequestDetails) {
         return requestRepository.findByRequestId(requestId)
@@ -111,12 +142,16 @@ public class RequestController {
     }
 
     // DELETE: Delete a Request
+    @Operation(summary = "deletes a request", responses = {
+            @ApiResponse(responseCode = "204", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Request id not found", content = @Content)
+    })
     @DeleteMapping("/{requestId}")
     public ResponseEntity<?> deleteRequest(@PathVariable int requestId) {
         return requestRepository.findByRequestId(requestId)
                 .map(Request -> {
                     requestRepository.delete(Request);
-                    return ResponseEntity.ok().build();
+                    return ResponseEntity.noContent().build();
                 }).orElse(ResponseEntity.notFound().build());
     }
 
