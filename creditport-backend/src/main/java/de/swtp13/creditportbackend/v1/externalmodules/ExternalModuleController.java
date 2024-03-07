@@ -1,6 +1,10 @@
 package de.swtp13.creditportbackend.v1.externalmodules;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,22 +25,33 @@ public class ExternalModuleController {
     @Autowired
     private ExternalModuleRepository moduleRepository;
 
+    @Operation(summary = "returns a list of all external modules", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(
+                    mediaType = "application/json",
+                    array = @ArraySchema(schema = @Schema(implementation = ExternalModule.class))
+            ))
+    })
     @GetMapping
     public ResponseEntity<List<ExternalModule>> getAllModules() {
         System.out.println("Get all modules");
         return ResponseEntity.ok(moduleRepository.findAll());
     }
 
+    @Operation(summary = "creates a procedure", responses = {
+            @ApiResponse(responseCode = "201")
+    })
     @PostMapping
-    public ResponseEntity<?> createModule(
-            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false, defaultValue = "") String token,
-            @RequestBody ExternalModule Module) {
+    public ResponseEntity<ExternalModule> createModule(@RequestBody ExternalModule Module) {
         System.out.println("Create Module: " + Module.getModuleName());
         return ResponseEntity.ok(moduleRepository.save(Module));
     }
 
 
     // PUT: Update a Module
+    @Operation(summary = "updates the external module with the given id", responses = {
+            @ApiResponse(responseCode = "200"),
+            @ApiResponse(responseCode = "404", description = "External module id not found", content = @Content)
+    })
     @PutMapping("/{moduleId}")
     public ResponseEntity<ExternalModule> updateModule(@PathVariable UUID moduleId, @RequestBody ExternalModule ModuleDetails) {
         return moduleRepository.findById(moduleId)
@@ -50,6 +65,10 @@ public class ExternalModuleController {
     }
 
     // DELETE: Delete a Module
+    @Operation(summary = "deletes an external module", responses = {
+            @ApiResponse(responseCode = "204", content = @Content),
+            @ApiResponse(responseCode = "404", description = "External module id not found", content = @Content)
+    })
     @DeleteMapping("/{moduleId}")
     public ResponseEntity<?> deleteModule(@PathVariable UUID moduleId) {
         return moduleRepository.findById(moduleId)
@@ -60,6 +79,9 @@ public class ExternalModuleController {
     }
 
     // import Module data from json file
+    @Operation(summary = "creates all external modules listed in the json of the body", responses = {
+            @ApiResponse(responseCode = "200")
+    })
     @PostMapping("/import")
     public ResponseEntity<List<ExternalModule>> importUniversities(@RequestBody List<ExternalModule> modules) {
         moduleRepository.saveAll(modules);
