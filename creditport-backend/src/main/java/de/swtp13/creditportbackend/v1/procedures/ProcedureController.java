@@ -108,14 +108,14 @@ public class ProcedureController {
     @PutMapping("/{id}")
     public ResponseEntity<Procedure> updateProcedure(@PathVariable("id") int procedureId, @RequestBody Procedure ProcedureDetails) {
         return procedureRepository.findByProcedureId(procedureId)
-                .map(Procedure -> {
-                    Procedure.setStatus(ProcedureDetails.getStatus());
-                    Procedure.setAnnotation(ProcedureDetails.getAnnotation());
-                    Procedure.setUniversity(ProcedureDetails.getUniversity());
-                    Procedure.setCourseName(ProcedureDetails.getCourseName());
-                    Procedure.setRequests(ProcedureDetails.getRequests());
+                .map(procedure -> {
+                    procedure.setStatus(ProcedureDetails.getStatus());
+                    procedure.setAnnotation(ProcedureDetails.getAnnotation());
+                    procedure.setUniversity(ProcedureDetails.getUniversity());
+                    procedure.setCourseName(ProcedureDetails.getCourseName());
+                    procedure.setRequests(ProcedureDetails.getRequests());
                     // Add other fields to update if needed
-                    Procedure updatedProcedure = procedureRepository.save(Procedure);
+                    Procedure updatedProcedure = procedureRepository.save(procedure);
                     return ResponseEntity.ok(updatedProcedure);
                 }).orElse(ResponseEntity.notFound().build());
     }
@@ -135,5 +135,32 @@ public class ProcedureController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         else
             return ResponseEntity.status(HttpStatus.CREATED).body(newProcedure);
+    }
+
+    @Operation(summary = "sets status of given procedure to 'WEITERGELEITET'", responses = {
+            @ApiResponse(responseCode = "200"),
+            @ApiResponse(responseCode = "404", content = @Content)
+    })
+    @PostMapping("/forward/{id}")
+    public ResponseEntity<?> forwardProcedure(@PathVariable("id") int id) {
+        return procedureRepository.findByProcedureId(id)
+                .map(procedure -> {
+                    procedure.setStatus(Status.WEITERGELEITET);
+                    Procedure updatedProcedure = procedureRepository.save(procedure);
+                    return ResponseEntity.ok(updatedProcedure);
+                }).orElse(ResponseEntity.notFound().build());
+    }
+
+    @Operation(summary = "deletes a procedure", responses = {
+            @ApiResponse(responseCode = "204", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Procedure id not found", content = @Content)
+    })
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteProcedure(@PathVariable int id) {
+        return procedureRepository.findById(id)
+                .map(procedure -> {
+                    procedureRepository.delete(procedure);
+                    return ResponseEntity.noContent().build();
+                }).orElse(ResponseEntity.notFound().build());
     }
 }
