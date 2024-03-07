@@ -1,6 +1,7 @@
 package de.swtp13.creditportbackend.v1.procedures;
 
 
+import de.swtp13.creditportbackend.v1.procedures.dto.ProcedureRequestDTO;
 import de.swtp13.creditportbackend.v1.requests.RequestRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
