@@ -4,6 +4,7 @@ import de.swtp13.creditportbackend.v1.procedures.dto.ProcedureRequestDTO;
 import de.swtp13.creditportbackend.v1.procedures.dto.ProcedureResponseDTO;
 import de.swtp13.creditportbackend.v1.requests.Request;
 import de.swtp13.creditportbackend.v1.requests.RequestRepository;
+import de.swtp13.creditportbackend.v1.universities.UniversityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.http.HttpStatus;
 
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +31,8 @@ public class ProcedureController {
     private final ProcedureService procedureService;
     @Autowired
     private RequestRepository requestRepository;
+    @Autowired
+    private UniversityRepository universityRepository;
 
     /**
      * Constructs a {@code ProcedureController} with the necessary service.
@@ -44,7 +49,7 @@ public class ProcedureController {
      */
     @GetMapping
     public ResponseEntity<List<Procedure>> getProceduresWithRequests() {
-        //List<Procedure> proceduresWithRequests = procedureService.getProceduresWithRequests();
+        List<Procedure> proceduresWithRequests = procedureService.getProceduresWithRequests();
         return ResponseEntity.ok(procedureRepository.findAll());
     }
 
@@ -55,14 +60,14 @@ public class ProcedureController {
 
     @GetMapping("/{procedureId}")
     public ResponseEntity<Procedure> getProcedureById(@PathVariable int procedureId) {
-       // List<Request> requests = requestRepository.findRequestsByProcedureId(procedureId);
+        List<Request> requests = requestRepository.findRequestsByProcedureId(procedureId);
         Optional<Procedure> optionalProcedure = procedureRepository.findByProcedureId(procedureId);
         Procedure procedure = optionalProcedure.orElse(null);
-        /*try {
+        try {
             procedure.setRequests(requests);
         } catch(NullPointerException e){
             return ResponseEntity.notFound().build();
-        }*/
+        }
         return ResponseEntity.ok(procedure);
     }
     @GetMapping("/ids")
@@ -101,15 +106,11 @@ public class ProcedureController {
 
 
     @PostMapping
-    public ResponseEntity<Procedure> createProcedure(@RequestBody Procedure procedure) {
-        Procedure newProcedure = new Procedure(
-                procedure.getAnnotation(),
-                procedure.getUniversity(),
-                procedure.getCourseName(),
-                procedure.getRequests());
-        if (newProcedure == null)
+    public ResponseEntity<ProcedureResponseDTO> createProcedure(@RequestBody ProcedureRequestDTO procedureDetails) {
+        ProcedureResponseDTO response = procedureService.createProcedureFromDTO(procedureDetails);
+        if (response == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         else
-            return ResponseEntity.status(HttpStatus.CREATED).body(newProcedure);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }

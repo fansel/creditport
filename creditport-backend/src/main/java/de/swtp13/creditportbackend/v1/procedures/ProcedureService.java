@@ -7,8 +7,10 @@ import de.swtp13.creditportbackend.v1.procedures.dto.RequestResponseDTO;
 import de.swtp13.creditportbackend.v1.requests.RequestRepository;
 import de.swtp13.creditportbackend.v1.requests.Request;
 import de.swtp13.creditportbackend.v1.requests.StatusRequest;
+import de.swtp13.creditportbackend.v1.universities.UniversityRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -24,13 +26,15 @@ public class ProcedureService {
     private ProcedureRepository procedureRepository;
     @Autowired
     private RequestRepository requestRepository;
-/*
+    @Autowired
+    private UniversityRepository universityRepository;
+
     public List<Procedure> getProceduresWithRequests() {
         List<Request> requests = requestRepository.findAllWithProcedure();
         Map<Integer, Procedure> procedureMap = new HashMap<>();
         for (Request request : requests) {
-            List<Procedure> procedures = request.getProcedures();
-            List<Procedure> finalProcedures = procedureMap.computeIfAbsent(procedures.getProcedureIds(), k -> {
+            Procedure procedure = request.getProcedure();
+            Procedure finalProcedure = procedureMap.computeIfAbsent(procedure.getProcedureId(), k -> {
                 Procedure newProcedure = new Procedure();
                 newProcedure.setProcedureId(procedure.getProcedureId());
                 newProcedure.setStatus(procedure.getStatus());
@@ -57,10 +61,10 @@ public class ProcedureService {
 
         newProcedure.setAnnotation(procedureRequestDTO.getAnnotation());
         newProcedure.setCourseName(procedureRequestDTO.getCourseName());
-        newProcedure.setUniversity(procedureRequestDTO.getUniversity());
-        newProcedure.setStatus(Status.NEU);
-        newProcedure.setCreatedAt(Instant.now());
-        newProcedure.setLastUpdated(newProcedure.getCreatedAt());
+        ResponseEntity.ok(universityRepository.findById(procedureRequestDTO.getUniversityId()));
+        //newProcedure.setStatus(Status.NEU);
+        //newProcedure.setCreatedAt(Instant.now());
+        //newProcedure.setLastUpdated(newProcedure.getCreatedAt());
         newProcedure.setRequests(new ArrayList<>());
 
         // Save the procedure to get an ID

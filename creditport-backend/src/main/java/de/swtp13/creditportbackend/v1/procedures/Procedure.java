@@ -20,7 +20,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity(name = "Procedures")
 @Table(name = "procedures")
 @Data
-@NoArgsConstructor // Lombok generiert einen Konstruktor ohne Parameter
+
 @AllArgsConstructor
 /**
  * Die Procedure Klasse repräsentiert ein Vorgang. Der Vorgang enthält mehrere Anträge.
@@ -80,8 +80,9 @@ public class Procedure {
     @Temporal(TemporalType.TIMESTAMP)
     private Instant lastUpdated;
 
-    @ManyToMany(mappedBy = "procedures")
-    private List<Request> requests;
+   @Getter
+   @Transient
+   private List<Request> requests = new ArrayList<>();
 
     // Benutzerdefinierter Konstruktor ohne ID
 
@@ -115,6 +116,11 @@ public class Procedure {
     public Procedure(University university, String courseName) {
         this.university = university;
         this.courseName = courseName;
+        this.status = Status.NEU;
+        this.createdAt =Instant.now();
+        this.lastUpdated = this.createdAt;
+    }
+    public Procedure() {
         this.status = Status.NEU;
         this.createdAt =Instant.now();
         this.lastUpdated = this.createdAt;
