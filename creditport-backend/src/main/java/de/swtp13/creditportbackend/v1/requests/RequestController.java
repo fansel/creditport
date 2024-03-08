@@ -58,9 +58,9 @@ public class RequestController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-/*
+
     // GET: related Requests by RequestID
-    @GetMapping("/relatedRequests/{requestId}")
+    @GetMapping("/related/{requestId}")
     public ResponseEntity<RelatedRequestDTO> getRelatedRequestsById(@PathVariable int requestId){
         RelatedRequestDTO relatedRequest = new RelatedRequestDTO();
 
@@ -68,7 +68,7 @@ public class RequestController {
         Request request = req.orElse(null);
         try {
             relatedRequest.setRequestId(request.getRequestId());
-            relatedRequest.setProcedureIds(request.getProcedureIds());
+            relatedRequest.setProcedureId(request.getProcedure().getProcedureId());
             relatedRequest.setExternalModules(request.getExternalModules());
             relatedRequest.setInternalModules(request.getInternalModules());
             relatedRequest.setAnnotationStudent(request.getAnnotationStudent());
@@ -90,7 +90,7 @@ public class RequestController {
             return ResponseEntity.notFound().build();
         }
     }
-*/
+
     // GET: Request by ProcedureId
     @Operation(summary = "returns a list of requests for the given procedure", responses = {
             @ApiResponse(responseCode = "200",
