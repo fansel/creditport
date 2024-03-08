@@ -106,7 +106,7 @@ public class ProcedureController {
      * updates a procedure with specific ID in the Database
      */
     @Operation(summary = "updates the procedure with the given id", responses = {
-            @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Procedure.class))),
+            @ApiResponse(responseCode = "200"),
             @ApiResponse(responseCode = "404", description = "Procedure id not found", content = @Content)
     })
     @PutMapping("/{id}")
@@ -125,7 +125,7 @@ public class ProcedureController {
     }
 
     @Operation(summary = "creates a procedure", responses = {
-            @ApiResponse(responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Procedure.class))),
+            @ApiResponse(responseCode = "201"),
             @ApiResponse(responseCode = "400", content = @Content)
     })
     @PostMapping

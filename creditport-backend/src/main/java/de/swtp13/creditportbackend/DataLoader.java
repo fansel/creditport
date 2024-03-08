@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
 import java.util.UUID;
+
 /*
 @Component  // Diese Annotation gibt an, dass diese Klasse ein Component ist, und von Spring automatisch erkannt und instanziiert wird.
 public class DataLoader implements CommandLineRunner {
@@ -743,16 +744,16 @@ public class DataLoader implements CommandLineRunner {
         externalModuleRepository.save(externalModule2);
         externalModuleRepository.save(externalModule1);
         List<Request> requests = Arrays.asList(
-                new Request(procedures1, externalModules1,
+                new Request(procedure, externalModules1,
                         internalModules1, "Algorithmen und Datenstrukturen 1", "an", 5),
-                new Request(procedures1, externalModules2,
+                new Request(procedure, externalModules2,
                         internalModules2, "Analysis für Informatiker", "an", 10)
         );
 
-        Request request1 = new Request(procedures3, externalModules1, internalModules1, "Anmerkung Antrag 1/ Vorgang 3", "an", 10);
-        Request request2 = new Request(procedures3, externalModules1, internalModules2, "Anmerkung Antrag 2/ Vorgang 3", "an", 10);
-        Request request3 = new Request(procedures2, externalModules2, internalModules1, "Anmerkung Antrag 1/ Vorgang 2", "an", 5);
-        Request request4 = new Request(procedures2, externalModules2, internalModules2, "Anmerkung Antrag 2/ Vorgang 2", "an", 10);
+        Request request1 = new Request(procedure3, externalModules1, internalModules1, "Anmerkung Antrag 1/ Vorgang 3", "an", 10);
+        Request request2 = new Request(procedure3, externalModules1, internalModules2, "Anmerkung Antrag 2/ Vorgang 3", "an", 10);
+        Request request3 = new Request(procedure2, externalModules2, internalModules1, "Anmerkung Antrag 1/ Vorgang 2", "an", 5);
+        Request request4 = new Request(procedure2, externalModules2, internalModules2, "Anmerkung Antrag 2/ Vorgang 2", "an", 10);
         //Erstelle einen neuen Antrag
         requestRepository.saveAll(requests);
         requestRepository.save(request1);
