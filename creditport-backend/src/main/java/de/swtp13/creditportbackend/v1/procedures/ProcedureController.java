@@ -3,6 +3,7 @@ package de.swtp13.creditportbackend.v1.procedures;
 
 import de.swtp13.creditportbackend.v1.procedures.dto.ProcedureRequestDTO;
 import de.swtp13.creditportbackend.v1.requests.RequestRepository;
+import de.swtp13.creditportbackend.v1.requests.StatusRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -15,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.http.HttpStatus;
 import de.swtp13.creditportbackend.v1.requests.Request;
 import de.swtp13.creditportbackend.v1.procedures.dto.ProcedureResponseDTO;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -138,17 +137,28 @@ public class ProcedureController {
     }
 
     @Operation(summary = "sets status of given procedure to 'WEITERGELEITET'", responses = {
-            @ApiResponse(responseCode = "200"),
-            @ApiResponse(responseCode = "404", content = @Content)
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Procedure.class))),
+            @ApiResponse(responseCode = "404", content = @Content),
+            @ApiResponse(responseCode = "428", description = "Precondition required: " +
+                    "One or more of the requests of the procedure did not have status 'BEARBEITET'",
+                    content = @Content)
     })
     @PostMapping("/forward/{id}")
     public ResponseEntity<?> forwardProcedure(@PathVariable("id") int id) {
-        return procedureRepository.findByProcedureId(id)
-                .map(procedure -> {
-                    procedure.setStatus(Status.WEITERGELEITET);
-                    Procedure updatedProcedure = procedureRepository.save(procedure);
-                    return ResponseEntity.ok(updatedProcedure);
-                }).orElse(ResponseEntity.notFound().build());
+        Procedure procedure = procedureRepository.findByProcedureId(id).orElse(null);
+        if (procedure == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        List<Request> requestList = procedure.getRequests();
+        for (Request request : requestList) {
+            if (request.getStatusRequest() != StatusRequest.BEARBEITET) {
+                return ResponseEntity.status(428).build();
+            }
+        }
+
+        procedure.setStatus(Status.WEITERGELEITET);
+        return ResponseEntity.ok(procedureRepository.save(procedure));
     }
 
     @Operation(summary = "deletes a procedure", responses = {
