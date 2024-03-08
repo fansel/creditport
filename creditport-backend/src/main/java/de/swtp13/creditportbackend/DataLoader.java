@@ -58,14 +58,14 @@ public class DataLoader implements CommandLineRunner {
     private PasswordEncoder passwordEncoder;
 
 
-    /**
-     * Diese Methode wird beim Start der Anwendung ausgeführt.
-     * Sie initialisiert und speichert eine Liste von Modulen in der Datenbank.
-     *
-     * @param args Argumente der Kommandozeile. Nicht verwendet in dieser Implementierung.
-     * @throws Exception wenn ein Fehler während der Ausführung auftritt.
-     */
-  /*  @Override
+    ///**
+    // * Diese Methode wird beim Start der Anwendung ausgeführt.
+    // * Sie initialisiert und speichert eine Liste von Modulen in der Datenbank.
+    // *
+    // * @param args Argumente der Kommandozeile. Nicht verwendet in dieser Implementierung.
+    // * @throws Exception wenn ein Fehler während der Ausführung auftritt.
+    // * /
+    @Override
     public void run(String... args) throws Exception {
         System.out.println("DataLoader is being executed!");
 
