@@ -19,7 +19,6 @@ public class RelatedRequestDTO {
     private List<InternalModule> internalModules;
     private String annotationStudent;
     private String annotationCommittee;
-    private int creditPoints;
     private StatusRequest statusRequest;
     private Instant createdAt;
     private boolean pdfExists;

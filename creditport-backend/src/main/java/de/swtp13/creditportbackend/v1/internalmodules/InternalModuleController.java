@@ -45,6 +45,7 @@ public class InternalModuleController {
                     Module.setNumber(ModuleDetails.getNumber());
                     Module.setModuleName(ModuleDetails.getModuleName());
                     Module.setModuleDescription(ModuleDetails.getModuleDescription());
+                    Module.setCreditPoints(ModuleDetails.getCreditPoints());
                     InternalModule updatedModule = moduleRepository.save(Module);
                     return ResponseEntity.ok(updatedModule);
                 }).orElse(ResponseEntity.notFound().build());

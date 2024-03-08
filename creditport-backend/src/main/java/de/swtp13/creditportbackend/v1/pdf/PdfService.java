@@ -13,6 +13,8 @@ import com.itextpdf.layout.element.*;
 import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.properties.*;
 import com.itextpdf.io.source.ByteArrayOutputStream;
+import de.swtp13.creditportbackend.v1.externalmodules.ExternalModule;
+import de.swtp13.creditportbackend.v1.internalmodules.InternalModule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -128,9 +130,13 @@ public class PdfService {
     private void addDataRowsToTable(Table table, List<Request> requests) {
         for (Request request : requests) {
             table.addCell(createCell(String.valueOf(request.getExternalModuleIds())));
-            table.addCell(createCell(String.valueOf(request.getCreditPoints())));
+            for(ExternalModule externalModule:request.getExternalModules()){
+                table.addCell(createCell(String.valueOf(externalModule.getCreditPoints())));
+            }
             table.addCell(createCell(String.valueOf(request.getInternalModuleIds())));
-            table.addCell(createCell(String.valueOf(request.getCreditPoints()))); // LP External
+            for(InternalModule internalModule:request.getInternalModules()){
+                table.addCell(createCell(String.valueOf(internalModule.getCreditPoints())));
+            }// LP External
         }
     }
 

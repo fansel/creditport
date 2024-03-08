@@ -69,12 +69,7 @@ public class Request {
     )
     private String annotationCommittee;
 
-    @Column(
-            name = "credit_points",
-            columnDefinition = "INT",
-            nullable = false
-    )
-    private int creditPoints;
+
 
     @Column(
             name = "request_status",
@@ -94,9 +89,8 @@ public class Request {
     @Column(name = "pdf_exists", nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean pdfExists;
 
-    @Column(name = "module_link", nullable = true)
+    @Column(name = "module_link")
     private String moduleLink;
-
     public List<UUID> getInternalModuleIds(){
         List<UUID> internalModuleIds = new ArrayList<>();
         for (InternalModule internalModule: internalModules){
@@ -114,24 +108,24 @@ public class Request {
 
 
     // Überarbeiteter Konstruktor mit 'createdAt'-Parameter
-    public Request(Procedure procedure, List<ExternalModule> externalModules, List<InternalModule> internalModules, String annotationCommittee, String annotationStudent, int creditPoints, Instant createdAt) {
+    public Request(Procedure procedure, List<ExternalModule> externalModules, List<InternalModule> internalModules, String annotationCommittee, String annotationStudent,  Instant createdAt) {
         this.procedure = procedure;
         this.externalModules = externalModules;
         this.internalModules = internalModules;
         this.annotationStudent = annotationStudent;
         this.annotationCommittee = annotationCommittee;
-        this.creditPoints = creditPoints;
+
         this.createdAt = createdAt;
         this.statusRequest = StatusRequest.NICHT_BEARBEITET;
     }
 
-    public Request(Procedure procedure, List<ExternalModule> externalModules, List<InternalModule> internalModules, String annotationStudent, String annotationCommittee, int creditPoints) {
+    public Request(Procedure procedure, List<ExternalModule> externalModules, List<InternalModule> internalModules, String annotationStudent, String annotationCommittee) {
         this.procedure = procedure;
         this.externalModules = externalModules;
         this.internalModules = internalModules;
         this.annotationStudent = annotationStudent;
         this.annotationCommittee = annotationCommittee;
-        this.creditPoints = creditPoints;
+
         this.statusRequest = StatusRequest.NICHT_BEARBEITET;
         this.createdAt = Instant.now();
     }

@@ -38,12 +38,7 @@ public class ExternalModule {
             columnDefinition = "VARCHAR"
     )
     private String moduleName;
-    //@Column(
-    //      name = "creditPoints",
-    //    nullable = false,
-    //  columnDefinition = "INT"
-    //)
-    //private int creditpoints;
+
     @Column(
             name = "module_description",
             nullable = false,
@@ -56,14 +51,20 @@ public class ExternalModule {
             nullable = false
     )
     private University university;
-
+    @Column(
+            name = "credit_points",
+            columnDefinition = "DOUBLE PRECISION",
+            nullable = false
+    )
+    private double creditPoints;
     public ExternalModule(String number,
                           String moduleName,
-                          String moduleDescription, University university ){
+                          String moduleDescription, University university, double creditPoints ){
         this.moduleDescription=moduleDescription;
         this.moduleNumber=number;
         this.moduleName= moduleName;
         this.university = university;
+        this.creditPoints = creditPoints;
     }
 
 }

@@ -65,13 +65,13 @@ public class DataLoader implements CommandLineRunner {
      * @param args Argumente der Kommandozeile. Nicht verwendet in dieser Implementierung.
      * @throws Exception wenn ein Fehler während der Ausführung auftritt.
      */
-    /*@Override
+  /*  @Override
     public void run(String... args) throws Exception {
         System.out.println("DataLoader is being executed!");
 
 
-        InternalModule internalModule1 = new InternalModule("10-201-2012", "Einführung in die objektorientierte Modellierung und Programmierung", "");
-        InternalModule internalModule2 = new InternalModule("10-201-2005-2", "Programmierparadigmen", "");
+        InternalModule internalModule1 = new InternalModule("10-201-2012", "Einführung in die objektorientierte Modellierung und Programmierung", "",5);
+        InternalModule internalModule2 = new InternalModule("10-201-2005-2", "Programmierparadigmen", "",5);
 
         internalModuleRepository.save(internalModule1);
         internalModuleRepository.save(internalModule2);
@@ -87,7 +87,7 @@ public class DataLoader implements CommandLineRunner {
                                 "    Arbeiten mit großen Datenmengen: Effektive Datenstrukturen, Sortieren, Suchen.\n" +
                                 "    Algorithmen für Graphen.\n" +
                                 "    Kompressionsalgorithmen.\n" +
-                                "    Grundlegende Strategien von Algorithmen."),
+                                "    Grundlegende Strategien von Algorithmen.",5),
                 new InternalModule("10-201-2001-2", "Algorithmen und Datenstrukturen 2",
                         "Nach der Teilnahme am Modul \"Algorithmen und Datenstrukturen 2\" können die Studierenden:\n" +
                                 "    Erweiterte Datenstrukturen erklären.\n" +
@@ -98,7 +98,7 @@ public class DataLoader implements CommandLineRunner {
                                 "    Arbeiten mit großen Datenmengen: Effektive Datenstrukturen, Sortieren, Suchen.\n" +
                                 "    Algorithmen für Graphen.\n" +
                                 "    Kompressionsalgorithmen.\n" +
-                                "    Grundlegende Strategien von Algorithmen."),
+                                "    Grundlegende Strategien von Algorithmen.",5),
                 new InternalModule("10-201-2006-1", "Grundlagen der Technischen Informatik 1",
                         "Nach der Teilnahme am Modul \"Grundlagen der Technischen Informatik 1\" können die Studierenden:\n" +
                                 "    Grundlegende Elektronikbegriffe definieren.\n" +
@@ -108,7 +108,7 @@ public class DataLoader implements CommandLineRunner {
                                 "Der Inhalt des Moduls umfasst die folgenden Themen:\n" +
                                 "    Grundlagen der Schaltungstechnik und die Verwendung von Transistoren als Schalter.\n" +
                                 "    Darstellung, Entwurfsminimierung und Realisierung digitaler Schaltungen.\n" +
-                                "    Den Aufbau und die Funktionsweise von Rechnersystemen und deren Peripheriegeräte."),
+                                "    Den Aufbau und die Funktionsweise von Rechnersystemen und deren Peripheriegeräte.",5),
                 new InternalModule("10-201-2006-2", "Grundlagen der Technischen Informatik 2",
                         "Nach der Teilnahme am Modul \"Grundlagen der Technischen Informatik 2\" können die Studierenden:\n" +
                                 "    Grundlegende Elektronikbegriffe definieren.\n" +
@@ -120,7 +120,7 @@ public class DataLoader implements CommandLineRunner {
                                 "Der Inhalt des Moduls umfasst die folgenden Themen:\n" +
                                 "    Grundlagen der Schaltungstechnik und die Verwendung von Transistoren als Schalter.\n" +
                                 "    Darstellung, Entwurfsminimierung und Realisierung digitaler Schaltungen.\n" +
-                                "    Den Aufbau und die Funktionsweise von Rechnersystemen und deren Peripheriegeräte."),
+                                "    Den Aufbau und die Funktionsweise von Rechnersystemen und deren Peripheriegeräte.",5),
                 new InternalModule("10-201-2004", "Betriebs- und Kommunikationssysteme",
                         "Nach der Teilnahme am Modul \"Betriebs- und Kommunikationssysteme\" sind die Studierenden in der Lage, folgende Fähigkeiten zu erlangen:\n" +
                                 "    Sie können die Grundlagen des Internets, einschließlich seiner Technologien und Konzepte, erläutern.\n" +
@@ -134,7 +134,7 @@ public class DataLoader implements CommandLineRunner {
                                 "    Vertiefte Betrachtung von Protokollen und Schichten\n" +
                                 "    Themen wie Internet-Routing und Datentransport\n" +
                                 "    Anwendung von Client/Server- und Peer-to-Peer-Paradigmen in Internetanwendungen\n" +
-                                "    Untersuchung spezifischer Anwendungen wie E-Mail, World Wide Web, Internet-Suchmaschinen, Peer-to-Peer-Dateienaustausch und Peer-to-Peer-Instant-Messaging."),
+                                "    Untersuchung spezifischer Anwendungen wie E-Mail, World Wide Web, Internet-Suchmaschinen, Peer-to-Peer-Dateienaustausch und Peer-to-Peer-Instant-Messaging.",5),
                 new InternalModule("10-201-2108-1", "Logik",
                         "Nach der Teilnahme am Modul \"Logik\" können die Studierenden:\n" +
                                 "    Sachverhalte präzise formalisieren, indem sie Aussagen- und Prädikatenlogik anwenden.\n" +
@@ -148,7 +148,7 @@ public class DataLoader implements CommandLineRunner {
                                 "    Prädikate\n" +
                                 "    Modelle\n" +
                                 "    Unentscheidbarkeit\n" +
-                                "    Grundlagen der Logikprogrammierung"),
+                                "    Grundlagen der Logikprogrammierung",5),
                 new InternalModule("10-201-2108-2", "Automaten und Sprachen",
                         "Nach der Teilnahme am Modul \"Automaten und Sprachen\" können die Studierenden:\n" +
                                 "    Grundlegende Begriffe und Konzepte aus der Automatentheorie sowie über formale Sprachen präzise definieren.\n" +
@@ -160,7 +160,7 @@ public class DataLoader implements CommandLineRunner {
                                 "    Die Chomsky-Hierarchie\n" +
                                 "    Endliche Automaten und reguläre Sprachen\n" +
                                 "    Keller-Automaten und kontextfreie Sprachen\n" +
-                                "    Kontextsensitive Sprachen."),
+                                "    Kontextsensitive Sprachen.",5),
                 new InternalModule("10-201-2009", "Berechenbarkeit",
                         "Nach der Teilnahme am Modul \"Berechenbarkeit\" erwerben die Studierenden die Fähigkeit:\n" +
                                 "    Grundlegende Begriffe und Konzepte aus der Algorithmentheorie und der Komplexitätstheorie präzise zu formalisieren.\n" +
@@ -176,7 +176,7 @@ public class DataLoader implements CommandLineRunner {
                                 "    Berechenbare Numerierungen\n" +
                                 "    Rekursiv aufzählbare und entscheidbare Mengen\n" +
                                 "    Halteproblem\n" +
-                                "    Elemente der Komplexitätstheorie"),
+                                "    Elemente der Komplexitätstheorie",5),
                 new InternalModule("10-201-2211", "Datenbanksysteme 1",
                         "Nach der Teilnahme am Modul \"Datenbanksysteme 1\" beherrschen Studierende:\n" +
                                 "    Grundlagen von Datenbanksystemen für große Datensätze.\n" +
@@ -189,7 +189,7 @@ public class DataLoader implements CommandLineRunner {
                                 "    Datenbankverwaltungssysteme: Aufbau und Merkmale\n" +
                                 "    Modellierung: Entity-Relationship und UML\n" +
                                 "    Das relationale Modell und Normalformen\n" +
-                                "    Relationenalgebra und SQL-Abfragen."),
+                                "    Relationenalgebra und SQL-Abfragen.",5),
                 new InternalModule("10-201-2321", "Software Engineering",
                         "Nach der Teilnahme am Modul \"Software Engineering\" sind die Studierenden in der Lage:\n" +
                                 "    Prinzipien, Methoden und Werkzeuge für die ingenieurmäßige Entwicklung und Anwendung umfangreicher Software-Systeme zu verstehen und anzuwenden.\n" +
@@ -201,7 +201,7 @@ public class DataLoader implements CommandLineRunner {
                                 "    Betrachtung von Software-Architekturen in Bezug auf funktionale und nicht-funktionale Anforderungen.\n" +
                                 "    Darstellung der Softwarelebenszyklusaktivitäten in verschiedenen Prozessmodellen, unter Berücksichtigung von Einschränkungen und Randbedingungen.\n" +
                                 "    Untersuchung leicht- und schwergewichtiger Entwicklungsprozesse.\n" +
-                                "    Behandlung ausgewählter Diagramme der UML in Bezug auf Notation und Verwendung sowie modellbasierte Entwicklung."),
+                                "    Behandlung ausgewählter Diagramme der UML in Bezug auf Notation und Verwendung sowie modellbasierte Entwicklung.",5),
                 new InternalModule("10-201-2320", "Software Engineering Praktikum",
                         "Nach der Teilnahme am Modul \"Software Engineering Praktikum\" erwerben die Studierenden die Fähigkeit:\n" +
                                 "    Die Aufgabenstellung eines größeren IT-Projekts im Team zu analysieren und deren Umsetzung gemeinsam zu organisieren.\n" +
@@ -214,7 +214,7 @@ public class DataLoader implements CommandLineRunner {
                                 "    Arbeit in Projektgruppen, in denen verschiedene Rollen innerhalb des Software-Entwicklungsprozesses wahrgenommen werden, einschließlich der Rolle des Projektleiters.\n" +
                                 "    Methodologie, die sich an [Balzert] orientiert, und die Durchführung von Anforderungsanalyse, Spezifikation, Modellierung und Implementierung.\n" +
                                 "    Erstellung von begleitender Projekt- und Produkt-Dokumentation, darunter Design-Beschreibungen, Javadoc-Kommentare und Inline-Kommentare.\n" +
-                                "    Regelmäßige Reviews wichtiger Entwicklungsphasen zu vorgegebenen Terminen."),
+                                "    Regelmäßige Reviews wichtiger Entwicklungsphasen zu vorgegebenen Terminen.",5),
                 new InternalModule("10-201-1602", "Diskrete Strukturen",
                         "Nach der Teilnahme am Modul \"Diskrete Strukturen\" erlangen die Studierenden folgende Fähigkeiten:\n" +
                                 "    Präzise formale Spezifikation grundlegender Begriffe und Konzepte aus der diskreten Mathematik.\n" +
@@ -229,7 +229,7 @@ public class DataLoader implements CommandLineRunner {
                                 "    Einführung in die Graphentheorie.\n" +
                                 "    Untersuchung geordneter Strukturen und Fixpunktsätze.\n" +
                                 "    Boolesche Algebren.\n" +
-                                "    Anwendungen dieser Konzepte in der Informatik."),
+                                "    Anwendungen dieser Konzepte in der Informatik.",5),
                 new InternalModule("10-201-1011", "Analysis",
                         "Nach der Teilnahme am Modul \"Analysis\" erwerben die Studierenden folgende Fähigkeiten:\n" +
                                 "    Definition und Erklärung grundlegender analytischer Begriffe, einschließlich Folgen und Reihen, Funktionen, Stetigkeit, Differentiation und Integration.\n" +
@@ -246,7 +246,7 @@ public class DataLoader implements CommandLineRunner {
                                 "    Differentiation und Integration von Funktionen einer Veränderlichen, einschließlich des Fundamentalsatzes, der Taylorentwicklung und uneigentlicher Integrale.\n" +
                                 "    Partielle Ableitungen von Funktionen mehrerer Veränderlicher.\n" +
                                 "    Lösungsformeln für spezielle gewöhnliche Differentialgleichungen erster Ordnung, sowohl lineare als auch separierbare.\n" +
-                                "    Interpolation und das Newton-Verfahren oder approximative Differentiation und Integration."),
+                                "    Interpolation und das Newton-Verfahren oder approximative Differentiation und Integration.",10),
                 new InternalModule("10-201-1015", "Lineare Algebra",
                         "Nach der Teilnahme am Modul \"Lineare Algebra\" erwerben die Studierenden die folgenden Fähigkeiten:\n" +
                                 "    Definition und Kenntnis grundlegender Begriffe der Linearen Algebra wie Vektorraum, Lineare Abbildung, Matrix und Determinante sowie deren Eigenschaften.\n" +
@@ -262,23 +262,23 @@ public class DataLoader implements CommandLineRunner {
                                 "    Lineare Abbildungen und ihre Darstellung in Matrixform.\n" +
                                 "    Determinanten.\n" +
                                 "    Eigenwerte.\n" +
-                                "    Numerische Lösung linearer Gleichungssysteme."),
+                                "    Numerische Lösung linearer Gleichungssysteme.",10),
                 new InternalModule("10-201-1802", "Wahrscheinlichkeitstheorie",
                         "Das Modul umfasst die folgenden Themen:" +
                                 "    Behandlung von diskreten Wahrscheinlichkeitsräumen und Wahrscheinlichkeiten mit Dichten," +
                                 "    grundlegende Konzepte wie Erwartungswert, Varianz, Unabhängigkeit und Zufallsgrößen, " +
                                 "    Beispiele für Wahrscheinlichkeitsverteilungen, " +
                                 "    das Gesetz der Großen Zahlen und der Satz von Moivre-Laplace, " +
-                                "    Einführende Betrachtungen zur mathematischen Statistik, einschließlich Schätztheorie, Konfidenzbereiche und Testtheorie."),
-                new InternalModule("", "Seminarmodule (Wahlpflichtfach)", ""),
-                new InternalModule("", "Kermodul (Wahlpflichtfach)", ""),
-                new InternalModule("", "Vertiefungsmodul (Wahlpflichtfach)", ""),
-                new InternalModule("", "Ergänzungsbereich (Wahlpflichtfach)", ""),
-                new InternalModule("", "Schlüsselqualifikation (Wahlpflichtfach)", ""),
+                                "    Einführende Betrachtungen zur mathematischen Statistik, einschließlich Schätztheorie, Konfidenzbereiche und Testtheorie.",5),
+                new InternalModule("", "Seminarmodule (Wahlpflichtfach)", "",5),
+                new InternalModule("", "Kermodul (Wahlpflichtfach)", "",5),
+                new InternalModule("", "Vertiefungsmodul (Wahlpflichtfach)", "",10),
+                new InternalModule("", "Ergänzungsbereich (Wahlpflichtfach)", "",10),
+                new InternalModule("", "Schlüsselqualifikation (Wahlpflichtfach)", "",10),
                 new InternalModule("10-201-2108-1", "Bachelorseminar", "Nach der  Teilnahme am Bachelorseminar erlangen die Studierenden folgende Fähigkeiten:\n" +
                         "Selbständige Einarbeitung in ein wissenschaftliches Thema der Informatik\n" +
                         "Vorbereitung auf die Bachelorarbeit\n" +
-                        "Präsentation selbst erarbeiteten Wissens")
+                        "Präsentation selbst erarbeiteten Wissens",5)
         );
         internalModuleRepository.saveAll(internalModules);
         System.out.println("Test procedure is being created!");
@@ -295,9 +295,6 @@ public class DataLoader implements CommandLineRunner {
         procedureRepository.save(procedure2);
         procedureRepository.save(procedure3);
 
-        List<Procedure> procedures1 = Arrays.asList(procedure);
-        List<Procedure> procedures2 = Arrays.asList(procedure2);
-        List<Procedure> procedures3 = Arrays.asList(procedure3);
 
         System.out.println("Procedures were saved in the database!");
 
@@ -736,8 +733,8 @@ public class DataLoader implements CommandLineRunner {
         List<InternalModule> internalModules1 = Arrays.asList(internalModule1,internalModule2);
         List<InternalModule> internalModules2 = Arrays.asList(internalModule2);
 
-        ExternalModule externalModule1 = new ExternalModule("20.300a", "Informatik101", "Informatik für Studienanfänger", testuni);
-        ExternalModule externalModule2 = new ExternalModule("20.300b", "Informatik102", "Informatik für Fortgeschrittene", testuni);
+        ExternalModule externalModule1 = new ExternalModule("20.300a", "Informatik101", "Informatik für Studienanfänger", testuni, 2.5);
+        ExternalModule externalModule2 = new ExternalModule("20.300b", "Informatik102", "Informatik für Fortgeschrittene", testuni,6.0);
         List<ExternalModule> externalModules1 = Arrays.asList(externalModule1,externalModule2);
         List<ExternalModule> externalModules2 = Arrays.asList(externalModule2);
 
@@ -745,15 +742,15 @@ public class DataLoader implements CommandLineRunner {
         externalModuleRepository.save(externalModule1);
         List<Request> requests = Arrays.asList(
                 new Request(procedure, externalModules1,
-                        internalModules1, "Algorithmen und Datenstrukturen 1", "an", 5),
+                        internalModules1, "Algorithmen und Datenstrukturen 1", "an"),
                 new Request(procedure, externalModules2,
-                        internalModules2, "Analysis für Informatiker", "an", 10)
+                        internalModules2, "Analysis für Informatiker", "an")
         );
 
-        Request request1 = new Request(procedure3, externalModules1, internalModules1, "Anmerkung Antrag 1/ Vorgang 3", "an", 10);
-        Request request2 = new Request(procedure3, externalModules1, internalModules2, "Anmerkung Antrag 2/ Vorgang 3", "an", 10);
-        Request request3 = new Request(procedure2, externalModules2, internalModules1, "Anmerkung Antrag 1/ Vorgang 2", "an", 5);
-        Request request4 = new Request(procedure2, externalModules2, internalModules2, "Anmerkung Antrag 2/ Vorgang 2", "an", 10);
+        Request request1 = new Request(procedure3, externalModules1, internalModules1, "Anmerkung Antrag 1/ Vorgang 3", "an");
+        Request request2 = new Request(procedure3, externalModules1, internalModules2, "Anmerkung Antrag 2/ Vorgang 3", "an");
+        Request request3 = new Request(procedure2, externalModules2, internalModules1, "Anmerkung Antrag 1/ Vorgang 2", "an");
+        Request request4 = new Request(procedure2, externalModules2, internalModules2, "Anmerkung Antrag 2/ Vorgang 2", "an");
         //Erstelle einen neuen Antrag
         requestRepository.saveAll(requests);
         requestRepository.save(request1);

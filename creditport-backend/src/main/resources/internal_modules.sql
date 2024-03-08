@@ -1,6 +1,6 @@
-INSERT INTO public.internal_modules (module_id, module_description, module_name, number) VALUES ('3e0370d8-7064-4a14-93da-121bed394fdf', '', 'Einführung in die objektorientierte Modellierung und Programmierung', '10-201-2012');
-INSERT INTO public.internal_modules (module_id, module_description, module_name, number) VALUES ('eed18dca-78a2-4280-b483-00b4c85ae964', '', 'Programmierparadigmen', '10-201-2005-2');
-INSERT INTO public.internal_modules (module_id, module_description, module_name, number) VALUES ('3759eb10-b14a-4518-bc2a-d2bbe5aeda35', e'Nach der Teilnahme am Modul "Algorithmen und Datenstrukturen 1" können die Studierenden:
+INSERT INTO public.internal_modules (credit_points, module_id, module_description, module_name, number) VALUES (5, '6a1b034d-4beb-4800-8c45-a61912fd212b', '', 'Einführung in die objektorientierte Modellierung und Programmierung', '10-201-2012');
+INSERT INTO public.internal_modules (credit_points, module_id, module_description, module_name, number) VALUES (5, '34f6e577-5579-4dfe-8efa-9529656dbeb3', '', 'Programmierparadigmen', '10-201-2005-2');
+INSERT INTO public.internal_modules (credit_points, module_id, module_description, module_name, number) VALUES (5, 'fba724bb-e568-46e8-9f27-1418bf53f9d8', e'Nach der Teilnahme am Modul "Algorithmen und Datenstrukturen 1" können die Studierenden:
     Grundlegende Datenstrukturen erklären.
     Einfache Algorithmen analysieren und ihre Funktionsweise reproduzieren.
     Einfache Textaufgaben mithilfe der erlernten Algorithmen und Datenstrukturen lösen.
@@ -10,7 +10,7 @@ Der Inhalt des Moduls umfasst die folgenden Themen:
     Algorithmen für Graphen.
     Kompressionsalgorithmen.
     Grundlegende Strategien von Algorithmen.', 'Algorithmen und Datenstrukturen 1', '10-201-2001-1');
-INSERT INTO public.internal_modules (module_id, module_description, module_name, number) VALUES ('94d23729-d9d1-4b66-889a-fe7d45e3b17d', e'Nach der Teilnahme am Modul "Algorithmen und Datenstrukturen 2" können die Studierenden:
+INSERT INTO public.internal_modules (credit_points, module_id, module_description, module_name, number) VALUES (5, 'f30a8713-0d7e-4125-b69d-7479219d96d1', e'Nach der Teilnahme am Modul "Algorithmen und Datenstrukturen 2" können die Studierenden:
     Erweiterte Datenstrukturen erklären.
     Komplexere Algorithmen analysieren und ihre Funktionsweise reproduzieren.
     Für ein gegebenes Anwendungsszenario geeignete Algorithmen und Datenstrukturen wählen.
@@ -20,16 +20,16 @@ Der Inhalt des Moduls umfasst die folgenden Themen:
     Algorithmen für Graphen.
     Kompressionsalgorithmen.
     Grundlegende Strategien von Algorithmen.', 'Algorithmen und Datenstrukturen 2', '10-201-2001-2');
-INSERT INTO public.internal_modules (module_id, module_description, module_name, number) VALUES ('b5081b67-0bd0-4d15-a8c7-10ad8ef65185', e'Nach der Teilnahme am Modul "Grundlagen der Technischen Informatik 1" können die Studierenden:
+INSERT INTO public.internal_modules (credit_points, module_id, module_description, module_name, number) VALUES (5, '46ba300c-6996-4fc8-8db0-29120c2c6071', e'Nach der Teilnahme am Modul "Grundlagen der Technischen Informatik 1" können die Studierenden:
     Grundlegende Elektronikbegriffe definieren.
     Bauteile aus der technischen Informatik beschreiben, analysieren und ihre Funktionsweise erläutern.
     Einfache analoge und digitale Schaltungen berechnen, analysieren, konzipieren und erklären.
-
+    
 Der Inhalt des Moduls umfasst die folgenden Themen:
     Grundlagen der Schaltungstechnik und die Verwendung von Transistoren als Schalter.
     Darstellung, Entwurfsminimierung und Realisierung digitaler Schaltungen.
     Den Aufbau und die Funktionsweise von Rechnersystemen und deren Peripheriegeräte.', 'Grundlagen der Technischen Informatik 1', '10-201-2006-1');
-INSERT INTO public.internal_modules (module_id, module_description, module_name, number) VALUES ('391d5a21-7ba7-456f-a346-797fe2a73c1c', e'Nach der Teilnahme am Modul "Grundlagen der Technischen Informatik 2" können die Studierenden:
+INSERT INTO public.internal_modules (credit_points, module_id, module_description, module_name, number) VALUES (5, 'bde4ab95-9b58-42c0-aa91-79c4368073c3', e'Nach der Teilnahme am Modul "Grundlagen der Technischen Informatik 2" können die Studierenden:
     Grundlegende Elektronikbegriffe definieren.
     Bauteile aus der technischen Informatik beschreiben, analysieren und ihre Funktionsweise erläutern.
     Einfache analoge und digitale Schaltungen berechnen, analysieren, konzipieren und erklären.
@@ -40,7 +40,7 @@ Der Inhalt des Moduls umfasst die folgenden Themen:
     Grundlagen der Schaltungstechnik und die Verwendung von Transistoren als Schalter.
     Darstellung, Entwurfsminimierung und Realisierung digitaler Schaltungen.
     Den Aufbau und die Funktionsweise von Rechnersystemen und deren Peripheriegeräte.', 'Grundlagen der Technischen Informatik 2', '10-201-2006-2');
-INSERT INTO public.internal_modules (module_id, module_description, module_name, number) VALUES ('ed67e61d-ab03-4c05-96c1-7008b74c55f1', e'Nach der Teilnahme am Modul "Betriebs- und Kommunikationssysteme" sind die Studierenden in der Lage, folgende Fähigkeiten zu erlangen:
+INSERT INTO public.internal_modules (credit_points, module_id, module_description, module_name, number) VALUES (5, 'a305cf06-dfe4-4941-811b-e2ad688ba1b7', e'Nach der Teilnahme am Modul "Betriebs- und Kommunikationssysteme" sind die Studierenden in der Lage, folgende Fähigkeiten zu erlangen:
     Sie können die Grundlagen des Internets, einschließlich seiner Technologien und Konzepte, erläutern.
     Die Studierenden sind in der Lage, die Aufgaben, die von den einzelnen Schichten des TCP/IP-Protokoll-Stacks wahrgenommen werden, zu definieren und die grundlegenden Protokolle, die in diesem Zusammenhang eine Rolle spielen, zu erklären.
     Die Studierenden können einfache Client/Server-Anwendungen sowie Peer-to-Peer-Anwendungen entwickeln.
@@ -53,7 +53,7 @@ Der Inhalt des Moduls umfasst die folgenden Themen:
     Themen wie Internet-Routing und Datentransport
     Anwendung von Client/Server- und Peer-to-Peer-Paradigmen in Internetanwendungen
     Untersuchung spezifischer Anwendungen wie E-Mail, World Wide Web, Internet-Suchmaschinen, Peer-to-Peer-Dateienaustausch und Peer-to-Peer-Instant-Messaging.', 'Betriebs- und Kommunikationssysteme', '10-201-2004');
-INSERT INTO public.internal_modules (module_id, module_description, module_name, number) VALUES ('5ce45d23-00c0-47a1-baab-2b1a214ec89b', e'Nach der Teilnahme am Modul "Logik" können die Studierenden:
+INSERT INTO public.internal_modules (credit_points, module_id, module_description, module_name, number) VALUES (5, 'c51f19e8-3cd5-4a87-b012-63d088902e3c', e'Nach der Teilnahme am Modul "Logik" können die Studierenden:
     Sachverhalte präzise formalisieren, indem sie Aussagen- und Prädikatenlogik anwenden.
     Bestimmen, ob eine Formel aus anderen logisch hergeleitet werden kann.
     Grundlegende automatische und formale Beweisverfahren nutzen.
@@ -66,7 +66,7 @@ Der Inhalt des Moduls umfasst die folgenden Themen:
     Modelle
     Unentscheidbarkeit
     Grundlagen der Logikprogrammierung', 'Logik', '10-201-2108-1');
-INSERT INTO public.internal_modules (module_id, module_description, module_name, number) VALUES ('848a9ee8-92ee-4c02-ab09-48c25fe0dc59', e'Nach der Teilnahme am Modul "Automaten und Sprachen" können die Studierenden:
+INSERT INTO public.internal_modules (credit_points, module_id, module_description, module_name, number) VALUES (5, 'cbf27134-8aee-4827-a6cd-1783513f8362', e'Nach der Teilnahme am Modul "Automaten und Sprachen" können die Studierenden:
     Grundlegende Begriffe und Konzepte aus der Automatentheorie sowie über formale Sprachen präzise definieren.
     Mathematische Aussagen bezüglich von Automaten und formalen Sprachen überprüfen und nachweisen oder widerlegen.
     Grundlegende formale Beweisverfahren auf verschiedene Automatenmodelle und Sprachklassen anwenden.
@@ -77,7 +77,7 @@ Der Inhalt des Moduls umfasst die folgenden Themen:
     Endliche Automaten und reguläre Sprachen
     Keller-Automaten und kontextfreie Sprachen
     Kontextsensitive Sprachen.', 'Automaten und Sprachen', '10-201-2108-2');
-INSERT INTO public.internal_modules (module_id, module_description, module_name, number) VALUES ('b79563f9-0768-42de-a91b-b9c201815d92', e'Nach der Teilnahme am Modul "Berechenbarkeit" erwerben die Studierenden die Fähigkeit:
+INSERT INTO public.internal_modules (credit_points, module_id, module_description, module_name, number) VALUES (5, 'f1aec6ce-5f29-4337-9d18-9e10f3dfbd07', e'Nach der Teilnahme am Modul "Berechenbarkeit" erwerben die Studierenden die Fähigkeit:
     Grundlegende Begriffe und Konzepte aus der Algorithmentheorie und der Komplexitätstheorie präzise zu formalisieren.
     Mathematische Aussagen bezüglich Berechenbarkeitskonzepten zu überprüfen, nachzuweisen oder zu widerlegen.
     Grundlegende formale Beweisverfahren für Entscheidbarkeits-, Berechenbarkeits- und Komplexitätsfragen anzuwenden.
@@ -92,7 +92,7 @@ Der Inhalt des Moduls umfasst die folgenden Themen:
     Rekursiv aufzählbare und entscheidbare Mengen
     Halteproblem
     Elemente der Komplexitätstheorie', 'Berechenbarkeit', '10-201-2009');
-INSERT INTO public.internal_modules (module_id, module_description, module_name, number) VALUES ('f307726a-2ba4-471e-9b7a-59ae456a20c0', e'Nach der Teilnahme am Modul "Datenbanksysteme 1" beherrschen Studierende:
+INSERT INTO public.internal_modules (credit_points, module_id, module_description, module_name, number) VALUES (5, '49d94803-82bf-4e58-a45d-c93b2cdffff2', e'Nach der Teilnahme am Modul "Datenbanksysteme 1" beherrschen Studierende:
     Grundlagen von Datenbanksystemen für große Datensätze.
     Modellierung in Entity-Relationship und UML-Klassendiagrammen anhand von Anwendungsbeschreibungen.
     Kenntnisse über relationale Datenbanksysteme, Relationenalgebra und SQL-Abfragen.
@@ -104,7 +104,7 @@ Der Inhalt des Moduls umfasst die folgenden Themen:
     Modellierung: Entity-Relationship und UML
     Das relationale Modell und Normalformen
     Relationenalgebra und SQL-Abfragen.', 'Datenbanksysteme 1', '10-201-2211');
-INSERT INTO public.internal_modules (module_id, module_description, module_name, number) VALUES ('4f79fc23-0ab5-4bb1-a0b5-80795c3e4c6c', e'Nach der Teilnahme am Modul "Software Engineering" sind die Studierenden in der Lage:
+INSERT INTO public.internal_modules (credit_points, module_id, module_description, module_name, number) VALUES (5, 'a0f9b6ac-fe35-470f-82df-1d15de1d63fc', e'Nach der Teilnahme am Modul "Software Engineering" sind die Studierenden in der Lage:
     Prinzipien, Methoden und Werkzeuge für die ingenieurmäßige Entwicklung und Anwendung umfangreicher Software-Systeme zu verstehen und anzuwenden.
     Verschiedene Vorgehensweisen der Softwareentwicklung zu vergleichen und anhand von Anwendungsbeispielen darzustellen.
 
@@ -115,7 +115,7 @@ Der Inhalt des Moduls umfasst die folgenden Themen:
     Darstellung der Softwarelebenszyklusaktivitäten in verschiedenen Prozessmodellen, unter Berücksichtigung von Einschränkungen und Randbedingungen.
     Untersuchung leicht- und schwergewichtiger Entwicklungsprozesse.
     Behandlung ausgewählter Diagramme der UML in Bezug auf Notation und Verwendung sowie modellbasierte Entwicklung.', 'Software Engineering', '10-201-2321');
-INSERT INTO public.internal_modules (module_id, module_description, module_name, number) VALUES ('9714b144-db66-4493-9b7f-d6d445acd998', e'Nach der Teilnahme am Modul "Software Engineering Praktikum" erwerben die Studierenden die Fähigkeit:
+INSERT INTO public.internal_modules (credit_points, module_id, module_description, module_name, number) VALUES (5, '08b2a3d1-ed05-431f-972e-00662dbb6186', e'Nach der Teilnahme am Modul "Software Engineering Praktikum" erwerben die Studierenden die Fähigkeit:
     Die Aufgabenstellung eines größeren IT-Projekts im Team zu analysieren und deren Umsetzung gemeinsam zu organisieren.
     Verschiedene Rollen innerhalb eines IT-Projekts selbstständig zu übernehmen.
     Kommunikationsmittel systematisch zur Planung, Vorbereitung, Durchführung und Auswertung angemessen einzusetzen.
@@ -127,7 +127,7 @@ Der Inhalt des Moduls umfasst die folgenden Themen:
     Methodologie, die sich an [Balzert] orientiert, und die Durchführung von Anforderungsanalyse, Spezifikation, Modellierung und Implementierung.
     Erstellung von begleitender Projekt- und Produkt-Dokumentation, darunter Design-Beschreibungen, Javadoc-Kommentare und Inline-Kommentare.
     Regelmäßige Reviews wichtiger Entwicklungsphasen zu vorgegebenen Terminen.', 'Software Engineering Praktikum', '10-201-2320');
-INSERT INTO public.internal_modules (module_id, module_description, module_name, number) VALUES ('57a50211-2986-458b-b464-a401b85d6ee7', e'Nach der Teilnahme am Modul "Diskrete Strukturen" erlangen die Studierenden folgende Fähigkeiten:
+INSERT INTO public.internal_modules (credit_points, module_id, module_description, module_name, number) VALUES (5, 'ee261256-c4c0-4606-94ac-945e7e9e3d0f', e'Nach der Teilnahme am Modul "Diskrete Strukturen" erlangen die Studierenden folgende Fähigkeiten:
     Präzise formale Spezifikation grundlegender Begriffe und Konzepte aus der diskreten Mathematik.
     Überprüfung algebraischer Aussagen im Zusammenhang mit diskreten Strukturen, sowie die Fähigkeit, diese nachzuweisen oder zu widerlegen.
     Anwendung grundlegender formaler Beweisverfahren im Kontext diskreter Strukturen.
@@ -141,7 +141,7 @@ Der Inhalt des Moduls umfasst die folgenden Themen:
     Untersuchung geordneter Strukturen und Fixpunktsätze.
     Boolesche Algebren.
     Anwendungen dieser Konzepte in der Informatik.', 'Diskrete Strukturen', '10-201-1602');
-INSERT INTO public.internal_modules (module_id, module_description, module_name, number) VALUES ('4fcb14ed-4e20-4e64-b234-333e675d50e5', e'Nach der Teilnahme am Modul "Analysis" erwerben die Studierenden folgende Fähigkeiten:
+INSERT INTO public.internal_modules (credit_points, module_id, module_description, module_name, number) VALUES (10, '5e7c3bfc-e54a-445d-b08d-62cbc7eeb2b9', e'Nach der Teilnahme am Modul "Analysis" erwerben die Studierenden folgende Fähigkeiten:
     Definition und Erklärung grundlegender analytischer Begriffe, einschließlich Folgen und Reihen, Funktionen, Stetigkeit, Differentiation und Integration.
     Verständnis des deduktiven Aufbaus der Mathematik.
     Kenntnis mathematischer Beweismethoden wie direkter und indirekter Beweis sowie vollständige Induktion und die Fähigkeit, mathematische Beweise nachzuvollziehen.
@@ -157,7 +157,7 @@ Die Inhalt des Moduls umfasst die folgenden Themen:
     Partielle Ableitungen von Funktionen mehrerer Veränderlicher.
     Lösungsformeln für spezielle gewöhnliche Differentialgleichungen erster Ordnung, sowohl lineare als auch separierbare.
     Interpolation und das Newton-Verfahren oder approximative Differentiation und Integration.', 'Analysis', '10-201-1011');
-INSERT INTO public.internal_modules (module_id, module_description, module_name, number) VALUES ('8d057247-31b6-43e5-9cb3-84cae736056b', e'Nach der Teilnahme am Modul "Lineare Algebra" erwerben die Studierenden die folgenden Fähigkeiten:
+INSERT INTO public.internal_modules (credit_points, module_id, module_description, module_name, number) VALUES (10, '8fee0b4e-67f1-4f8b-b029-31c078dd6e14', e'Nach der Teilnahme am Modul "Lineare Algebra" erwerben die Studierenden die folgenden Fähigkeiten:
     Definition und Kenntnis grundlegender Begriffe der Linearen Algebra wie Vektorraum, Lineare Abbildung, Matrix und Determinante sowie deren Eigenschaften.
     Anwendung mathematischer Beweismethoden, darunter direkter und indirekter Beweis sowie vollständige Induktion, zur Lösung von Problemstellungen im Zusammenhang mit der Linearen Algebra.
     Fähigkeit zur Bearbeitung und Diskussion von Fragestellungen aus dem Bereich der Linearen Algebra, auch in kleinen Gruppen.
@@ -172,16 +172,13 @@ Die Inhalt des Moduls umfasst die folgenden Themen:
     Determinanten.
     Eigenwerte.
     Numerische Lösung linearer Gleichungssysteme.', 'Lineare Algebra', '10-201-1015');
-INSERT INTO public.internal_modules (module_id, module_description, module_name, number) VALUES ('2fe58fc4-b08e-422c-b975-79b9a1cd0afe', 'Das Modul umfasst die folgenden Themen:    Behandlung von diskreten Wahrscheinlichkeitsräumen und Wahrscheinlichkeiten mit Dichten,    grundlegende Konzepte wie Erwartungswert, Varianz, Unabhängigkeit und Zufallsgrößen,     Beispiele für Wahrscheinlichkeitsverteilungen,     das Gesetz der Großen Zahlen und der Satz von Moivre-Laplace,     Einführende Betrachtungen zur mathematischen Statistik, einschließlich Schätztheorie, Konfidenzbereiche und Testtheorie.', 'Wahrscheinlichkeitstheorie', '10-201-1802');
-INSERT INTO public.internal_modules (module_id, module_description, module_name, number) VALUES ('31f4d130-8bd2-444b-9a07-95e8984e3839', '', 'Seminarmodule (Wahlpflichtfach)', '');
-INSERT INTO public.internal_modules (module_id, module_description, module_name, number) VALUES ('e3cda707-4b67-49b7-a856-2407716ba21f', '', 'Kermodul (Wahlpflichtfach)', '');
-INSERT INTO public.internal_modules (module_id, module_description, module_name, number) VALUES ('f2e30aee-9539-434c-9bfe-403a240be004', '', 'Vertiefungsmodul (Wahlpflichtfach)', '');
-INSERT INTO public.internal_modules (module_id, module_description, module_name, number) VALUES ('e6264f77-0d5e-4e94-9b3b-03377ea94e03', '', 'Ergänzungsbereich (Wahlpflichtfach)', '');
-INSERT INTO public.internal_modules (module_id, module_description, module_name, number) VALUES ('c49f7f2c-dc3a-49b6-b870-7a9c11d39d3f', '', 'Schlüsselqualifikation (Wahlpflichtfach)', '');
-INSERT INTO public.internal_modules (module_id, module_description, module_name, number) VALUES ('ae7047b7-85d8-413e-b608-bf67c55ba67b', e'Nach der  Teilnahme am Bachelorseminar erlangen die Studierenden folgende Fähigkeiten:
+INSERT INTO public.internal_modules (credit_points, module_id, module_description, module_name, number) VALUES (5, '9967011a-ed8a-4b84-a6cb-87283fbdc95b', 'Das Modul umfasst die folgenden Themen:    Behandlung von diskreten Wahrscheinlichkeitsräumen und Wahrscheinlichkeiten mit Dichten,    grundlegende Konzepte wie Erwartungswert, Varianz, Unabhängigkeit und Zufallsgrößen,     Beispiele für Wahrscheinlichkeitsverteilungen,     das Gesetz der Großen Zahlen und der Satz von Moivre-Laplace,     Einführende Betrachtungen zur mathematischen Statistik, einschließlich Schätztheorie, Konfidenzbereiche und Testtheorie.', 'Wahrscheinlichkeitstheorie', '10-201-1802');
+INSERT INTO public.internal_modules (credit_points, module_id, module_description, module_name, number) VALUES (5, '0458c042-29e9-4ef8-996d-38401665608c', '', 'Seminarmodule (Wahlpflichtfach)', '');
+INSERT INTO public.internal_modules (credit_points, module_id, module_description, module_name, number) VALUES (5, '81c7cdd9-7eb8-47b3-9d84-e63a13abed86', '', 'Kermodul (Wahlpflichtfach)', '');
+INSERT INTO public.internal_modules (credit_points, module_id, module_description, module_name, number) VALUES (10, 'dad6c38f-d5d7-412a-9c9e-57b8aa668fe2', '', 'Vertiefungsmodul (Wahlpflichtfach)', '');
+INSERT INTO public.internal_modules (credit_points, module_id, module_description, module_name, number) VALUES (10, 'abccf23d-e330-4294-9b2a-849ba588689e', '', 'Ergänzungsbereich (Wahlpflichtfach)', '');
+INSERT INTO public.internal_modules (credit_points, module_id, module_description, module_name, number) VALUES (10, '57f90def-51d9-4772-baf3-13af5a7a6a17', '', 'Schlüsselqualifikation (Wahlpflichtfach)', '');
+INSERT INTO public.internal_modules (credit_points, module_id, module_description, module_name, number) VALUES (5, 'b94c5247-be22-492e-8a11-14ac318dc0c3', e'Nach der  Teilnahme am Bachelorseminar erlangen die Studierenden folgende Fähigkeiten:
 Selbständige Einarbeitung in ein wissenschaftliches Thema der Informatik
 Vorbereitung auf die Bachelorarbeit
 Präsentation selbst erarbeiteten Wissens', 'Bachelorseminar', '10-201-2108-1');
-
-
-

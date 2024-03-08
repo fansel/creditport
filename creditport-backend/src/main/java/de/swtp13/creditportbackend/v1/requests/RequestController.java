@@ -73,7 +73,6 @@ public class RequestController {
             relatedRequest.setInternalModules(request.getInternalModules());
             relatedRequest.setAnnotationStudent(request.getAnnotationStudent());
             relatedRequest.setAnnotationCommittee(request.getAnnotationCommittee());
-            relatedRequest.setCreditPoints(request.getCreditPoints());
             relatedRequest.setStatusRequest(request.getStatusRequest());
             relatedRequest.setCreatedAt(request.getCreatedAt());
             relatedRequest.setPdfExists(request.isPdfExists());
@@ -132,7 +131,6 @@ public class RequestController {
                     Request.setInternalModules(RequestDetails.getInternalModules());
                     Request.setAnnotationStudent(RequestDetails.getAnnotationStudent());
                     Request.setAnnotationCommittee(RequestDetails.getAnnotationCommittee());
-                    Request.setCreditPoints(RequestDetails.getCreditPoints());
                     Request.setPdfExists(RequestDetails.isPdfExists());
                     Request.setModuleLink(RequestDetails.getModuleLink());
                     // Add other fields to update if needed

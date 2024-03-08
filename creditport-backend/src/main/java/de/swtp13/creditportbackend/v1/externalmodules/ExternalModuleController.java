@@ -59,6 +59,7 @@ public class ExternalModuleController {
                     Module.setModuleName(ModuleDetails.getModuleName());
                     Module.setModuleDescription(ModuleDetails.getModuleDescription());
                     Module.setUniversity(ModuleDetails.getUniversity());
+                    Module.setCreditPoints(ModuleDetails.getCreditPoints());
                     ExternalModule updatedModule = moduleRepository.save(Module);
                     return ResponseEntity.ok(updatedModule);
                 }).orElse(ResponseEntity.notFound().build());

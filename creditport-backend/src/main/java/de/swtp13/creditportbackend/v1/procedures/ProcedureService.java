@@ -62,9 +62,9 @@ public class ProcedureService {
         newProcedure.setAnnotation(procedureRequestDTO.getAnnotation());
         newProcedure.setCourseName(procedureRequestDTO.getCourseName());
         ResponseEntity.ok(universityRepository.findById(procedureRequestDTO.getUniversityId()));
-        //newProcedure.setStatus(Status.NEU);
-        //newProcedure.setCreatedAt(Instant.now());
-        //newProcedure.setLastUpdated(newProcedure.getCreatedAt());
+        newProcedure.setStatus(Status.NEU);
+        newProcedure.setCreatedAt(Instant.now());
+        newProcedure.setLastUpdated(newProcedure.getCreatedAt());
         newProcedure.setRequests(new ArrayList<>());
 
         // Save the procedure to get an ID
@@ -78,11 +78,10 @@ public class ProcedureService {
             newRequest.setInternalModules(requestDTO.getInternalModules());
             newRequest.setAnnotationStudent(requestDTO.getAnnotationStudent());
             newRequest.setAnnotationCommittee(requestDTO.getAnnotationCommittee());
-            newRequest.setCreditPoints(requestDTO.getCreditPoints());
+            newRequest.setModuleLink(requestDTO.getModuleLink());
             newRequest.setProcedure(newProcedure);
             newRequest.setStatusRequest(StatusRequest.NICHT_BEARBEITET);
             newRequest.setCreatedAt(Instant.now());
-            newRequest.setModuleLink(requestDTO.getModuleLink());
             newRequest = requestRepository.save(newRequest);
             RequestResponseDTO requestResponseDTO = new RequestResponseDTO();
             requestResponseDTO.setRequestId(String.valueOf(newRequest.getRequestId()));

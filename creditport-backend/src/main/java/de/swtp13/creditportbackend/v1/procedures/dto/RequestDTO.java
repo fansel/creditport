@@ -12,7 +12,6 @@ public class RequestDTO {
     private List<InternalModule> internalModules;
     private String annotationStudent;
     private String annotationCommittee;
-    private int creditPoints;
     private String moduleLink;
 
 

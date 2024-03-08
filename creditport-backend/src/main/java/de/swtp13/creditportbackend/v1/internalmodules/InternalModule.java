@@ -48,11 +48,18 @@ public class InternalModule {
            columnDefinition = "VARCHAR"
     )
     private String moduleDescription;
+    @Column(
+            name = "credit_points",
+            columnDefinition = "INT",
+            nullable = false
+    )
+    private int creditPoints;
 
-    public InternalModule(String number, String moduleName, String moduleDescription){
+    public InternalModule(String number, String moduleName, String moduleDescription, int creditPoints){
         this.moduleDescription = moduleDescription;
         this.moduleName = moduleName;
         this.number = number;
+        this.creditPoints = creditPoints;
     }
 
 
