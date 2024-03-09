@@ -6,6 +6,6 @@ import java.util.List;
 
 @Data
 public class ProcedureResponseDTO {
-    private String procedureId;
+    private int procedureId;
     private List<RequestResponseDTO> requests;
 }

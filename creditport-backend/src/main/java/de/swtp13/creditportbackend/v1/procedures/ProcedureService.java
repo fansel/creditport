@@ -7,6 +7,7 @@ import de.swtp13.creditportbackend.v1.procedures.dto.RequestResponseDTO;
 import de.swtp13.creditportbackend.v1.requests.RequestRepository;
 import de.swtp13.creditportbackend.v1.requests.Request;
 import de.swtp13.creditportbackend.v1.requests.StatusRequest;
+import de.swtp13.creditportbackend.v1.universities.University;
 import de.swtp13.creditportbackend.v1.universities.UniversityRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +62,11 @@ public class ProcedureService {
 
         newProcedure.setAnnotation(procedureRequestDTO.getAnnotation());
         newProcedure.setCourseName(procedureRequestDTO.getCourseName());
-        ResponseEntity.ok(universityRepository.findById(procedureRequestDTO.getUniversityId()));
+        Optional<University> opUni = universityRepository.findById(procedureRequestDTO.getUniversityId());
+        if (!opUni.isPresent()){
+            return null;
+        }
+        newProcedure.setUniversity(opUni.get());
         newProcedure.setStatus(Status.NEU);
         newProcedure.setCreatedAt(Instant.now());
         newProcedure.setLastUpdated(newProcedure.getCreatedAt());
@@ -84,12 +89,12 @@ public class ProcedureService {
             newRequest.setCreatedAt(Instant.now());
             newRequest = requestRepository.save(newRequest);
             RequestResponseDTO requestResponseDTO = new RequestResponseDTO();
-            requestResponseDTO.setRequestId(String.valueOf(newRequest.getRequestId()));
+            requestResponseDTO.setRequestId(newRequest.getRequestId());
             requestResponseDTOs.add(requestResponseDTO);
         }
 
         ProcedureResponseDTO responseDTO = new ProcedureResponseDTO();
-        responseDTO.setProcedureId(String.valueOf(newProcedure.getProcedureId()));
+        responseDTO.setProcedureId(newProcedure.getProcedureId());
         responseDTO.setRequests(requestResponseDTOs);
 
         return responseDTO;
