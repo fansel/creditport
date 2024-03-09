@@ -57,7 +57,7 @@ public class ProcedureController {
     @GetMapping
     public ResponseEntity<List<Procedure>> getProceduresWithRequests() {
         List<Procedure> proceduresWithRequests = procedureService.getProceduresWithRequests();
-        return ResponseEntity.ok(procedureRepository.findAll());
+        return ResponseEntity.ok(proceduresWithRequests);
     }
 
     /**
@@ -133,7 +133,7 @@ public class ProcedureController {
         ProcedureResponseDTO response = procedureService.createProcedureFromDTO(procedureDetails);
         if (response == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        else
+       else
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
