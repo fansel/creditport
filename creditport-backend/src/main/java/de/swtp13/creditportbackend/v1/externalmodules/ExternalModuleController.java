@@ -37,13 +37,13 @@ public class ExternalModuleController {
         return ResponseEntity.ok(moduleRepository.findAll());
     }
 
-    @Operation(summary = "creates a procedure", responses = {
+    @Operation(summary = "creates an external module", responses = {
             @ApiResponse(responseCode = "201")
     })
     @PostMapping
     public ResponseEntity<ExternalModule> createModule(@RequestBody ExternalModule Module) {
         System.out.println("Create Module: " + Module.getModuleName());
-        return ResponseEntity.ok(moduleRepository.save(Module));
+        return ResponseEntity.status(201).body(moduleRepository.save(Module));
     }
 
 
@@ -75,7 +75,7 @@ public class ExternalModuleController {
         return moduleRepository.findById(moduleId)
                 .map(Module -> {
                     moduleRepository.delete(Module);
-                    return ResponseEntity.ok().build();
+                    return ResponseEntity.noContent().build();
                 }).orElse(ResponseEntity.notFound().build());
     }
 
