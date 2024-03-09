@@ -13,6 +13,7 @@
   import Send from './send.svelte';
 
   $: modules = data.modules;
+  $: universities = data.universities;
 
   // $: console.log($tabProcedureForm);
 
@@ -110,7 +111,7 @@
   <hr />
 
   <div class={activeTab == 'pills-general' ? '' : 'visually-hidden'}>
-    <General bind:generalData {goToNextTab} />
+    <General bind:generalData {goToNextTab} {universities} />
   </div>
 
   <div class={activeTab == 'pills-module' ? '' : 'visually-hidden'}>

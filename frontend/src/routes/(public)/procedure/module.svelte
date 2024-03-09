@@ -5,6 +5,7 @@
   export let removeRequest;
   export let generalData;
   export let modules;
+  //export let universities;
   // export let activeTab;
   export let goToNextTab;
   export let addRequest;

@@ -1,7 +1,14 @@
 <script>
   export let generalData;
   export let goToNextTab;
+  export let universities;
+
+  
+
+  
+
 </script>
+
 
 <!-- Tab General -->
 
@@ -10,7 +17,19 @@
   <div class="col-md">
     <div class="mb-3">
       <label for="uni" class="mb-2">Universität der anzurechnenden Module </label>
-      <input type="text" id="uni" bind:value={generalData.university} class="form-control" placeholder="Universität Bremen" required />
+      <select
+      class="form-select" 
+      name="uni"
+      id="uni"
+      aria-label="Default select example"
+      bind:value={generalData.university}
+      >
+      {#each universities as university, index}
+      <option value={index} >{university.uniName}</option>         
+      {/each}
+      </select>
+     
+      <!-- <input type="text" id="uni" bind:value={generalData.university} class="form-control" placeholder="Universität Bremen" required /> -->
     </div>
     <div class="mb-3">
       <label for="" class="mb-2">Studiengang der anzurechnenden Module</label>

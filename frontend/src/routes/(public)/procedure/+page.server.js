@@ -6,12 +6,14 @@ import { fail, redirect } from '@sveltejs/kit';
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ params }) {
   const modules = await api.get('modules');
-
+  const universities = await api.get('universities');
   return {
+    universities: universities,
     modules: modules,
     title: 'Vorgang erstellen'
   };
 }
+
 
 function createDynamicSchema(count) {
   const dynamicFields = {};
