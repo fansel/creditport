@@ -118,8 +118,7 @@ public class ProcedureController {
                     procedure.setCourseName(ProcedureDetails.getCourseName());
                     procedure.setRequests(ProcedureDetails.getRequests());
                     // Add other fields to update if needed
-                    Procedure updatedProcedure = procedureRepository.save(procedure);
-                    return ResponseEntity.ok(updatedProcedure);
+                    return ResponseEntity.ok(procedureRepository.save(procedure));
                 }).orElse(ResponseEntity.notFound().build());
     }
 
