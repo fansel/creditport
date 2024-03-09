@@ -21,7 +21,7 @@ public class ManagementService {
         return UserDTO.of(userRepository.findById(id));
     }
 
-    public HttpStatus updatePassword(Integer id, String token, PasswordUpdateRequest newPass) {
+    public HttpStatus updatePassword(Integer id, String token, PasswordUpdateRequestDTO newPass) {
         User user;
         if (id == null) {
             try {
