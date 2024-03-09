@@ -1,7 +1,11 @@
 package de.swtp13.creditportbackend.v1.internalmodules;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,22 +26,33 @@ public class InternalModuleController {
     @Autowired
     private InternalModuleRepository moduleRepository;
 
+    @Operation(summary = "returns a list of all internal modules", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(
+                    mediaType = "application/json",
+                    array = @ArraySchema(schema = @Schema(implementation = InternalModule.class))
+            ))
+    })
     @GetMapping
     public ResponseEntity<List<InternalModule>> getAllModules() {
         System.out.println("Get all modules");
         return ResponseEntity.ok(moduleRepository.findAll());
     }
 
+    @Operation(summary = "creates an internal module", responses = {
+            @ApiResponse(responseCode = "201")
+    })
     @PostMapping
-    public ResponseEntity<?> createModule(
-            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false, defaultValue = "") String token,
-            @RequestBody InternalModule Module) {
+    public ResponseEntity<?> createModule(@RequestBody InternalModule Module) {
         System.out.println("Create Module: " + Module.getModuleName());
-        return ResponseEntity.ok(moduleRepository.save(Module));
+        return ResponseEntity.status(201).body(moduleRepository.save(Module));
     }
 
 
     // PUT: Update a Module
+    @Operation(summary = "updates the internal module with the given id", responses = {
+            @ApiResponse(responseCode = "200"),
+            @ApiResponse(responseCode = "404", description = "Internal module id not found", content = @Content)
+    })
     @PutMapping("/{moduleId}")
     public ResponseEntity<InternalModule> updateModule(@PathVariable UUID moduleId, @RequestBody InternalModule ModuleDetails) {
         return moduleRepository.findById(moduleId)
@@ -52,16 +67,23 @@ public class InternalModuleController {
     }
 
     // DELETE: Delete a Module
+    @Operation(summary = "deletes an internal module", responses = {
+            @ApiResponse(responseCode = "204", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Internal module id not found", content = @Content)
+    })
     @DeleteMapping("/{moduleId}")
     public ResponseEntity<?> deleteModule(@PathVariable UUID moduleId ) {
         return moduleRepository.findById(moduleId)
                 .map(Module -> {
                     moduleRepository.delete(Module);
-                    return ResponseEntity.ok().build();
+                    return ResponseEntity.noContent().build();
                 }).orElse(ResponseEntity.notFound().build());
     }
 
     // import Module data from json file
+    @Operation(summary = "creates all internal modules listed in the json of the body", responses = {
+            @ApiResponse(responseCode = "200")
+    })
     @PostMapping("/import")
     public ResponseEntity<List<InternalModule>> importModules(@RequestBody List<InternalModule> modules) {
         moduleRepository.saveAll(modules);
