@@ -1,4 +1,5 @@
 package de.swtp13.creditportbackend.v1.externalmodules;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -35,6 +36,19 @@ public class ExternalModuleController {
     public ResponseEntity<List<ExternalModule>> getAllModules() {
         System.out.println("Get all modules");
         return ResponseEntity.ok(moduleRepository.findAll());
+    }
+
+    @Operation(summary = "returns a single external module", responses = {
+            @ApiResponse(responseCode = "200",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ExternalModule.class))),
+            @ApiResponse(responseCode = "404", description = "Module id not found",
+                    content = @Content)
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<ExternalModule> getModuleById(@PathVariable("id") UUID uuid) {
+        return moduleRepository.findById(uuid)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @Operation(summary = "creates an external module", responses = {

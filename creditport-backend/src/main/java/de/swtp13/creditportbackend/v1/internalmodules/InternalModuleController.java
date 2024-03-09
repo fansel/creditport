@@ -38,6 +38,19 @@ public class InternalModuleController {
         return ResponseEntity.ok(moduleRepository.findAll());
     }
 
+    @Operation(summary = "returns a single internal module", responses = {
+            @ApiResponse(responseCode = "200",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = InternalModule.class))),
+            @ApiResponse(responseCode = "404", description = "Module id not found",
+                    content = @Content)
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<InternalModule> getModuleById(@PathVariable("id") UUID uuid) {
+        return moduleRepository.findById(uuid)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @Operation(summary = "creates an internal module", responses = {
             @ApiResponse(responseCode = "201")
     })
