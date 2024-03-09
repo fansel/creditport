@@ -37,7 +37,7 @@
                 {#each moduleData.selectedModul as selectedModul, selectedModulIndex}
                     <h6 class="h6" key={selectedModulIndex}>
                     <!-- selectedModul == 0 ist Auswahl "nichts" siehe select" -->
-                      {selectedModul !== 0 ? `${modules[selectedModul-1].moduleName}` : 'Neues Modul'}
+                      {selectedModul !== 0 ? `${modules[selectedModul].moduleName}` : 'Neues Modul'}
                     </h6>
                 {/each}
                 <button class="btn p-0 position-absolute top-50 end-0 translate-middle-y me-5" on:click={() => removeRequest(index)} type="button"><i class="bi bi-trash3-fill" /> </button>
@@ -121,9 +121,9 @@
                           aria-label="Default select example"
                           bind:value={moduleData.selectedModul[selectedModulIndex]}
                         >
-                        <option value={0} disabled selected hidden>Bitte treffen Sie eine Auswahl</option>
+                        <!-- <option value={0} disabled selected hidden>Bitte treffen Sie eine Auswahl</option> -->
                           {#each modules as modul, index}
-                          <option value={index+1} >{modul.moduleName}</option>         
+                          <option value={index} >{modul.moduleName}</option>         
                           {/each}
                         </select>
                       </div>

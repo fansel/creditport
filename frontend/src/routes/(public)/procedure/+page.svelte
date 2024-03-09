@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte';
-  import { enhance } from '$app/forms';
+  //import { enhance } from '$app/forms';
   import { page } from '$app/stores';
   import { tabProcedureForm } from '$lib/stores';
 
@@ -124,7 +124,7 @@
       {removeRequest}
       bind:generalData
       {modules}
-      {activeTab}
+      
       {goToNextTab}
       {addRequest}
     />
