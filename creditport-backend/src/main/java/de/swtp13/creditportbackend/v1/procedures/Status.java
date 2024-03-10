@@ -34,7 +34,9 @@ public enum Status {
      * VOLLSTÄNDIG (Prüfungsausschuss)
      * Alle Anträge in dem Vorgang wurden vom Prüfungsausschuss bearbeitet und es wurde eine begründete Entscheidung getroffen.
      */
-    VOLLSTÄNDIG(5);
+    VOLLSTÄNDIG(5),
+
+    ARCHIVIERT(11);
 
     private final int value;
 
