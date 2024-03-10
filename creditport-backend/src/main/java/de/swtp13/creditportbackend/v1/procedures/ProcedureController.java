@@ -91,15 +91,6 @@ public class ProcedureController {
         return ResponseEntity.ok(ids);
     }
 
-    /*@PutMapping("/{id}")
-    public ResponseEntity<Procedure> updateProcedure(@PathVariable String procedureId, @RequestBody Procedure procedure) {
-        if (!procedureService.existsById(procedureId)) {
-            return ResponseEntity.notFound().build();
-        }
-        Procedure updatedProcedure = procedureService.updateProcedure(procedureId, procedure);
-        return ResponseEntity.ok(updatedProcedure);
-    }
-     */
     /**
      * PUT by ID
      * updates a procedure with specific ID in the Database
@@ -179,7 +170,7 @@ public class ProcedureController {
             @ApiResponse(responseCode = "404", description = "Procedure id not found",
                     content = @Content)
     })
-    @GetMapping("/archive/{id}")
+    @PatchMapping("/archive/{id}")
     public ResponseEntity<Procedure> archiveProcedure(@PathVariable Integer id) {
         Optional<Procedure> optionalProcedure = procedureRepository.findByProcedureId(id);
         Procedure procedure = optionalProcedure.orElse(null);
