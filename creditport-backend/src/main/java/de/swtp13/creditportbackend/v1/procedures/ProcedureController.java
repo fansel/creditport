@@ -112,7 +112,7 @@ public class ProcedureController {
     public ResponseEntity<Procedure> updateProcedure(@PathVariable("id") int procedureId, @RequestBody Procedure ProcedureDetails) {
         return procedureRepository.findByProcedureId(procedureId)
                 .map(procedure -> {
-                    procedure.setStatus(ProcedureDetails.getStatus());
+                    procedure.setStatus(procedureService.setStatusOffen(ProcedureDetails.getStatus()));
                     procedure.setAnnotation(ProcedureDetails.getAnnotation());
                     procedure.setUniversity(ProcedureDetails.getUniversity());
                     procedure.setCourseName(ProcedureDetails.getCourseName());
@@ -171,5 +171,19 @@ public class ProcedureController {
                     procedureRepository.delete(procedure);
                     return ResponseEntity.noContent().build();
                 }).orElse(ResponseEntity.notFound().build());
+    }
+
+    @Operation(summary = "set a procedure status \"archiviert\"", responses = {
+            @ApiResponse(responseCode = "200",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Procedure.class))),
+            @ApiResponse(responseCode = "404", description = "Procedure id not found",
+                    content = @Content)
+    })
+    @GetMapping("/archive/{id}")
+    public ResponseEntity<Procedure> archiveProcedure(@PathVariable Integer id) {
+        Optional<Procedure> optionalProcedure = procedureRepository.findByProcedureId(id);
+        Procedure procedure = optionalProcedure.orElse(null);
+        if (procedure != null) procedureService.setStatusArchiviert(procedure);
+        return ResponseEntity.ok(procedure);
     }
 }
