@@ -4,14 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.swtp13.creditportbackend.v1.externalmodules.ExternalModule;
 import de.swtp13.creditportbackend.v1.internalmodules.InternalModule;
 import de.swtp13.creditportbackend.v1.procedures.Procedure;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -69,8 +67,6 @@ public class Request {
     )
     private String annotationCommittee;
 
-
-
     @Column(
             name = "request_status",
             columnDefinition = "VARCHAR",
@@ -91,6 +87,11 @@ public class Request {
 
     @Column(name = "module_link")
     private String moduleLink;
+
+    @Column(name = "favored",
+            columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private boolean favored = false;
+
     public List<UUID> getInternalModuleIds(){
         List<UUID> internalModuleIds = new ArrayList<>();
         for (InternalModule internalModule: internalModules){
@@ -110,15 +111,14 @@ public class Request {
 
 
     // Überarbeiteter Konstruktor mit 'createdAt'-Parameter
-    public Request(Procedure procedure, List<ExternalModule> externalModules, List<InternalModule> internalModules, String annotationCommittee, String annotationStudent,  Instant createdAt) {
+    public Request(Procedure procedure, List<ExternalModule> externalModules, List<InternalModule> internalModules, String annotationCommittee, String annotationStudent,  StatusRequest status) {
         this.procedure = procedure;
         this.externalModules = externalModules;
         this.internalModules = internalModules;
         this.annotationStudent = annotationStudent;
         this.annotationCommittee = annotationCommittee;
-
-        this.createdAt = createdAt;
-        this.statusRequest = StatusRequest.NICHT_BEARBEITET;
+        this.createdAt = Instant.now();
+        this.statusRequest = status;
     }
 
     public Request(Procedure procedure, List<ExternalModule> externalModules, List<InternalModule> internalModules, String annotationStudent, String annotationCommittee) {
