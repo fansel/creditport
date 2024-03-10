@@ -13,6 +13,7 @@
   export let addModuleToRequest;
   export let removeTitleFromRequest;
   export let removeModuleFromRequest;
+  
 
 </script>
 
@@ -21,10 +22,13 @@
   <input type="hidden" name="globalAnnotation" value={generalData.annotation} />
   <input type="hidden" name="university" id="university" value={generalData.university} />
   <input type="hidden" name="externalCourseName" id="externalCourseName" value={generalData.externalCourseName} />
-  <input type="hidden" name="modulesCount" bind:value={requests.length} />
+  <input type="hidden" name="requestCount" bind:value={requests.length} />
+  
 
   <div class="accordion" id="accordionExample">
     {#each requests as { moduleData }, index (index)}
+    <input type="hidden" name={`internalModulesCount${index}`} bind:value={moduleData.title.length} />
+    <input type="hidden" name={`externalModulesCount${index}`} bind:value={moduleData.selectedModul.length} />
       <div class="accordion-item full-border">
         <div class="row">
           <h2 class="accordion-header" id="headingOne">
@@ -37,8 +41,8 @@
               <div class="col-md">
                 {#each moduleData.selectedModul as selectedModul, selectedModulIndex}
                     <h6 class="h6" key={selectedModulIndex}>
-                    <!-- selectedModul == 0 ist Auswahl "nichts" siehe select" -->
-                      {selectedModul !== 0 ? `${modules[selectedModul].moduleName}` : 'Neues Modul'}
+                    <!-- wie kann ich nichts selecten? -->
+                      {selectedModul !== undefined ? `${modules[selectedModul].moduleName}` : 'Neues Modul'}
                     </h6>
                 {/each}
                 <button class="btn p-0 position-absolute top-50 end-0 translate-middle-y me-5" on:click={() => removeRequest(index)} type="button"><i class="bi bi-trash3-fill" /> </button>
@@ -69,8 +73,8 @@
                           <input
                             type="text"
                             class="form-control"
-                            name={`externalModule${titleIndex}`}
-                            id={`externalModule${titleIndex}`}
+                            name={`externalModule${index}-${titleIndex}`}
+                            id={`externalModule${index}-${titleIndex}`}
                             placeholder="Modellierung und Programmierung"
                             bind:value={moduleData.title[titleIndex]}
                           />
@@ -79,7 +83,7 @@
                       <div class="col-md-2">
                         <div class="mb-3">
                           <label for={`creditPoints${titleIndex}`} class="mb-2">LP</label>
-                          <input type="number" class="form-control" name={`creditPoints${titleIndex}`} id={`creditPoints${titleIndex}`} placeholder="5" />
+                          <input type="number" class="form-control" name={`creditPoints${index}-${titleIndex}`} id={`creditPoints${index}-${titleIndex}`} placeholder="5" />
                         </div>
                       </div>
                     </div>
@@ -96,7 +100,7 @@
                   </div>
                 {/each}
 
-                <button class="mb-3 btn btn-primary d-inline-flex align-items-center" type="button" on:click={addTitleToRequest(index)}>Fremdmodul<i class="ms-2 bi bi-plus-circle" /></button>
+                <button class="mb-3 btn btn-primary d-inline-flex align-items-center" type="button" on:click={() => {addTitleToRequest(index);}} >Fremdmodul<i class="ms-2 bi bi-plus-circle" /></button>
               </div>
 
               <div class="col-md">
