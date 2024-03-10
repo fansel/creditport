@@ -99,34 +99,19 @@ public class ProcedureService {
 
         return responseDTO;
     }
-/* Vorbereitung für Statusänderungen
-    public void setStatusInBearbeitung(Procedure procedure){
-        boolean bearbeitet = false;
-        List<Request> requests = requestRepository.findRequestsByProcedureId(procedure.getProcedureId());
-        for (Request request : requests){
-            if (request.getStatusRequest().equals(StatusRequest.BEARBEITET)) {
-                bearbeitet = true;
-                break;
-            }
+
+    public Status setStatusOffen(Status status){
+        if (status.equals(Status.NEU)){
+            return Status.OFFEN;
         }
-        if (procedure.getStatus().equals(Status.OFFEN)){
-            procedure.setStatus(Status.IN_BEARBEITUNG);
+        else return status;
+    }
+
+    public void setStatusArchiviert(Procedure procedure){
+        if (procedure.getStatus().equals(Status.VOLLSTÄNDIG)){
+            procedure.setStatus(Status.ARCHIVIERT);
+            procedureRepository.save(procedure);
         }
     }
 
-    public void setStatusVollstaendig(Procedure procedure){
-        boolean bearbeitet = true;
-        List<Request> requests = requestRepository.findRequestsByProcedureId(procedure.getProcedureId());
-        for (Request request : requests){
-            if (!(request.getStatusRequest().equals(StatusRequest.ABGELEHNT)) && !(request.getStatusRequest().equals(StatusRequest.ANGENOMMEN))) {
-                bearbeitet = false;
-                break;
-            }
-        }
-        if (procedure.getStatus().equals(Status.WEITERGELEITET)){
-            procedure.setStatus(Status.VOLLSTÄNDIG);
-        }
-    }
-
- */
 }
