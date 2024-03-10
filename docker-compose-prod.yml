@@ -1,0 +1,90 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:16.0-alpine
+    container_name: postgres-db
+
+    ports: 
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: admin
+      POSTGRES_DB: production
+    volumes:
+      - 'creditport-db:/var/lib/postgresql/data'
+    networks:
+      - creditport-net
+  db-gui:
+    image: elestio/pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@creditport.de"
+      PGADMIN_DEFAULT_PASSWORD: "admin"
+      PGADMIN_LISTEN_PORT: 5050
+    ports:
+      - "5050:5050"
+    volumes:
+      - "pgadmin-data:/var/lib/pgadmin"
+      - ./servers.json:/var/lib/pgadmin/servers.json
+    networks:
+        - creditport-net
+
+  javadoc:
+    container_name: creditport-javadoc
+    image: swtp202313/creditport:javadoc-latest
+    ports:
+      - 1234:80
+    restart: unless-stopped
+
+  frontend:
+    container_name: creditport-frontend
+    image: swtp202313/creditport:frontend-latest
+    ports:
+      # - 172.26.92.92:3000:80
+      - 3000:3000
+      # - 172.26.92.92:4173:4173
+    environment:
+      - PUBLIC_API_ENDPOINT=http://backend:8080/api/v1
+      - PUBLIC_ENV=production
+      - PUBLIC_SECURE_CONNECTION=false
+      - ORIGIN=http://172.26.92.92:3000
+      - PUBLIC_PDF_ENDPOINT=http://172.26.92.92:8080/pdf/download/
+    networks:
+      - creditport-net
+    restart: unless-stopped
+    pull_policy: always
+
+
+  backend:
+    container_name: creditport-backend
+    depends_on:
+      - db
+    image: swtp202313/creditport:backend-latest
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=production
+      - DB_USERNAME=admin
+      - DB_PASSWORD=admin
+    ports:
+      - 8080:8080
+    networks:
+      - creditport-net
+    restart: unless-stopped
+    pull_policy: always
+
+
+networks:
+  creditport-net:
+    driver: bridge
+    name: creditport-net
+
+volumes:
+  creditport-db:
+    name: creditport-db
+  pgadmin-data:
+    name: pgadmin-data
+
+
+    

@@ -1,0 +1,96 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:16.0-alpine
+    container_name: postgres-db
+    ports: 
+      - 1432:5432
+    environment:
+      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: admin
+      POSTGRES_DB: development
+    volumes:
+      - 'creditport-db:/var/lib/postgresql/data'
+    networks:
+      - creditport-net
+  db-gui:
+    image: elestio/pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@creditport.de"
+      PGADMIN_DEFAULT_PASSWORD: "admin"
+      PGADMIN_LISTEN_PORT: 5050
+    ports:
+      - "5050:5050"
+    volumes:
+      - "pgadmin-data:/var/lib/pgadmin"
+      - ./servers.json:/var/lib/pgadmin/servers.json
+    networks:
+      - creditport-net
+
+
+
+
+  javadoc:
+    container_name: creditport-javadoc
+    build:
+      context: ./creditport-backend/
+      dockerfile: javadoc.Dockerfile
+    image: creditport-javadoc
+    ports:
+      - 1234:80
+    restart: unless-stopped
+
+  frontend:
+    container_name: creditport-frontend
+    build:
+      context: ./frontend/
+      dockerfile: Dockerfile
+      target: development
+    image: creditport-frontend   
+    environment:
+      - PUBLIC_API_ENDPOINT=http://backend:8080/api/v1
+      - PUBLIC_ENV=development
+      - PUBLIC_SECURE_CONNECTION=false
+      - PUBLIC_PDF_ENDPOINT=http://localhost:8080/api/v1/pdf/download/
+    ports:
+      - 5173:5173
+    volumes:
+      - './frontend/:/app'
+      - '/app/node_modules/'
+    networks:
+      - creditport-net
+    restart: unless-stopped
+
+  backend:
+    container_name: creditport-backend
+    depends_on:
+      - db
+    build:
+      context: ./creditport-backend/
+      dockerfile: Dockerfile     
+    image: creditport-backend
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USERNAME=admin
+      - DB_PASSWORD=admin
+      - DB_NAME=development
+    ports:
+      - 8080:8080
+    networks:
+      - creditport-net
+    restart: unless-stopped
+
+
+networks:
+  creditport-net:
+    driver: bridge
+    name: creditport-net
+
+volumes:
+  creditport-db:
+    name: creditport-db
+  pgadmin-data:
+    name: pgadmin-data

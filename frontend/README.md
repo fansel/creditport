@@ -1,38 +1,43 @@
-# create-svelte
+# Creditport Frontend 
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
-
-## Creating a project
-
-If you're seeing this, you've probably already done this step. Congrats!
+## Installation für Entwickler
 
 ```bash
-# create a new project in the current directory
-npm create svelte@latest
+git clone git@git.informatik.uni-leipzig.de:SWS/lehre/ws-2023-2024/swt-p/projects/swtp-2023-13.git
+cd swtp-2023-13/frontend
+git checkout developer
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
+npm i
 npm run dev -- --open
+
 ```
 
-## Building
+## VSCode Einstellungen
 
-To create a production version of your app:
+**Extension**
+- Svelte for VS Code
+- Svelte 3 Snippets
+- Svette Intellisense
 
-```bash
-npm run build
-```
+**Settings**
+*Kann durch Ctrl+, aufgerufen werden*
+- @lang:svelte "editor.DefaultFormatter" : "Svelte for VSCode"
+- "editor.tabsize": 2
 
-You can preview the production build with `npm run preview`.
+## Seiten Übersicht fürs Frontend
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+| Urls              | Designer  | Beschreibung                                            |
+|------------------ |---------- | ---                                                     |
+| /                 | Leopold   | Startseite                                              |
+| /login            | Leopold   | Login für Bearbeiter                                    |
+| /vorgang          | Leopold   | Formular zum erstellen eines Vorgang                    |
+| /status           | Leopold   | Status abfragen / Übersicht bekommen                    |
+| /faq              | Elias     | Seite auf der Fragen beantwortet werden                 |
+| /impressum        | Elias     |                                                         |
+| /dashboard        | Leopold   | Übersicht für Bearbeiter                                |
+| /settings         | Elias     | Allgemeine Einstellungen                                |
+| /procedures       | Leopold   | Liste mit allen Vorgängen                               |
+| /procedures/[id]  | Leopold   | Bearbeitung / Übersicht eines Vorgangs                  |
+| /requests         | Leopold   | Liste aller Anträge (verlinkung zu jeweiligem Vorgang)  |
+| /requests/[id]    | Leopold   | Bearbeitung / Übersicht eines Antrags                   |
+
