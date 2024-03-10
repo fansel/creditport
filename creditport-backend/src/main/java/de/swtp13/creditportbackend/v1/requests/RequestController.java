@@ -25,13 +25,12 @@ import java.util.*;
 @RestController
 @RequestMapping("/requests")
 public class RequestController {
-
-
     @Autowired
     private RequestRepository requestRepository;
     @Autowired
     private ProcedureRepository procedureRepository;
-
+    @Autowired
+    private RequestService requestService;
 
     @Operation(summary = "returns a list of all requests", responses = {
             @ApiResponse(responseCode = "200" //content = @Content(
@@ -45,7 +44,6 @@ public class RequestController {
         return ResponseEntity.ok(requestRepository.findAll());
     }
 
-    // GET Request by RequestID
     @Operation(summary = "returns a single request", responses = {
             @ApiResponse(responseCode = "200",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = Request.class))),
@@ -146,16 +144,39 @@ public class RequestController {
         return requestRepository.findByRequestId(requestId)
                 .map(Request -> {
                     Request.setStatusRequest(RequestDetails.getStatusRequest());
-                    Request.setExternalModules(RequestDetails.getExternalModules());
-                    Request.setInternalModules(RequestDetails.getInternalModules());
+                    //Request.setExternalModules(RequestDetails.getExternalModules());
+                    //Request.setInternalModules(RequestDetails.getInternalModules());
                     Request.setAnnotationStudent(RequestDetails.getAnnotationStudent());
                     Request.setAnnotationCommittee(RequestDetails.getAnnotationCommittee());
                     Request.setPdfExists(RequestDetails.isPdfExists());
                     Request.setModuleLink(RequestDetails.getModuleLink());
                     // Add other fields to update if needed
                     Request updatedRequest = requestRepository.save(Request);
+                    requestService.setProcedureStatus(requestId);
                     return ResponseEntity.ok(updatedRequest);
                 }).orElse(ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/approval/{requestId}")
+    public ResponseEntity<?> acceptRequest(@PathVariable int requestId, @RequestBody Request RequestDetails) {
+        if (RequestDetails.getAnnotationCommittee().strip() == ""){
+            return ResponseEntity.badRequest().body("Committee Annotation is not allowed to be null!");
+        }
+        return requestRepository.findByRequestId(requestId)
+                .map(Request -> {
+                    Request.setStatusRequest(RequestDetails.getStatusRequest());
+                    Request.setAnnotationCommittee(RequestDetails.getAnnotationCommittee());
+                    Request updatedRequest = requestRepository.save(Request);
+                    return ResponseEntity.ok(updatedRequest);
+                }).orElse(ResponseEntity.notFound().build());
+    }
+
+    @PatchMapping("/favored/{id}")
+    public ResponseEntity<Request> favoredProcedure(@PathVariable Integer id) {
+        Optional<Request> optionalRequest = requestRepository.findByRequestId(id);
+        Request request = optionalRequest.orElse(null);
+        if (request != null) requestService.setFavored(request);
+        return ResponseEntity.ok(request);
     }
 
     // DELETE: Delete a Request
