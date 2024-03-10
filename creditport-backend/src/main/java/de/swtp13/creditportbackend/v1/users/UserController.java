@@ -108,7 +108,7 @@ public class UserController {
     public ResponseEntity<?> updatePassword(
             @RequestParam(required = false) Integer id,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
-            @RequestBody PasswordUpdateRequest newPass
+            @RequestBody PasswordUpdateRequestDTO newPass
     ) {
         String jwt = token.substring(7);
         return ResponseEntity.status(managementService.updatePassword(id, jwt, newPass)).build();

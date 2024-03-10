@@ -1,4 +1,5 @@
 package de.swtp13.creditportbackend.v1.externalmodules;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -37,13 +38,26 @@ public class ExternalModuleController {
         return ResponseEntity.ok(moduleRepository.findAll());
     }
 
-    @Operation(summary = "creates a procedure", responses = {
+    @Operation(summary = "returns a single external module", responses = {
+            @ApiResponse(responseCode = "200",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ExternalModule.class))),
+            @ApiResponse(responseCode = "404", description = "Module id not found",
+                    content = @Content)
+    })
+    @GetMapping("/{id}")
+    public ResponseEntity<ExternalModule> getModuleById(@PathVariable("id") UUID uuid) {
+        return moduleRepository.findById(uuid)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @Operation(summary = "creates an external module", responses = {
             @ApiResponse(responseCode = "201")
     })
     @PostMapping
     public ResponseEntity<ExternalModule> createModule(@RequestBody ExternalModule Module) {
         System.out.println("Create Module: " + Module.getModuleName());
-        return ResponseEntity.ok(moduleRepository.save(Module));
+        return ResponseEntity.status(201).body(moduleRepository.save(Module));
     }
 
 
@@ -75,7 +89,7 @@ public class ExternalModuleController {
         return moduleRepository.findById(moduleId)
                 .map(Module -> {
                     moduleRepository.delete(Module);
-                    return ResponseEntity.ok().build();
+                    return ResponseEntity.noContent().build();
                 }).orElse(ResponseEntity.notFound().build());
     }
 
