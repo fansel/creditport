@@ -13,22 +13,18 @@
   export let addModuleToRequest;
   export let removeTitleFromRequest;
   export let removeModuleFromRequest;
-  
-
 </script>
-
 
 <form action="?/requests" method="POST" enctype="multipart/form-data" id="requests" bind:this={modulesForm} use:enhance>
   <input type="hidden" name="globalAnnotation" value={generalData.annotation} />
   <input type="hidden" name="university" id="university" value={generalData.university} />
   <input type="hidden" name="externalCourseName" id="externalCourseName" value={generalData.externalCourseName} />
   <input type="hidden" name="requestCount" bind:value={requests.length} />
-  
 
   <div class="accordion" id="accordionExample">
     {#each requests as { moduleData }, index (index)}
-    <input type="hidden" name={`internalModulesCount${index}`} bind:value={moduleData.title.length} />
-    <input type="hidden" name={`externalModulesCount${index}`} bind:value={moduleData.selectedModul.length} />
+      <input type="hidden" name={`internalModulesCount${index}`} bind:value={moduleData.title.length} />
+      <input type="hidden" name={`externalModulesCount${index}`} bind:value={moduleData.selectedModul.length} />
       <div class="accordion-item full-border">
         <div class="row">
           <h2 class="accordion-header" id="headingOne">
@@ -40,10 +36,10 @@
               </div>
               <div class="col-md">
                 {#each moduleData.selectedModul as selectedModul, selectedModulIndex}
-                    <h6 class="h6" key={selectedModulIndex}>
+                  <h6 class="h6" key={selectedModulIndex}>
                     <!-- wie kann ich nichts selecten? -->
-                      {selectedModul !== undefined ? `${modules[selectedModul].moduleName}` : 'Neues Modul'}
-                    </h6>
+                    {selectedModul !== undefined ? `${modules[selectedModul].moduleName}` : 'Neues Modul'}
+                  </h6>
                 {/each}
                 <button class="btn p-0 position-absolute top-50 end-0 translate-middle-y me-5" on:click={() => removeRequest(index)} type="button"><i class="bi bi-trash3-fill" /> </button>
               </div>
@@ -62,7 +58,7 @@
                       <div class="col-md-10">
                         <div class="mb-3">
                           <div class="row">
-                            <label for={`externalModule${titleIndex}`} class="mb-2"
+                            <label for={`externalModule${index}-${titleIndex}`} class="mb-2"
                               >Name des Moduls
                               <button class="btn p-0 me-3" on:click={() => removeTitleFromRequest(index, titleIndex)} type="button">
                                 <i class="bi bi-trash3-fill" />
@@ -82,32 +78,36 @@
                       </div>
                       <div class="col-md-2">
                         <div class="mb-3">
-                          <label for={`creditPoints${titleIndex}`} class="mb-2">LP</label>
+                          <label for={`creditPoints${index}-${titleIndex}`} class="mb-2">LP</label>
                           <input type="number" class="form-control" name={`creditPoints${index}-${titleIndex}`} id={`creditPoints${index}-${titleIndex}`} placeholder="5" />
                         </div>
                       </div>
                     </div>
 
                     <div class="mb-3 col-md">
-                      <label for={`formFile${titleIndex}`} class="form-label">Modulbeschreibung<i class="bi bi-question-circle ms-2" /> </label>
-                      <input class="form-control mb-3" type="file" name={`formFile${titleIndex}`} id={`formFile${titleIndex}`} accept="application/pdf" />
+                      <label for={`formFile${index}-${titleIndex}`} class="form-label">Modulbeschreibung<i class="bi bi-question-circle ms-2" /> </label>
+                      <input class="form-control mb-3" type="file" name={`formFile${index}-${titleIndex}`} id={`formFile${index}-${titleIndex}`} accept="application/pdf" />
                     </div>
 
                     <div class="mb-3">
-                      <label for={`moduleLink${titleIndex}`} class="mb-2">Website zum Modul</label>
-                      <input type="text" class="form-control" name={`moduleLink${titleIndex}`} id={`moduleLink${titleIndex}`} placeholder="http://uni-leipzig.de/module_xyz" />
+                      <label for={`moduleLink${index}-${titleIndex}`} class="mb-2">Website zum Modul</label>
+                      <input type="text" class="form-control" name={`moduleLink${index}-${titleIndex}`} id={`moduleLink${index}-${titleIndex}`} placeholder="http://uni-leipzig.de/module_xyz" />
                     </div>
                   </div>
                 {/each}
 
-                <button class="mb-3 btn btn-primary d-inline-flex align-items-center" type="button" on:click={() => {addTitleToRequest(index);}} >Fremdmodul<i class="ms-2 bi bi-plus-circle" /></button>
+                <button
+                  class="mb-3 btn btn-primary d-inline-flex align-items-center"
+                  type="button"
+                  on:click={() => {
+                    addTitleToRequest(index);
+                  }}>Fremdmodul<i class="ms-2 bi bi-plus-circle" /></button
+                >
               </div>
 
               <div class="col-md">
                 <h5 class="h5">Interne Modul(e)</h5>
 
-
-           
                 {#each moduleData.selectedModul as selectedModul, selectedModulIndex}
                   <div class="border mb-5 border-3 rounded p-2">
                     <div class="row">
@@ -121,14 +121,14 @@
                         </label>
                         <select
                           class="form-select"
-                          name={`internalModule${selectedModulIndex}`}
-                          id={`internalModule${selectedModulIndex}`}
+                          name={`internalModule${index}-${selectedModulIndex}`}
+                          id={`internalModule${index}-${selectedModulIndex}`}
                           aria-label="Default select example"
                           bind:value={moduleData.selectedModul[selectedModulIndex]}
                         >
-                        <!-- <option value={0} disabled selected hidden>Bitte treffen Sie eine Auswahl</option> -->
+                          <!-- <option value={0} disabled selected hidden>Bitte treffen Sie eine Auswahl</option> -->
                           {#each modules as modul, index}
-                          <option value={index} >{modul.moduleName}</option>         
+                            <option value={index}>{modul.moduleName}</option>
                           {/each}
                         </select>
                       </div>
@@ -147,7 +147,7 @@
                     </div>
                   </div>
                 {/each}
-                
+
                 <button class="mb-3 btn btn-primary d-inline-flex align-items-center" type="button" on:click={addModuleToRequest(index)}>Modul Leipzig<i class="ms-2 bi bi-plus-circle" /></button>
               </div>
             </div>
@@ -158,13 +158,11 @@
             </div>
           </div>
         </div>
-        
       </div>
-      <br>
+      <br />
     {/each}
   </div>
 
-  
   <div class="my-3 d-flex justify-content-between">
     <button class="btn btn-primary d-inline-flex align-items-center" type="button" on:click={addRequest}>Antrag Hinzufügen<i class="ms-2 bi bi-plus-circle" /></button>
     <!-- <button type="button" class="btn btn-primary">Alle ausklappen</button> -->
@@ -195,7 +193,7 @@
 
   .full-border {
     border: 5px solid #dee2e6; /* Ändere die Breite und den Stil nach Bedarf */
-  } 
+  }
 
   /* .form-control::placeholder {
     color: red;
