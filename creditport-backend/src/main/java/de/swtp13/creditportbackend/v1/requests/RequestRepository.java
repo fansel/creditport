@@ -1,11 +1,16 @@
 package de.swtp13.creditportbackend.v1.requests;
 
+import de.swtp13.creditportbackend.v1.externalmodules.ExternalModule;
+import de.swtp13.creditportbackend.v1.internalmodules.InternalModule;
 import de.swtp13.creditportbackend.v1.procedures.Procedure;
+
+import org.postgresql.core.Tuple;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -31,4 +36,9 @@ public interface RequestRepository extends JpaRepository<Request,Integer> {
 
     @Query("SELECT r.requestId FROM Requests r WHERE r.procedure.procedureId = ?1")
     List<Integer> findAllRelatedRequests(int procedureId);
+
+
+    @Query("SELECT r FROM Requests r WHERE r.statusRequest='ANGENOMMEN' OR r.statusRequest='ABGELEHNT'")
+    public List<Request> getModulesFromApprovedRequests();
+
 }

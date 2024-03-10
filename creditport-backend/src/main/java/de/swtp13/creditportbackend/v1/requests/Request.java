@@ -96,6 +96,7 @@ public class Request {
         for (InternalModule internalModule: internalModules){
             internalModuleIds.add(internalModule.getModuleId());
         }
+        internalModuleIds.sort(UUID::compareTo);
         return internalModuleIds;
     }
     public List<UUID> getExternalModuleIds(){
@@ -103,6 +104,7 @@ public class Request {
         for (ExternalModule externalModule: externalModules){
             externalModuleIds.add(externalModule.getModuleId());
         }
+        externalModuleIds.sort(UUID::compareTo);
         return externalModuleIds;
     }
 

@@ -1,6 +1,7 @@
 package de.swtp13.creditportbackend.v1.requests;
 
 
+import de.swtp13.creditportbackend.v1.internalmodules.InternalModule;
 import de.swtp13.creditportbackend.v1.procedures.Procedure;
 import de.swtp13.creditportbackend.v1.procedures.ProcedureRepository;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,8 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 /**
@@ -104,6 +104,25 @@ public class RequestController {
         return procedure.map(value -> ResponseEntity.ok(value.getRequests())).orElseGet(() -> ResponseEntity.notFound().build());
         //List<Request> requests = requestRepository.findRequestsByProcedureId(procedureId);
 
+    }
+    @GetMapping("/similar/{requestId}")
+    public List<Request> getSimilarRequests(@PathVariable int requestId){
+        List<Request> similarRequests = new ArrayList<>();
+        if (!requestRepository.findByRequestId(requestId).isPresent()){
+        }else{
+        Request request = requestRepository.findByRequestId(requestId).get();
+        List<Request> approvedRequests = requestRepository.getModulesFromApprovedRequests();
+        for(Request approvedRequest: approvedRequests){
+            if(
+                   approvedRequest.getExternalModuleIds().equals(request.getExternalModuleIds())
+                           &&
+                   approvedRequest.getInternalModuleIds().equals(request.getInternalModuleIds())
+            ){
+                similarRequests.add(requestRepository.findByRequestId(approvedRequest.getRequestId()).get());
+            }
+        }
+        }
+        return similarRequests;
     }
 
 
