@@ -169,15 +169,24 @@ public class ProcedureController {
             @ApiResponse(responseCode = "200",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = Procedure.class))),
             @ApiResponse(responseCode = "404", description = "Procedure id not found",
+                    content = @Content),
+            @ApiResponse(responseCode = "428",
                     content = @Content)
     })
-    @PatchMapping("/archive/{id}")
+    @PostMapping("/archive/{id}")
     public ResponseEntity<Procedure> archiveProcedure(@PathVariable Integer id) {
         Optional<Procedure> optionalProcedure = procedureRepository.findByProcedureId(id);
         if (optionalProcedure.isPresent()) {
             Procedure procedure = optionalProcedure.get();
-            procedureService.setStatusArchiviert(procedure);
-            return ResponseEntity.ok(procedure);
+            if (procedure.getStatus().equals(Status.VOLLSTÄNDIG)){
+                procedure.setStatus(Status.ARCHIVIERT);
+                procedureRepository.save(procedure);
+                return ResponseEntity.ok(procedure);
+
+            }
+            else {
+                return ResponseEntity.status(428).build();
+            }
         } else {
             return ResponseEntity.notFound().build();
         }
