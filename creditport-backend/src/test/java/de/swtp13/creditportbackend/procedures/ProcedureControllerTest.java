@@ -15,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.Assert;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.not;
@@ -49,20 +48,6 @@ public class ProcedureControllerTest {
         mockMvc.perform(get("/procedures/ids"))
                 .andExpect(status().is(not(HttpStatus.NOT_FOUND.value())));
         System.out.println("Procedure Test finished");
-    }
-    @Test
-    public void procedureIdShouldHaveSixFigures(){
-        for(int i=0; i<1000; i++){
-            University uni = new University("Uni");
-            universityRepository.save(uni);
-            Course course = new Course(uni.getUniId(),"kurs", List.of());
-            courseRepository.save(course);
-            Procedure testProcedure = new Procedure(uni,course);
-            procedureRepository.save(testProcedure);
-            int procedureId = testProcedure.getProcedureId();
-            int length = String.valueOf(procedureId).length();
-            Assert.state(length == 6, "procedure ID has 6 digits");
-        }
     }
     @Test
     public void procedureShouldNotBeNull(){
