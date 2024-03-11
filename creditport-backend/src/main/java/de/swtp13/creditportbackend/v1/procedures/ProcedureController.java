@@ -20,6 +20,8 @@ import org.springframework.http.HttpStatus;
 import de.swtp13.creditportbackend.v1.requests.Request;
 import de.swtp13.creditportbackend.v1.procedures.dto.ProcedureResponseDTO;
 
+import java.time.Instant;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -101,6 +103,7 @@ public class ProcedureController {
         return ResponseEntity.ok(ids);
     }
 
+
     /**
      * PUT by ID
      * updates a procedure with specific ID in the Database
@@ -119,17 +122,13 @@ public class ProcedureController {
                 .map(procedure -> {
                     procedureService.setStatusOffen(ProcedureDetails);
                     procedure.setAnnotation(ProcedureDetails.getAnnotation());
-                    System.out.println("1");
                     procedure.setUniversity(universityRepository.findById(ProcedureDetails.getUniversity().getUniId()).get());
-                    System.out.println("2");
                     procedure.setCourseName(ProcedureDetails.getCourseName());
                     List<Request> requests = new ArrayList<>();
-                    for(Request request: procedure.getRequests()){
+                    for(Request request: requestRepository.findRequestsByProcedureId(procedureId)){
                         requestService.updateRequest(requestService.toUpdateRequestDTO(request),request.getRequestId());
                     }
-                    System.out.println("3");
                     procedure.setRequests(requests);
-                    System.out.println("4");
                     // Add other fields to update if needed
                     return ResponseEntity.ok(procedureRepository.save(procedure));
                 }).orElse(ResponseEntity.notFound().build());
