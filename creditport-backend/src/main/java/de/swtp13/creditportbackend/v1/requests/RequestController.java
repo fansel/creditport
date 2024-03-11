@@ -126,7 +126,7 @@ public class RequestController {
             for(Request approvedRequest: approvedRequests){
                 if(
                        approvedRequest.getExternalModuleIds().equals(request.getExternalModuleIds())
-                               &&
+                               ||
                        approvedRequest.getInternalModuleIds().equals(request.getInternalModuleIds())
                 ){
                     similarRequests.add(requestRepository.findByRequestId(approvedRequest.getRequestId()).get());
