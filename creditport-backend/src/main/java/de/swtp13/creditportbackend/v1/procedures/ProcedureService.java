@@ -100,11 +100,11 @@ public class ProcedureService {
         return responseDTO;
     }
 
-    public Status setStatusOffen(Status status){
-        if (status.equals(Status.NEU)){
-            return Status.OFFEN;
+    public void setStatusOffen(Procedure procedure){
+        if (procedure.getStatus().equals(Status.NEU)){
+            procedure.setStatus(Status.OFFEN);
+            procedureRepository.save(procedure);
         }
-        else return status;
     }
 
     public void setStatusArchiviert(Procedure procedure){
