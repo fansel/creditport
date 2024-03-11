@@ -29,6 +29,10 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+
 
 @Service
 public class PdfService {
@@ -62,7 +66,7 @@ public class PdfService {
                 .setBold();
 
         Procedure procedure = procedureOptional.get();
-        //List<Request> requests = requestRepository.findRequestsByProcedureId(procedureId);
+        List<Request> requests = requestRepository.findRequestsByProcedureId(procedureId);
 
         try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
              PdfWriter writer = new PdfWriter(byteArrayOutputStream);
@@ -123,12 +127,24 @@ public class PdfService {
     }
 
     private void addFooterToDocument(Document document, Procedure procedure) {
-        Paragraph footer = new Paragraph("Diese Antrag wurde elektronisch gestellt am " +
-                procedure.getCreatedAt() +
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy 'um' HH:mm 'Uhr'");
+
+        // Konvertieren und Formatieren von procedure.getCreatedAt()
+        LocalDateTime createdDateTime = LocalDateTime.ofInstant(procedure.getCreatedAt(), ZoneId.systemDefault());
+        String formattedCreatedDate = createdDateTime.format(formatter);
+
+        // Konvertieren und Formatieren von procedure.getLastUpdated()
+        LocalDateTime updatedDateTime = LocalDateTime.ofInstant(procedure.getLastUpdated(), ZoneId.systemDefault());
+        String formattedUpdatedDate = updatedDateTime.format(formatter);
+
+        // Erstellen des Paragraphs mit den formatierten Datumswerten
+        Paragraph footer = new Paragraph("Dieser Antrag wurde elektronisch gestellt am " +
+                formattedCreatedDate +
                 " und zuletzt geändert am " +
-                procedure.getLastUpdated())
+                formattedUpdatedDate)
                 .addStyle(normalStyle)
-                .setTextAlignment(TextAlignment.RIGHT);
+                .setTextAlignment(TextAlignment.LEFT);
+
         document.add(footer);
     }
 
