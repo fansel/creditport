@@ -73,6 +73,7 @@ public class ExternalModuleController {
                     Module.setModuleName(ModuleDetails.getModuleName());
                     Module.setModuleDescription(ModuleDetails.getModuleDescription());
                     Module.setUniversity(ModuleDetails.getUniversity());
+                    Module.setModuleNumber(ModuleDetails.getModuleNumber());
                     Module.setCreditPoints(ModuleDetails.getCreditPoints());
                     ExternalModule updatedModule = moduleRepository.save(Module);
                     return ResponseEntity.ok(updatedModule);
@@ -98,7 +99,7 @@ public class ExternalModuleController {
             @ApiResponse(responseCode = "200")
     })
     @PostMapping("/import")
-    public ResponseEntity<List<ExternalModule>> importUniversities(@RequestBody List<ExternalModule> modules) {
+    public ResponseEntity<List<ExternalModule>> importModules(@RequestBody List<ExternalModule> modules) {
         moduleRepository.saveAll(modules);
         return ResponseEntity.ok(modules);
     }
