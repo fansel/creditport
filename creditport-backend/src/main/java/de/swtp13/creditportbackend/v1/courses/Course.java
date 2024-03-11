@@ -1,5 +1,6 @@
 package de.swtp13.creditportbackend.v1.courses;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.swtp13.creditportbackend.v1.internalmodules.InternalModule;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -39,6 +40,7 @@ public class Course {
             joinColumns = @JoinColumn(name = "course_id"),
             inverseJoinColumns = @JoinColumn(name = "internal_module_id")
     )
+    @JsonIgnore
     private List<InternalModule> internalModules;
 
     public Course(String courseName, List<InternalModule> internalModules){
