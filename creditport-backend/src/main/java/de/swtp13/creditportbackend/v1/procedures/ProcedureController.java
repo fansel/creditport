@@ -3,7 +3,10 @@ package de.swtp13.creditportbackend.v1.procedures;
 
 import de.swtp13.creditportbackend.v1.procedures.dto.ProcedureRequestDTO;
 import de.swtp13.creditportbackend.v1.requests.RequestRepository;
+import de.swtp13.creditportbackend.v1.requests.RequestService;
 import de.swtp13.creditportbackend.v1.requests.StatusRequest;
+import de.swtp13.creditportbackend.v1.universities.University;
+import de.swtp13.creditportbackend.v1.universities.UniversityRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -16,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.http.HttpStatus;
 import de.swtp13.creditportbackend.v1.requests.Request;
 import de.swtp13.creditportbackend.v1.procedures.dto.ProcedureResponseDTO;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +38,10 @@ public class ProcedureController {
     private final ProcedureService procedureService;
     @Autowired
     private RequestRepository requestRepository;
+    @Autowired
+    private RequestService requestService;
+    @Autowired
+    private UniversityRepository universityRepository;
 
     /**
      * Constructs a {@code ProcedureController} with the necessary service.
@@ -74,9 +83,10 @@ public class ProcedureController {
         List<Request> requests = requestRepository.findRequestsByProcedureId(procedureId);
         Optional<Procedure> optionalProcedure = procedureRepository.findByProcedureId(procedureId);
         Procedure procedure = optionalProcedure.orElse(null);
+        if (optionalProcedure.isPresent()) procedureService.setStatusOffen(procedure);
         try {
             procedure.setRequests(requests);
-        } catch(NullPointerException e){
+        } catch (NullPointerException e) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(procedure);
@@ -91,15 +101,6 @@ public class ProcedureController {
         return ResponseEntity.ok(ids);
     }
 
-    /*@PutMapping("/{id}")
-    public ResponseEntity<Procedure> updateProcedure(@PathVariable String procedureId, @RequestBody Procedure procedure) {
-        if (!procedureService.existsById(procedureId)) {
-            return ResponseEntity.notFound().build();
-        }
-        Procedure updatedProcedure = procedureService.updateProcedure(procedureId, procedure);
-        return ResponseEntity.ok(updatedProcedure);
-    }
-     */
     /**
      * PUT by ID
      * updates a procedure with specific ID in the Database
@@ -110,13 +111,25 @@ public class ProcedureController {
     })
     @PutMapping("/{id}")
     public ResponseEntity<Procedure> updateProcedure(@PathVariable("id") int procedureId, @RequestBody Procedure ProcedureDetails) {
+        if(universityRepository.findById(ProcedureDetails.getUniversity().getUniId()).isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+
         return procedureRepository.findByProcedureId(procedureId)
                 .map(procedure -> {
-                    procedure.setStatus(procedureService.setStatusOffen(ProcedureDetails.getStatus()));
+                    procedureService.setStatusOffen(ProcedureDetails);
                     procedure.setAnnotation(ProcedureDetails.getAnnotation());
-                    procedure.setUniversity(ProcedureDetails.getUniversity());
+                    System.out.println("1");
+                    procedure.setUniversity(universityRepository.findById(ProcedureDetails.getUniversity().getUniId()).get());
+                    System.out.println("2");
                     procedure.setCourseName(ProcedureDetails.getCourseName());
-                    procedure.setRequests(ProcedureDetails.getRequests());
+                    List<Request> requests = new ArrayList<>();
+                    for(Request request: procedure.getRequests()){
+                        requestService.updateRequest(requestService.toUpdateRequestDTO(request),request.getRequestId());
+                    }
+                    System.out.println("3");
+                    procedure.setRequests(requests);
+                    System.out.println("4");
                     // Add other fields to update if needed
                     return ResponseEntity.ok(procedureRepository.save(procedure));
                 }).orElse(ResponseEntity.notFound().build());
@@ -177,13 +190,26 @@ public class ProcedureController {
             @ApiResponse(responseCode = "200",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = Procedure.class))),
             @ApiResponse(responseCode = "404", description = "Procedure id not found",
+                    content = @Content),
+            @ApiResponse(responseCode = "428",
                     content = @Content)
     })
-    @GetMapping("/archive/{id}")
+    @PostMapping("/archive/{id}")
     public ResponseEntity<Procedure> archiveProcedure(@PathVariable Integer id) {
         Optional<Procedure> optionalProcedure = procedureRepository.findByProcedureId(id);
-        Procedure procedure = optionalProcedure.orElse(null);
-        if (procedure != null) procedureService.setStatusArchiviert(procedure);
-        return ResponseEntity.ok(procedure);
+        if (optionalProcedure.isPresent()) {
+            Procedure procedure = optionalProcedure.get();
+            if (procedure.getStatus().equals(Status.VOLLSTÄNDIG)){
+                procedure.setStatus(Status.ARCHIVIERT);
+                procedureRepository.save(procedure);
+                return ResponseEntity.ok(procedure);
+
+            }
+            else {
+                return ResponseEntity.status(428).build();
+            }
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
