@@ -1,5 +1,7 @@
 package de.swtp13.creditportbackend.procedures;
 
+import de.swtp13.creditportbackend.v1.courses.Course;
+import de.swtp13.creditportbackend.v1.courses.CourseRepository;
 import de.swtp13.creditportbackend.v1.procedures.Procedure;
 import de.swtp13.creditportbackend.v1.procedures.ProcedureController;
 import de.swtp13.creditportbackend.v1.procedures.ProcedureRepository;
@@ -13,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.Assert;
 
+import java.util.Arrays;
+import java.util.List;
 
 import static org.hamcrest.Matchers.not;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -30,6 +34,8 @@ public class ProcedureControllerTest {
     ProcedureController procedureController;
     @Autowired
     UniversityRepository universityRepository;
+    @Autowired
+    CourseRepository courseRepository;
     @Test
     public void endpointShouldExist() throws Exception {
         System.out.println("Procedure Test started");
@@ -49,7 +55,9 @@ public class ProcedureControllerTest {
         for(int i=0; i<1000; i++){
             University uni = new University("Uni");
             universityRepository.save(uni);
-            Procedure testProcedure = new Procedure(uni,"Kurs");
+            Course course = new Course(uni.getUniId(),"kurs", List.of());
+            courseRepository.save(course);
+            Procedure testProcedure = new Procedure(uni,course);
             procedureRepository.save(testProcedure);
             int procedureId = testProcedure.getProcedureId();
             int length = String.valueOf(procedureId).length();
@@ -58,8 +66,9 @@ public class ProcedureControllerTest {
     }
     @Test
     public void procedureShouldNotBeNull(){
-        University uni = new University("Uni");
-        Procedure testProcedure = new Procedure(uni,"j");
+        University uni = new University(("Uni"));
+        Course course = new Course(uni.getUniId(),"kurs", List.of());
+        Procedure testProcedure = new Procedure(uni,course);
         Assert.state(testProcedure != null, "test procedure is not null");
     }
 

@@ -1,11 +1,14 @@
 package de.swtp13.creditportbackend.v1.internalmodules;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import de.swtp13.creditportbackend.v1.courses.Course;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -24,12 +27,14 @@ public class InternalModule {
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "module_id", updatable = false, nullable = false)
     private UUID moduleId;
+
     @Column(
             name= "number",
             columnDefinition = "VARCHAR",
             nullable = false
     )
     private String number;
+
     @Column(
             name = "module_name",
             nullable = false,
@@ -54,6 +59,11 @@ public class InternalModule {
             nullable = false
     )
     private int creditPoints;
+
+    @ManyToMany(mappedBy = "internalModules")
+    @JsonIgnore
+    private List<Course> courses;
+
 
     public InternalModule(String number, String moduleName, String moduleDescription, int creditPoints){
         this.moduleDescription = moduleDescription;
