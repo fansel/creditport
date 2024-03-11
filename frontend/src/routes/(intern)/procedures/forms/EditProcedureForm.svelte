@@ -3,8 +3,9 @@
   import { page } from '$app/stores';
   import { onMount } from 'svelte';
   import * as config from '$lib/config';
+  import { truncateText } from '$lib/util';
   import { format, parseISO } from 'date-fns';
-  import Status from '$lib/components/Status.svelte';
+  import RequestStatus from '$lib/components/RequestStatus.svelte';
 
   export let showModal;
   export let procedure;
@@ -25,7 +26,7 @@
   <div slot="body" class="p-3">
     {#if showModal}
       <div class="row">
-        <div class="col">
+        <div class="col-12 col-lg-6">
           <div class="row mb-3">
             <div class="col-3">
               <label for="id" class="col-form-label"> Vorgangsnummer </label>
@@ -44,7 +45,13 @@
               <label for="university" class="col-form-label"> Universität </label>
             </div>
             <div class="col">
-              <input type="text" value={$page.form?.data?.university ?? procedure?.university} name="university" class="form-control {$page.form?.errors?.university ? 'is-invalid' : ''}" />
+              <input
+                type="text"
+                value={$page.form?.data?.university.uniName ?? procedure?.university.uniName}
+                disabled
+                name="university"
+                class="form-control {$page.form?.errors?.university ? 'is-invalid' : ''}"
+              />
               {#if $page.form?.errors?.university}
                 <div class="invalid-feedback">
                   {$page.form?.errors?.university}
@@ -57,7 +64,7 @@
               <label for="courseName" class="col-form-label"> Studiengang </label>
             </div>
             <div class="col">
-              <input type="text" value={$page.form?.data?.courseName ?? procedure?.courseName} name="courseName" class="form-control {$page.form?.errors?.courseName ? 'is-invalid' : ''}" />
+              <input type="text" value={$page.form?.data?.courseName ?? procedure?.courseName} disabled name="courseName" class="form-control {$page.form?.errors?.courseName ? 'is-invalid' : ''}" />
               {#if $page.form?.errors?.courseName}
                 <div class="invalid-feedback">
                   {$page.form?.errors?.courseName}
@@ -83,18 +90,25 @@
             {/if}
           </div>
         </div>
-        <div class="col">
+        <div class="col-12 col-lg-6">
           <div class="list-group">
-            <div class="list-group-item d-inline-flex justify-content-between"><strong>Moduleanträge ({procedure.requests.length})</strong></div>
+            <div class="list-group-item d-inline-flex justify-content-between"><strong>Modulanträge ({procedure.requests.length})</strong></div>
 
             {#if procedure}
               {#each procedure.requests as request}
                 <div class="list-group-item d-inline-flex justify-content-between">
                   <div class="d-inline-flex align-item-center">
-                    {request.externalModuleId}
-                    <Status status={request.status} />
+                    {request.externalModule.moduleName} - {truncateText(request.internalModule.moduleName, 20)}
+                    <RequestStatus status={request.statusRequest} />
                   </div>
-                  <a href="/procedures/{request.requestId}"><i class="bi bi-pencil-square" /></a>
+                  <div class="d-flex align-items-center">
+                    <form action="?/favoriteRequest" method="POST" class="d-flex align-items-center">
+                      <input type="hidden" name="id" value={request.requestId} />
+                      <button class="btn p-0 me-2"> <i class="bi bi-star" /> </button>
+                    </form>
+
+                    <a href="/procedures/{request.requestId}"><i class="bi bi-pencil-square" /></a>
+                  </div>
                 </div>
               {/each}
             {/if}
@@ -104,13 +118,13 @@
       <div class="row" />
     {/if}
   </div>
-  <div slot="footer" class="p-3 d-flex justify-content-between align-items-center border-top">
+  <div slot="footer" class="p-3 row border-top m-0">
     {#if showModal}
-      <div class="">
-        <div class="form-text" id="basic-addon4">Erstellt am {format(parseISO(procedure?.createdAt), 'dd.MM.yyyy HH:mm')}</div>
+      <div class="col-sm-auto d-flex align-items-center">
+        <div class="form-text m-0" id="basic-addon4">Erstellt am {format(parseISO(procedure?.createdAt), 'dd.MM.yyyy HH:mm')}</div>
       </div>
-      <div>
-        <button class="btn btn-outline-primary mx-2">Weiterleiten <i class="bi bi-arrow-right" /> </button>
+      <div class="col-sm d-flex justify-content-md-end">
+        <button class="btn btn-outline-primary me-3">Weiterleiten <i class="bi bi-arrow-right" /> </button>
         <button class="btn btn-outline-secondary me-3" on:click={() => dialog.closeDialog()} type="button">Abbrechen</button>
         <button class="btn btn-primary" type="submit">Speichern</button>
       </div>

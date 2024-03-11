@@ -13,6 +13,8 @@ import com.itextpdf.layout.element.*;
 import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.properties.*;
 import com.itextpdf.io.source.ByteArrayOutputStream;
+import de.swtp13.creditportbackend.v1.externalmodules.ExternalModule;
+import de.swtp13.creditportbackend.v1.internalmodules.InternalModule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -47,7 +49,7 @@ public class PdfService {
         }
 
         Procedure procedure = procedureOptional.get();
-        List<Request> requests = requestRepository.findRequestsByProcedureId(procedureId);
+        //List<Request> requests = requestRepository.findRequestsByProcedureId(procedureId);
 
         try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
              PdfWriter writer = new PdfWriter(byteArrayOutputStream);
@@ -57,7 +59,7 @@ public class PdfService {
             applyTemplateToDocument(document);
             setDocumentMargins(document);
             addHeadingToDocument(document, procedure);
-            addTableToDocument(document, requests);
+            addTableToDocument(document, procedure.getRequests());
             addQRCodeWithBox(document,"http://localhost:5173/status/"+procedureId);
             addFooterToDocument(document, procedure);
 
@@ -127,10 +129,14 @@ public class PdfService {
 
     private void addDataRowsToTable(Table table, List<Request> requests) {
         for (Request request : requests) {
-            table.addCell(createCell(request.getExternalModuleId()));
-            table.addCell(createCell(String.valueOf(request.getCreditPoints())));
-            table.addCell(createCell(request.getInternalModuleId()));
-            table.addCell(createCell(String.valueOf(request.getCreditPoints()))); // LP External
+            table.addCell(createCell(String.valueOf(request.getExternalModuleIds())));
+            for(ExternalModule externalModule:request.getExternalModules()){
+                table.addCell(createCell(String.valueOf(externalModule.getCreditPoints())));
+            }
+            table.addCell(createCell(String.valueOf(request.getInternalModuleIds())));
+            for(InternalModule internalModule:request.getInternalModules()){
+                table.addCell(createCell(String.valueOf(internalModule.getCreditPoints())));
+            }// LP External
         }
     }
 

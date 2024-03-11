@@ -1,20 +1,20 @@
 package de.swtp13.creditportbackend.v1.requests;
 
 
-        import de.swtp13.creditportbackend.v1.procedures.Procedure;
-        import org.springframework.beans.factory.annotation.Autowired;
-        import org.springframework.core.io.ByteArrayResource;
-        import org.springframework.http.MediaType;
-        import org.springframework.http.ResponseEntity;
-        import org.springframework.web.bind.annotation.*;
-        import org.springframework.http.HttpStatus;
-        import org.springframework.web.multipart.MultipartFile;
+import de.swtp13.creditportbackend.v1.internalmodules.InternalModule;
+import de.swtp13.creditportbackend.v1.procedures.Procedure;
+import de.swtp13.creditportbackend.v1.procedures.ProcedureRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 
-        import java.util.ArrayList;
-        import java.util.List;
-        import java.util.Objects;
-        import java.util.Optional;
+import java.util.*;
 
 
 /**
@@ -25,21 +25,31 @@ package de.swtp13.creditportbackend.v1.requests;
 @RestController
 @RequestMapping("/requests")
 public class RequestController {
-
-
     @Autowired
     private RequestRepository requestRepository;
+    @Autowired
+    private ProcedureRepository procedureRepository;
+    @Autowired
+    private RequestService requestService;
 
-
-
-    // GET all requests
+    @Operation(summary = "returns a list of all requests", responses = {
+            @ApiResponse(responseCode = "200" //content = @Content(
+                    //mediaType = "application/json",
+                    //array = @ArraySchema(schema = @Schema(implementation = Request.class))
+            )//)
+    })
     @GetMapping
     public ResponseEntity<List<Request>> getAllRequests() {
         System.out.println("Get all requests");
         return ResponseEntity.ok(requestRepository.findAll());
     }
 
-    // GET Request by RequestID
+    @Operation(summary = "returns a single request", responses = {
+            @ApiResponse(responseCode = "200",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Request.class))),
+            @ApiResponse(responseCode = "404", description = "Request id not found",
+                    content = @Content)
+    })
     @GetMapping("/{requestId}")
     public ResponseEntity<Request> getRequestById(@PathVariable int requestId) {
         return requestRepository.findByRequestId(requestId)
@@ -48,7 +58,7 @@ public class RequestController {
     }
 
     // GET: related Requests by RequestID
-    @GetMapping("/relatedRequests/{requestId}")
+    @GetMapping("/related/{requestId}")
     public ResponseEntity<RelatedRequestDTO> getRelatedRequestsById(@PathVariable int requestId){
         RelatedRequestDTO relatedRequest = new RelatedRequestDTO();
 
@@ -57,11 +67,11 @@ public class RequestController {
         try {
             relatedRequest.setRequestId(request.getRequestId());
             relatedRequest.setProcedureId(request.getProcedure().getProcedureId());
-            relatedRequest.setExternalModule(request.getExternalModuleId());
-            relatedRequest.setInternalModule(request.getInternalModuleId());
-            relatedRequest.setAnnotation(request.getAnnotation());
-            relatedRequest.setCreditPoints(request.getCreditPoints());
-            relatedRequest.setStatus(request.getStatus());
+            relatedRequest.setExternalModules(request.getExternalModules());
+            relatedRequest.setInternalModules(request.getInternalModules());
+            relatedRequest.setAnnotationStudent(request.getAnnotationStudent());
+            relatedRequest.setAnnotationCommittee(request.getAnnotationCommittee());
+            relatedRequest.setStatusRequest(request.getStatusRequest());
             relatedRequest.setCreatedAt(request.getCreatedAt());
             relatedRequest.setPdfExists(request.isPdfExists());
 
@@ -79,14 +89,45 @@ public class RequestController {
     }
 
     // GET: Request by ProcedureId
+    @Operation(summary = "returns a list of requests for the given procedure", responses = {
+            @ApiResponse(responseCode = "200",
+                    content = @Content(mediaType = "application/json",
+                            array = @ArraySchema(schema = @Schema(implementation = Request.class)))),
+            @ApiResponse(responseCode = "404", description = "Procedure id not found",
+                    content = @Content)
+    })
     @GetMapping("/procedure/{procedureId}")
     public ResponseEntity<List<Request>> getRequestsByProcedure(@PathVariable int procedureId) {
-        List<Request> requests = requestRepository.findRequestsByProcedureId(procedureId);
-        return ResponseEntity.ok(requests);
+        Optional<Procedure> procedure = procedureRepository.findByProcedureId(procedureId);
+        return procedure.map(value -> ResponseEntity.ok(value.getRequests())).orElseGet(() -> ResponseEntity.notFound().build());
+        //List<Request> requests = requestRepository.findRequestsByProcedureId(procedureId);
+
+    }
+    @GetMapping("/similar/{requestId}")
+    public List<Request> getSimilarRequests(@PathVariable int requestId){
+        List<Request> similarRequests = new ArrayList<>();
+        if (!requestRepository.findByRequestId(requestId).isPresent()){
+        }else{
+        Request request = requestRepository.findByRequestId(requestId).get();
+        List<Request> approvedRequests = requestRepository.getModulesFromApprovedRequests();
+        for(Request approvedRequest: approvedRequests){
+            if(
+                   approvedRequest.getExternalModuleIds().equals(request.getExternalModuleIds())
+                           &&
+                   approvedRequest.getInternalModuleIds().equals(request.getInternalModuleIds())
+            ){
+                similarRequests.add(requestRepository.findByRequestId(approvedRequest.getRequestId()).get());
+            }
+        }
+        }
+        return similarRequests;
     }
 
 
     // POST: Create a new Request
+    @Operation(summary = "creates a Request", responses = {
+            @ApiResponse(responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Request.class)))
+    })
     @PostMapping
     public ResponseEntity<Request> createRequest(@RequestBody Request request) {
         //System.out.println("Create Request: " + request.getRequestId());
@@ -94,30 +135,61 @@ public class RequestController {
     }
 
     // PUT: Update a Request
+    @Operation(summary = "updates the request with the given id", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Request.class))),
+            @ApiResponse(responseCode = "404", description = "Request id not found", content = @Content)
+    })
     @PutMapping("/{requestId}")
     public ResponseEntity<Request> updateRequestStatus(@PathVariable int requestId, @RequestBody Request RequestDetails) {
         return requestRepository.findByRequestId(requestId)
                 .map(Request -> {
-                    Request.setStatus(RequestDetails.getStatus());
-                    Request.setExternalModuleId(RequestDetails.getExternalModuleId());
-                    Request.setInternalModuleId(RequestDetails.getInternalModuleId());
-                    Request.setAnnotation(RequestDetails.getAnnotation());
-                    Request.setCreditPoints(RequestDetails.getCreditPoints());
+                    Request.setStatusRequest(RequestDetails.getStatusRequest());
+                    //Request.setExternalModules(RequestDetails.getExternalModules());
+                    //Request.setInternalModules(RequestDetails.getInternalModules());
+                    Request.setAnnotationStudent(RequestDetails.getAnnotationStudent());
+                    Request.setAnnotationCommittee(RequestDetails.getAnnotationCommittee());
                     Request.setPdfExists(RequestDetails.isPdfExists());
                     Request.setModuleLink(RequestDetails.getModuleLink());
                     // Add other fields to update if needed
+                    Request updatedRequest = requestRepository.save(Request);
+                    requestService.setProcedureStatus(requestId);
+                    return ResponseEntity.ok(updatedRequest);
+                }).orElse(ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/approval/{requestId}")
+    public ResponseEntity<?> acceptRequest(@PathVariable int requestId, @RequestBody Request RequestDetails) {
+        if (RequestDetails.getAnnotationCommittee().strip() == ""){
+            return ResponseEntity.badRequest().body("Committee Annotation is not allowed to be null!");
+        }
+        return requestRepository.findByRequestId(requestId)
+                .map(Request -> {
+                    Request.setStatusRequest(RequestDetails.getStatusRequest());
+                    Request.setAnnotationCommittee(RequestDetails.getAnnotationCommittee());
                     Request updatedRequest = requestRepository.save(Request);
                     return ResponseEntity.ok(updatedRequest);
                 }).orElse(ResponseEntity.notFound().build());
     }
 
+    @PatchMapping("/favored/{id}")
+    public ResponseEntity<Request> favoredProcedure(@PathVariable Integer id) {
+        Optional<Request> optionalRequest = requestRepository.findByRequestId(id);
+        Request request = optionalRequest.orElse(null);
+        if (request != null) requestService.setFavored(request);
+        return ResponseEntity.ok(request);
+    }
+
     // DELETE: Delete a Request
+    @Operation(summary = "deletes a request", responses = {
+            @ApiResponse(responseCode = "204", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Request id not found", content = @Content)
+    })
     @DeleteMapping("/{requestId}")
     public ResponseEntity<?> deleteRequest(@PathVariable int requestId) {
         return requestRepository.findByRequestId(requestId)
                 .map(Request -> {
                     requestRepository.delete(Request);
-                    return ResponseEntity.ok().build();
+                    return ResponseEntity.noContent().build();
                 }).orElse(ResponseEntity.notFound().build());
     }
 

@@ -1,22 +1,22 @@
 <script>
-  import Status from '$lib/components/Status.svelte';
+  import RequestStatus from '$lib/components/RequestStatus.svelte';
   import RelatedRequestsExtern from './forms/RelatedRequestsExtern.svelte';
   import RelatedRequestsIntern from './forms/RelatedRequestsIntern.svelte';
   import Header from '$lib/components/InternHeader.svelte';
   import * as config from '$lib/config';
   import { format, parseISO } from 'date-fns';
   import { page } from '$app/stores';
+  import { successToast } from '$root/lib/toast';
   import Comment from './Comment.svelte';
   import PDF from './PDF.svelte';
   import Navbar from './Navbar.svelte';
   import CreditModule from './CreditModule.svelte';
 
   export let data;
+  console.log(data.modules);
 
-  const modules = data.modules;
-  const request = data.request;
-  let selectedModul = 0;
-  let annotation;
+  let request = data.request;
+  let requestBackup = JSON.parse(JSON.stringify(data.request));
 
   let showModalExtern;
   let showModalIntern;
@@ -24,6 +24,28 @@
   function updateStatus(status) {
     request.status = status;
     closeDropdown();
+  }
+
+  async function submitForm(event) {
+    const body = request;
+    delete body.relatedRequests;
+    const res = await fetch('/update-request', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: JSON.stringify(body)
+    });
+    // successToast('Erfolreich gespeichert');
+
+    console.log(res);
+    requestBackup = JSON.parse(JSON.stringify(request));
+  }
+
+  async function cancelChanges(event) {
+    request = requestBackup;
+    submitForm();
   }
 
   function closeDropdown() {
@@ -34,7 +56,8 @@
 </script>
 
 <svelte:head>
-  <title>{config.title} - {$page.data.title}</title>
+  <!-- <title>{config.title} - {$page.data.title}</title> -->
+  <title>{$page.data.title}</title>
 </svelte:head>
 
 <Header wide={true} />
@@ -51,7 +74,7 @@
 <div class="site position-fixed m-2 w-100">
   <div class="row px-3">
     <div class="col">
-      <Navbar bind:showModalExtern bind:showModalIntern></Navbar>
+      <Navbar bind:showModalExtern bind:showModalIntern />
     </div>
   </div>
   <div class="row px-3 w-100">
@@ -60,45 +83,36 @@
     </div>
 
     <div class="col-4">
-      <form method="PUT" action="?/putRequest">
-        <!-- hidden input für Daten die sich nicht ändern sollten -->
-        <input name="requestId" value={request.requestId} type="hidden" />
-        <input name="pdfExists" value={request.pdfExists} type="hidden" />
-        <input name="createdAt" value={request.createdAt} type="hidden" />
+      <div>
         <div class="row mb-3">
-          <div class="col-6"><strong>Antrag erstellt am </strong><br />{format(new Date(request.createdAt), 'dd.MM.yyyy HH:mm')}</div>
+          <!-- <div class="col-6"><strong>Antrag erstellt am </strong><br />{format(new Date(request.createdAt), 'dd.MM.yyyy HH:mm')}</div> -->
+          <div class="col-6"><strong>Antrag erstellt am </strong><br />{format(new Date(request.createdAt), 'dd.MM.yyyy')}</div>
         </div>
 
         <!-- input für ausgewähltes Modul handlen -->
-        <CreditModule />
+        <CreditModule bind:selectedOption={request.internalModule} />
 
         <div class="col mb-3">
           <div class="row">
             <!-- studibüro -->
             <div class="col">
-              <p class="mb-1"><strong>Status</strong> <Status status={request.status} /></p>
+              <p class="mb-1"><strong>Status</strong> <RequestStatus status={request.statusRequest} /></p>
 
               <!-- studianzeige -->
               <div class="col">
-                <p class="mb-1"><strong>Auf Statusseite</strong><Status status={request.status} extern={true} /></p>
+                <p class="mb-1"><strong>Auf Statusseite</strong><RequestStatus status={request.statusRequest} extern={true} /></p>
               </div>
             </div>
           </div>
 
-          <Comment bind:annotation={request.annotation} />
-
-          <button type="submit" class="btn btn-primary">Speichern</button>
-          <div class="btn btn-outline-secondary">Abbrechen</div>
+          <Comment bind:annotationCommittee={request.annotationCommittee} bind:annotationStudent={request.annotationStudent} />
+          <button type="submit" class="btn btn-primary" on:click={submitForm}>Speichern</button>
+          <div class="btn btn-outline-secondary" on:click={cancelChanges}>Abbrechen</div>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 </div>
 
 <style>
-  textarea#input {
-    border-top: none;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-  }
 </style>

@@ -21,7 +21,7 @@ public class ManagementService {
         return UserDTO.of(userRepository.findById(id));
     }
 
-    public HttpStatus updatePassword(Integer id, String token, UpdateRequest newPass) {
+    public HttpStatus updatePassword(Integer id, String token, PasswordUpdateRequestDTO newPass) {
         User user;
         if (id == null) {
             try {
@@ -58,7 +58,14 @@ public class ManagementService {
             if (updatedUser.getUsername() == null || updatedUser.getUsername().isEmpty()) {
                 return HttpStatus.BAD_REQUEST;
             }
-            user.setUsername(updatedUser.getUsername());
+            if (!user.getUsername().equals(updatedUser.getUsername())) {
+                if (userRepository.findByUsername(updatedUser.getUsername()).isPresent()) {
+                    return HttpStatus.CONFLICT;
+                } else {
+                    user.setUsername(updatedUser.getUsername());
+                }
+            }
+
             try {
                 user.setRole(Role.valueOf(updatedUser.getRole()));
             } catch (IllegalArgumentException iae) {

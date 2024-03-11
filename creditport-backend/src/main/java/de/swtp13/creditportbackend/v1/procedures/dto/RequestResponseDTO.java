@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class RequestResponseDTO {
-    private String requestId;
+    private int requestId;
 }

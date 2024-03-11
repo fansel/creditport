@@ -1,10 +1,13 @@
 package de.swtp13.creditportbackend.v1.universities;
 
-import de.swtp13.creditportbackend.v1.config.JwtService;
 import de.swtp13.creditportbackend.v1.users.ManagementService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +32,12 @@ public class UniversityController {
 
 
     // GET all universities with optional name filter
+    @Operation(summary = "returns a list of all universities with optional name filter", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(
+                    mediaType = "application/json",
+                    array = @ArraySchema(schema = @Schema(implementation = University.class))
+            ))
+    })
     @GetMapping
     public ResponseEntity<List<University>> getAllUniversities(@RequestParam(required = false) String name) {
         if (name != null && !name.isEmpty()) {
@@ -41,6 +50,12 @@ public class UniversityController {
     }
 
     // GET university by ID
+    @Operation(summary = "returns a single university", responses = {
+            @ApiResponse(responseCode = "200",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = University.class))),
+            @ApiResponse(responseCode = "404", description = "University id not found",
+                    content = @Content)
+    })
     @GetMapping("/{id}")
     public ResponseEntity<University> getUniversityById(@PathVariable UUID id) {
         return universityRepository.findById(id)
@@ -49,50 +64,63 @@ public class UniversityController {
     }
 
     // POST: Create a new university
+    @Operation(summary = "creates a university", responses = {
+            @ApiResponse(responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = University.class)))
+    })
     @PostMapping
     public ResponseEntity<?> createUniversity(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false, defaultValue = "") String token,
             @RequestBody University university) {
         System.out.println("Create University: " + university.getUniName());
         if (managementService.isAuthorized(token)) {
-            return ResponseEntity.ok(universityRepository.save(university));
+            university.setVerified(true);
         } else {
             university.setVerified(false);
-           return ResponseEntity.ok(universityRepository.save(university));
         }
+        return ResponseEntity.status(201).body(universityRepository.save(university));
     }
 
 
 
     // PUT: Update a university
+    @Operation(summary = "updates the university with the given id", responses = {
+            @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = University.class))),
+            @ApiResponse(responseCode = "404", description = "University id not found", content = @Content)
+    })
     @PutMapping("/{id}")
     public ResponseEntity<University> updateUniversity(@PathVariable UUID id, @RequestBody University universityDetails) {
         return universityRepository.findById(id)
                 .map(university -> {
                     university.setUniName(universityDetails.getUniName());
                     // Add other fields to update if needed
-                    University updatedUniversity = universityRepository.save(university);
-                    return ResponseEntity.ok(updatedUniversity);
+                    return ResponseEntity.ok(universityRepository.save(university));
                 }).orElse(ResponseEntity.notFound().build());
     }
 
     // DELETE: Delete a university
+    @Operation(summary = "deletes a request", responses = {
+            @ApiResponse(responseCode = "204", content = @Content),
+            @ApiResponse(responseCode = "404", description = "University id not found", content = @Content)
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUniversity(@PathVariable UUID id) {
         return universityRepository.findById(id)
                 .map(university -> {
                     universityRepository.delete(university);
-                    return ResponseEntity.ok().build();
+                    return ResponseEntity.noContent().build();
                 }).orElse(ResponseEntity.notFound().build());
     }
 
 
 
     // import university data from json file
+    @Operation(summary = "creates all universities listed in the json of the body", responses = {
+            @ApiResponse(responseCode = "200")
+    })
     @PostMapping("/import")
-    public ResponseEntity<String> importUniversities(@RequestBody List<University> universities) {
+    public ResponseEntity<List<University>> importUniversities(@RequestBody List<University> universities) {
         universityRepository.saveAll(universities);
-        return ResponseEntity.ok("Universities imported");
+        return ResponseEntity.ok(universities);
     }
 
 

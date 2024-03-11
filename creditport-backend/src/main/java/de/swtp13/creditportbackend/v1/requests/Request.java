@@ -1,15 +1,18 @@
 package de.swtp13.creditportbackend.v1.requests;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import de.swtp13.creditportbackend.v1.externalmodules.ExternalModule;
+import de.swtp13.creditportbackend.v1.internalmodules.InternalModule;
 import de.swtp13.creditportbackend.v1.procedures.Procedure;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Die Klasse repräsentiert einen Antrag.
@@ -28,49 +31,49 @@ public class Request {
     )
     private int requestId;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(
-            name = "procedure_id",
-            nullable = false
+           name="procedure_id",nullable = false
     )
     @JsonIgnore
     private Procedure procedure;
 
-    @Column(
-            name = "external_module_id",
-            columnDefinition = "VARCHAR",
-            nullable = false
+    @ManyToMany()
+    @JoinTable(
+            name = "extmod_request",
+            joinColumns = @JoinColumn(name = "request_id"),
+            inverseJoinColumns = @JoinColumn(name = "external_module_id" )
     )
-    private String externalModuleId;
+    @JsonIgnore
+    private List<ExternalModule> externalModules;
+    @ManyToMany()
+    @JoinTable(
+            name = "intmod_request",
+            joinColumns = @JoinColumn(name = "request_id"),
+            inverseJoinColumns = @JoinColumn(name = "internal_module_id" )
+    )
+    @JsonIgnore
+    private List<InternalModule> internalModules;
 
     @Column(
-            name = "internal_module_id",
-            columnDefinition = "VARCHAR",
-            nullable = false
-    )
-    private String internalModuleId;
-
-    @Column(
-            name = "annotation",
+            name = "annotation_student",
             columnDefinition = "TEXT"
     )
-    private String annotation;
+    private String annotationStudent;
 
     @Column(
-            name = "credit_points",
-            columnDefinition = "INT",
-            nullable = false
+            name = "annotation_committee",
+            columnDefinition = "TEXT"
     )
-    private int creditPoints;
+    private String annotationCommittee;
 
     @Column(
             name = "request_status",
             columnDefinition = "VARCHAR",
             nullable = false
     )
-
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private StatusRequest statusRequest;
 
     @Column(
             name = "created_at",
@@ -82,31 +85,50 @@ public class Request {
     @Column(name = "pdf_exists", nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean pdfExists;
 
-    @Column(name = "module_link", nullable = true)
+    @Column(name = "module_link")
     private String moduleLink;
 
+    @Column(name = "favored",
+            columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private boolean favored = false;
 
-
+    public List<UUID> getInternalModuleIds(){
+        List<UUID> internalModuleIds = new ArrayList<>();
+        for (InternalModule internalModule: internalModules){
+            internalModuleIds.add(internalModule.getModuleId());
+        }
+        internalModuleIds.sort(UUID::compareTo);
+        return internalModuleIds;
+    }
+    public List<UUID> getExternalModuleIds(){
+        List<UUID> externalModuleIds = new ArrayList<>();
+        for (ExternalModule externalModule: externalModules){
+            externalModuleIds.add(externalModule.getModuleId());
+        }
+        externalModuleIds.sort(UUID::compareTo);
+        return externalModuleIds;
+    }
 
 
     // Überarbeiteter Konstruktor mit 'createdAt'-Parameter
-    public Request(Procedure procedure, String externalModuleId, String internalModuleId, String annotation, int creditPoints, Instant createdAt) {
+    public Request(Procedure procedure, List<ExternalModule> externalModules, List<InternalModule> internalModules, String annotationCommittee, String annotationStudent,  StatusRequest status) {
         this.procedure = procedure;
-        this.externalModuleId = externalModuleId;
-        this.internalModuleId = internalModuleId;
-        this.annotation = annotation;
-        this.creditPoints = creditPoints;
-        this.createdAt = createdAt;
-        this.status = Status.NICHT_BEARBEITET;
+        this.externalModules = externalModules;
+        this.internalModules = internalModules;
+        this.annotationStudent = annotationStudent;
+        this.annotationCommittee = annotationCommittee;
+        this.createdAt = Instant.now();
+        this.statusRequest = status;
     }
 
-    public Request(Procedure procedure, String externalModuleId, String internalModuleId, String annotation, int creditPoints) {
+    public Request(Procedure procedure, List<ExternalModule> externalModules, List<InternalModule> internalModules, String annotationStudent, String annotationCommittee) {
         this.procedure = procedure;
-        this.externalModuleId = externalModuleId;
-        this.internalModuleId = internalModuleId;
-        this.annotation = annotation;
-        this.creditPoints = creditPoints;
-        this.status = Status.NICHT_BEARBEITET;
+        this.externalModules = externalModules;
+        this.internalModules = internalModules;
+        this.annotationStudent = annotationStudent;
+        this.annotationCommittee = annotationCommittee;
+
+        this.statusRequest = StatusRequest.NICHT_BEARBEITET;
         this.createdAt = Instant.now();
     }
 }

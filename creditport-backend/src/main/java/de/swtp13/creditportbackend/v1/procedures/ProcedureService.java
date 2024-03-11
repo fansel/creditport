@@ -6,8 +6,12 @@ import de.swtp13.creditportbackend.v1.procedures.dto.RequestDTO;
 import de.swtp13.creditportbackend.v1.procedures.dto.RequestResponseDTO;
 import de.swtp13.creditportbackend.v1.requests.RequestRepository;
 import de.swtp13.creditportbackend.v1.requests.Request;
+import de.swtp13.creditportbackend.v1.requests.StatusRequest;
+import de.swtp13.creditportbackend.v1.universities.University;
+import de.swtp13.creditportbackend.v1.universities.UniversityRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -23,6 +27,8 @@ public class ProcedureService {
     private ProcedureRepository procedureRepository;
     @Autowired
     private RequestRepository requestRepository;
+    @Autowired
+    private UniversityRepository universityRepository;
 
     public List<Procedure> getProceduresWithRequests() {
         List<Request> requests = requestRepository.findAllWithProcedure();
@@ -56,7 +62,11 @@ public class ProcedureService {
 
         newProcedure.setAnnotation(procedureRequestDTO.getAnnotation());
         newProcedure.setCourseName(procedureRequestDTO.getCourseName());
-        newProcedure.setUniversity(procedureRequestDTO.getUniversity());
+        Optional<University> opUni = universityRepository.findById(procedureRequestDTO.getUniversityId());
+        if (!opUni.isPresent()){
+            return null;
+        }
+        newProcedure.setUniversity(opUni.get());
         newProcedure.setStatus(Status.NEU);
         newProcedure.setCreatedAt(Instant.now());
         newProcedure.setLastUpdated(newProcedure.getCreatedAt());
@@ -69,24 +79,39 @@ public class ProcedureService {
         List<RequestResponseDTO> requestResponseDTOs = new ArrayList<>();
         for (RequestDTO requestDTO : procedureRequestDTO.getRequests()) {
             Request newRequest = new Request();
-            newRequest.setExternalModuleId(requestDTO.getExternalModule());
-            newRequest.setInternalModuleId(requestDTO.getInternalModule());
-            newRequest.setAnnotation(requestDTO.getAnnotation());
-            newRequest.setCreditPoints(requestDTO.getCreditPoints());
-            newRequest.setProcedure(newProcedure);
-            newRequest.setStatus(de.swtp13.creditportbackend.v1.requests.Status.NICHT_BEARBEITET);
-            newRequest.setCreatedAt(Instant.now());
+            newRequest.setExternalModules(requestDTO.getExternalModules());
+            newRequest.setInternalModules(requestDTO.getInternalModules());
+            newRequest.setAnnotationStudent(requestDTO.getAnnotationStudent());
+            newRequest.setAnnotationCommittee(requestDTO.getAnnotationCommittee());
             newRequest.setModuleLink(requestDTO.getModuleLink());
+            newRequest.setProcedure(newProcedure);
+            newRequest.setStatusRequest(StatusRequest.NICHT_BEARBEITET);
+            newRequest.setCreatedAt(Instant.now());
             newRequest = requestRepository.save(newRequest);
             RequestResponseDTO requestResponseDTO = new RequestResponseDTO();
-            requestResponseDTO.setRequestId(String.valueOf(newRequest.getRequestId()));
+            requestResponseDTO.setRequestId(newRequest.getRequestId());
             requestResponseDTOs.add(requestResponseDTO);
         }
 
         ProcedureResponseDTO responseDTO = new ProcedureResponseDTO();
-        responseDTO.setProcedureId(String.valueOf(newProcedure.getProcedureId()));
+        responseDTO.setProcedureId(newProcedure.getProcedureId());
         responseDTO.setRequests(requestResponseDTOs);
 
         return responseDTO;
     }
+
+    public Status setStatusOffen(Status status){
+        if (status.equals(Status.NEU)){
+            return Status.OFFEN;
+        }
+        else return status;
+    }
+
+    public void setStatusArchiviert(Procedure procedure){
+        if (procedure.getStatus().equals(Status.VOLLSTÄNDIG)){
+            procedure.setStatus(Status.ARCHIVIERT);
+            procedureRepository.save(procedure);
+        }
+    }
+
 }

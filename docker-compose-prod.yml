@@ -4,7 +4,7 @@ services:
   db:
     image: postgres:16.0-alpine
     container_name: postgres-db
-    restart: always
+
     ports: 
       - 5432:5432
     environment:
@@ -15,6 +15,20 @@ services:
       - 'creditport-db:/var/lib/postgresql/data'
     networks:
       - creditport-net
+  db-gui:
+    image: elestio/pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@creditport.de"
+      PGADMIN_DEFAULT_PASSWORD: "admin"
+      PGADMIN_LISTEN_PORT: 5050
+    ports:
+      - "5050:5050"
+    volumes:
+      - "pgadmin-data:/var/lib/pgadmin"
+      - ./servers.json:/var/lib/pgadmin/servers.json
+    networks:
+        - creditport-net
 
   javadoc:
     container_name: creditport-javadoc
@@ -69,5 +83,8 @@ networks:
 volumes:
   creditport-db:
     name: creditport-db
+  pgadmin-data:
+    name: pgadmin-data
+
 
     
