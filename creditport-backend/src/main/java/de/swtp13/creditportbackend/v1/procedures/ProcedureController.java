@@ -83,9 +83,10 @@ public class ProcedureController {
         List<Request> requests = requestRepository.findRequestsByProcedureId(procedureId);
         Optional<Procedure> optionalProcedure = procedureRepository.findByProcedureId(procedureId);
         Procedure procedure = optionalProcedure.orElse(null);
+        if (optionalProcedure.isPresent()) procedureService.setStatusOffen(procedure);
         try {
             procedure.setRequests(requests);
-        } catch(NullPointerException e){
+        } catch (NullPointerException e) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(procedure);
@@ -116,7 +117,7 @@ public class ProcedureController {
 
         return procedureRepository.findByProcedureId(procedureId)
                 .map(procedure -> {
-                    procedure.setStatus(procedureService.setStatusOffen(ProcedureDetails.getStatus()));
+                    procedureService.setStatusOffen(ProcedureDetails);
                     procedure.setAnnotation(ProcedureDetails.getAnnotation());
                     System.out.println("1");
                     procedure.setUniversity(universityRepository.findById(ProcedureDetails.getUniversity().getUniId()).get());
@@ -189,13 +190,26 @@ public class ProcedureController {
             @ApiResponse(responseCode = "200",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = Procedure.class))),
             @ApiResponse(responseCode = "404", description = "Procedure id not found",
+                    content = @Content),
+            @ApiResponse(responseCode = "428",
                     content = @Content)
     })
-    @PatchMapping("/archive/{id}")
+    @PostMapping("/archive/{id}")
     public ResponseEntity<Procedure> archiveProcedure(@PathVariable Integer id) {
         Optional<Procedure> optionalProcedure = procedureRepository.findByProcedureId(id);
-        Procedure procedure = optionalProcedure.orElse(null);
-        if (procedure != null) procedureService.setStatusArchiviert(procedure);
-        return ResponseEntity.ok(procedure);
+        if (optionalProcedure.isPresent()) {
+            Procedure procedure = optionalProcedure.get();
+            if (procedure.getStatus().equals(Status.VOLLSTÄNDIG)){
+                procedure.setStatus(Status.ARCHIVIERT);
+                procedureRepository.save(procedure);
+                return ResponseEntity.ok(procedure);
+
+            }
+            else {
+                return ResponseEntity.status(428).build();
+            }
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
