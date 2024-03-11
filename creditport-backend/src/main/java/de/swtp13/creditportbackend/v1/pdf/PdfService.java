@@ -9,6 +9,7 @@ import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.pdf.*;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.Style;
+import com.itextpdf.layout.borders.Border;
 import com.itextpdf.layout.element.*;
 import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.properties.*;
@@ -67,7 +68,6 @@ public class PdfService {
 
         Procedure procedure = procedureOptional.get();
         List<Request> requests = requestRepository.findRequestsByProcedureId(procedureId);
-
         try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
              PdfWriter writer = new PdfWriter(byteArrayOutputStream);
              PdfDocument pdfDoc = new PdfDocument(writer);
@@ -76,7 +76,7 @@ public class PdfService {
             applyTemplateToDocument(document);
             setDocumentMargins(document);
             addHeadingToDocument(document, procedure);
-            addTableToDocument(document, procedure.getRequests());
+            addTableToDocument(document, requests);
             addQRCodeWithBox(document,"http://localhost:5173/status/"+procedureId);
             addFooterToDocument(document, procedure);
             document.close();
@@ -168,16 +168,35 @@ public class PdfService {
 
     private void addDataRowsToTable(Table table, List<Request> requests) {
         for (Request request : requests) {
-            table.addCell(createCell(String.valueOf(request.getExternalModuleIds())));
-            for(ExternalModule externalModule:request.getExternalModules()){
-                table.addCell(createCell(String.valueOf(externalModule.getCreditPoints())));
+            // Maximale Anzahl der Module ermitteln
+            int maxModules = Math.max(request.getExternalModules().size(), request.getInternalModules().size());
+
+            for (int i = 0; i < maxModules; i++) {
+                // Externe Moduldaten hinzufügen
+                if (i < request.getExternalModules().size()) {
+                    ExternalModule externalModule = request.getExternalModules().get(i);
+                    table.addCell(createCell(externalModule.getModuleName()));
+                    table.addCell(createCell(String.valueOf(externalModule.getCreditPoints())));
+                } else {
+                    // Leere Zellen hinzufügen, wenn keine externen Module mehr vorhanden sind
+                    table.addCell(createCell(""));
+                    table.addCell(createCell(""));
+                }
+
+                // Interne Moduldaten hinzufügen
+                if (i < request.getInternalModules().size()) {
+                    InternalModule internalModule = request.getInternalModules().get(i);
+                    table.addCell(createCell(internalModule.getModuleName()));
+                    table.addCell(createCell(String.valueOf(internalModule.getCreditPoints())));
+                } else {
+                    // Leere Zellen hinzufügen, wenn keine internen Module mehr vorhanden sind
+                    table.addCell(createCell(""));
+                    table.addCell(createCell(""));
+                }
             }
-            table.addCell(createCell(String.valueOf(request.getInternalModuleIds())));
-            for(InternalModule internalModule:request.getInternalModules()){
-                table.addCell(createCell(String.valueOf(internalModule.getCreditPoints())));
-            }// LP External
         }
     }
+
 
     private Cell createHeaderCell(String content) {
         Style headerStyle = new Style()
@@ -206,31 +225,51 @@ public class PdfService {
 
     //addQRCodeToDocument(document, procedure);
 
-
     private void addQRCodeWithBox(Document document, String url) throws Exception {
+        // QR-Code erstellen
         BarcodeQRCode barcodeQRCode = new BarcodeQRCode(url);
         Image qrCodeImage = new Image(barcodeQRCode.createFormXObject(document.getPdfDocument()))
                 .setWidth(100)
                 .setHeight(100)
-                .setBorderRadius(new BorderRadius(10))
-                .setHorizontalAlignment(HorizontalAlignment.RIGHT);
+                .setHorizontalAlignment(HorizontalAlignment.RIGHT); // QR-Code rechtsbündig
+
+        // Text für QR-Code, Schriftgröße erhöht
         Paragraph qrText = new Paragraph("Deinen Status abfragen:")
-                .setFontSize(14)
-                .setBold()
-                .setTextAlignment(TextAlignment.LEFT);  // Text linksbündig
+                .setFontSize(18) // Schriftgröße erhöht
+                .setBold();
 
+        // Tabelle zur Anordnung von Text und QR-Code
+        float[] columnWidths = {1, 2}; // Verhältnis der Spaltenbreite angepasst, um mehr Platz für den QR-Code zu schaffen
+        Table table = new Table(UnitValue.createPercentArray(columnWidths))
+                .useAllAvailableWidth(); // Tabelle verwendet die ganze verfügbare Breite
+
+        // Text in die erste Zelle der Tabelle hinzufügen
+        Cell textCell = new Cell().add(qrText)
+                .setBorder(Border.NO_BORDER) // Keine Zellenumrandung
+                .setVerticalAlignment(VerticalAlignment.MIDDLE) // Vertikale Ausrichtung in der Mitte
+                .setTextAlignment(TextAlignment.LEFT) // Text linksbündig ausrichten
+                .setPaddingRight(20); // Rechter Abstand, um den QR-Code näher an den Rand zu bringen
+        table.addCell(textCell);
+
+        // QR-Code in die zweite Zelle der Tabelle hinzufügen
+        Cell qrCell = new Cell().add(new Paragraph()) // Füge einen leeren Absatz hinzu, um den QR-Code an den Rand zu drücken
+                .add(qrCodeImage)
+                .setBorder(Border.NO_BORDER) // Keine Zellenumrandung
+                .setPaddingLeft(10) // Platz zwischen Text und QR-Code
+                .setVerticalAlignment(VerticalAlignment.MIDDLE) // Vertikale Ausrichtung in der Mitte
+                .setPaddingRight(10); // Geringer Abstand vom Rand
+        table.addCell(qrCell);
+
+        // Container für die Tabelle
         Div qrCodeContainer = new Div()
-                .add(qrCodeImage).setHorizontalAlignment(HorizontalAlignment.RIGHT)
-                .add(qrText).setVerticalAlignment(VerticalAlignment.MIDDLE).setHorizontalAlignment(HorizontalAlignment.LEFT)
-                .setMarginTop(20)
-                .setBorderRadius(new BorderRadius(10))
-                .setBackgroundColor(new DeviceRgb(200, 200, 200))
-                .setPadding(10)
-                .setMarginLeft(10)
-                .setHeight(100); // Abstand zwischen Text und QR-Code
+                .add(table)
+                .setBackgroundColor(new DeviceRgb(200, 200, 200)) // Hintergrundfarbe
+                .setPadding(10) // Innenabstand
+                .setMarginTop(20) // Abstand nach oben
+                .setBorderRadius(new BorderRadius(10)) // Ecken abrunden
+                .setWidth(UnitValue.createPercentValue(100)); // Breite auf 100% setzen
 
-
-
+        // Container zum Dokument hinzufügen
         document.add(qrCodeContainer);
     }
 
@@ -239,7 +278,11 @@ public class PdfService {
 
 
 
+    }
 
 
-}
+
+
+
+
 
