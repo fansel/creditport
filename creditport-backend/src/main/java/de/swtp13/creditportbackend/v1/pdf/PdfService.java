@@ -75,7 +75,8 @@ public class PdfService {
 
             applyTemplateToDocument(document);
             setDocumentMargins(document);
-            addHeadingToDocument(document, procedure);
+            //addHeadingToDocument(document, procedure);
+            procedureDetails(document, procedure);
             addTableToDocument(document, requests);
             addQRCodeWithBox(document,"http://localhost:5173/status/"+procedureId);
             addFooterToDocument(document, procedure);
@@ -118,6 +119,51 @@ public class PdfService {
         System.out.println("Added heading to document wihout error");
         } catch (Exception e) {
             System.out.println("Error while adding heading to document: " + e.getMessage());
+        }
+    }
+
+
+    private void procedureDetails(Document document, Procedure procedure) {
+        // Überschrift für den Abschnitt
+        Paragraph heading = new Paragraph("Verfahrensdetails")
+                .setFontSize(14)
+                .setBold()
+                .setUnderline()
+                .setMarginBottom(10);
+        document.add(heading);
+
+        // ID und Status des Verfahrens
+        Paragraph idAndStatus = new Paragraph()
+                .add(new Text("Verfahrens-ID: ").setBold())
+                .add(String.valueOf(procedure.getProcedureId()) + "\n")
+                .setMarginBottom(5);
+        document.add(idAndStatus);
+
+        // Anmerkungen zum Verfahren
+        if (procedure.getAnnotation() != null && !procedure.getAnnotation().isEmpty()) {
+            Paragraph annotations = new Paragraph()
+                    .add(new Text("Anmerkungen: ").setBold())
+                    .add(procedure.getAnnotation() + "\n")
+                    .setMarginBottom(5);
+            document.add(annotations);
+        }
+
+        // Universitätsinformationen, wenn vorhanden
+        if (procedure.getUniversity() != null) {
+            Paragraph universityInfo = new Paragraph()
+                    .add(new Text("Universität: ").setBold())
+                    .add(procedure.getUniversity().getUniName() + "\n")
+                    .setMarginBottom(5);
+            document.add(universityInfo);
+        }
+
+        // Kursinformationen, wenn vorhanden
+        if (procedure.getCourse() != null) {
+            Paragraph courseInfo = new Paragraph()
+                    .add(new Text("Studiengang: ").setBold())
+                    .add(procedure.getCourse().getCourseName() + "\n")
+                    .setMarginBottom(5);
+            document.add(courseInfo);
         }
     }
 
