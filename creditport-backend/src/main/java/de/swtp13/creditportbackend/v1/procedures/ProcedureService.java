@@ -1,5 +1,7 @@
 package de.swtp13.creditportbackend.v1.procedures;
 
+import de.swtp13.creditportbackend.v1.courses.Course;
+import de.swtp13.creditportbackend.v1.courses.CourseRepository;
 import de.swtp13.creditportbackend.v1.procedures.dto.ProcedureRequestDTO;
 import de.swtp13.creditportbackend.v1.procedures.dto.ProcedureResponseDTO;
 import de.swtp13.creditportbackend.v1.procedures.dto.RequestDTO;
@@ -29,6 +31,8 @@ public class ProcedureService {
     private RequestRepository requestRepository;
     @Autowired
     private UniversityRepository universityRepository;
+    @Autowired
+    private CourseRepository courseRepository;
 
     public List<Procedure> getProceduresWithRequests() {
         List<Request> requests = requestRepository.findAllWithProcedure();
@@ -40,7 +44,7 @@ public class ProcedureService {
                 newProcedure.setProcedureId(procedure.getProcedureId());
                 newProcedure.setStatus(procedure.getStatus());
                 newProcedure.setAnnotation(procedure.getAnnotation());
-                newProcedure.setCourseName(procedure.getCourseName());
+                newProcedure.setCourse(procedure.getCourse());
                 newProcedure.setUniversity(procedure.getUniversity());
                 newProcedure.setLastUpdated(procedure.getLastUpdated());
                 newProcedure.setCreatedAt(procedure.getCreatedAt());
@@ -61,11 +65,12 @@ public class ProcedureService {
         Procedure newProcedure = new Procedure();
 
         newProcedure.setAnnotation(procedureRequestDTO.getAnnotation());
-        newProcedure.setCourseName(procedureRequestDTO.getCourseName());
+        Optional<Course> opCourse = courseRepository.findById(procedureRequestDTO.getCourseId());
         Optional<University> opUni = universityRepository.findById(procedureRequestDTO.getUniversityId());
-        if (!opUni.isPresent()){
+        if (opUni.isEmpty() || opCourse.isEmpty()){
             return null;
         }
+        newProcedure.setCourse(opCourse.get());
         newProcedure.setUniversity(opUni.get());
         newProcedure.setStatus(Status.NEU);
         newProcedure.setCreatedAt(Instant.now());
