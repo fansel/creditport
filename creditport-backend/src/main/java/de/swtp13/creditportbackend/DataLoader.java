@@ -8,6 +8,8 @@ package de.swtp13.creditportbackend;
  * @author Felix
  */
 
+import de.swtp13.creditportbackend.v1.courses.Course;
+import de.swtp13.creditportbackend.v1.courses.CourseRepository;
 import de.swtp13.creditportbackend.v1.internalmodules.InternalModuleRepository;
 import de.swtp13.creditportbackend.v1.externalmodules.ExternalModule;
 import de.swtp13.creditportbackend.v1.internalmodules.InternalModule;
@@ -31,8 +33,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
 import java.util.UUID;
-
 /*
+
 @Component  // Diese Annotation gibt an, dass diese Klasse ein Component ist, und von Spring automatisch erkannt und instanziiert wird.
 public class DataLoader implements CommandLineRunner {
 
@@ -56,6 +58,8 @@ public class DataLoader implements CommandLineRunner {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private CourseRepository courseRepository;
 
 
     ///**
@@ -284,12 +288,13 @@ public class DataLoader implements CommandLineRunner {
         System.out.println("Test procedure is being created!");
         University testuni = new University(new UUID(1, 8), "hibh", true);
         universityRepository.save(testuni);
-
+        Course course = new Course("Informatik Bachelor",internalModules);
+        courseRepository.save(course);
         // Erstelle einen neuen Vorgang mit Antrag 1
         Procedure procedure = new Procedure("only a test procedure",
-                testuni, "Informatik Bachelor");
-        Procedure procedure2 = new Procedure(testuni, "Data Science Master");
-        Procedure procedure3 = new Procedure("Das ist eine Bemerkung", testuni, "Info");
+                testuni, course);
+        Procedure procedure2 = new Procedure(testuni, course);
+        Procedure procedure3 = new Procedure("Das ist eine Bemerkung", testuni, course);
         // Speichern des Vorgangs in der Datenbank
         procedureRepository.save(procedure);
         procedureRepository.save(procedure2);
