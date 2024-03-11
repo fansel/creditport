@@ -1,6 +1,7 @@
 package de.swtp13.creditportbackend.procedures;
 
 import de.swtp13.creditportbackend.v1.courses.Course;
+import de.swtp13.creditportbackend.v1.courses.CourseRepository;
 import de.swtp13.creditportbackend.v1.procedures.Procedure;
 import de.swtp13.creditportbackend.v1.procedures.ProcedureRepository;
 import de.swtp13.creditportbackend.v1.universities.University;
@@ -18,12 +19,15 @@ public class ProcedureTest {
     ProcedureRepository procedureRepository;
     @Autowired
     UniversityRepository universityRepository;
+    @Autowired
+    CourseRepository courseRepository;
     @Test
     public void procedureIdShouldHaveSixFigures(){
         for(int i=0; i<1000; i++){
             University uni = new University(("Uni"));
             universityRepository.save(uni);
             Course course = new Course(uni.getUniId(),"kurs", List.of());
+            courseRepository.save(course);
             Procedure testProcedure = new Procedure(uni,course);
             procedureRepository.save(testProcedure);
             int procedureId = testProcedure.getProcedureId();

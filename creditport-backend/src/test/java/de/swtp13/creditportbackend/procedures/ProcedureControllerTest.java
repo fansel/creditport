@@ -1,6 +1,7 @@
 package de.swtp13.creditportbackend.procedures;
 
 import de.swtp13.creditportbackend.v1.courses.Course;
+import de.swtp13.creditportbackend.v1.courses.CourseRepository;
 import de.swtp13.creditportbackend.v1.procedures.Procedure;
 import de.swtp13.creditportbackend.v1.procedures.ProcedureController;
 import de.swtp13.creditportbackend.v1.procedures.ProcedureRepository;
@@ -33,6 +34,8 @@ public class ProcedureControllerTest {
     ProcedureController procedureController;
     @Autowired
     UniversityRepository universityRepository;
+    @Autowired
+    CourseRepository courseRepository;
     @Test
     public void endpointShouldExist() throws Exception {
         System.out.println("Procedure Test started");
@@ -53,6 +56,7 @@ public class ProcedureControllerTest {
             University uni = new University("Uni");
             universityRepository.save(uni);
             Course course = new Course(uni.getUniId(),"kurs", List.of());
+            courseRepository.save(course);
             Procedure testProcedure = new Procedure(uni,course);
             procedureRepository.save(testProcedure);
             int procedureId = testProcedure.getProcedureId();
