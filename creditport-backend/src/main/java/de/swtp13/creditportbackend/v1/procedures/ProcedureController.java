@@ -123,7 +123,7 @@ public class ProcedureController {
                     procedureService.setStatusOffen(ProcedureDetails);
                     procedure.setAnnotation(ProcedureDetails.getAnnotation());
                     procedure.setUniversity(universityRepository.findById(ProcedureDetails.getUniversity().getUniId()).get());
-                    procedure.setCourseName(ProcedureDetails.getCourseName());
+                    procedure.setCourse(ProcedureDetails.getCourse());
                     List<Request> requests = new ArrayList<>();
                     for(Request request: requestRepository.findRequestsByProcedureId(procedureId)){
                         requestService.updateRequest(requestService.toUpdateRequestDTO(request),request.getRequestId());
