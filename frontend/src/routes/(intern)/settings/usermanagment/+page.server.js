@@ -1,20 +1,24 @@
 import * as api from '$lib/api.js';
 import * as config from '$lib/config.js';
 import { zfd } from 'zod-form-data';
-import { fail } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 import z from 'zod';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ locals }) {
-  let userlist;
-
   //Muss später noch auf die Rolle angepasst werden #TODO
   if (locals.user.role == config.user_roles.ADMIN) {
     //Nutzerliste
-    userlist = await api.get('users', locals.user?.token);
+    const res = await api.get(api.routes.user_all, locals.user?.token);
+
+    if (!res.success) {
+      throw error(res.http_code, { message: 'Fehler beim Laden der Nutzer' });
+    }
+
+    return { title: 'Einstellungen', users: res.data, subtitle: 'Benutzer & Rollen' };
   }
 
-  return { title: 'Einstellungen', users: userlist, subtitle: 'Benutzer & Rollen' };
+  throw redirect(303, '/settings');
 }
 
 /** @type {import('./$types').Actions} */

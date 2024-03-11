@@ -1,24 +1,28 @@
 import * as api from '$lib/api.js';
 import * as config from '$lib/config.js';
 import { zfd } from 'zod-form-data';
-import { fail } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 import z from 'zod';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ params, locals, cookies }) {
-  let unilist;
-
   //Muss später noch auf die Rolle angepasst werden #TODO
   if (locals.user.role == config.user_roles.ADMIN) {
     //Nutzerliste
-    unilist = await api.get('universities');
+    const res = await api.get(api.routes.university_all);
+
+    if (!res.success) {
+      throw error(res.status, { message: 'Fehler beim Laden der Universitäten' });
+    }
+
+    return {
+      title: 'Dashboard',
+      subtitle: 'Universitäten',
+      universities: res.data
+    };
   }
 
-  return {
-    title: 'Dashboard',
-    subtitle: 'Universitäten',
-    universities: unilist
-  };
+  throw redirect(303, '/settings');
 }
 
 /** @type {import('./$types').Actions} */

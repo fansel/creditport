@@ -7,33 +7,68 @@ export const content_type = {
   form_data: 'multipart/form-data'
 };
 
-// /**
-//  * Übersicht aller api routes
-//  * TODO alle ergänzen
-//  */
-// export const routes = {
-//   /**
-//    * ----------------------------------------------------------------------
-//    * USERMANAGMENT
-//    * ----------------------------------------------------------------------
-//    */
-//   login: '/',
-//   change_password: '/',
-//   all_users: '/',
-//   register: '/',
+/**
+ * Übersicht aller API Routes
+ * Form: ohne Backslash am Anfang localhost:8080/users => users
+ * TODO alle ergänzen
+ */
+export const routes = {
+  /**
+   * ----------------------------------------------------------------------
+   * USERMANAGMENT
+   * ----------------------------------------------------------------------
+   */
+  login: 'auth/login',
+  register: 'users/register',
+  change_password: 'users/update/password',
+  user_all: 'users',
+  user_by_id: (id) => `users/${id}`,
 
-//   /**
-//    * ----------------------------------------------------------------------
-//    * PROCEDURES
-//    * ----------------------------------------------------------------------
-//    */
-//   procedure_by_id: (id) => `procedures/${id}`,
-//   procedure_all: 'procedures'
-// };
+  /**
+   * ----------------------------------------------------------------------
+   * UNIVERSITIES
+   * ----------------------------------------------------------------------
+   */
+  university_by_id: (id) => `universities/${id}`, // GET, PUT, DELETE
+  university_all: `universities`, // POST, GET
+  university_import: `universities/import`, // POST
+
+  /**
+   * ----------------------------------------------------------------------
+   * PROCEDURES
+   * ----------------------------------------------------------------------
+   */
+  procedure_by_id: (id) => `procedures/${id}`, // PUT, DELETE, GET
+  procedure_all: 'procedures', // POST, GET
+  procedure_ids: `procedures/ids`, // GET
+  procedure_forward: (id) => `procedures/forward/${id}`, // POST
+  procedure_archive: (id) => `procedures/archive/${id}`, // POST
+
+  /**
+   * ----------------------------------------------------------------------
+   * REQUEST
+   * ----------------------------------------------------------------------
+   */
+  request_by_id: (id) => `requests/${id}`, // PUT, DELETE, GET
+  request_by_id_similar: (id) => `requests/similar/${id}`, // GET
+  request_by_id_related: (id) => `requests/related/${id}`, // GET
+  request_by_id_approval: (id) => `requests/approval/${id}`, // PUT
+  request_all: 'requests', // POST, GET
+  request_by_procedure_id: (id) => `requests/procedure/${id}`, // GET
+
+  /**
+   * ----------------------------------------------------------------------
+   * SYSTEM
+   * ----------------------------------------------------------------------
+   */
+  system_health: `actuator/health` // GET
+};
 
 /**
- * @param req_type Content Typ mit dem der request gesendet wird (muss immer gesetzt sein)
- * @param res_type Content Typ der von der response erwartet wird (zb. application/json)
+ * Methode zum senden von Requests an die API
+ *
+ * @param req_type Request Type - Content Type mit dem der Request gesendet wird (default json)
+ * @param res_type Response Type - Content Type der in der Response erwartet wird (default json)
  * @returns
  */
 async function send({ method, path, data, token, req_type = content_type.json, res_type = content_type.json }) {
@@ -52,13 +87,9 @@ async function send({ method, path, data, token, req_type = content_type.json, r
 
         break;
       case content_type.form_data:
-        // const formData = new FormData();
-        // // Assume data is a plain object
-        // Object.entries(data).forEach(([key, value]) => {
-        //   formData.append(key, value);
-        // });
-        // console.log(formData)
         opts.body = data;
+        opts.headers['Content-Type'] = req_type;
+
         break;
     }
   }
@@ -69,25 +100,33 @@ async function send({ method, path, data, token, req_type = content_type.json, r
 
   try {
     const res = await fetch(`${config.api_endpoint}/${path}`, opts);
+    let body = null;
 
-    if (res.ok || res.status === 422) {
-      //Hier fehlt noch Multipart
-      switch (res_type) {
-        case content_type.json:
-          return await res.json();
-        case content_type.plain:
-          return await res.text();
-        case content_type.form_data:
-          return await res.formData();
-        default:
-          return null;
-      }
+    switch (res_type) {
+      case content_type.json:
+        body = await res.json();
+        break;
+      case content_type.plain:
+        body = await res.text();
+        break;
+      case content_type.form_data:
+        body = await res.formData();
+      default:
+        body = null;
     }
 
-    return res.status;
-  } catch (error) {
-    console.error(error);
-    return null;
+    return {
+      success: res.ok,
+      http_code: res.status,
+      data: body
+    };
+  } catch (msg) {
+    console.log(msg);
+    return {
+      success: false,
+      http_code: 500,
+      data: null
+    };
   }
 }
 

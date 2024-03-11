@@ -39,18 +39,3 @@ export function getRequestStatus(match) {
   return status_requests.find((status) => status.match === match) || null;
 }
 
-/**
- * Überprüft, ob ein Datum zwischen zwei anderen Daten liegt, wobei null als das größte oder kleinste Datum betrachtet wird.
- * @param {Date} date - Das zu überprüfende Datum.
- * @param {Date} date1 - Das erste Grenzdatum.
- * @param {Date} date2 - Das zweite Grenzdatum.
- * @returns {boolean} - Gibt true zurück, wenn das Datum zwischen date1 und date2 liegt, andernfalls false.
- */
-export function isDateBetween(date, date1, date2) {
-  // Behandlung von null als größtes bzw. kleinste Datum
-  if (date1 === null) date1 = new Date(Number.MIN_VALUE);
-  if (date2 === null) date2 = new Date(Number.MAX_VALUE);
-
-  // Überprüfen, ob das Datum zwischen date1 und date2 liegt
-  return date >= date1 && date <= date2;
-}

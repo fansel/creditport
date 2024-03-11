@@ -3,9 +3,9 @@ import * as api from '$lib/api.js';
 /** @type {import('./$types').LayoutServerLoad} */
 export async function load() {
   //Hier wird ein Request ans Backend gesendet um zu prüfen ob es ONLINE ist
-  const backend_data = await api.get('actuator/health');
+  const res = await api.get(api.routes.system_health);
 
-  if (backend_data && backend_data.status === 'UP') {
+  if (res.success && res.data.status === 'UP') {
     return {
       status: true
     };
