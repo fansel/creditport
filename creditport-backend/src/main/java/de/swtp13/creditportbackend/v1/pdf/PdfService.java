@@ -23,7 +23,6 @@ import de.swtp13.creditportbackend.v1.procedures.Procedure;
 import de.swtp13.creditportbackend.v1.procedures.ProcedureRepository;
 import de.swtp13.creditportbackend.v1.requests.Request;
 import de.swtp13.creditportbackend.v1.requests.RequestRepository;
-
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -34,19 +33,33 @@ import java.util.Optional;
 @Service
 public class PdfService {
 
+
+
     @Autowired
     private ProcedureRepository procedureRepository;
     @Autowired
     private RequestRepository requestRepository;
 
+    private Style normalStyle = null;
+    private Style headingStyle = null;
+    private PdfFont font = null;
+
     public PdfService() throws IOException {
     }
 
-    public Optional<byte[]> createOverview(int procedureId) {
+    public Optional<byte[]> createOverview(int procedureId) throws IOException {
         Optional<Procedure> procedureOptional = procedureRepository.findById(procedureId);
         if (!procedureOptional.isPresent()) {
             return Optional.empty();
         }
+        font = PdfFontFactory.createFont(StandardFonts.HELVETICA);
+        normalStyle = new Style()
+                .setFont(font)
+                .setFontSize(12);
+        headingStyle = new Style()
+                .setFont(font)
+                .setFontSize(16)
+                .setBold();
 
         Procedure procedure = procedureOptional.get();
         //List<Request> requests = requestRepository.findRequestsByProcedureId(procedureId);
@@ -62,16 +75,20 @@ public class PdfService {
             addTableToDocument(document, procedure.getRequests());
             addQRCodeWithBox(document,"http://localhost:5173/status/"+procedureId);
             addFooterToDocument(document, procedure);
-
             document.close();
+            pdfDoc.close();
+
             return Optional.of(byteArrayOutputStream.toByteArray());
         } catch (IOException e) {
             System.err.println("Error while creating PDF: " + e.getMessage());
             return Optional.empty();
         } catch (Exception e) {
+
             throw new RuntimeException(e);
+
         }
     }
+
 
     private void applyTemplateToDocument(Document document) throws IOException {
         ClassPathResource resource = new ClassPathResource("template.pdf");
@@ -85,6 +102,8 @@ public class PdfService {
     }
 
     private void addHeadingToDocument(Document document, Procedure procedure) {
+        try {
+
         String firstHaldOfProcedureId = (String.valueOf(procedure.getProcedureId())).substring(0, 3);
         String secondHaldOfProcedureId = (String.valueOf(procedure.getProcedureId())).substring(3);
         String procedureIdShow = firstHaldOfProcedureId + "-" + secondHaldOfProcedureId;
@@ -92,6 +111,10 @@ public class PdfService {
                 .setTextAlignment(TextAlignment.CENTER)
                 .addStyle(headingStyle);
         document.add(heading);
+        System.out.println("Added heading to document wihout error");
+        } catch (Exception e) {
+            System.out.println("Error while adding heading to document: " + e.getMessage());
+        }
     }
 
     private void addTableToDocument(Document document, List<Request> requests) {
@@ -197,15 +220,6 @@ public class PdfService {
 
 
 
-    PdfFont font = PdfFontFactory.createFont(StandardFonts.HELVETICA);
-    Style normalStyle = new Style()
-            .setFont(font)
-            .setFontSize(12);
-
-    Style headingStyle = new Style()
-            .setFont(font)
-            .setFontSize(16)
-            .setBold();
 
 
 
