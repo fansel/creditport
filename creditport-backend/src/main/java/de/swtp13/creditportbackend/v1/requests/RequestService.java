@@ -4,6 +4,7 @@ import de.swtp13.creditportbackend.v1.procedures.Procedure;
 import de.swtp13.creditportbackend.v1.procedures.ProcedureRepository;
 import de.swtp13.creditportbackend.v1.procedures.Status;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -50,5 +51,35 @@ public class RequestService {
 
     public void setFavored(Request request){
         request.setFavored(!request.isFavored());
+    }
+    public ResponseEntity<Request> updateRequest(UpdateRequestDTO RequestDetails, int requestId){
+        return requestRepository.findByRequestId(requestId)
+                .map(Request -> {
+                    Request.setStatusRequest(RequestDetails.getStatusRequest());
+                    //Request.setExternalModules(RequestDetails.getExternalModules());
+                    //Request.setInternalModules(RequestDetails.getInternalModules());
+                    Request.setAnnotationStudent(RequestDetails.getAnnotationStudent());
+                    Request.setAnnotationCommittee(RequestDetails.getAnnotationCommittee());
+                    Request.setPdfExists(RequestDetails.isPdfExists());
+                    Request.setModuleLink(RequestDetails.getModuleLink());
+                    // Add other fields to update if needed
+                    Request updatedRequest = requestRepository.save(Request);
+                    setProcedureStatus(requestId);
+                    return ResponseEntity.ok(updatedRequest);
+                }).orElse(ResponseEntity.notFound().build());
+    }
+    public UpdateRequestDTO toUpdateRequestDTO(Request request){
+        return(new UpdateRequestDTO(
+                request.getProcedure().getProcedureId(),
+                request.getRequestId(),
+                request.getExternalModuleIds(),
+                request.getInternalModuleIds(),
+                request.getAnnotationStudent(),
+                request.getAnnotationStudent(),
+                request.getStatusRequest(),
+                request.getCreatedAt(),
+                request.isPdfExists(),
+                request.getModuleLink()
+        ));
     }
 }

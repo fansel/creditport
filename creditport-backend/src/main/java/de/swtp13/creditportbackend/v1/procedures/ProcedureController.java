@@ -74,9 +74,10 @@ public class ProcedureController {
         List<Request> requests = requestRepository.findRequestsByProcedureId(procedureId);
         Optional<Procedure> optionalProcedure = procedureRepository.findByProcedureId(procedureId);
         Procedure procedure = optionalProcedure.orElse(null);
+        if (optionalProcedure.isPresent()) procedureService.setStatusOffen(procedure);
         try {
             procedure.setRequests(requests);
-        } catch(NullPointerException e){
+        } catch (NullPointerException e) {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(procedure);
@@ -103,7 +104,7 @@ public class ProcedureController {
     public ResponseEntity<Procedure> updateProcedure(@PathVariable("id") int procedureId, @RequestBody Procedure ProcedureDetails) {
         return procedureRepository.findByProcedureId(procedureId)
                 .map(procedure -> {
-                    procedure.setStatus(procedureService.setStatusOffen(ProcedureDetails.getStatus()));
+                    procedureService.setStatusOffen(ProcedureDetails);
                     procedure.setAnnotation(ProcedureDetails.getAnnotation());
                     procedure.setUniversity(ProcedureDetails.getUniversity());
                     procedure.setCourseName(ProcedureDetails.getCourseName());
@@ -173,8 +174,12 @@ public class ProcedureController {
     @PatchMapping("/archive/{id}")
     public ResponseEntity<Procedure> archiveProcedure(@PathVariable Integer id) {
         Optional<Procedure> optionalProcedure = procedureRepository.findByProcedureId(id);
-        Procedure procedure = optionalProcedure.orElse(null);
-        if (procedure != null) procedureService.setStatusArchiviert(procedure);
-        return ResponseEntity.ok(procedure);
+        if (optionalProcedure.isPresent()) {
+            Procedure procedure = optionalProcedure.get();
+            procedureService.setStatusArchiviert(procedure);
+            return ResponseEntity.ok(procedure);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
