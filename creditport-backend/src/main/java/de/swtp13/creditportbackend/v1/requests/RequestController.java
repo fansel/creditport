@@ -1,7 +1,10 @@
 package de.swtp13.creditportbackend.v1.requests;
 
 
+import de.swtp13.creditportbackend.v1.externalmodules.ExternalModule;
+import de.swtp13.creditportbackend.v1.externalmodules.ExternalModuleRepository;
 import de.swtp13.creditportbackend.v1.internalmodules.InternalModule;
+import de.swtp13.creditportbackend.v1.internalmodules.InternalModuleRepository;
 import de.swtp13.creditportbackend.v1.procedures.Procedure;
 import de.swtp13.creditportbackend.v1.procedures.ProcedureRepository;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,6 +34,10 @@ public class RequestController {
     private ProcedureRepository procedureRepository;
     @Autowired
     private RequestService requestService;
+    @Autowired
+    private InternalModuleRepository internalModuleRepository;
+    @Autowired
+    private ExternalModuleRepository externalModuleRepository;
 
     @Operation(summary = "returns a list of all requests", responses = {
             @ApiResponse(responseCode = "200" //content = @Content(
@@ -39,9 +46,13 @@ public class RequestController {
             )//)
     })
     @GetMapping
-    public ResponseEntity<List<Request>> getAllRequests() {
+    public ResponseEntity<List<UpdateRequestDTO>> getAllRequests() {
         System.out.println("Get all requests");
-        return ResponseEntity.ok(requestRepository.findAll());
+        List<UpdateRequestDTO> requestDTOS = new ArrayList<>();
+        for(Request request: requestRepository.findAll()){
+            requestDTOS.add(requestService.toUpdateRequestDTO(request));
+        }
+        return ResponseEntity.ok(requestDTOS);
     }
 
     @Operation(summary = "returns a single request", responses = {
@@ -129,9 +140,31 @@ public class RequestController {
             @ApiResponse(responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Request.class)))
     })
     @PostMapping
-    public ResponseEntity<Request> createRequest(@RequestBody Request request) {
-        //System.out.println("Create Request: " + request.getRequestId());
-        return ResponseEntity.ok(requestRepository.save(request));
+    public ResponseEntity<Request> createRequest(@RequestBody UpdateRequestDTO RequestDetails) {
+        if(!procedureRepository.findByProcedureId(RequestDetails.getProcedureId()).isPresent()){
+            return ResponseEntity.notFound().build();
+        }
+        Procedure procedure = procedureRepository.findByProcedureId(RequestDetails.getProcedureId()).get();
+        List<InternalModule> internalModules = new ArrayList<>();
+        for (UUID internalModuleId: RequestDetails.getInternalModuleIds()){
+            if (internalModuleRepository.existsById(internalModuleId)){
+                internalModules.add(internalModuleRepository.findById(internalModuleId).get());
+            } else{
+                return ResponseEntity.notFound().build();
+            }
+        }
+        List<ExternalModule> externalModules = new ArrayList<>();
+        for(UUID externalModuleId:RequestDetails.getExternalModuleIds()){
+            if(externalModuleRepository.existsById(externalModuleId)){
+                externalModules.add(externalModuleRepository.findById(externalModuleId).get());
+            } else{
+                ResponseEntity.notFound().build();
+            }
+        }
+        Request newRequest = new Request(
+            procedure, externalModules, internalModules, RequestDetails.getAnnotationStudent(), RequestDetails.getAnnotationCommittee()
+        );
+        return ResponseEntity.ok(requestRepository.save(newRequest));
     }
 
     // PUT: Update a Request
@@ -140,21 +173,8 @@ public class RequestController {
             @ApiResponse(responseCode = "404", description = "Request id not found", content = @Content)
     })
     @PutMapping("/{requestId}")
-    public ResponseEntity<Request> updateRequestStatus(@PathVariable int requestId, @RequestBody Request RequestDetails) {
-        return requestRepository.findByRequestId(requestId)
-                .map(Request -> {
-                    Request.setStatusRequest(RequestDetails.getStatusRequest());
-                    //Request.setExternalModules(RequestDetails.getExternalModules());
-                    //Request.setInternalModules(RequestDetails.getInternalModules());
-                    Request.setAnnotationStudent(RequestDetails.getAnnotationStudent());
-                    Request.setAnnotationCommittee(RequestDetails.getAnnotationCommittee());
-                    Request.setPdfExists(RequestDetails.isPdfExists());
-                    Request.setModuleLink(RequestDetails.getModuleLink());
-                    // Add other fields to update if needed
-                    Request updatedRequest = requestRepository.save(Request);
-                    requestService.setProcedureStatus(requestId);
-                    return ResponseEntity.ok(updatedRequest);
-                }).orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<Request> updateRequest(@PathVariable int requestId, @RequestBody UpdateRequestDTO RequestDetails) {
+            return requestService.updateRequest(RequestDetails,requestId);
     }
 
     @PutMapping("/approval/{requestId}")
