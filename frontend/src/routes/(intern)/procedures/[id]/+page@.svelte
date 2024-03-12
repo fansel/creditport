@@ -90,7 +90,10 @@
         </div>
 
         <!-- input für ausgewähltes Modul handlen -->
-        <CreditModule bind:selectedOption={request.internalModule} />
+        {#each request.internalModules as modul, i}
+          <CreditModule bind:selectedOption={request.internalModules} />
+        {/each}
+        <!-- <CreditModule bind:selectedOption={request.internalModules} /> -->
 
         <div class="col mb-3">
           <div class="row">
@@ -109,6 +112,8 @@
           <button type="submit" class="btn btn-primary" on:click={submitForm}>Speichern</button>
           <div class="btn btn-outline-secondary" on:click={cancelChanges}>Abbrechen</div>
         </div>
+
+        <div class="btn btn-primary bi-fill-chat">H</div>
       </div>
     </div>
   </div>
