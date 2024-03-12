@@ -36,3 +36,7 @@ export const universities_import_schema = z.array(
     verified: z.boolean()
   })
 );
+
+export const course_schema = z.object({
+  
+})

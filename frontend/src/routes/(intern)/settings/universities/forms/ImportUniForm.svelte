@@ -54,7 +54,7 @@
     <div class="body p-3">
       <div class="row mb-3">
         <div class="col-12 mb-2">
-         <p class="text-secondary">Bitte lade eine JSON-Datei im richtigen Format hoch.</p>
+         <p class="text-secondary">Bitte lade eine JSON-Datei im richtigen Format hoch. Lade <a href="/examples/example_import_uni.json" target="_blank">hier</a> eine Beispiel Datei herunter.</p>
         </div>
         <div class="col-12">
           <input type="file" name="file" placeholder="" class="form-control" on:input={(e) => ($form.file = e.currentTarget.files?.item(0))} accept="application/json" />
