@@ -64,17 +64,17 @@ public class RequestService {
     }
     public ResponseEntity<Request> updateRequest(UpdateRequestDTO RequestDetails, int requestId){
         List<InternalModule> internalModules = new ArrayList<>();
-        for (UUID internalModuleId: RequestDetails.getInternalModuleIds()){
-            if (internalModuleRepository.existsById(internalModuleId)){
-                internalModules.add(internalModuleRepository.findById(internalModuleId).get());
+        for (InternalModule internalModule: RequestDetails.getInternalModules()){
+            if (internalModuleRepository.existsById(internalModule.getModuleId())){
+                internalModules.add(internalModuleRepository.findById(internalModule.getModuleId()).get());
             } else{
                 return ResponseEntity.notFound().build();
             }
         }
         List<ExternalModule> externalModules = new ArrayList<>();
-        for(UUID externalModuleId:RequestDetails.getExternalModuleIds()){
-            if(externalModuleRepository.existsById(externalModuleId)){
-                externalModules.add(externalModuleRepository.findById(externalModuleId).get());
+        for(ExternalModule externalModule:RequestDetails.getExternalModules()){
+            if(externalModuleRepository.existsById(externalModule.getModuleId())){
+                externalModules.add(externalModuleRepository.findById(externalModule.getModuleId()).get());
             } else{
                 return ResponseEntity.notFound().build();
             }
@@ -94,18 +94,19 @@ public class RequestService {
                     return ResponseEntity.ok(updatedRequest);
                 }).orElse(ResponseEntity.notFound().build());
     }
-    public UpdateRequestDTO toUpdateRequestDTO(Request request){
-        return(new UpdateRequestDTO(
+    public UpdateRequestDTO toUpdateRequestDTO(Request request) {
+        return new UpdateRequestDTO(
                 request.getProcedure().getProcedureId(),
                 request.getRequestId(),
-                request.getExternalModuleIds(),
-                request.getInternalModuleIds(),
+                request.getExternalModules(), // Extrahiert die vollständigen ExternalModule Objekte
+                request.getInternalModules(), // Extrahiert die vollständigen InternalModule Objekte
                 request.getAnnotationStudent(),
-                request.getAnnotationStudent(),
+                request.getAnnotationCommittee(),
                 request.getStatusRequest(),
                 request.getCreatedAt(),
                 request.isPdfExists(),
                 request.getModuleLink()
-        ));
+        );
     }
+
 }
