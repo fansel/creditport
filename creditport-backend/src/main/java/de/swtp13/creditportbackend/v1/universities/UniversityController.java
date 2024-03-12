@@ -88,10 +88,14 @@ public class UniversityController {
             @ApiResponse(responseCode = "404", description = "University id not found", content = @Content)
     })
     @PutMapping("/{id}")
-    public ResponseEntity<University> updateUniversity(@PathVariable UUID id, @RequestBody University universityDetails) {
+    public ResponseEntity<University> updateUniversity(@PathVariable UUID id,@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false, defaultValue = "") String token, @RequestBody University universityDetails) {
         return universityRepository.findById(id)
                 .map(university -> {
                     university.setUniName(universityDetails.getUniName());
+                    if(managementService.isAuthorized(token)){
+                        university.setVerified(universityDetails.isVerified());
+                    }
+
                     // Add other fields to update if needed
                     return ResponseEntity.ok(universityRepository.save(university));
                 }).orElse(ResponseEntity.notFound().build());
