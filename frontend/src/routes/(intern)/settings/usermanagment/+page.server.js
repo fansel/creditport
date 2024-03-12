@@ -34,8 +34,6 @@ export const actions = {
 
     const userId = form.get('userId');
 
-    console.log(userId);
-
     if (!userId) {
       setFlash({ type: 'error', message: 'Keine Nutzer ID angegeben' }, cookies);
       return fail(400);
@@ -61,7 +59,7 @@ export const actions = {
     const res = await api.put(api.routes.user_update, form.data, locals.user?.token, { res_type: api.content_type.plain });
 
     if (!res.success) {
-      return message(form, { type: 'error', message: 'Fehler beim anlegen des Nutzers' }, { status: 400 });
+      return message(form, { type: 'error', message: 'Fehler beim bearbeiten des Nutzers' }, { status: 400 });
     }
 
     return message(form, { type: 'success', message: 'Nutzer wurde erfolgreich bearbeitet' }, { status: 200 });

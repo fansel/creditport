@@ -17,5 +17,11 @@ export const user_schema = z.object({
 });
 
 export const add_user_schema = user_schema.extend({
-  password: z.string().min(1, { message: 'Passwort darf nicht leer sein.' }),
-})
+  password: z.string().min(1, { message: 'Passwort darf nicht leer sein.' })
+});
+
+export const universities_schema = z.object({
+  uniId: z.string().min(1),
+  uniName: z.string().min(1, { message: 'Uni Name darf nicht leer sein.' }),
+  verified: z.boolean().default(false)
+});

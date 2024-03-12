@@ -13,8 +13,10 @@
   let end;
 
   let showDeleteModal = false;
-  let showUpdateModal = false;
+  // let showUpdateModal = false;
   let showAddModal = false;
+
+  let updateForm;
 
   let selectedUni;
 
@@ -40,27 +42,42 @@
       return uni.uniName.includes(searchTerm);
     })
     .sort(compareUniNames);
+
+  function dialog_open(id) {
+    const uni = universities.find((u) => u.uniId == id);
+    if (!uni) {
+      console.error('Uni not found');
+    }
+    updateForm.dialog_open(uni);
+  }
 </script>
 
 <DeleteUniForm uni={selectedUni} bind:showModal={showDeleteModal} />
-<UpdateUniForm uni={selectedUni} bind:showModal={showUpdateModal} />
+<UpdateUniForm bind:this={updateForm} data={data.updateUniForm} />
 <AddUniForm bind:showModal={showAddModal} />
 
-<div class="row mb-3">
+<div class="row">
   <div class="col">
-    <h4 class=" d-flex flex-wrap gap-3">
-      Vorschlagliste
-      <button class="btn btn-primary btn-sm text-nowrap" on:click={() => (showAddModal = true)}>
-        <i class="bi bi-plus-circle" />
-        Universität hinzufügen
-      </button>
-    </h4>
+    <h4 class=" d-flex flex-wrap gap-3">Vorschlagliste</h4>
   </div>
 
   <div class="col-8">
     <div class="form-inline d-flex align-items-center no-wrap">
       <input type="text" placeholder="Suche" class="form-control form-control-sm" bind:value={searchTerm} />
     </div>
+  </div>
+</div>
+
+<div class="row mb-3">
+  <div class="col">
+    <button class="btn btn-primary btn-sm text-nowrap" on:click={() => (showAddModal = true)}>
+      <i class="bi bi-plus-circle" />
+      Universität hinzufügen
+    </button>
+    <a class="btn btn-primary btn-sm" href="/settings/universities/import">
+      <i class="bi bi-cloud-arrow-up" />
+      Importieren
+    </a>
   </div>
 </div>
 
@@ -87,7 +104,7 @@
               <input type="hidden" name="id" value={item.uniId} /> -->
 
             <div class="btn-group">
-              <button class="btn btn-sm btn-outline-primary" on:click={() => ((showUpdateModal = true), (selectedUni = item))}>Bearbeiten</button>
+              <button class="btn btn-sm btn-outline-primary" on:click={() => dialog_open(item.uniId)}>Bearbeiten</button>
               <button class="btn btn-sm btn-outline-danger" on:click={() => ((showDeleteModal = true), (selectedUni = item))}>Löschen</button>
             </div>
             <!-- </form> -->
