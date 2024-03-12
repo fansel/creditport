@@ -3,9 +3,11 @@
   import VirtualList from '@sveltejs/svelte-virtual-list';
   import DeleteUniForm from './forms/DeleteUniForm.svelte';
   import UpdateUniForm from './forms/UpdateUniForm.svelte';
+  import ImportUniForm from './forms/ImportUniForm.svelte';
   import AddUniForm from './forms/AddUniForm.svelte';
 
   export let data;
+  export let form;
 
   $: universities = data.universities;
 
@@ -17,6 +19,7 @@
   let showAddModal = false;
 
   let updateForm;
+  let importForm;
 
   let selectedUni;
 
@@ -55,6 +58,7 @@
 <DeleteUniForm uni={selectedUni} bind:showModal={showDeleteModal} />
 <UpdateUniForm bind:this={updateForm} data={data.updateUniForm} />
 <AddUniForm bind:showModal={showAddModal} />
+<ImportUniForm bind:this={importForm} data={data.importUniForm} />
 
 <div class="row">
   <div class="col">
@@ -74,10 +78,10 @@
       <i class="bi bi-plus-circle" />
       Universität hinzufügen
     </button>
-    <a class="btn btn-primary btn-sm" href="/settings/universities/import">
+    <button class="btn btn-primary btn-sm" on:click={() => importForm.dialog_open()}>
       <i class="bi bi-cloud-arrow-up" />
       Importieren
-    </a>
+    </button>
   </div>
 </div>
 
