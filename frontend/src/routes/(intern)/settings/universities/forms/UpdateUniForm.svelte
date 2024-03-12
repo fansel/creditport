@@ -58,7 +58,7 @@
     <div class="body p-3">
       <input type="hidden" bind:value={$form.uniId} name="uniId" />
       <div class="row mb-3">
-        <div class="col-3">
+        <div class="col-md-3">
           <label for="name" class="col-form-label">Uni Name</label>
         </div>
         <div class="col">
@@ -70,7 +70,7 @@
       </div>
 
       <div class="row mb-3">
-        <div class="col-3">
+        <div class="col-md-3">
           <label for="verfiedCheckboxUpdate" class="col-form-label">Verifiziert</label>
         </div>
         <div class="col d-flex align-items-center">

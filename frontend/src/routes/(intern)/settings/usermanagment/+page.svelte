@@ -25,7 +25,7 @@
 <AddUserForm bind:showModal={showAddModal} roles={config.user_roles} />
 <UpdateUserForm bind:this={updateForm} data={data.updateUserForm} />
 
-<h4 class="mb-3 d-flex flex-wrap gap-3">
+<h4 class="mb-3 d-flex justify-content-between flex-wrap gap-2">
   Benutzer
   <button class="btn btn-primary btn-sm text-nowrap" on:click={() => (showAddModal = true)}>
     <i class="bi bi-plus-circle" />

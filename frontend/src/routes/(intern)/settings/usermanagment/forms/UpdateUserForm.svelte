@@ -58,7 +58,7 @@
     <div class="body p-3">
       <input type="hidden" bind:value={$form.userId} name="userId" />
       <div class="row mb-3">
-        <div class="col-3">
+        <div class="col-md-3">
           <label for="name" class="col-form-label">Nutzername</label>
         </div>
         <div class="col">
@@ -70,7 +70,7 @@
       </div>
 
       <div class="row mb-3">
-        <div class="col-3">
+        <div class="col-md-3">
           <label for="roleSelectUpdate" class="col-form-label">Rolle</label>
         </div>
         <div class="col">

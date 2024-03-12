@@ -14,29 +14,6 @@
 
   let dialog;
 
-  let sample_struc = [
-    {
-      uniName: 'AKAD Hochschule Stuttgart',
-      verified: false
-    },
-    {
-      uniName: 'Akademie der Bildenden Künste München',
-      verified: false
-    },
-    {
-      uniName: 'Akademie der Bildenden Künste Nürnberg',
-      verified: false
-    },
-    {
-      uniName: 'Akademie der Polizei Hamburg',
-      verified: false
-    },
-    {
-      uniName: 'Akkon-Hochschule',
-      verified: false
-    }
-  ];
-
   const { form, errors, enhance, reset } = superForm(data, {
     syncFlashMessage: true,
     flashMessage: {
@@ -62,6 +39,7 @@
   export function dialog_close() {
     dialog.close();
   }
+
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
@@ -76,7 +54,7 @@
     <div class="body p-3">
       <div class="row mb-3">
         <div class="col-12 mb-2">
-          <label for="name" class="col-form-label">JSON Datei hochladen</label>
+         <p class="text-secondary">Bitte lade eine JSON-Datei im richtigen Format hoch.</p>
         </div>
         <div class="col-12">
           <input type="file" name="file" placeholder="" class="form-control" on:input={(e) => ($form.file = e.currentTarget.files?.item(0))} accept="application/json" />
@@ -86,9 +64,7 @@
         </div>
       </div>
 
-      <h2 class="fs-6">Erwartetes Format</h2>
-      <pre class="chroma"><code > {@html sample_struc}</code></pre>
-    </div>
+     </div>
 
     <!-- Footer -->
     <div class="p-3 d-flex justify-content-end align-items-center border-top">
