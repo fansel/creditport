@@ -15,7 +15,7 @@
   }
 </script>
 
-<Modal bind:showModal bind:this={dialog} action="?/changeUni" reset={false}>
+<Modal bind:showModal bind:this={dialog} action="?/updateUni" reset={false}>
   <h2 slot="headline" class="m-0">Universität bearbeiten</h2>
   <div slot="body" class="p-3">
     <div class="row">

@@ -4,14 +4,18 @@
 
   export let modules = $page.data.modules;
   export let selectedOption;
+  export let index;
 
-  let currentModule = $page.data.request.internalModule;
+  let currentModule = $page.data.request.internalModules[index];
   let isOpen = false;
   let dropdown;
 
   const options = modules;
 
   // DELETE
+  $: {
+    console.log('currentModule: ', currentModule);
+  }
   $: {
     console.log(selectedOption);
   }

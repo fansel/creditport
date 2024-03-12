@@ -18,17 +18,23 @@ export async function load({ params, locals }) {
     throw redirect(300, '/');
   }
 
-  const modules = await api.get('modules/internal');
-  const request = await api.get(`requests/relatedRequests/${id}`);
+  const modules = await api.get(api.routes.modules_internal);
+  const request = await api.get(api.routes.request_by_id_related(id));
   // const request = await api.get(`requests/${uuid}`)
 
-  if (!request || request == 500 || request == 404) {
-    throw error(404, { message: 'Antrag existiert nicht' });
+  if (!modules.success) {
+    console.log(modules.data)
+    throw error(500, {message: 'Fehler beim laden der Module'})
   }
 
+  if(!request.success && request.http_code == 404) {
+    throw error(404, {message: 'Antrag existiert nicht'})
+  }
+
+
   return {
-    modules: modules,
-    request: request,
+    modules: modules.data,
+    request: request.data,
     user: locals.user,
     title: 'Antrag bearbeiten'
   };

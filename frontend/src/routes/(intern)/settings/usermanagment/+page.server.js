@@ -1,20 +1,30 @@
 import * as api from '$lib/api.js';
 import * as config from '$lib/config.js';
 import { zfd } from 'zod-form-data';
-import { fail } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 import z from 'zod';
+import {zod } from 'sveltekit-superforms/adapters'
+import { superValidate } from 'sveltekit-superforms';
+import { user_schema } from '$root/lib/schema';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ locals }) {
-  let userlist;
-
   //Muss später noch auf die Rolle angepasst werden #TODO
   if (locals.user.role == config.user_roles.ADMIN) {
     //Nutzerliste
-    userlist = await api.get('users', locals.user?.token);
+    const res = await api.get(api.routes.user_all, locals.user?.token);
+
+    if (!res.success) {
+      throw error(res.http_code, { message: 'Fehler beim Laden der Nutzer' });
+    }
+
+    const updateUserForm = await superValidate(zod(user_schema));
+    const addUserForm = await superValidate(zod(user_schema))
+
+    return { title: 'Einstellungen', users: res.data, subtitle: 'Benutzer & Rollen', updateUserForm, addUserForm };
   }
 
-  return { title: 'Einstellungen', users: userlist, subtitle: 'Benutzer & Rollen' };
+  throw redirect(303, '/settings');
 }
 
 /** @type {import('./$types').Actions} */
@@ -36,7 +46,7 @@ export const actions = {
 
     return { success: true };
   },
-  changeUser: async ({ locals, request }) => {
+  updateUser: async ({ locals, request }) => {
     const formData = await request.formData();
 
     const schema = zfd.formData({

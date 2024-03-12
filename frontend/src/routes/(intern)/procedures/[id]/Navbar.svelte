@@ -29,4 +29,6 @@
       <button class="dropdown-item" on:click={() => (showModalIntern = true)}>Akzeptierte Fremdmodule für Modulvorschlag</button>
     </div>
   </div>
+
+  <div class="btn btn-sm btn-success align-self-end">Weiterleiten</div>
 </div>

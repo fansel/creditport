@@ -1,4 +1,4 @@
-/** @type {import('@sveltejs/kit').Handle} */
+import { PUBLIC_ENV } from '$env/dynamic/public';
 
 /** @type {import('@sveltejs/kit').Handle} */
 export async function handle({ event, resolve }) {
@@ -16,4 +16,16 @@ export async function handle({ event, resolve }) {
   }
 
   return resolve(event);
+}
+
+/** @type {import('@sveltejs/kit').HandleServerError} */
+export async function handleError({ error, event, status, message }) {
+  const errorId = crypto.randomUUID();
+
+  console.error(error)
+
+  return {
+    message: 'Whoops!',
+    errorId
+  };
 }
