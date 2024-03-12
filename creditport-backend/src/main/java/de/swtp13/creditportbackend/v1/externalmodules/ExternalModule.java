@@ -58,6 +58,11 @@ public class ExternalModule {
             nullable = false
     )
     private double creditPoints;
+    @Column(
+            name = "is_verified",
+            columnDefinition = "BOOLEAN DEFAULT FALSE"
+    )
+    private boolean isVerified;
 
 
     public ExternalModule(String number,

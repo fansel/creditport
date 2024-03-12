@@ -1,11 +1,14 @@
 package de.swtp13.creditportbackend.v1.externalmodules;
 
+import de.swtp13.creditportbackend.v1.universities.University;
+import de.swtp13.creditportbackend.v1.users.ManagementService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +28,8 @@ public class ExternalModuleController {
 
     @Autowired
     private ExternalModuleRepository moduleRepository;
+    @Autowired
+    private ManagementService managementService;
 
     @Operation(summary = "returns a list of all external modules", responses = {
             @ApiResponse(responseCode = "200", content = @Content(
@@ -52,11 +57,18 @@ public class ExternalModuleController {
     }
 
     @Operation(summary = "creates an external module", responses = {
-            @ApiResponse(responseCode = "201")
+            @ApiResponse(responseCode = "201", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ExternalModule.class)))
     })
     @PostMapping
-    public ResponseEntity<ExternalModule> createModule(@RequestBody ExternalModule Module) {
+    public ResponseEntity<ExternalModule> createModule(
+            @RequestBody ExternalModule Module,
+            @RequestHeader(value =HttpHeaders.AUTHORIZATION, required = false, defaultValue="") String token) {
         System.out.println("Create Module: " + Module.getModuleName());
+        if(managementService.isAuthorized(token)){
+            Module.setVerified(true);
+        } else {
+            Module.setVerified(false);
+        }
         return ResponseEntity.status(201).body(moduleRepository.save(Module));
     }
 
