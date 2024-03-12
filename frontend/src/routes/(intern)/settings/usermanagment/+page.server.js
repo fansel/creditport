@@ -3,6 +3,7 @@ import * as config from '$lib/config.js';
 import { zfd } from 'zod-form-data';
 import { fail, redirect } from '@sveltejs/kit';
 import z from 'zod';
+import {zod } from 'sveltekit-superforms/adapters'
 import { superValidate } from 'sveltekit-superforms';
 import { user_schema } from '$root/lib/schema';
 

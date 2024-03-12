@@ -1,5 +1,5 @@
 <script>
-  import Modal from '$lib/components/FormModal.svelte';
+  import SuperformModal from '$lib/components/SuperformModal.svelte';
   import { page } from '$app/stores';
   import { getContext } from 'svelte';
   import { superForm } from 'sveltekit-superforms';
@@ -8,16 +8,25 @@
 
   let showUpdateModal = getContext('showUpdateModal');
 
+  $: console.log($showUpdateModal)
+
   export let data;
-  const { form, errors, enhance } = superForm(data);
 </script>
 
-<Modal bind:showUpdateModal bind:this={dialog} action="?/changeUser">
-  <div class="" slot="h1" />
+<SuperformModal bind:showModal={$showUpdateModal} bind:this={dialog} action="?/changeUser" data={data.regForm} invalidateAll={false} let:form let:message>
+  <div slot="headline" >
+    Update Benutzer
+  </div>
 
-  <form action="">
+  <div slot="body">
 
-  </form>
+  </div>
+
+    <div slot="footer" class="p-3 d-flex justify-content-end align-items-center border-top">
+      <button class="btn btn-outline-secondary me-3" on:click={() => dialog.closeDialog()} type="button">Abbrechen</button>
+      <button class="btn btn-primary" type="submit">Erstellen</button>
+    </div>
+
   <!-- <h2 slot="headline" class="m-0">Benutzer hinzufügen</h2>
   <form action="?/updateUser">
     <div slot="body" class="p-3">
@@ -64,7 +73,7 @@
       <button class="btn btn-primary" type="submit">Erstellen</button>
     </div>
   </form> -->
-</Modal>
+</SuperformModal>
 
 <style>
 </style>

@@ -1,16 +1,28 @@
 <script>
-  import { enhance } from '$app/forms';
-  import { page } from '$app/stores';
-  import { invalidateAll, goto } from '$app/navigation';
+  import SuperDebug, { superForm } from 'sveltekit-superforms';
+  import { SuperValidated } from 'sveltekit-superforms';
+
+  export let data;
+  export let dataType = 'form'; //
+  export let invalidateAll = true; // set to false to keep form data using muliple forms on a page
+
+  export const theForm = superForm(data, {
+    dataType,
+    invalidateAll,
+    onUpdated({ form }) {
+      if (form.valid) {
+        // Successful post! Do some more client-side stuff.
+      }
+    }
+  });
+
+  const { form, message, delayed, errors, allErrors, enhance } = theForm;
 
   export let showModal; // boolean
-  // export let action;
-  // export let method = 'POST';
-  // export let reset = true;
   export let min_width = '50rem';
 
   let dialog; // HTMLDialogElement
-  let form; //HTMLFormElement
+  // let form; //HTMLFormElement
 
   $: if (dialog && showModal) dialog.showModal();
 
@@ -29,13 +41,15 @@
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
-<dialog bind:this={dialog} on:close={() => (showModal = false)} style="min-width: {min_width};">
+<dialog bind:this={dialog} on:close={() => ($showModal.open = false)} style="min-width: {min_width};">
   <div class="header border-bottom">
     <slot name="headline" />
     <button class="btn-close" type="button" aria-label="Close" on:click={() => closeDialog()} />
   </div>
-    <slot name="body" />
+  <form method="POST" use:enhance {...$$restProps}>
+    <slot name="body" form={theForm} message={$message} errors={$errors} allErrors={$allErrors} delayed={$delayed} />
     <slot name="footer" />
+  </form>
 </dialog>
 
 <style>

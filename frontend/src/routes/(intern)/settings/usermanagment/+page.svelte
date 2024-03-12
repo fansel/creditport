@@ -4,16 +4,15 @@
   import AddUserForm from './forms/AddUserForm.svelte';
   import UpdateUserForm from './forms/UpdateUserForm.svelte';
   import { setContext } from 'svelte';
-  
+
   export let data;
 
   $: users = data.users;
 
   let showAddModal = false;
 
-  let showUpdateModal = writable(false);
+  let showUpdateModal = writable({ open: false, id: null });
   setContext('showUpdateModal', $showUpdateModal);
-
 </script>
 
 <AddUserForm bind:showModal={showAddModal} roles={config.user_roles} />
