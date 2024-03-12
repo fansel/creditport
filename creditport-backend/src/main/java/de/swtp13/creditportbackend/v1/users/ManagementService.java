@@ -43,10 +43,10 @@ public class ManagementService {
         } else {
             return HttpStatus.FORBIDDEN;
         }
-        if (newPass.getValue() == null || newPass.getValue().isEmpty()) {
+        if (newPass.getPassword() == null || newPass.getPassword().isEmpty()) {
             return HttpStatus.BAD_REQUEST;
         }
-        user.setPassword(passwordEncoder.encode(newPass.getValue()));
+        user.setPassword(passwordEncoder.encode(newPass.getPassword()));
         userRepository.save(user);
         return HttpStatus.NO_CONTENT;
     }
