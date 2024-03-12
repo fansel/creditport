@@ -44,7 +44,7 @@ export const actions = {
 
     return { success: true };
   },
-  changeUni: async ({ locals, request }) => {
+  updateUni: async ({ locals, request }) => {
     const formData = await request.formData();
 
     const schema = zfd.formData({

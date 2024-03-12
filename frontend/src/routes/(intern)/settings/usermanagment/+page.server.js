@@ -3,6 +3,8 @@ import * as config from '$lib/config.js';
 import { zfd } from 'zod-form-data';
 import { fail, redirect } from '@sveltejs/kit';
 import z from 'zod';
+import { superValidate } from 'sveltekit-superforms';
+import { user_schema } from '$root/lib/schema';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ locals }) {
@@ -15,7 +17,10 @@ export async function load({ locals }) {
       throw error(res.http_code, { message: 'Fehler beim Laden der Nutzer' });
     }
 
-    return { title: 'Einstellungen', users: res.data, subtitle: 'Benutzer & Rollen' };
+    const updateUserForm = await superValidate(zod(user_schema));
+    const addUserForm = await superValidate(zod(user_schema))
+
+    return { title: 'Einstellungen', users: res.data, subtitle: 'Benutzer & Rollen', updateUserForm, addUserForm };
   }
 
   throw redirect(303, '/settings');
@@ -40,7 +45,7 @@ export const actions = {
 
     return { success: true };
   },
-  changeUser: async ({ locals, request }) => {
+  updateUser: async ({ locals, request }) => {
     const formData = await request.formData();
 
     const schema = zfd.formData({

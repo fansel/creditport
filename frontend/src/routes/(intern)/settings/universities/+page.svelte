@@ -48,9 +48,9 @@
 
 <div class="row mb-3">
   <div class="col">
-    <h4 class=" d-flex">
+    <h4 class=" d-flex flex-wrap gap-3">
       Vorschlagliste
-      <button class="btn btn-primary btn-sm ms-4" on:click={() => (showAddModal = true)}>
+      <button class="btn btn-primary btn-sm text-nowrap" on:click={() => (showAddModal = true)}>
         <i class="bi bi-plus-circle" />
         Universität hinzufügen
       </button>
@@ -79,7 +79,7 @@
           <div class="col-8 d-flex align-items-center">
             {item.uniName}
             {#if item.verified}
-              <i class="bi bi-check-circle ms-2 text-primary"></i>
+              <i class="bi bi-check-circle ms-2 text-primary" />
             {/if}
           </div>
           <div class="col d-flex align-items-center">

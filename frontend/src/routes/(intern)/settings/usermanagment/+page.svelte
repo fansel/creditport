@@ -1,18 +1,27 @@
 <script>
   import * as config from '$lib/config';
+  import { writable } from 'svelte/store';
   import AddUserForm from './forms/AddUserForm.svelte';
+  import UpdateUserForm from './forms/UpdateUserForm.svelte';
+  import { setContext } from 'svelte';
+  
   export let data;
 
   $: users = data.users;
 
   let showAddModal = false;
+
+  let showUpdateModal = writable(false);
+  setContext('showUpdateModal', $showUpdateModal);
+
 </script>
 
 <AddUserForm bind:showModal={showAddModal} roles={config.user_roles} />
+<UpdateUserForm data={data.updateUserForm} />
 
-<h4 class="mb-3 d-flex">
+<h4 class="mb-3 d-flex flex-wrap gap-3">
   Benutzer
-  <button class="btn btn-primary btn-sm ms-4" on:click={() => (showAddModal = true)}>
+  <button class="btn btn-primary btn-sm text-nowrap" on:click={() => (showAddModal = true)}>
     <i class="bi bi-plus-circle" />
     Benutzer hinzufügen
   </button>
