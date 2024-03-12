@@ -3,9 +3,11 @@
   import VirtualList from '@sveltejs/svelte-virtual-list';
   import DeleteUniForm from './forms/DeleteUniForm.svelte';
   import UpdateUniForm from './forms/UpdateUniForm.svelte';
+  import ImportUniForm from './forms/ImportUniForm.svelte';
   import AddUniForm from './forms/AddUniForm.svelte';
 
   export let data;
+  export let form;
 
   $: universities = data.universities;
 
@@ -13,8 +15,11 @@
   let end;
 
   let showDeleteModal = false;
-  let showUpdateModal = false;
+  // let showUpdateModal = false;
   let showAddModal = false;
+
+  let updateForm;
+  let importForm;
 
   let selectedUni;
 
@@ -40,24 +45,38 @@
       return uni.uniName.includes(searchTerm);
     })
     .sort(compareUniNames);
+
+  function dialog_open(id) {
+    const uni = universities.find((u) => u.uniId == id);
+    if (!uni) {
+      console.error('Uni not found');
+    }
+    updateForm.dialog_open(uni);
+  }
 </script>
 
 <DeleteUniForm uni={selectedUni} bind:showModal={showDeleteModal} />
-<UpdateUniForm uni={selectedUni} bind:showModal={showUpdateModal} />
+<UpdateUniForm bind:this={updateForm} data={data.updateUniForm} />
 <AddUniForm bind:showModal={showAddModal} />
+<ImportUniForm bind:this={importForm} data={data.importUniForm} />
+
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+  <h4 class="m-0">Vorschlagliste</h4>
+
+  <div class="d-flex flex-wrap gap-2">
+    <button class="btn btn-primary btn-sm text-nowrap" on:click={() => (showAddModal = true)}>
+      <i class="bi bi-plus-circle" />
+      Universität hinzufügen
+    </button>
+    <button class="btn btn-primary btn-sm" on:click={() => importForm.dialog_open()}>
+      <i class="bi bi-cloud-arrow-up" />
+      Importieren
+    </button>
+  </div>
+</div>
 
 <div class="row mb-3">
   <div class="col">
-    <h4 class=" d-flex flex-wrap gap-3">
-      Vorschlagliste
-      <button class="btn btn-primary btn-sm text-nowrap" on:click={() => (showAddModal = true)}>
-        <i class="bi bi-plus-circle" />
-        Universität hinzufügen
-      </button>
-    </h4>
-  </div>
-
-  <div class="col-8">
     <div class="form-inline d-flex align-items-center no-wrap">
       <input type="text" placeholder="Suche" class="form-control form-control-sm" bind:value={searchTerm} />
     </div>
@@ -75,19 +94,19 @@
   <div class="uni-table-body">
     <VirtualList items={searchResults} height="332px" bind:start bind:end let:item>
       <li class="uni-table-item border-bottom">
-        <div class="row">
-          <div class="col-8 d-flex align-items-center">
+        <div class="row gy-2">
+          <div class="col col-md-8 d-flex align-items-center">
             {item.uniName}
             {#if item.verified}
               <i class="bi bi-check-circle ms-2 text-primary" />
             {/if}
           </div>
-          <div class="col d-flex align-items-center">
+          <div class="col-auto col-md d-flex align-items-center">
             <!-- <form method="POST" use:enhance>
               <input type="hidden" name="id" value={item.uniId} /> -->
 
             <div class="btn-group">
-              <button class="btn btn-sm btn-outline-primary" on:click={() => ((showUpdateModal = true), (selectedUni = item))}>Bearbeiten</button>
+              <button class="btn btn-sm btn-outline-primary" on:click={() => dialog_open(item.uniId)}>Bearbeiten</button>
               <button class="btn btn-sm btn-outline-danger" on:click={() => ((showDeleteModal = true), (selectedUni = item))}>Löschen</button>
             </div>
             <!-- </form> -->

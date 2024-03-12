@@ -26,6 +26,10 @@
     <li class="nav-item">
       <a href="/settings/universities" class="nav-link {$page.data.subtitle == 'Universitäten' ? 'active' : ''}">Universitäten</a>
     </li>
+
+    <li class="nav-item">
+      <a href="/settings/courses" class="nav-link {$page.data.subtitle == 'Studiengänge' ? 'active' : ''}">Studiengänge</a>
+    </li>
   {/if}
 </ul>
 

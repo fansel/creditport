@@ -5,10 +5,14 @@ import { fail, redirect } from '@sveltejs/kit';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ params }) {
-  const modules = await api.get('modules');
+  const modules = await api.get(api.routes.module_all_internal);
+
+  if (!modules.success) {
+    throw error(404, { message: 'Fehler beim Laden der Module' });
+  }
 
   return {
-    modules: modules,
+    modules: modules.data,
     title: 'Vorgang erstellen'
   };
 }

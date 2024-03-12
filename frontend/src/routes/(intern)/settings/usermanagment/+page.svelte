@@ -1,9 +1,9 @@
 <script>
   import * as config from '$lib/config';
-  import { writable } from 'svelte/store';
+  import { superValidate } from 'sveltekit-superforms';
   import AddUserForm from './forms/AddUserForm.svelte';
   import UpdateUserForm from './forms/UpdateUserForm.svelte';
-  import { setContext } from 'svelte';
+  import { enhance } from '$app/forms';
 
   export let data;
 
@@ -11,14 +11,21 @@
 
   let showAddModal = false;
 
-  let showUpdateModal = writable({ open: false, id: null });
-  setContext('showUpdateModal', $showUpdateModal);
+  let updateForm;
+
+  function dialog_open(id) {
+    const user = users.find((u) => u.userId == id);
+    if (!user) {
+      console.error('User not found');
+    }
+    updateForm.dialog_open(user);
+  }
 </script>
 
 <AddUserForm bind:showModal={showAddModal} roles={config.user_roles} />
-<UpdateUserForm data={data.updateUserForm} />
+<UpdateUserForm bind:this={updateForm} data={data.updateUserForm} />
 
-<h4 class="mb-3 d-flex flex-wrap gap-3">
+<h4 class="mb-3 d-flex justify-content-between flex-wrap gap-2">
   Benutzer
   <button class="btn btn-primary btn-sm text-nowrap" on:click={() => (showAddModal = true)}>
     <i class="bi bi-plus-circle" />
@@ -46,8 +53,11 @@
         <div class="col d-flex align-items-center"><span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill">{user.role}</span></div>
         <div class="col d-flex align-items-center">
           <div class="btn-group">
-            <button class="btn btn-sm btn-outline-primary">Bearbeiten</button>
-            <button class="btn btn-sm btn-outline-danger">Löschen</button>
+            <button class="btn btn-sm btn-outline-primary" on:click={() => dialog_open(user.userId)}>Bearbeiten</button>
+            <form action="?/deleteUser" method="POST" use:enhance>
+              <input type="hidden" bind:value={user.userId} name="userId" />
+              <button class="btn btn-sm btn-outline-danger left-no-radius">Löschen</button>
+            </form>
           </div>
         </div>
       </div>
@@ -105,7 +115,7 @@
   </li>
 </ul>
 
-<button class="btn btn-primary mt-2 mb-2">Speichern</button>
+<!-- <button class="btn btn-primary mt-2 mb-2">Speichern</button> -->
 
 <style>
   .btn-link {
@@ -114,5 +124,11 @@
 
   .font-sm {
     font-size: 0.875rem;
+  }
+
+  .left-no-radius {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-left: 0;
   }
 </style>
