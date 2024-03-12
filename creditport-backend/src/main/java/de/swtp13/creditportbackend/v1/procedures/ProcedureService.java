@@ -2,6 +2,7 @@ package de.swtp13.creditportbackend.v1.procedures;
 
 import de.swtp13.creditportbackend.v1.courses.Course;
 import de.swtp13.creditportbackend.v1.courses.CourseRepository;
+<<<<<<< Updated upstream
 import de.swtp13.creditportbackend.v1.externalmodules.ExternalModule;
 import de.swtp13.creditportbackend.v1.externalmodules.ExternalModuleRepository;
 import de.swtp13.creditportbackend.v1.internalmodules.InternalModule;
@@ -10,9 +11,13 @@ import de.swtp13.creditportbackend.v1.procedures.dto.ProcedureRequestDTO;
 import de.swtp13.creditportbackend.v1.procedures.dto.ProcedureResponseDTO;
 import de.swtp13.creditportbackend.v1.procedures.dto.RequestDTO;
 import de.swtp13.creditportbackend.v1.procedures.dto.RequestResponseDTO;
+=======
+import de.swtp13.creditportbackend.v1.procedures.dto.*;
+>>>>>>> Stashed changes
 import de.swtp13.creditportbackend.v1.requests.RequestRepository;
 import de.swtp13.creditportbackend.v1.requests.Request;
 import de.swtp13.creditportbackend.v1.requests.StatusRequest;
+import de.swtp13.creditportbackend.v1.requests.dto.RequestDetailsDTO;
 import de.swtp13.creditportbackend.v1.universities.University;
 import de.swtp13.creditportbackend.v1.universities.UniversityRepository;
 import jakarta.transaction.Transactional;
@@ -41,27 +46,48 @@ public class ProcedureService {
     @Autowired
     private InternalModuleRepository internalModuleRepository;
 
-    public List<Procedure> getProceduresWithRequests() {
+
+    private RequestDetailsDTO convertToRequestDetailsDTO(Request request) {
+        RequestDetailsDTO dto = new RequestDetailsDTO();
+        dto.setRequestId(request.getRequestId());
+        dto.setExternalModules(request.getExternalModules());
+        dto.setInternalModules(request.getInternalModules());
+        dto.setAnnotationStudent(request.getAnnotationStudent());
+        dto.setAnnotationCommittee(request.getAnnotationCommittee());
+        dto.setStatusRequest(request.getStatusRequest());
+        dto.setCreatedAt(request.getCreatedAt());
+        dto.setPdfExists(request.isPdfExists());
+        dto.setModuleLink(request.getModuleLink());
+        return dto;
+    }
+
+    // Angepasste Methode, um Procedures mit RequestDetailsDTOs abzurufen
+    public List<ProcedureWithRequestsDTO> getProcedureDetailsWithRequests() {
         List<Request> requests = requestRepository.findAllWithProcedure();
-        Map<Integer, Procedure> procedureMap = new HashMap<>();
+        Map<Integer, ProcedureWithRequestsDTO> procedureMap = new HashMap<>();
+
         for (Request request : requests) {
             Procedure procedure = request.getProcedure();
-            Procedure finalProcedure = procedureMap.computeIfAbsent(procedure.getProcedureId(), k -> {
-                Procedure newProcedure = new Procedure();
-                newProcedure.setProcedureId(procedure.getProcedureId());
-                newProcedure.setStatus(procedure.getStatus());
-                newProcedure.setAnnotation(procedure.getAnnotation());
-                newProcedure.setCourse(procedure.getCourse());
-                newProcedure.setUniversity(procedure.getUniversity());
-                newProcedure.setLastUpdated(procedure.getLastUpdated());
-                newProcedure.setCreatedAt(procedure.getCreatedAt());
-                newProcedure.setRequests(new ArrayList<>());
-                return newProcedure;
-                });
-            finalProcedure.getRequests().add(request);
+            ProcedureWithRequestsDTO finalProcedureDTO = procedureMap.computeIfAbsent(procedure.getProcedureId(), k -> {
+                ProcedureWithRequestsDTO newProcedureDTO = new ProcedureWithRequestsDTO();
+                newProcedureDTO.setProcedureId(procedure.getProcedureId());
+                newProcedureDTO.setStatus(procedure.getStatus());
+                newProcedureDTO.setAnnotation(procedure.getAnnotation());
+                newProcedureDTO.setUniversity(procedure.getUniversity());
+                newProcedureDTO.setCourse(procedure.getCourse());
+                newProcedureDTO.setCreatedAt(procedure.getCreatedAt());
+                newProcedureDTO.setLastUpdated(procedure.getLastUpdated());
+                newProcedureDTO.setRequestDetails(new ArrayList<>());
+                return newProcedureDTO;
+            });
+
+            RequestDetailsDTO requestDetailsDTO = convertToRequestDetailsDTO(request);
+            finalProcedureDTO.getRequestDetails().add(requestDetailsDTO);
         }
+
         return new ArrayList<>(procedureMap.values());
     }
+
 
     @Transactional
     public ProcedureResponseDTO createProcedureFromDTO(ProcedureRequestDTO procedureRequestDTO) {

@@ -2,6 +2,7 @@ package de.swtp13.creditportbackend.v1.procedures;
 
 
 import de.swtp13.creditportbackend.v1.procedures.dto.ProcedureRequestDTO;
+import de.swtp13.creditportbackend.v1.procedures.dto.ProcedureWithRequestsDTO;
 import de.swtp13.creditportbackend.v1.requests.RequestRepository;
 import de.swtp13.creditportbackend.v1.requests.RequestService;
 import de.swtp13.creditportbackend.v1.requests.StatusRequest;
@@ -65,8 +66,8 @@ public class ProcedureController {
             ))
     })
     @GetMapping
-    public ResponseEntity<List<Procedure>> getProceduresWithRequests() {
-        List<Procedure> proceduresWithRequests = procedureService.getProceduresWithRequests();
+    public ResponseEntity<List<ProcedureWithRequestsDTO>> getProceduresWithRequests() {
+        List<ProcedureWithRequestsDTO> proceduresWithRequests = procedureService.getProcedureDetailsWithRequests();
         return ResponseEntity.ok(proceduresWithRequests);
     }
 

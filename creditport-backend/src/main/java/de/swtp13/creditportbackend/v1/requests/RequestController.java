@@ -148,17 +148,17 @@ public class RequestController {
         }
         Procedure procedure = procedureRepository.findByProcedureId(RequestDetails.getProcedureId()).get();
         List<InternalModule> internalModules = new ArrayList<>();
-        for (InternalModule internalModule: RequestDetails.getInternalModules()){
-            if (internalModuleRepository.existsById(internalModule.getModuleId())){
-                internalModules.add(internalModuleRepository.findById(internalModule.getModuleId()).get());
+        for (UUID internalModuleId: RequestDetails.getInternalModuleIds()){
+            if (internalModuleRepository.existsById(internalModuleId)){
+                internalModules.add(internalModuleRepository.findById(internalModuleId).get());
             } else{
                 return ResponseEntity.notFound().build();
             }
         }
         List<ExternalModule> externalModules = new ArrayList<>();
-        for(ExternalModule externalModule:RequestDetails.getExternalModules()){
-            if(externalModuleRepository.existsById(externalModule.getModuleId())){
-                externalModules.add(externalModuleRepository.findById(externalModule.getModuleId()).get());
+        for(UUID externalModuleId:RequestDetails.getExternalModuleIds()){
+            if(externalModuleRepository.existsById(externalModuleId)){
+                externalModules.add(externalModuleRepository.findById(externalModuleId).get());
             } else{
                 ResponseEntity.notFound().build();
             }
