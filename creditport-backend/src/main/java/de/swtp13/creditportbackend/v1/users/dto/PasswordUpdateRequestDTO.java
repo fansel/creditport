@@ -1,4 +1,4 @@
-package de.swtp13.creditportbackend.v1.users;
+package de.swtp13.creditportbackend.v1.users.dto;
 
 import lombok.Data;
 
