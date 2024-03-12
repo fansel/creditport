@@ -1,5 +1,8 @@
 package de.swtp13.creditportbackend.v1.users;
 
+import de.swtp13.creditportbackend.v1.users.dto.PasswordUpdateRequestDTO;
+import de.swtp13.creditportbackend.v1.users.dto.RegisterRequestDTO;
+import de.swtp13.creditportbackend.v1.users.dto.UserDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -75,43 +78,47 @@ public class UserController {
     @Operation(summary = "adds a user to the database, only usable by admin", responses = {
             @ApiResponse(responseCode = "200",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Username or password are blank or null", content = @Content),
             @ApiResponse(responseCode = "403", description = "Missing admin authentification", content = @Content),
             @ApiResponse(responseCode = "409", description = "Username already taken, returns existing user",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDTO.class)))
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDTO.class))),
+            @ApiResponse(responseCode = "422", description = "Invalid role has been given", content = @Content)
     })
     @PostMapping("/register")
     public ResponseEntity<UserDTO> register(
             @RequestBody RegisterRequestDTO request
     ) {
-        return ResponseEntity.status(managementService.register(request))
-                .body(
-                        UserDTO.of(
-                                userRepository.findByUsername(request.getUsername()).orElseThrow()
-                        )
-                );
+        HttpStatus responseStatus = managementService.register(request);
+        if (responseStatus == HttpStatus.OK || responseStatus == HttpStatus.CONFLICT) {
+            return ResponseEntity.status(managementService.register(request))
+                    .body(
+                            UserDTO.of(
+                                    userRepository.findByUsername(request.getUsername()).orElseThrow()
+                            )
+                    );
+        } else {
+            return ResponseEntity.status(responseStatus).build();
+        }
+
     }
 
-    @Operation(summary = "updates password of the calling user or a given user id",
-            description = "Updates the password of the calling user. Should the caller be an admin, " +
-                    "they can specify a user id as an optional parameter whose password to update instead." +
-                    "the required user details are taken from the Authorization header.",
+    @Operation(summary = "updates password of the calling user",
             responses = {
             @ApiResponse(responseCode = "204", content = @Content),
             @ApiResponse(responseCode = "400", description = "New password is null or empty",
                     content = @Content),
             @ApiResponse(responseCode = "403",
-                    description = "User is not authenticated or an id has been given but the user is not an admin",
+                    description = "Missing authentication",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "User id not found", content = @Content)
             })
     @PostMapping("/update/password")
     public ResponseEntity<?> updatePassword(
-            @RequestParam(required = false) Integer id,
             @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
             @RequestBody PasswordUpdateRequestDTO newPass
     ) {
         String jwt = token.substring(7);
-        return ResponseEntity.status(managementService.updatePassword(id, jwt, newPass)).build();
+        return ResponseEntity.status(managementService.updatePassword(jwt, newPass)).build();
     }
 
     @Operation(summary = "updates a user, only usable by admin", responses = {
@@ -122,11 +129,12 @@ public class UserController {
             @ApiResponse(responseCode = "409", description = "New username is already taken", content = @Content),
             @ApiResponse(responseCode = "422", description = "Invalid role has been given", content = @Content)
     })
-    @PutMapping("/update")
+    @PutMapping("/{id}")
     public ResponseEntity<?> updateUser(
-            @RequestBody UserDTO updatedUser
+            @RequestParam int id,
+            @RequestBody User updatedUser
     ) {
-        return ResponseEntity.status(managementService.updateUser(updatedUser)).build();
+        return ResponseEntity.status(managementService.updateUser(id, updatedUser)).build();
     }
 
 }

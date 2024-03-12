@@ -1,6 +1,9 @@
 package de.swtp13.creditportbackend.v1.users;
 
 import de.swtp13.creditportbackend.v1.config.JwtService;
+import de.swtp13.creditportbackend.v1.users.dto.PasswordUpdateRequestDTO;
+import de.swtp13.creditportbackend.v1.users.dto.RegisterRequestDTO;
+import de.swtp13.creditportbackend.v1.users.dto.UserDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,29 +24,18 @@ public class ManagementService {
         return UserDTO.of(userRepository.findById(id));
     }
 
-    public HttpStatus updatePassword(Integer id, String token, PasswordUpdateRequestDTO newPass) {
+    public HttpStatus updatePassword(String token, PasswordUpdateRequestDTO newPass) {
         User user;
-        if (id == null) {
-            try {
-                user = userRepository.findById(
-                        userRepository.findByUsername(
-                                jwtService.extractUsername(token)
-                        ).orElseThrow().getUserId()
-                ).orElseThrow();
-            } catch (NoSuchElementException nsee) {
-                return HttpStatus.NOT_FOUND;
-            }
-
-        } else if (jwtService.extractRole(token).equals("ADMIN")) {
-            if (userRepository.existsById(id)) {
-                user = userRepository.findById(id).orElseThrow();
-            } else {
-                return HttpStatus.NOT_FOUND;
-            }
-        } else {
-            return HttpStatus.FORBIDDEN;
+        try {
+            user = userRepository.findById(
+                    userRepository.findByUsername(
+                            jwtService.extractUsername(token)
+                    ).orElseThrow().getUserId()
+            ).orElseThrow();
+        } catch (NoSuchElementException nsee) {
+            return HttpStatus.NOT_FOUND;
         }
-        if (newPass.getPassword() == null || newPass.getPassword().isEmpty()) {
+        if (newPass.getPassword() == null || newPass.getPassword().isBlank()) {
             return HttpStatus.BAD_REQUEST;
         }
         user.setPassword(passwordEncoder.encode(newPass.getPassword()));
@@ -51,11 +43,10 @@ public class ManagementService {
         return HttpStatus.NO_CONTENT;
     }
 
-    public HttpStatus updateUser(UserDTO updatedUser) {
-        int id = updatedUser.getUserId();
+    public HttpStatus updateUser(int id, User updatedUser) {
         if (userRepository.existsById(id)) {
             var user = userRepository.findById(id).orElseThrow();
-            if (updatedUser.getUsername() == null || updatedUser.getUsername().isEmpty()) {
+            if (updatedUser.getUsername() == null || updatedUser.getUsername().isBlank()) {
                 return HttpStatus.BAD_REQUEST;
             }
             if (!user.getUsername().equals(updatedUser.getUsername())) {
@@ -66,8 +57,16 @@ public class ManagementService {
                 }
             }
 
+            if (updatedUser.getPassword() != null) {
+                if (updatedUser.getPassword().isBlank()) {
+                    return HttpStatus.BAD_REQUEST;
+                } else {
+                    user.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+                }
+            }
+
             try {
-                user.setRole(Role.valueOf(updatedUser.getRole()));
+                user.setRole(updatedUser.getRole());
             } catch (IllegalArgumentException iae) {
                 return HttpStatus.UNPROCESSABLE_ENTITY;
             }
@@ -82,10 +81,19 @@ public class ManagementService {
         if (userRepository.findByUsername(request.getUsername()).isPresent()) {
             return HttpStatus.CONFLICT;
         }
+        if (request.getUsername().isBlank() || request.getPassword().isBlank()) {
+            return HttpStatus.BAD_REQUEST;
+        }
+        Role role;
+        try {
+            role = Role.valueOf(request.getRole());
+        } catch (IllegalArgumentException iae) {
+            return HttpStatus.UNPROCESSABLE_ENTITY;
+        }
         var user = User.builder()
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.valueOf(request.getRole()))
+                .role(role)
                 .build();
         userRepository.save(user);
         return HttpStatus.OK;
