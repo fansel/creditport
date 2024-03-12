@@ -2,6 +2,10 @@ package de.swtp13.creditportbackend.v1.procedures;
 
 import de.swtp13.creditportbackend.v1.courses.Course;
 import de.swtp13.creditportbackend.v1.courses.CourseRepository;
+import de.swtp13.creditportbackend.v1.externalmodules.ExternalModule;
+import de.swtp13.creditportbackend.v1.externalmodules.ExternalModuleRepository;
+import de.swtp13.creditportbackend.v1.internalmodules.InternalModule;
+import de.swtp13.creditportbackend.v1.internalmodules.InternalModuleRepository;
 import de.swtp13.creditportbackend.v1.procedures.dto.ProcedureRequestDTO;
 import de.swtp13.creditportbackend.v1.procedures.dto.ProcedureResponseDTO;
 import de.swtp13.creditportbackend.v1.procedures.dto.RequestDTO;
@@ -13,7 +17,6 @@ import de.swtp13.creditportbackend.v1.universities.University;
 import de.swtp13.creditportbackend.v1.universities.UniversityRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -33,6 +36,10 @@ public class ProcedureService {
     private UniversityRepository universityRepository;
     @Autowired
     private CourseRepository courseRepository;
+    @Autowired
+    private ExternalModuleRepository externalModuleRepository;
+    @Autowired
+    private InternalModuleRepository internalModuleRepository;
 
     public List<Procedure> getProceduresWithRequests() {
         List<Request> requests = requestRepository.findAllWithProcedure();
@@ -84,8 +91,23 @@ public class ProcedureService {
         List<RequestResponseDTO> requestResponseDTOs = new ArrayList<>();
         for (RequestDTO requestDTO : procedureRequestDTO.getRequests()) {
             Request newRequest = new Request();
-            newRequest.setExternalModules(requestDTO.getExternalModules());
-            newRequest.setInternalModules(requestDTO.getInternalModules());
+            List<ExternalModule> externalModules = new ArrayList<>();
+            for(UUID externalModuleId: requestDTO.getExternalModuleId()){
+                Optional<ExternalModule> externalModule = externalModuleRepository.findById(externalModuleId);
+                if(externalModule.isEmpty()){
+                    return null;
+                }
+                externalModules.add(externalModule.get());
+
+            }
+            List<InternalModule> internalModules = new ArrayList<>();
+            for(UUID internalModuleId: requestDTO.getInternalModuleId()){
+                Optional<InternalModule> internalModule = internalModuleRepository.findById(internalModuleId);
+                if(internalModule.isEmpty()){
+                    return null;
+                }
+                internalModules.add(internalModule.get());
+            }
             newRequest.setAnnotationStudent(requestDTO.getAnnotationStudent());
             newRequest.setAnnotationCommittee(requestDTO.getAnnotationCommittee());
             newRequest.setModuleLink(requestDTO.getModuleLink());
