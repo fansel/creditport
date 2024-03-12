@@ -27,7 +27,7 @@ export const actions = {
     const res = await api.post(api.routes.login, form.data);
 
     // TODO => nur auf res.success umstellen
-    if (!res.success | !res.data.success) {
+    if (!res.success) {
       setError(form, 'username', '')
       setError(form, 'password', '')
 
