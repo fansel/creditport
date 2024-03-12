@@ -3,6 +3,7 @@
   import { superValidate } from 'sveltekit-superforms';
   import AddUserForm from './forms/AddUserForm.svelte';
   import UpdateUserForm from './forms/UpdateUserForm.svelte';
+  import DeleteUserForm from './forms/DeleteUserForm.svelte';
   import { enhance } from '$app/forms';
 
   export let data;
@@ -10,6 +11,9 @@
   $: users = data.users;
 
   let showAddModal = false;
+  let showDeleteModal = false;
+
+  let selectedUser;
 
   let updateForm;
 
@@ -24,12 +28,13 @@
 
 <AddUserForm bind:showModal={showAddModal} roles={config.user_roles} />
 <UpdateUserForm bind:this={updateForm} data={data.updateUserForm} />
+<DeleteUserForm user={selectedUser} bind:showModal={showDeleteModal} />
 
 <h4 class="mb-3 d-flex justify-content-between flex-wrap gap-2">
   Benutzer
   <button class="btn btn-primary btn-sm text-nowrap" on:click={() => (showAddModal = true)}>
     <i class="bi bi-plus-circle" />
-    Benutzer hinzufügen
+    Hinzufügen
   </button>
 </h4>
 
@@ -54,10 +59,7 @@
         <div class="col d-flex align-items-center">
           <div class="btn-group">
             <button class="btn btn-sm btn-outline-primary" on:click={() => dialog_open(user.userId)}>Bearbeiten</button>
-            <form action="?/deleteUser" method="POST" use:enhance>
-              <input type="hidden" bind:value={user.userId} name="userId" />
-              <button class="btn btn-sm btn-outline-danger left-no-radius">Löschen</button>
-            </form>
+              <button class="btn btn-sm btn-outline-danger" on:click={() => ((showDeleteModal = true), (selectedUser = user))}>Löschen</button>
           </div>
         </div>
       </div>

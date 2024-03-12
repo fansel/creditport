@@ -1,5 +1,4 @@
 <script>
-  import { enhance } from '$app/forms';
   import VirtualList from '@sveltejs/svelte-virtual-list';
   import DeleteUniForm from './forms/DeleteUniForm.svelte';
   import UpdateUniForm from './forms/UpdateUniForm.svelte';
@@ -7,7 +6,6 @@
   import AddUniForm from './forms/AddUniForm.svelte';
 
   export let data;
-  export let form;
 
   $: universities = data.universities;
 
@@ -61,12 +59,12 @@
 <ImportUniForm bind:this={importForm} data={data.importUniForm} />
 
 <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-  <h4 class="m-0">Vorschlagliste</h4>
+  <h4 class="m-0">Universitäten</h4>
 
   <div class="d-flex flex-wrap gap-2">
     <button class="btn btn-primary btn-sm text-nowrap" on:click={() => (showAddModal = true)}>
       <i class="bi bi-plus-circle" />
-      Universität hinzufügen
+      Hinzufügen
     </button>
     <button class="btn btn-primary btn-sm" on:click={() => importForm.dialog_open()}>
       <i class="bi bi-cloud-arrow-up" />

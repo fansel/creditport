@@ -57,7 +57,7 @@ export const routes = {
   request_all: 'requests', // POST, GET
   request_by_procedure_id: (id) => `requests/procedure/${id}`, // GET
 
-    /**
+  /**
    * ----------------------------------------------------------------------
    * MODULES
    * ----------------------------------------------------------------------
@@ -66,9 +66,17 @@ export const routes = {
   module_all_external: `modules/external`, // POST, GET
   module_internal_import: `modules/internal/import`, // POST
   module_external_import: `modules/external/import`, // POST
-  module_internal_by_id: (id) => `modules/internal/${id}`, // GET, PUT, DELETE 
-  module_external_by_id: (id) => `modules/external/${id}`, // GET, PUT, DELETE 
+  module_internal_by_id: (id) => `modules/internal/${id}`, // GET, PUT, DELETE
+  module_external_by_id: (id) => `modules/external/${id}`, // GET, PUT, DELETE
 
+  /**
+   * ----------------------------------------------------------------------
+   * COURSES
+   * ----------------------------------------------------------------------
+   */
+  course_by_id: (id) => `courses/${id}`, // GET, PUT, DELETE
+  course_all: `courses`, // POST, GET
+  course_import: `courses/import`, // POST
 
   /**
    * ----------------------------------------------------------------------
