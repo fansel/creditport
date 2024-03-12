@@ -9,7 +9,7 @@ export const pdf_endpoint = env.PUBLIC_PDF_ENDPOINT || 'http://localhost:8080/ap
 export const user_roles = {
   ADMIN: 'ADMIN',
   STUDY_OFFICE: 'STUDY_OFFICE',
-  EXAM_COMITEE: 'EXAM_COMITEE'
+  EXAM_COMITEE: 'EXAM_COMMITTEE'
 };
 
 // Status die ein Vorgang haben kann, Reihenfolge ist wichtig
