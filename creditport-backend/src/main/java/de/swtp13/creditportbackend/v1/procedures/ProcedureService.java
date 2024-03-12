@@ -1,6 +1,7 @@
 package de.swtp13.creditportbackend.v1.procedures;
 
 import de.swtp13.creditportbackend.v1.courses.Course;
+import de.swtp13.creditportbackend.v1.courses.CourseDTO;
 import de.swtp13.creditportbackend.v1.courses.CourseRepository;
 import de.swtp13.creditportbackend.v1.externalmodules.ExternalModule;
 import de.swtp13.creditportbackend.v1.externalmodules.ExternalModuleRepository;
@@ -67,7 +68,7 @@ public class ProcedureService {
                 newProcedureDTO.setStatus(procedure.getStatus());
                 newProcedureDTO.setAnnotation(procedure.getAnnotation());
                 newProcedureDTO.setUniversity(procedure.getUniversity());
-                newProcedureDTO.setCourse(procedure.getCourse());
+                newProcedureDTO.setCourse(new CourseDTO(procedure.getCourse().getCourseId(),procedure.getCourse().getCourseName()));
                 newProcedureDTO.setCreatedAt(procedure.getCreatedAt());
                 newProcedureDTO.setLastUpdated(procedure.getLastUpdated());
                 newProcedureDTO.setRequestDetails(new ArrayList<>());
