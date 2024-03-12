@@ -2,20 +2,13 @@ package de.swtp13.creditportbackend.v1.procedures;
 
 import de.swtp13.creditportbackend.v1.courses.Course;
 import de.swtp13.creditportbackend.v1.courses.CourseRepository;
-<<<<<<< Updated upstream
 import de.swtp13.creditportbackend.v1.externalmodules.ExternalModule;
 import de.swtp13.creditportbackend.v1.externalmodules.ExternalModuleRepository;
 import de.swtp13.creditportbackend.v1.internalmodules.InternalModule;
 import de.swtp13.creditportbackend.v1.internalmodules.InternalModuleRepository;
-import de.swtp13.creditportbackend.v1.procedures.dto.ProcedureRequestDTO;
-import de.swtp13.creditportbackend.v1.procedures.dto.ProcedureResponseDTO;
-import de.swtp13.creditportbackend.v1.procedures.dto.RequestDTO;
-import de.swtp13.creditportbackend.v1.procedures.dto.RequestResponseDTO;
-=======
 import de.swtp13.creditportbackend.v1.procedures.dto.*;
->>>>>>> Stashed changes
-import de.swtp13.creditportbackend.v1.requests.RequestRepository;
 import de.swtp13.creditportbackend.v1.requests.Request;
+import de.swtp13.creditportbackend.v1.requests.RequestRepository;
 import de.swtp13.creditportbackend.v1.requests.StatusRequest;
 import de.swtp13.creditportbackend.v1.requests.dto.RequestDetailsDTO;
 import de.swtp13.creditportbackend.v1.universities.University;
