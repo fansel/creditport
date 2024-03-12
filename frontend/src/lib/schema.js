@@ -25,3 +25,14 @@ export const universities_schema = z.object({
   uniName: z.string().min(1, { message: 'Uni Name darf nicht leer sein.' }),
   verified: z.boolean().default(false)
 });
+
+export const universities_upload_schema = z.object({
+  file: z.instanceof(File, { message: 'Please upload a file.' }).refine((f) => f.size < 100_000, 'Max 100 kB upload size.')
+});
+
+export const universities_import_schema = z.array(
+  z.object({
+    uniName: z.string(),
+    verified: z.boolean()
+  })
+);
