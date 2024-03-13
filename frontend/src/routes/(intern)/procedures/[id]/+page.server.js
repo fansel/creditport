@@ -3,6 +3,7 @@ import { error } from '@sveltejs/kit';
 import { zfd } from 'zod-form-data';
 import { z } from 'zod';
 import { fail } from '@sveltejs/kit';
+import { superValidate } from 'sveltekit-superforms/server'
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ params, locals }) {

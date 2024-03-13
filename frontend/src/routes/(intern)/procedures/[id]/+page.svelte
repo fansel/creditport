@@ -15,7 +15,7 @@
 
   export let data;
   let procedure = data.procedure;
-  let request = data.request;
+  let request = $page.data.request;
   let requestBackup = JSON.parse(JSON.stringify(data.request));
   let modules = data.modules;
 
@@ -151,6 +151,7 @@
                   <input type="number" class="form-control" placeholder={module.creditPoints} bind:value={module.creditPoints} />
                 </div>
               </div>
+              <div class="btn btn-outline-secondary">Bearbeiten<i class="bi bi-pencil-square"></i></div>
             </div>
           </div>
         </div>
