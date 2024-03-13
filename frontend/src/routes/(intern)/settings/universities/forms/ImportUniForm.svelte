@@ -1,5 +1,4 @@
 <script>
-  import SuperformModal from '$lib/components/SuperformModal.svelte';
   import { page } from '$app/stores';
   import { getContext } from 'svelte';
   import { superForm } from 'sveltekit-superforms';

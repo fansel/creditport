@@ -1,6 +1,8 @@
 <script>
   import VirtualList from '@sveltejs/svelte-virtual-list';
+  import AddCourseForm from './form/AddCourseForm.svelte';
   import UpdateCourseForm from './form/UpdateCourseForm.svelte';
+  import DeleteCourseForm from './form/DeleteCourseForm.svelte';
 
   export let data;
 
@@ -9,6 +11,8 @@
 
   let updateCourseForm;
   let addCourseForm;
+  let showDeleteCourseModal = false;
+
 
   let selectedCourseId;
   $: selectedCourse = data.courses.find((c) => c.courseId == selectedCourseId);
@@ -26,12 +30,14 @@
 </script>
 
 <UpdateCourseForm bind:this={updateCourseForm} data={data.updateCourseForm} />
+<AddCourseForm bind:this={addCourseForm} data={data.addCourseForm} />
+<DeleteCourseForm course={selectedCourse} bind:showModal={showDeleteCourseModal} />
 
 <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
   <h4 class="m-0">Interne Studiengänge</h4>
 
   <div class="d-flex flex-wrap gap-2">
-    <button class="btn btn-primary btn-sm text-nowrap" on:click={test}>
+    <button class="btn btn-primary btn-sm text-nowrap" on:click={addCourseForm.dialog_open()}>
       <i class="bi bi-plus-circle" />
       Neu
     </button>
@@ -54,8 +60,8 @@
       Verwalte die internen Studiengänge der Universtität Leipzig. Um Module zu bearbeiten wähle den Studiengang aus der Liste.
     </p>
     <div>
-      <button class="btn btn-outline-primary btn-sm text-nowrap" on:click={test}>Name bearbeiten</button>
-      <button class="btn btn-outline-danger btn-sm text-nowrap" on:click={test}>Löschen</button>
+      <button class="btn btn-outline-primary btn-sm text-nowrap" on:click={course_dialog_open(selectedCourseId)}>Name bearbeiten</button>
+      <button class="btn btn-outline-danger btn-sm text-nowrap" on:click={() => ((showDeleteCourseModal = true))}>Löschen</button>
     </div>
   </div>
 </div>
