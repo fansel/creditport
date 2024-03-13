@@ -32,8 +32,6 @@ public class University {
     private boolean isVerified;
 
 
-
-
     public University(String uniName) {
         this.uniName = uniName;
     }
