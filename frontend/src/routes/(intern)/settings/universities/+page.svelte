@@ -33,7 +33,7 @@
   // - letztes Item hat doppelten Border-Bottom
 
   function compareUniNames(a, b) {
-    return a.uniName.localeCompare(b.uniName);
+    return a.uniName.toLowerCase().localeCompare(b.uniName);
   }
 
   $: searchResultsCount = searchResults.length;

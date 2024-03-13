@@ -46,4 +46,10 @@ export const add_course_schema = z.object({
   courseName: z.string().min(1, { message: 'Name des Studiengangs darf nicht leer sein!' })
 });
 
-export const update_internal_modul_schema = z.object({});
+export const update_internal_modul_schema = z.object({
+  moduleId: z.string(),
+  number: z.string(),
+  moduleName: z.string().min(1, { message: 'Name des Moduls darf nicht leer sein!' }),
+  moduleDescription: z.string(),
+  creditPoints: z.number().default(1)
+});
