@@ -58,6 +58,9 @@ public class CourseController {
     })
     @PutMapping("/{courseId}")
     public ResponseEntity<Course> updateCourse(@PathVariable UUID courseId, @RequestBody Course CourseDetails) {
+        if (CourseDetails.getInternalModules() == null){
+            CourseDetails.setInternalModules(courseRepository.getReferenceById(courseId).getInternalModules());
+        }
         return courseRepository.findById(courseId)
                 .map(Course -> {
                     Course.setCourseName(CourseDetails.getCourseName());
