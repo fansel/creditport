@@ -38,7 +38,7 @@
                 {#each moduleData.selectedInternalModulIds as selectedInternalModulIds, selectedModulIndex}
                   <h6 class="h6" key={selectedModulIndex}>
                     <!-- wie kann ich nichts selecten? -->
-                    {selectedInternalModulIds!== undefined ? `${modules[selectedInternalModulIds].moduleName}` : 'Neues Modul'}
+                    {selectedInternalModulIds!== undefined ? `${modules[moduleData.selectedInternalModulIds[selectedModulIndex]].moduleName}` : 'Neues Modul'}
                   </h6>
                 {/each}
                 <button class="btn p-0 position-absolute top-50 end-0 translate-middle-y me-5" on:click={() => removeRequest(index)} type="button"><i class="bi bi-trash3-fill" /> </button>
@@ -127,7 +127,7 @@
                         >
                           <!-- <option value={0} disabled selected hidden>Bitte treffen Sie eine Auswahl</option> -->
                           {#each modules as modul, index}
-                            <option value={modul.moduleId}>{modul.moduleName}</option>
+                            <option value={index}>{modul.moduleName}</option>
                           {/each}
                         </select>
                       </div>
