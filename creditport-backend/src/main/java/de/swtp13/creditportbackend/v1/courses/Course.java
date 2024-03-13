@@ -40,6 +40,7 @@ public class Course {
             joinColumns = @JoinColumn(name = "course_id"),
             inverseJoinColumns = @JoinColumn(name = "internal_module_id")
     )
+    @JsonIgnore
     private List<InternalModule> internalModules;
 
     public Course(String courseName, List<InternalModule> internalModules){
