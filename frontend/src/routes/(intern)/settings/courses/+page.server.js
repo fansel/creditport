@@ -1,6 +1,9 @@
 import * as config from '$lib/config';
 import * as api from '$lib/api';
 import { redirect, error, fail } from '@sveltejs/kit';
+import { superValidate } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
+import { add_course_schema, update_course_schema } from '$root/lib/schema';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ locals }) {
@@ -18,14 +21,17 @@ export async function load({ locals }) {
       throw error(courses.status, { message: 'Fehler beim Laden der Internen Module' });
     }
 
-    // const updateUniForm = superValidate(zod(universities_schema));
+    const updateCourseForm = superValidate(zod(update_course_schema));
+    const addCourseForm = superValidate(zod(add_course_schema));
     // const importUniForm = superValidate(zod(universities_upload_schema));
 
     return {
       title: 'Einstellungen',
       subtitle: 'Studiengänge',
       courses: courses.data,
-      modules: modules.data
+      modules: modules.data,
+      updateCourseForm,
+      addCourseForm
       // updateUniForm,
       // importUniForm
     };
@@ -36,37 +42,14 @@ export async function load({ locals }) {
 
 /** @type {import('./$types').Actions} */
 export const actions = {
-  importUni: async ({ locals, request, cookies }) => {
-    const form = await superValidate(request, zod(universities_upload_schema));
+  addCourse: async ({ locals, request, cookies }) => {
+    const form = await superValidate(request, zod(add_course_schema));
 
     if (!form.valid) {
-      return message(withFiles({ form }), { type: 'error', message: 'Bitte wähle eine Datei aus' }, { status: 400 });
+      return message(form, { type: 'error', message: 'Bitte wähle eine Datei aus' }, { status: 400 });
     }
 
-    try {
-      const parsedText = await form.data.file.text();
-      const parsedJsonObj = JSON.parse(parsedText);
-
-      // Überprüfe ob das importierte Objekt die korrekte Form hat
-      const result = universities_import_schema.safeParse(parsedJsonObj);
-
-      if (!result.success) {
-        setError(form, 'file', 'Nicht das richtige JSON Format');
-        return message(form, { type: 'error', message: 'Fehler beim importieren der Universitäten' }, { status: 400 });
-      }
-
-      const res = await api.post(api.routes.university_import, result.data, locals.user?.token);
-
-      if (!res.success) {
-        return message(form, { type: 'error', message: 'Fehler beim importieren der Universitäten' }, { status: 400 });
-      }
-
-      return message(form, { type: 'success', message: 'Universitäten wurden erfolgreich importiert.' }, { status: 200 });
-    } catch (error) {
-      console.error(error);
-      setError(form, 'file', 'Fehler beim parsen der JSON Datei');
-      return fail(400, withFiles({ form }));
-    }
+    
   },
   deleteUni: async ({ locals, request }) => {
     const formData = await request.formData();

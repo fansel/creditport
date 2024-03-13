@@ -81,17 +81,17 @@
   </div>
 </div>
 
-<ul class="list-group mb-3 uni-table border">
-  <li class="uni-table-header border-bottom font-sm">
+<ul class="list-group mb-3 cp-table border">
+  <li class="cp-table-header border-bottom font-sm">
     <div class="row">
       <div class="col-8">Name</div>
       <div class="col">Aktionen</div>
     </div>
   </li>
 
-  <div class="uni-table-body">
+  <div class="cp-table-body">
     <VirtualList items={searchResults} height="332px" bind:start bind:end let:item>
-      <li class="uni-table-item border-bottom">
+      <li class="cp-table-item border-bottom">
         <div class="row gy-2">
           <div class="col col-md-8 d-flex align-items-center">
             {item.uniName}
@@ -128,26 +128,26 @@
     font-size: 0.875rem;
   }
 
-  .uni-table {
+  .cp-table {
     list-style-type: none;
   }
 
-  .uni-table-header {
+  .cp-table-header {
     width: 100%;
     padding: 0.5rem 1rem;
   }
 
-  .uni-table-body {
+  .cp-table-body {
     overflow-y: auto;
   }
 
-  .uni-table-item {
+  .cp-table-item {
     /* border-bottom: 1px solid rgb(222, 226, 230); */
     width: 100%;
     padding: 0.5rem 1rem;
   }
 
-  .uni-table-item:hover {
+  .cp-table-item:hover {
     background-color: rgba(0, 0, 0, 0.075);
   }
 </style>
