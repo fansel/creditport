@@ -1,0 +1,27 @@
+button.reset-btn {
+        /* Entfernen der Hintergrundfarbe */
+        background-color: transparent;
+        /* Entfernen der Rahmen */
+        border: none;
+        /* Entfernen der Schattierung */
+        box-shadow: none;
+        /* Entfernen der abgerundeten Ecken */
+        border-radius: 0;
+        /* Entfernen von Padding und Margin */
+        padding: 0;
+        margin: 0;
+        /* Schriftart-Einstellungen zurücksetzen */
+        font-family: inherit;
+        font-size: inherit;
+        font-weight: inherit;
+        /* Setzen der Schriftfarbe auf Standard */
+        color: inherit;
+        /* Entfernen des Standard-Cursor-Stils */
+        cursor: pointer;
+        /* Festlegen der Textausrichtung auf Standard */
+        text-align: inherit;
+        /* Festlegen der Zeilenhöhe auf Standard */
+        line-height: normal;
+    
+    
+}
