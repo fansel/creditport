@@ -93,7 +93,7 @@
       <i class="bi bi-question-circle me-2" />
       Verwalte die internen Studiengänge der Universtität Leipzig. Um Module zu bearbeiten wähle den Studiengang aus der Liste.
     </p>
-    <div class="hstack gap-2">
+    <div class="ms-3 hstack flex-column flex-md-row gap-2">
       <button class="btn btn-outline-primary btn-sm text-nowrap" on:click={course_dialog_open(selectedCourseId)}>Name bearbeiten</button>
       <button class="btn btn-outline-danger btn-sm text-nowrap" on:click={() => (showDeleteCourseModal = true)}>Löschen</button>
     </div>

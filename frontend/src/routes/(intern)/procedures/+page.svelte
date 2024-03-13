@@ -5,7 +5,7 @@
   import { formatProcdureID } from '$lib/util.js';
   import { status_procedures } from '$lib/config';
 
-  import EditProcedureForm from './forms/EditProcedureForm.svelte';
+  import UpdateProcedureForm from './forms/UpdateProcedureForm.svelte';
   import ProcedureStatus from '$lib/components/ProcedureStatus.svelte';
 
   /* https://www.npmjs.com/package/date-picker-svelte */
@@ -17,8 +17,7 @@
   $: procedures = data.procedures;
   $: proceduresSearchIndex = createSearchIndex(procedures);
 
-  let showEditModal = false;
-  let selectedProcedure;
+  let updateProcedureForm;
 
   let locale = localeFromDateFnsLocale(de);
 
@@ -117,9 +116,17 @@
       return filterBySearch && filterByStatus && filterByCreatedAt && filterBylastUpdateAt;
     })
     .sort(compareByProperty(sortingByField, sortingDirection));
+
+  function dialog_open(id) {
+    const procedure = data.procedures.find((u) => u.procedureId == id);
+    if (!procedure) {
+      console.error('Procedure not found');
+    }
+    updateProcedureForm.dialog_open(procedure);
+  }
 </script>
 
-<EditProcedureForm procedure={selectedProcedure} bind:showModal={showEditModal} />
+<UpdateProcedureForm bind:this={updateProcedureForm} data={data.updateProcedureForm} />
 
 <div class="row py-3 mb-3 pb-md-1 border-bottom align-items-center">
   <div class="col-md">
@@ -297,10 +304,10 @@
           <td>
             <div class="btn-group text-nowrap float-end" role="group">
               <form method="POST" use:enhance>
-                <button class="text-danger btn p-1 me-2" formaction="?/archiv"> <i class="bi bi-archive " /> </button>
+                <button class="text-danger btn p-1 me-2" formaction="?/archiv"> <i class="bi bi-archive" /> </button>
 
                 <input type="hidden" name="id" value={procedure.procedureId} />
-                <button type="button" on:click={() => ((showEditModal = true), (selectedProcedure = procedure))} class="btn btn-sm btn-primary btn-group-right"
+                <button type="button" on:click={() => dialog_open(procedure.procedureId)} class="btn btn-sm btn-primary btn-group-right"
                   ><i class="bi bi-pencil-square" /></button
                 >
               </form>

@@ -1,6 +1,9 @@
 import * as config from '$lib/config';
 import * as api from '$lib/api';
 import { error } from '@sveltejs/kit';
+import { superValidate, message } from 'sveltekit-superforms';
+import { zod } from 'sveltekit-superforms/adapters';
+import { procedure_schema } from '$root/lib/schema';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ params, locals }) {
@@ -10,79 +13,51 @@ export async function load({ params, locals }) {
     throw error(res.http_code, { message: 'Fehler beim Laden der Vorgänge' });
   }
 
-  return { procedures: res.data, title: 'Vorgänge' };
+  return { procedures: res.data, title: 'Vorgänge', updateProcedureForm: await superValidate(zod(procedure_schema)) };
 }
 
 /** @type {import('./$types').Actions} */
 export const actions = {
-  editProcedure: async ({ locals, request }) => {
-    const formData = await request.formData();
+  updateProcedure: async ({ locals, request }) => {
+    const form = await superValidate(request, zod(procedure_schema));
 
-    // const schema = zfd.formData({
-    //   id: zfd.text()
-    // });
-
-    // const result = schema.safeParse(formData);
-
-    // if (!result.success) {
-    //   return fail(400, { errors: 'keine ID angegeben' });
-    // }
-
-    // const res = await api.del(`universities/${result.data.id}`, locals.user?.token, { res_type: api.content_type.plain });
-
-    return { success: true };
-  },
-  changeUni: async ({ locals, request }) => {
-    const formData = await request.formData();
-
-    const schema = zfd.formData({
-      id: zfd.text(),
-      name: zfd.text(z.string({ required_error: 'Name darf nicht leer sein' }))
-    });
-
-    const result = schema.safeParse(formData);
-
-    if (!result.success) {
-      const data = {
-        data: Object.fromEntries(formData),
-        errors: result.error.flatten().fieldErrors
-      };
-      return fail(400, data);
+    if (!form.valid) {
+      return message(form, { type: 'error', message: 'Fehlerhafter Input!' }, { status: 400 });
     }
 
+    console.log(form.data)
+
+
     const body = {
-      uniName: result.data.name
+      procedureId: form.data.procedureId,
+      annotation: form.data.annotation,
+      university: form.data.university,
+      course: form.data.course,
+      createdAt: form.data.createdAt,
+      requests: form.data.requestDetails.map((r) => ({
+        requestId: r.requestId,
+        annotationStudent: r.annotationStudent,
+        annotationCommittee: r.annotationCommittee,
+        favored: false,
+        moduleLink: r.moduleLink,
+        pdfExists: r.pdfExists,
+        createdAt: r.createdAt,
+        internalModuleIds: r.internalModules.map((r) => r.moduleId),
+        externalModuleIds: r.externalModules.map((r) => r.moduleId),
+        statusRequest: r.statusRequest
+      }))
     };
 
-    const res = await api.put(`universities/${result.data.id}`, body, locals.user?.token);
+    console.log(body)
 
-    return { success: true };
-  },
-  addUni: async ({ locals, request }) => {
-    const formData = await request.formData();
+    const res = await api.put(api.routes.procedure_by_id(form.data.procedureId), body, locals.user?.token);
 
-    const schema = zfd.formData({
-      name: zfd.text()
-    });
+    console.log(res)
 
-    const result = schema.safeParse(formData);
-
-    if (!result.success) {
-      const data = {
-        data: Object.fromEntries(formData),
-        errors: result.error.flatten().fieldErrors
-      };
-      return fail(400, data);
+    if (!res.success) {
+      return message(form, { type: 'error', message: 'Fehler beim Speichern des Vorgangs.' }, { status: 400 });
     }
 
-    const body = {
-      uniName: result.data.name
-    };
-
-    const res = await api.post(`universities`, body, locals.user?.token);
-
-    return { success: true };
+    return message(form, { type: 'success', message: 'Erfolgreich gespeichert.' });
   }
 };
-
-export const ssr = false;
