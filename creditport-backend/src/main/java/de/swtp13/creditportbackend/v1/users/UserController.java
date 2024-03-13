@@ -90,7 +90,7 @@ public class UserController {
     ) {
         HttpStatus responseStatus = managementService.register(request);
         if (responseStatus == HttpStatus.OK || responseStatus == HttpStatus.CONFLICT) {
-            return ResponseEntity.status(managementService.register(request))
+            return ResponseEntity.status(responseStatus)
                     .body(
                             UserDTO.of(
                                     userRepository.findByUsername(request.getUsername()).orElseThrow()
@@ -131,7 +131,7 @@ public class UserController {
     })
     @PutMapping("/{id}")
     public ResponseEntity<?> updateUser(
-            @RequestParam int id,
+            @PathVariable int id,
             @RequestBody User updatedUser
     ) {
         return ResponseEntity.status(managementService.updateUser(id, updatedUser)).build();

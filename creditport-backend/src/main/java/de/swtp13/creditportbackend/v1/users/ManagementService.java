@@ -46,7 +46,7 @@ public class ManagementService {
     public HttpStatus updateUser(int id, User updatedUser) {
         if (userRepository.existsById(id)) {
             var user = userRepository.findById(id).orElseThrow();
-            if (updatedUser.getUsername() == null || updatedUser.getUsername().isBlank()) {
+            if (updatedUser.getUsername() == null || updatedUser.getUsername().isBlank() || updatedUser.getRole() == null) {
                 return HttpStatus.BAD_REQUEST;
             }
             if (!user.getUsername().equals(updatedUser.getUsername())) {
@@ -81,9 +81,11 @@ public class ManagementService {
         if (userRepository.findByUsername(request.getUsername()).isPresent()) {
             return HttpStatus.CONFLICT;
         }
-        if (request.getUsername().isBlank() || request.getPassword().isBlank()) {
+        if (request.getUsername() == null || request.getPassword() == null || request.getRole() == null ||
+                request.getUsername().isBlank() || request.getPassword().isBlank()) {
             return HttpStatus.BAD_REQUEST;
         }
+
         Role role;
         try {
             role = Role.valueOf(request.getRole());
