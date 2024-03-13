@@ -21,13 +21,29 @@ export async function load({ params, locals }) {
     throw redirect(300, '/');
   }
 
-  const modules = await api.get(api.routes.module_all_internal);
-  const request = await api.get(api.routes.request_by_id_related(id));
-  const procedure = await api.get(api.routes.procedure_by_id(request.data.procedureId));
+  const modules = await api.get(api.routes.module_all_internal, locals.user?.token);
+  const request = await api.get(api.routes.request_by_id_related(id), locals.user?.token);
+  const procedure = await api.get(api.routes.procedure_by_id(request.data.procedureId), locals.user?.token);
+  const similarRequests = await api.get(api.routes.request_by_id_similar(id), locals.user?.token);
 
   if (!modules.success) {
     console.log(modules.data);
     throw error(500, { message: 'Fehler beim laden der Module' });
+  }
+
+  if (!request.success) {
+    console.log(request.data);
+    throw error(500, { message: 'Fehler beim laden des Antrags' });
+  }
+
+  if (!procedure.success) {
+    console.log(procedure.data);
+    throw error(500, { message: 'Fehler beim laden des Vorgangs' });
+  }
+
+  if (!similarRequests.success) {
+    console.log(similarRequests.data);
+    throw error(500, { message: 'Fehler beim laden der ähnlichen Anträge' });
   }
 
   if (!request.success && request.http_code == 404) {
@@ -38,6 +54,7 @@ export async function load({ params, locals }) {
     modules: modules.data,
     request: request.data,
     procedure: procedure.data,
+    similarRequests: similarRequests.data,
     user: locals.user,
     updateRequestForm: await superValidate(request.data, zod(full_request_schema)),
     updateModuleForm: await superValidate(zod(update_external_module)),
