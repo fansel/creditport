@@ -1,5 +1,7 @@
 package de.swtp13.creditportbackend.v1.internalmodules;
 
+import de.swtp13.creditportbackend.v1.courses.Course;
+import de.swtp13.creditportbackend.v1.courses.CourseRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -25,6 +27,8 @@ public class InternalModuleController {
 
     @Autowired
     private InternalModuleRepository moduleRepository;
+    @Autowired
+    private CourseRepository courseRepository;
 
     @Operation(summary = "returns a list of all internal modules", responses = {
             @ApiResponse(responseCode = "200", content = @Content(
@@ -99,6 +103,14 @@ public class InternalModuleController {
     })
     @PostMapping("/import")
     public ResponseEntity<List<InternalModule>> importModules(@RequestBody List<InternalModule> modules) {
+       /* for(InternalModule internalModule: modules){
+            for(Course course: internalModule.getCourses()){
+                if(courseRepository.findById(course.getCourseId()).isEmpty()){
+                    return ResponseEntity.notFound().build();
+                }
+            }
+        }
+        */
         moduleRepository.saveAll(modules);
         return ResponseEntity.ok(modules);
     }
