@@ -2,6 +2,7 @@
   import * as config from '$lib/config';
   import { format, parseISO } from 'date-fns';
   import { page } from '$app/stores';
+  import { superForm } from 'sveltekit-superforms';
 
   import { truncateText } from '$root/lib/util.js';
 
@@ -12,41 +13,39 @@
   import Studi from '$root/lib/components/InfoModal.svelte';
   import RelatedRequestsIntern from './forms/RelatedRequestsIntern.svelte';
   import RelatedRequestsExtern from './forms/RelatedRequestsExtern.svelte';
+  import { full_request_schema } from '$root/lib/schema';
+  import * as flashModule from 'sveltekit-flash-message/client';
+  import { zod } from 'sveltekit-superforms/adapters';
+  import SuperDebug from 'sveltekit-superforms';
+  import UpdateExternalModule from './forms/UpdateExternalModule.svelte';
 
   export let data;
+
+  const { form, messages, errors, enhance } = superForm(data.updateRequestForm, {
+    dataType: 'json',
+    syncFlashMessage: true,
+    flashMessage: {
+      module: flashModule
+    },
+    onError({ result }) {
+      console.error(result.error.message);
+    },
+    clearOnSubmit: 'none',
+    resetForm: false,
+    validators: zod(full_request_schema),
+    validationMethod: 'auto',
+    customValidity: false
+  });
+
   let procedure = data.procedure;
-  let request = $page.data.request;
-  let requestBackup = JSON.parse(JSON.stringify(data.request));
-  let modules = data.modules;
+  let internalModules = data.modules;
+  let showComment = false;
+  let showModalExtern = false;
+  let showModalIntern = false;
 
-  let selectedModule = [];
-  for (let i = 0; i < request.internalModules.length; i++) {
-    const moduleId = request.internalModules[i].moduleId;
-    const index = findCurrentModule(modules, moduleId);
-    selectedModule[i] = index;
-  }
+  let updateModuleForm;
 
-  async function submitForm(event) {
-    const body = request;
-    delete body.relatedRequests;
-    const res = await fetch('/update-request', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: JSON.stringify(body)
-    });
-    // successToast('Erfolreich gespeichert');
-
-    console.log(res);
-    requestBackup = JSON.parse(JSON.stringify(request));
-  }
-
-  async function cancelChanges(event) {
-    request = requestBackup;
-    submitForm();
-  }
+  // let requestBackup = JSON.parse(JSON.stringify(data.request));
 
   function sumLP(list) {
     let sum = 0;
@@ -56,184 +55,186 @@
     return sum;
   }
 
-  function findCurrentModule(array, moduleId) {
-    for (let i = 0; i < array.length; i++) {
-      if (array[i].moduleId === moduleId) {
-        return i; // Rückgabe des Index, wenn das gesuchte moduleId gefunden wurde
-      }
+  function sumLPInternalModules(list) {
+    let sum = 0;
+    for (let i = 0; i < list.length; i++) {
+      sum += findCurrentModule(list[i].moduleId).creditPoints;
     }
-    return -1; // Rückgabe -1, wenn das gesuchte moduleId nicht gefunden wurde
+    return sum;
   }
 
-  let showComment = false;
-  let showModalExtern = false;
-  let showModalIntern = false;
+  function findCurrentModule(moduleId) {
+    return internalModules.find((m) => m.moduleId == moduleId);
+  }
+
+  function module_dialog_open(id) {
+    const module = $form.externalModules.find((u) => u.moduleId == id);
+    if (!module) {
+      console.error('Module not found');
+    }
+    updateModuleForm.dialog_open(module);
+  }
 </script>
-
-<!-- <Header wide={true} /> -->
-<div class="border-bottom py-3 d-flex my-3 justify-content-between">
-  <div class="d-flex">
-    <div class="vorgangsnummer">
-      <strong>Vorgangsnummer: </strong>
-      {request.procedureId}
-    </div>
-    <div class="dates d-none d-lg-block">
-      <i class="bi bi-calendar"></i>
-      {format(new Date(request.createdAt), 'dd.MM.yyyy')}
-
-      <i class="bi bi-calendar-range"></i>
-      {format(new Date(request.createdAt), 'dd.MM.yyyy')}
-    </div>
-
-    <div class="ms-3 studium">
-      <strong>{procedure.course.courseName} </strong>
-    </div>
-  </div>
-
-  <div class="status">
-    <RequestStatus status={request.statusRequest} />
-  </div>
-</div>
-
-<div class="row">
-  <div class="together d-flex flex-nowrap">
-    {#if request.pdfExists}
-      <a class="btn btn-sm btn-danger" href="{config.pdf_endpoint}{request.requestId}" target="_blank">PDF</a>
-    {:else}
-      <div class="btn btn-sm btn-outline-secondary">PDF</div>
-    {/if}
-    <input type="text" class="form-control mx-3" placeholder="Link zum Modul" />
-    <div class="mx-2 btn btn-outline-primary" on:click={() => (showComment = true)}>Kommentar</div>
-    <Studi bind:showModal={showComment}>
-      <div slot="headline"><strong>Hinweis für Vorgang der Student*in</strong></div>
-      <div slot="body">
-        <p>{procedure.annotation}</p>
-      </div>
-    </Studi>
-    <div class="btn-group dropdown">
-      <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ähnliche Anträge</button>
-      <div class="dropdown-menu">
-        <button class="dropdown-item" on:click={() => (showModalExtern = true)}>Module für aktuelles Fremdmodul</button>
-        <button class="dropdown-item" on:click={() => (showModalIntern = true)}>Akzeptierte Fremdmodule für Modulvorschlag</button>
-      </div>
-    </div>
-  </div>
-</div>
 
 <RelatedRequestsExtern bind:showModal={showModalExtern} />
 <RelatedRequestsIntern bind:showModal={showModalIntern} />
 
-<!-- OVERVIEW -->
-<div class="row scrollable">
-  <div class="col-md-6">
-    {#each request.externalModules as module, index}
-      <Accordion>
-        <div slot="head">
-          <span>{truncateText(module.moduleName, 55)}</span>
+<UpdateExternalModule bind:this={updateModuleForm} data={data.updateModuleForm} />
 
-          <i class="bi {module.verified ? 'bi-patch-check-fill' : 'bi-patch-check'}" />
+
+<Studi bind:showModal={showComment}>
+  <div slot="headline"><strong>Hinweis für Vorgang der Student*in</strong></div>
+  <div slot="body">
+    <p>{procedure.annotation}</p>
+  </div>
+</Studi>
+
+<form action="?/updateRequest" method="POST" use:enhance>
+  <!-- <Header wide={true} /> -->
+  <div class="border-bottom py-3 d-flex my-3 justify-content-between">
+    <div class="d-flex">
+      <div class="vorgangsnummer">
+        <strong>Vorgangsnummer: </strong>
+        {$form.procedureId}
+      </div>
+      <div class="dates d-none d-lg-block">
+        <i class="ms-3 bi bi-calendar" />
+        {format(new Date($form.createdAt), 'dd.MM.yyyy')}
+
+        <i class="ms-3 bi bi-calendar-range" />
+        {format(new Date(procedure.lastUpdated), 'dd.MM.yyyy')}
+      </div>
+
+      <div class="ms-3 studium">
+        <strong>{procedure.course.courseName} </strong>
+      </div>
+    </div>
+
+    <div class="status">
+      <RequestStatus status={$form.statusRequest} />
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="together d-flex">
+      {#if $form.pdfExists}
+        <a class="btn btn-sm btn-danger fw-bold" href="{config.pdf_endpoint}{$form.requestId}" target="_blank">PDF</a>
+      {:else}
+        <div class="disabled d-flex flex-center btn btn-outline-danger"><i class="bi bi-ban" /></div>
+      {/if}
+
+      <input type="text" class="form-control mx-3" placeholder="Website zum Modul" bind:value={$form.moduleLink} />
+      <button class="me-2 btn btn-outline-primary" on:click={() => (showComment = true)}>Kommentar</button>
+
+      <div class="btn-group dropdown">
+        <button type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ähnliche Anträge</button>
+        <div class="dropdown-menu">
+          <button class="dropdown-item" on:click={() => (showModalExtern = true)}>Module für aktuelles Fremdmodul</button>
+          <button class="dropdown-item" on:click={() => (showModalIntern = true)}>Akzeptierte Fremdmodule für Modulvorschlag</button>
         </div>
-        <div slot="details">
-          <div class=" mb-1 p-1">
-            <div class="row">
-              <div class="col-md-9">
-                <div class="mb-2">
-                  <div class="row">
-                    <label class="mb-2">Name des Moduls </label>
-                  </div>
+      </div>
+    </div>
+  </div>
 
-                  <input type="text" class="form-control" placeholder="Modellierung und Programmierung" bind:value={module.moduleName} />
-                </div>
+  <!-- OVERVIEW -->
+  <div class="row scrollable">
+    <div class="col-md-6">
+      {#each $form.externalModules as _, i}
+        <Accordion>
+          <div slot="head">
+            <span class="fs-6 fw-bold">{truncateText($form.externalModules[i].moduleName, 55)}</span>
+            <i class="bi text-primary {$form.externalModules[i].verified ? 'bi-check-circle' : ''}" />
+          </div>
+
+          <div slot="details">
+            <div class="row mb-3">
+              <div class="col-md-10 mb-2">
+                <label for="" class="mb-2">Name des Moduls </label>
+                <input disabled type="text" class="form-control" placeholder="Modellierung und Programmierung" bind:value={$form.externalModules[i].moduleName} />
               </div>
-              <div class="col-md-3">
-                <div class="mb-3">
-                  <label class="mb-2">LP</label>
-                  <input type="number" class="form-control" placeholder={module.creditPoints} bind:value={module.creditPoints} />
-                </div>
+
+              <div class="col-md-2 mb-2">
+                <label for="" class="mb-2">LP</label>
+                <input disabled type="number" class="form-control" placeholder="" bind:value={$form.externalModules[i].creditPoints} />
               </div>
-              <div class="btn btn-outline-secondary">Bearbeiten<i class="bi bi-pencil-square"></i></div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <button type="button" class="btn btn-outline-secondary btn-sm" on:click={module_dialog_open($form.externalModules[i].moduleId)}>Bearbeiten<i class="bi bi-pencil-square ms-2" /></button>
+              </div>
             </div>
           </div>
-        </div>
-      </Accordion>
-    {/each}
-  </div>
-  <div class="col-md-6">
-    {#each request.internalModules as module, index}
-      <Accordion>
-        <div slot="head" class="d-flex justify-content-">
-          <span>{truncateText(module.moduleName, 55)}</span>
-        </div>
-        <div slot="details">
-          <div class="p-1">
-            <div class="row">
-              <div class="col-md-9">
-                <div class="row">
-                  <label class="mb-1"><strong>Name des Moduls</strong> </label>
-                </div>
+        </Accordion>
+      {/each}
+    </div>
+    <div class="col-md-6">
+      {#each $form.internalModules as _, i}
+        <Accordion>
+          <div slot="head" class="d-flex justify-content-">
+            <span class="fs-6 fw-bold">{truncateText(findCurrentModule($form.internalModules[i].moduleId).moduleName, 55)}</span>
+          </div>
+          <div slot="details">
+            <div class="row mb-3">
+              <div class="col-md-10 mb-2">
+                <label class="mb-2" for="">Name des Moduls</label>
 
-                <select class="form-select" aria-label="Default select example" bind:value={selectedModule[index]}>
-                  {#each modules as modul, index}
-                    <option value={index}>{modul.moduleName}</option>
+                <select class="form-select" bind:value={$form.internalModules[i].moduleId}>
+                  {#each internalModules as module, index}
+                    <option value={module.moduleId}>{module.moduleName}</option>
                   {/each}
                 </select>
               </div>
-              <div class="col-md-3">
-                <div class="mb-3">
-                  <label class="mb-1"><strong>LP</strong></label>
-                  <input type="text" class="form-control" disabled placeholder={(request.internalModules[index] = modules[selectedModule[index]]).creditPoints} />
-                  <!-- <p class="border p-2 rounded">{module.creditPoints}</p> -->
-                </div>
+              <div class="col-md-2 mb-2">
+                <label class="mb-2" for="">LP</label>
+                <input type="text" class="form-control" disabled placeholder="" value={findCurrentModule($form.internalModules[i].moduleId).creditPoints} />
+                <!-- <p class="border p-2 rounded">{module.creditPoints}</p> -->
               </div>
             </div>
 
-            <div class="mb-3">
-              <label class="mb-2"><strong>Modulbeschreibung</strong></label>
-              <p class="moduleDescription border p-2 rounded">
-                <!-- {#if modules[moduleData.selectedModul[selectedModulIndex]].moduleDescription} -->
-                {(module = modules[selectedModule[index]].moduleDescription)}
-                <!-- {/if} -->
-              </p>
-              <!-- <input type="text" class="form-control" disabled placeholder={truncateText(modules[0].moduleDescription, 25)} /> -->
-            </div>
+            {#if findCurrentModule($form.internalModules[i].moduleId).moduleDescription}
+              <div class="mb-3">
+                <label class="mb-2" for="">Modulbeschreibung</label>
+                <p class="moduleDescription border p-2 rounded">
+                  {findCurrentModule($form.internalModules[i].moduleId).moduleDescription}
+                </p>
+              </div>
+            {/if}
           </div>
-        </div>
-      </Accordion>
-    {/each}
+        </Accordion>
+      {/each}
+    </div>
   </div>
-</div>
 
-<div class="fest">
-  <div class="row border-top">
-    <div class="col-md-6">
-      <div class="m-2">
-        <strong>LP Summe: </strong>
-        {sumLP(request.externalModules)}
+  <div class="fest">
+    <div class="row">
+      <div class="col-md-6 fw-bold">
+        <div class="m-2">
+          Summe LP:
+          {sumLP($form.externalModules)}
+        </div>
+      </div>
+      <div class="col-md-6 fw-bold">
+        <div class="m-2">
+          Summe LP:
+          {sumLPInternalModules($form.internalModules)}
+        </div>
       </div>
     </div>
-    <div class="col-md-6">
-      <div class="m-2">
-        <strong>LP Summe: </strong>
-        {sumLP(request.internalModules)}
-      </div>
+    <div class="comment my-3">
+      <Comment bind:annotationCommittee={$form.annotationCommittee} bind:annotationStudent={$form.annotationStudent} />
+    </div>
+    <div class="buttons d-flex ms-auto">
+      <button type="submit" class="btn btn-sm btn-primary d-flex">Speichern</button>
+      <button type="button" class="btn btn-sm btn-outline-secondary mx-1 d-flex">Abbrechen</button>
+      <button type="button" class="btn btn-sm btn-success mx-1 d-flex justfiy-content-end">Status ändern</button>
+      <button type="button" class="btn btn-sm btn-danger mx-1 d-flex justfiy-content-end">Formal ablehnen</button>
     </div>
   </div>
-  <div class="comment my-3" style="margin-right: 20px">
-    <Comment bind:annotationCommittee={request.annotationCommittee} bind:annotationStudent={request.annotationStudent} />
-  </div>
-  <div class="buttons d-flex ms-auto">
-    <button type="submit" class="btn btn-sm btn-primary d-flex" on:click={submitForm}>Speichern</button>
-    <div class="btn btn-sm btn-outline-secondary mx-1 d-flex" on:click={cancelChanges}>Abbrechen</div>
-    <button type="submit" class="btn btn-sm btn-success mx-1 d-flex justfiy-content-end">Weiterleiten</button>
-    <button type="submit" class="btn btn-sm btn-danger mx-1 d-flex justfiy-content-end">Formal ablehnen</button>
-  </div>
-</div>
+</form>
+
+<!-- <SuperDebug data={$form} /> -->
 
 <style>
-  i {
-    margin-left: 20px;
-  }
-
   .accordion-button:focus {
     box-shadow: none;
   }

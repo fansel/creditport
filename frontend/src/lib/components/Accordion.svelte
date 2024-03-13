@@ -5,12 +5,12 @@
 </script>
 
 <div class="accordion">
-  <div class="card">
-    <button class="reset-btn card-header btn m-0" on:click={handleClick}>
+  <div class="card {open ? 'open' : 'closed'}">
+    <button class="reset-btn card-header btn m-0 {open ? 'open' : 'closed'}" type="button" on:click={handleClick}>
       <h5 class="mb-0 d-flex justify-content-between">
         <slot name="head" />
         <!-- <button class="btn btn-link" on:click={handleClick}> </button> -->
-        <span class="bi-chevron-down small"></span>
+        <span class="{!open ? 'bi-chevron-down' : 'bi-chevron-up '} small" />
       </h5>
     </button>
 
@@ -34,11 +34,20 @@
     border-radius: 0.25rem;
   }
 
+  .card.closed {
+    border-radius: var(--bs-card-inner-border-radius);
+  }
+
   .card-header {
     background-color: #f8f9fa;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+    border-bottom: none;
     padding: 0.75rem 1.25rem;
     margin-bottom: 0;
+  }
+
+  .card-header.closed{
+    border: none;
+    border-radius: var(--bs-card-inner-border-radius);
   }
 
   .card-header h5 {
@@ -66,6 +75,8 @@
   }
 
   .card-body {
-    padding: 1.25rem;
+    /* padding: 1.25rem; */
+    border: none;
+    border-radius: var(--bs-card-inner-border-radius);
   }
 </style>
