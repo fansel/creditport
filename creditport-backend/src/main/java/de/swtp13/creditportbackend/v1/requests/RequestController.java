@@ -93,6 +93,7 @@ public class RequestController {
         relatedRequest.setStatusRequest(request.getStatusRequest());
         relatedRequest.setCreatedAt(request.getCreatedAt());
         relatedRequest.setPdfExists(request.isPdfExists());
+        relatedRequest.setModuleLink(request.getModuleLink());
         Procedure proc = requestRepository.findProcedureByRequestId(requestId);
         List<Integer> requestIds = requestRepository.findAllRelatedRequests(proc.getProcedureId());
         if (requestIds.contains(requestId)){

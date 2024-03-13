@@ -22,6 +22,7 @@ public class RelatedRequestDTO {
     private StatusRequest statusRequest;
     private Instant createdAt;
     private boolean pdfExists;
+    private String moduleLink;
 
 
     private List<Integer> relatedRequests;
