@@ -1,0 +1,103 @@
+/* UTILS */
+.font-sm {
+  font-size: 0.875rem;
+}
+
+.no-wrap {
+  white-space: nowrap;
+}
+
+/* BUTTON */
+button.reset-btn {
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+  cursor: pointer;
+  text-align: inherit;
+  line-height: normal;
+}
+
+button {
+  display: block;
+}
+
+/* DIALOG */
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+dialog {
+  border: none;
+  min-width: 50rem;
+  border-radius: 10px;
+  position: relative;
+  padding: 0;
+}
+
+@media screen and (max-width: 1200px) {
+  dialog {
+    min-width: calc(100vw - 3rem) !important ;
+  }
+}
+
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.3);
+}
+dialog > div {
+  padding: 1em;
+}
+dialog[open] {
+  animation: zoom 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes zoom {
+  from {
+    transform: scale(0.95);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+dialog[open]::backdrop {
+  animation: fade 0.2s ease-out;
+}
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* CREDITPORT TABLES */
+.cp-table {
+  list-style-type: none;
+}
+
+.cp-table-header {
+  width: 100%;
+  padding: 0.5rem 1rem;
+}
+
+.cp-table-body {
+  overflow-y: auto;
+}
+
+.cp-table-item {
+  /* border-bottom: 1px solid rgb(222, 226, 230); */
+  width: 100%;
+  padding: 0.5rem 1rem;
+}
+
+.cp-table-item:hover {
+  background-color: rgba(0, 0, 0, 0.075);
+}

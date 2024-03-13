@@ -41,12 +41,6 @@ public class InternalModule {
             columnDefinition = "VARCHAR"
     )
     private String moduleName;
-    //@Column(
-      //      name = "creditPoints",
-        //    nullable = false,
-          //  columnDefinition = "INT"
-    //)
-    //private int creditpoints;
     @Column(
            name = "module_description",
             nullable = false,
@@ -61,7 +55,6 @@ public class InternalModule {
     private int creditPoints;
 
     @ManyToMany(mappedBy = "internalModules")
-    @JsonIgnore
     private List<Course> courses;
 
 
@@ -71,7 +64,11 @@ public class InternalModule {
         this.number = number;
         this.creditPoints = creditPoints;
     }
-
-
-
+    public InternalModule(String number, String moduleName, String moduleDescription, int creditPoints, List<Course> courses){
+        this.moduleDescription = moduleDescription;
+        this.moduleName = moduleName;
+        this.number = number;
+        this.creditPoints = creditPoints;
+        this.courses=courses;
+    }
 }

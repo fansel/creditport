@@ -11,7 +11,7 @@
   <h2 slot="headline" class="m-0">Universität hinzufügen</h2>
   <div slot="body" class="p-3">
     <div class="row">
-      <div class="col-3">
+      <div class="col-md-3">
         <label for="name" class="col-form-label">Name</label>
       </div>
       <div class="col">

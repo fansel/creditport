@@ -1,6 +1,5 @@
 import z from 'zod';
-import { user_roles } from '$lib/config';
-
+import { user_roles, status_requests } from '$lib/config';
 /**
  * Alle globalen ZOD Schemas für Superform Integration
  */
@@ -36,3 +35,56 @@ export const universities_import_schema = z.array(
     verified: z.boolean()
   })
 );
+
+export const update_course_schema = z.object({
+  courseName: z.string().min(1, { message: 'Name des Studiengangs darf nicht leer sein!' }),
+  courseId: z.string().min(1)
+});
+
+export const add_course_schema = z.object({
+  courseName: z.string().min(1, { message: 'Name des Studiengangs darf nicht leer sein!' })
+});
+
+export const update_internal_modul_schema = z.object({
+  moduleId: z.string(),
+  number: z.string(),
+  moduleName: z.string().min(1, { message: 'Name des Moduls darf nicht leer sein!' }),
+  moduleDescription: z.string(),
+  creditPoints: z.number().default(1)
+});
+
+export const update_external_module = z.object({
+  moduleId: z.string(),
+  moduleNumber: z.string(),
+  moduleName: z.string(),
+  moduleDescription: z.string(),
+  university: universities_schema,
+  creditPoints: z.number(),
+  verified: z.boolean(),
+})
+
+export const full_request_schema = z.object({
+  procedureId: z.number(),
+  requestId: z.number(),
+  externalModules: z.array(update_external_module),
+  internalModules: z.array(z.object({moduleId: z.string()})),
+  annotationStudent: z.string(),
+  annotationCommittee: z.string(),
+  statusRequest: z.enum(status_requests.map((status) => status.match)),
+  createdAt: z.string(),
+  pdfExists: z.boolean(),
+  moduleLink: z.string()
+});
+
+export const request_schema = z.object({
+  procedureId: z.number(),
+  requestId: z.number(),
+  externalModuleIds: z.array(z.string()),
+  internalModulesIds: z.array(z.string()),
+  annotationStudent: z.string(),
+  annotationCommittee: z.string(),
+  statusRequest: z.enum(status_requests.map((status) => status.match)),
+  createdAt: z.string(),
+  pdfExists: z.boolean(),
+  moduleLink: z.string()
+});

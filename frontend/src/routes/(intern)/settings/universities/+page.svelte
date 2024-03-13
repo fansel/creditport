@@ -1,5 +1,4 @@
 <script>
-  import { enhance } from '$app/forms';
   import VirtualList from '@sveltejs/svelte-virtual-list';
   import DeleteUniForm from './forms/DeleteUniForm.svelte';
   import UpdateUniForm from './forms/UpdateUniForm.svelte';
@@ -7,7 +6,6 @@
   import AddUniForm from './forms/AddUniForm.svelte';
 
   export let data;
-  export let form;
 
   $: universities = data.universities;
 
@@ -35,7 +33,7 @@
   // - letztes Item hat doppelten Border-Bottom
 
   function compareUniNames(a, b) {
-    return a.uniName.localeCompare(b.uniName);
+    return a.uniName.toLowerCase().localeCompare(b.uniName);
   }
 
   $: searchResultsCount = searchResults.length;
@@ -60,23 +58,13 @@
 <AddUniForm bind:showModal={showAddModal} />
 <ImportUniForm bind:this={importForm} data={data.importUniForm} />
 
-<div class="row">
-  <div class="col">
-    <h4 class=" d-flex flex-wrap gap-3">Vorschlagliste</h4>
-  </div>
+<div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+  <h4 class="m-0">Universitäten</h4>
 
-  <div class="col-8">
-    <div class="form-inline d-flex align-items-center no-wrap">
-      <input type="text" placeholder="Suche" class="form-control form-control-sm" bind:value={searchTerm} />
-    </div>
-  </div>
-</div>
-
-<div class="row mb-3">
-  <div class="col">
+  <div class="d-flex flex-wrap gap-2">
     <button class="btn btn-primary btn-sm text-nowrap" on:click={() => (showAddModal = true)}>
       <i class="bi bi-plus-circle" />
-      Universität hinzufügen
+      Hinzufügen
     </button>
     <button class="btn btn-primary btn-sm" on:click={() => importForm.dialog_open()}>
       <i class="bi bi-cloud-arrow-up" />
@@ -85,25 +73,33 @@
   </div>
 </div>
 
-<ul class="list-group mb-3 uni-table border">
-  <li class="uni-table-header border-bottom font-sm">
+<div class="row mb-3">
+  <div class="col">
+    <div class="form-inline d-flex align-items-center no-wrap">
+      <input type="text" placeholder="Suche" class="form-control form-control-sm" bind:value={searchTerm} />
+    </div>
+  </div>
+</div>
+
+<ul class="list-group mb-3 cp-table border">
+  <li class="cp-table-header border-bottom font-sm">
     <div class="row">
       <div class="col-8">Name</div>
       <div class="col">Aktionen</div>
     </div>
   </li>
 
-  <div class="uni-table-body">
+  <div class="cp-table-body">
     <VirtualList items={searchResults} height="332px" bind:start bind:end let:item>
-      <li class="uni-table-item border-bottom">
-        <div class="row">
-          <div class="col-8 d-flex align-items-center">
+      <li class="cp-table-item border-bottom">
+        <div class="row gy-2">
+          <div class="col col-md-8 d-flex align-items-center">
             {item.uniName}
             {#if item.verified}
               <i class="bi bi-check-circle ms-2 text-primary" />
             {/if}
           </div>
-          <div class="col d-flex align-items-center">
+          <div class="col-auto col-md d-flex align-items-center">
             <!-- <form method="POST" use:enhance>
               <input type="hidden" name="id" value={item.uniId} /> -->
 
@@ -132,26 +128,26 @@
     font-size: 0.875rem;
   }
 
-  .uni-table {
+  .cp-table {
     list-style-type: none;
   }
 
-  .uni-table-header {
+  .cp-table-header {
     width: 100%;
     padding: 0.5rem 1rem;
   }
 
-  .uni-table-body {
+  .cp-table-body {
     overflow-y: auto;
   }
 
-  .uni-table-item {
+  .cp-table-item {
     /* border-bottom: 1px solid rgb(222, 226, 230); */
     width: 100%;
     padding: 0.5rem 1rem;
   }
 
-  .uni-table-item:hover {
+  .cp-table-item:hover {
     background-color: rgba(0, 0, 0, 0.075);
   }
 </style>

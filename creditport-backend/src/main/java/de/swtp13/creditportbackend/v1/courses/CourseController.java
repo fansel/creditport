@@ -1,7 +1,5 @@
 package de.swtp13.creditportbackend.v1.courses;
 
-import de.swtp13.creditportbackend.v1.externalmodules.ExternalModule;
-import de.swtp13.creditportbackend.v1.internalmodules.InternalModule;
 import de.swtp13.creditportbackend.v1.internalmodules.InternalModuleRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -23,6 +21,8 @@ public class CourseController {
     private CourseRepository courseRepository;
     @Autowired
     private InternalModuleRepository internalModuleRepository;
+    @Autowired
+    private CourseService courseService;
     @Operation(summary = "returns a list of all courses", responses = {
             @ApiResponse(responseCode = "200", content = @Content(
                     mediaType = "application/json",
@@ -30,8 +30,15 @@ public class CourseController {
             ))
     })
     @GetMapping
-    public ResponseEntity<List<Course>> getAllCourses(){
-        return ResponseEntity.ok(courseRepository.findAll());
+    public ResponseEntity<List<CourseDTO>> getAllCourses(){
+        List<CourseDTO> courses = new ArrayList<>();
+        for(Course course:courseRepository.findAll()){
+            courses.add(new CourseDTO(course.getCourseId(),course.getCourseName(), internalModuleRepository.findInternalModulesByCoursesContains(course)));
+            course.getInternalModules();
+            courseService.addInternalModules(course);
+            courseRepository.save(course);
+        }
+        return ResponseEntity.ok(courses);
     }
     @Operation(summary = "returns a single course", responses = {
             @ApiResponse(responseCode = "200",
@@ -40,10 +47,15 @@ public class CourseController {
                     content = @Content)
     })
     @GetMapping("/{id}")
-    public ResponseEntity<Course> getCourseById(@PathVariable("id") UUID courseId){
-        return courseRepository.findById(courseId)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<CourseDTO> getCourseById(@PathVariable("id") UUID courseId){
+        if (courseRepository.findById(courseId).isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(new CourseDTO(
+                courseId,
+                courseRepository.findById(courseId).get().getCourseName(),
+                internalModuleRepository.findInternalModulesByCoursesContains(courseRepository.findById(courseId).get()))
+                );
     }
     @Operation(summary = "creates a course", responses = {
             @ApiResponse(responseCode = "201")
@@ -58,6 +70,9 @@ public class CourseController {
     })
     @PutMapping("/{courseId}")
     public ResponseEntity<Course> updateCourse(@PathVariable UUID courseId, @RequestBody Course CourseDetails) {
+        if (CourseDetails.getInternalModules() == null){
+            CourseDetails.setInternalModules(courseRepository.getReferenceById(courseId).getInternalModules());
+        }
         return courseRepository.findById(courseId)
                 .map(Course -> {
                     Course.setCourseName(CourseDetails.getCourseName());

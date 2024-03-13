@@ -87,6 +87,7 @@ public class ExternalModuleController {
                     Module.setUniversity(ModuleDetails.getUniversity());
                     Module.setModuleNumber(ModuleDetails.getModuleNumber());
                     Module.setCreditPoints(ModuleDetails.getCreditPoints());
+                    Module.setVerified(ModuleDetails.isVerified());
                     ExternalModule updatedModule = moduleRepository.save(Module);
                     return ResponseEntity.ok(updatedModule);
                 }).orElse(ResponseEntity.notFound().build());

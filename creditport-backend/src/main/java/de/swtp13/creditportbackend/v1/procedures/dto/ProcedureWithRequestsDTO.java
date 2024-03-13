@@ -15,7 +15,7 @@ public class ProcedureWithRequestsDTO {
     private int procedureId;
     private String annotation;
     private University university;
-    private CourseDTO course;
+    private Course course;
     private Instant createdAt;
     private Status status;
     private Instant lastUpdated;
