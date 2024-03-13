@@ -15,7 +15,7 @@
   export let removeModuleFromRequest;
 </script>
 
-<form action="?/requests" method="POST" enctype="multipart/form-data" id="requests" bind:this={modulesForm} use:enhance>
+<form action="?/requests" method="POST" enctype="multipart/form-data" id="requests" bind:this={modulesForm}>
   <input type="hidden" name="globalAnnotation" value={generalData.annotation} />
   <input type="hidden" name="university" id="university" value={generalData.university} />
   <input type="hidden" name="externalCourseName" id="externalCourseName" value={generalData.externalCourseName} />
@@ -23,22 +23,22 @@
 
   <div class="accordion" id="accordionExample">
     {#each requests as { moduleData }, index (index)}
-      <input type="hidden" name={`internalModulesCount${index}`} bind:value={moduleData.title.length} />
-      <input type="hidden" name={`externalModulesCount${index}`} bind:value={moduleData.selectedModul.length} />
+      <input type="hidden" name={`internalModulesCount${index}`} bind:value={moduleData.selectedExternalModulIds.length} />
+      <input type="hidden" name={`externalModulesCount${index}`} bind:value={moduleData.selectedInternalModulIds.length} />
       <div class="accordion-item full-border">
         <div class="row">
           <h2 class="accordion-header" id="headingOne">
             <button class="accordion-button position-relative" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{index}" aria-expanded="false" aria-controls="collapseOne">
               <div class="col-md col-md-62">
-                {#each moduleData.title as title, titleIndex}
-                  <h6 class="h6" key={titleIndex}>{title ? `${title} ` : 'Neues Modul'}</h6>
+                {#each moduleData.selectedExternalModulIds as selectedExternalModulIds, modulIndex}
+                  <h6 class="h6" key= modulIndex}>{selectedExternalModulIds ? `${selectedExternalModulIds} ` : 'Neues Modul'}</h6>
                 {/each}
               </div>
               <div class="col-md">
-                {#each moduleData.selectedModul as selectedModul, selectedModulIndex}
+                {#each moduleData.selectedInternalModulIds as selectedInternalModulIds, selectedModulIndex}
                   <h6 class="h6" key={selectedModulIndex}>
                     <!-- wie kann ich nichts selecten? -->
-                    {selectedModul !== undefined ? `${modules[selectedModul].moduleName}` : 'Neues Modul'}
+                    {selectedInternalModulIds!== undefined ? `${modules[selectedInternalModulIds].moduleName}` : 'Neues Modul'}
                   </h6>
                 {/each}
                 <button class="btn p-0 position-absolute top-50 end-0 translate-middle-y me-5" on:click={() => removeRequest(index)} type="button"><i class="bi bi-trash3-fill" /> </button>
@@ -52,15 +52,15 @@
               <div class="col-md">
                 <h5 class="h5">Externe Modul(e)</h5>
 
-                {#each moduleData.title as title, titleIndex}
+                {#each moduleData.selectedExternalModulIds as selectedExternalModulIds, modulIndex}
                   <div class=" border mb-5 border-3 rounded p-2">
                     <div class="row">
                       <div class="col-md-10">
                         <div class="mb-3">
                           <div class="row">
-                            <label for={`externalModule${index}-${titleIndex}`} class="mb-2"
+                            <label for={`externalModule${index}-$ modulIndex}`} class="mb-2"
                               >Name des Moduls
-                              <button class="btn p-0 me-3" on:click={() => removeTitleFromRequest(index, titleIndex)} type="button">
+                              <button class="btn p-0 me-3" on:click={() => removeTitleFromRequest(index, modulIndex)} type="button">
                                 <i class="bi bi-trash3-fill" />
                               </button>
                             </label>
@@ -69,29 +69,29 @@
                           <input
                             type="text"
                             class="form-control"
-                            name={`externalModule${index}-${titleIndex}`}
-                            id={`externalModule${index}-${titleIndex}`}
+                            name={`externalModule${index}-$ modulIndex}`}
+                            id={`externalModule${index}-$ modulIndex}`}
                             placeholder="Modellierung und Programmierung"
-                            bind:value={moduleData.title[titleIndex]}
+                            bind:value={moduleData.selectedExternalModulIds[modulIndex]}
                           />
                         </div>
                       </div>
                       <div class="col-md-2">
                         <div class="mb-3">
-                          <label for={`creditPoints${index}-${titleIndex}`} class="mb-2">LP</label>
-                          <input type="number" class="form-control" name={`creditPoints${index}-${titleIndex}`} id={`creditPoints${index}-${titleIndex}`} placeholder="5" />
+                          <label for={`creditPoints${index}-$ modulIndex}`} class="mb-2">LP</label>
+                          <input type="number" class="form-control" name={`creditPoints${index}-$ modulIndex}`} id={`creditPoints${index}-$ modulIndex}`} placeholder="5" />
                         </div>
                       </div>
                     </div>
 
                     <div class="mb-3 col-md">
-                      <label for={`formFile${index}-${titleIndex}`} class="form-label">Modulbeschreibung<i class="bi bi-question-circle ms-2" /> </label>
-                      <input class="form-control mb-3" type="file" name={`formFile${index}-${titleIndex}`} id={`formFile${index}-${titleIndex}`} accept="application/pdf" />
+                      <label for={`formFile${index}-$ modulIndex}`} class="form-label">Modulbeschreibung<i class="bi bi-question-circle ms-2" /> </label>
+                      <input class="form-control mb-3" type="file" name={`formFile${index}-$ modulIndex}`} id={`formFile${index}-$ modulIndex}`} accept="application/pdf" />
                     </div>
 
                     <div class="mb-3">
-                      <label for={`moduleLink${index}-${titleIndex}`} class="mb-2">Website zum Modul</label>
-                      <input type="text" class="form-control" name={`moduleLink${index}-${titleIndex}`} id={`moduleLink${index}-${titleIndex}`} placeholder="http://uni-leipzig.de/module_xyz" />
+                      <label for={`moduleLink${index}-$ modulIndex}`} class="mb-2">Website zum Modul</label>
+                      <input type="text" class="form-control" name={`moduleLink${index}-$ modulIndex}`} id={`moduleLink${index}-$ modulIndex}`} placeholder="http://uni-leipzig.de/module_xyz" />
                     </div>
                   </div>
                 {/each}
@@ -108,10 +108,9 @@
               <div class="col-md">
                 <h5 class="h5">Interne Modul(e)</h5>
 
-                {#each moduleData.selectedModul as selectedModul, selectedModulIndex}
+                {#each moduleData.selectedInternalModulIds as selectedInternalModulIds, selectedModulIndex}
                   <div class="border mb-5 border-3 rounded p-2">
                     <div class="row">
-                      <div class="" />
                       <div class="mb-3 col-md-10">
                         <label for={`internalModule${selectedModulIndex}`} class="mb-2"
                           >Name
@@ -124,26 +123,29 @@
                           name={`internalModule${index}-${selectedModulIndex}`}
                           id={`internalModule${index}-${selectedModulIndex}`}
                           aria-label="Default select example"
-                          bind:value={moduleData.selectedModul[selectedModulIndex]}
+                          bind:value={moduleData.selectedInternalModulIds[selectedModulIndex]}
                         >
                           <!-- <option value={0} disabled selected hidden>Bitte treffen Sie eine Auswahl</option> -->
                           {#each modules as modul, index}
-                            <option value={index}>{modul.moduleName}</option>
+                            <option value={modul.moduleId}>{modul.moduleName}</option>
                           {/each}
                         </select>
                       </div>
                       <div class="col-md-2">
-                        {#if modules[moduleData.selectedModul[selectedModulIndex]].creditPoints}
-                          <p>{modules[moduleData.selectedModul[selectedModulIndex]].creditPoints ?? ''}</p>
-                        {/if}
-                      </div>
-                      <div class="col-md">
-                        <p class="moduleDescription border p-3 rounded">
-                          {#if modules[moduleData.selectedModul[selectedModulIndex]].moduleDescription}
-                            {modules[moduleData.selectedModul[selectedModulIndex]].moduleDescription}
+                        <label for={`creditPoints${index}-${selectedModulIndex}`} class="pt-1 mb-2">LP</label>
+                        <div type="number" class="form-control border rounded text-center mb-2" style="height: 36px">
+                          {#if modules[moduleData.selectedInternalModulIds[selectedModulIndex]].creditPoints}
+                            <p>{modules[moduleData.selectedInternalModulIds[selectedModulIndex]].creditPoints ?? ''}</p>
                           {/if}
-                        </p>
+                        </div>
                       </div>
+                    </div>
+                    <div class="col-md">
+                      <p class="moduleDescription border p-3 rounded">
+                        {#if modules[moduleData.selectedInternalModulIds[selectedModulIndex]].moduleDescription}
+                          {modules[moduleData.selectedInternalModulIds[selectedModulIndex]].moduleDescription}
+                        {/if}
+                      </p>
                     </div>
                   </div>
                 {/each}

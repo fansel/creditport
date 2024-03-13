@@ -1,12 +1,16 @@
 import * as api from '$lib/api.js';
-//import { file, zfd } from 'zod-form-data';
+import { file, zfd } from 'zod-form-data';
 import z from 'zod';
 import { fail, redirect } from '@sveltejs/kit';
+//import { superValidate } from 'sveltekit-superforms';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ params }) {
-  const modules = await api.get('modules');
+  const modules = await api.get('modules/internal');
   const universities = await api.get('universities');
+  const newUniversity = await api.get()
+
+  //const form = await superValidate(zod(schema));
   return {
     universities: universities,
     modules: modules,
@@ -29,7 +33,7 @@ export const actions = {
           const internalModule = `internalModule${i}-${j}`;
           dynamicFields[internalModule] = zfd.text();
         }
-        for (let j = 0; j < internalModulesCount; j++) {
+        for (let j = 0; j < externalModulesCount; j++) {
           const creditPoints = `creditPoints${i}-${j}`;
           const externalModule = `externalModule${i}-${j}`;
 
@@ -56,6 +60,9 @@ export const actions = {
 
     const requestCount = formData.get('requestCount') || 0;
     const schema = createDynamicSchema(requestCount);
+
+    //const form = await superValidate(request, schema);
+    //console.log(form)
     const result = schema.safeParse(formData);
 
     if (!result.success) {
@@ -108,5 +115,36 @@ export const actions = {
     throw redirect(302, `/status/${res.procedureId}`);
     // return { success: true, procedureId: res.procedureId };
     //zugriff $page.form.procesureId
+  },
+
+  addUniversity: async ({ request }) => {
+    const formData = await request.formData();
+
+    const schema = zfd.formData({
+      universityName: zfd.text()
+    });
+
+    const result = schema.safeParse(formData);
+
+    if (!result.success) {
+      const data = {
+        data: Object.fromEntries(formData),
+        errors: result.error.flatten().fieldErrors
+      };
+      return fail(400, data);
+    }
+
+    const body = {
+      uniName: result.data.universityName
+    };
+
+    const res = await api.post(`universities`, body, null, { req_type: api.content_type.json, res_type: api.content_type.json });
+    // Extrahiere die uniId aus dem Response-Body
+    const { uniId } = res;
+    const {uniName} = res;
+
+    console.log(res);
+
+    return { success: true, uniId: uniId, uniName: uniName};
   }
 };

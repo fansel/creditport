@@ -3,9 +3,13 @@
   //import { enhance } from '$app/forms';
   import { page } from '$app/stores';
   import { tabProcedureForm } from '$lib/stores';
+ // import { superForm } from 'sveltekit-superforms';
 
 
+  //const { form } = superForm(data.form);
   export let data;
+  export let form;
+
 
   //components
   import General from './general.svelte';
@@ -15,6 +19,9 @@
 
   $: modules = data.modules;
   $: universities = data.universities;
+  $: uniId = form?.uniId;
+  $: uniName = form?.uniName;
+  
 
   // $: console.log($tabProcedureForm);
 
@@ -45,7 +52,7 @@
 
   //Logik zum einlesen der Daten aus den allgemeinen Angaben
   let generalData = {
-    university: '',
+    universityId: '',
     externalCourseName: '',
     internalCouseName: '',
     annotation: ''
@@ -70,16 +77,16 @@
       ...requests,
       {
         moduleData: {
-          selectedModul:[0],
-          title: [null] // Ein Array für die Titel
+          selectedInternalModulIds:[0],
+          selectedExternalModulIds: [null] // Ein Array für die Titel
         }
       }
     ];
   }
 
   function addTitleToRequest(requestIndex) {
-    requests[requestIndex].moduleData.title = [
-      ...requests[requestIndex].moduleData.title,
+    requests[requestIndex].moduleData.selectedExternalModulIds = [
+      ...requests[requestIndex].moduleData.selectedExternalModulIds,
       null // Füge einen weiteren Titel hinzu (initial null, kann nach Bedarf angepasst werden)
     ];
   }
@@ -93,9 +100,9 @@
 
   function removeTitleFromRequest(requestIndex, titleIndex) {
     const request = requests[requestIndex];
-    const titles = [...request.moduleData.title];
+    const titles = [...request.moduleData.selectedExternalModulIds];
     titles.splice(titleIndex, 1);
-    requests[requestIndex].moduleData.title = titles;
+    requests[requestIndex].moduleData.selectedExternalModulIds = titles;
   }
 
   function removeModuleFromRequest(requestIndex, moduleIndex) {
@@ -114,7 +121,7 @@
   <hr />
 
   <div class={activeTab == 'pills-general' ? '' : 'visually-hidden'}>
-    <General bind:generalData {goToNextTab} {universities} />
+    <General bind:generalData {goToNextTab} {uniId} {uniName} {universities} />
   </div>
 
   <div class={activeTab == 'pills-module' ? '' : 'visually-hidden'}>
