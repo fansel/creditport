@@ -11,7 +11,6 @@
   import RequestStatus from '$root/lib/components/RequestStatus.svelte';
   import Accordion from '$root/lib/components/Accordion.svelte';
   import Studi from '$root/lib/components/InfoModal.svelte';
-  import RelatedRequestsIntern from './forms/RelatedRequestsIntern.svelte';
   import RelatedRequestsExtern from './forms/RelatedRequestsExtern.svelte';
   import { full_request_schema } from '$root/lib/schema';
   import * as flashModule from 'sveltekit-flash-message/client';
@@ -41,8 +40,6 @@
   let internalModules = data.modules;
   let showComment = false;
   let showModalExtern = false;
-  let showModalIntern = false;
-
   let updateModuleForm;
 
   // let requestBackup = JSON.parse(JSON.stringify(data.request));
@@ -76,11 +73,9 @@
   }
 </script>
 
-<RelatedRequestsExtern bind:showModal={showModalExtern} />
-<RelatedRequestsIntern bind:showModal={showModalIntern} />
+<RelatedRequestsExtern bind:showModal={showModalExtern} bind:similarRequests={data.similarRequests} />
 
 <UpdateExternalModule bind:this={updateModuleForm} data={data.updateModuleForm} />
-
 
 <Studi bind:showModal={showComment}>
   <div slot="headline"><strong>Hinweis für Vorgang der Student*in</strong></div>
@@ -116,23 +111,16 @@
   </div>
 
   <div class="row">
-    <div class="together d-flex">
+    <div class="together hstack gap-2">
       {#if $form.pdfExists}
         <a class="btn btn-sm btn-danger fw-bold" href="{config.pdf_endpoint}{$form.requestId}" target="_blank">PDF</a>
       {:else}
         <div class="disabled d-flex flex-center btn btn-outline-danger"><i class="bi bi-ban" /></div>
       {/if}
 
-      <input type="text" class="form-control mx-3" placeholder="Website zum Modul" bind:value={$form.moduleLink} />
-      <button class="me-2 btn btn-outline-primary" on:click={() => (showComment = true)}>Kommentar</button>
-
-      <div class="btn-group dropdown">
-        <button type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ähnliche Anträge</button>
-        <div class="dropdown-menu">
-          <button class="dropdown-item" on:click={() => (showModalExtern = true)}>Module für aktuelles Fremdmodul</button>
-          <button class="dropdown-item" on:click={() => (showModalIntern = true)}>Akzeptierte Fremdmodule für Modulvorschlag</button>
-        </div>
-      </div>
+      <input type="text" class="form-control" placeholder="Website zum Modul" bind:value={$form.moduleLink} />
+      <button type="button" class=" btn btn-outline-primary" on:click={() => (showComment = true)}>Kommentar</button>
+      <button type="button" class="btn-outline-primary btn {data.similarRequests.length == 0 ? 'disabled' : ''} text-nowrap" on:click={() => (showModalExtern = true)}>ähnliche Anträge</button>
     </div>
   </div>
 
@@ -143,7 +131,9 @@
         <Accordion>
           <div slot="head">
             <span class="fs-6 fw-bold">{truncateText($form.externalModules[i].moduleName, 55)}</span>
-            <i class="bi text-primary {$form.externalModules[i].verified ? 'bi-check-circle' : ''}" />
+            {#if $form.externalModules[i].verified}
+              <i class="bi ms-2 text-primary bi-check-circle" />
+            {/if}
           </div>
 
           <div slot="details">
@@ -160,7 +150,8 @@
             </div>
             <div class="row">
               <div class="col">
-                <button type="button" class="btn btn-outline-secondary btn-sm" on:click={module_dialog_open($form.externalModules[i].moduleId)}>Bearbeiten<i class="bi bi-pencil-square ms-2" /></button>
+                <button type="button" class="btn btn-outline-secondary btn-sm" on:click={module_dialog_open($form.externalModules[i].moduleId)}>Bearbeiten<i class="bi bi-pencil-square ms-2" /></button
+                >
               </div>
             </div>
           </div>
@@ -225,8 +216,7 @@
     </div>
     <div class="buttons d-flex ms-auto">
       <button type="submit" class="btn btn-sm btn-primary d-flex">Speichern</button>
-      <button type="button" class="btn btn-sm btn-outline-secondary mx-1 d-flex">Abbrechen</button>
-      <button type="button" class="btn btn-sm btn-success mx-1 d-flex justfiy-content-end">Status ändern</button>
+      <button type="button" class="btn btn-sm btn-outline-primary mx-1 d-flex justfiy-content-end">Status ändern</button>
       <button type="button" class="btn btn-sm btn-danger mx-1 d-flex justfiy-content-end">Formal ablehnen</button>
     </div>
   </div>
