@@ -30,7 +30,7 @@
 
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
 <dialog bind:this={dialog} on:close={() => (showModal = false)} style="min-width: {min_width};">
-  <div class="header-dialog border-bottom">
+  <div class="dialog-header border-bottom">
     <slot name="headline" />
     <button class="btn-close" type="button" aria-label="Close" on:click={() => closeDialog()} />
   </div>
