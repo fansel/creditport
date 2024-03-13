@@ -18,8 +18,11 @@ export async function load({ params, locals }) {
     throw redirect(300, '/');
   }
 
-  const modules = await api.get(api.routes.modules_internal);
+  const modules = await api.get(api.routes.module_all_internal);
   const request = await api.get(api.routes.request_by_id_related(id));
+  let procedureId = request.data.procedureId;
+  console.log(procedureId);
+  const procedure = await api.get(api.routes.procedure_by_id(procedureId));
   // const request = await api.get(`requests/${uuid}`)
 
   if (!modules.success) {
@@ -35,6 +38,7 @@ export async function load({ params, locals }) {
   return {
     modules: modules.data,
     request: request.data,
+    procedure: procedure.data,
     user: locals.user,
     title: 'Antrag bearbeiten'
   };

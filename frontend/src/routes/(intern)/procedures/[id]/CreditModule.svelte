@@ -4,9 +4,9 @@
 
   export let modules = $page.data.modules;
   export let selectedOption;
-  export let index;
+  // export let index;
 
-  let currentModule = $page.data.request.internalModules[index];
+  let currentModule = $page.data.request.internalModules[0];
   let isOpen = false;
   let dropdown;
 

@@ -11,12 +11,17 @@
   import PDF from './PDF.svelte';
   import Navbar from './Navbar.svelte';
   import CreditModule from './CreditModule.svelte';
+  import CommentModal from './forms/CommentModal.svelte';
 
   export let data;
   console.log(data.modules);
 
   let request = data.request;
   let requestBackup = JSON.parse(JSON.stringify(data.request));
+
+  let procedure = data.procedure;
+
+  // consloge.log('procedureId: ', request.procedureId);
 
   let showModalExtern;
   let showModalIntern;
@@ -53,6 +58,8 @@
     var bootstrapDropdown = new bootstrap.Dropdown(dropdown);
     bootstrapDropdown.hide();
   }
+
+  let showComment = false;
 </script>
 
 <svelte:head>
@@ -64,10 +71,19 @@
 
 <RelatedRequestsExtern bind:showModal={showModalExtern} />
 <RelatedRequestsIntern bind:showModal={showModalIntern} />
+<CommentModal bind:showModal={showComment} bind:annotationCommittee={request.annotationCommittee} bind:annotationStudent={request.annotationStudent}></CommentModal>
 
-<div class="border-bottom">
-  <div class="col-md m-3">
-    <h1>Vorgangsnummer: {request.procedureId}</h1>
+<div class="border-bottom d-flex justify-content-between">
+  <div class="m-3 d-flex flex-column justify-content-center">
+    <h2>Vorgangsnummer: {request.procedureId}</h2>
+  </div>
+  <div class="m-3 d-flex flex-column justify-content-center">
+    <h2>{procedure.course.courseName}</h2>
+  </div>
+  <div class="m-3 d-flex flex-column justify-content-center">
+    <div class="center">
+      <RequestStatus status={request.statusRequest} />
+    </div>
   </div>
 </div>
 
@@ -108,12 +124,14 @@
             </div>
           </div>
 
-          <Comment bind:annotationCommittee={request.annotationCommittee} bind:annotationStudent={request.annotationStudent} />
+          <!-- <Comment bind:annotationCommittee={request.annotationCommittee} bind:annotationStudent={request.annotationStudent} /> -->
           <button type="submit" class="btn btn-primary" on:click={submitForm}>Speichern</button>
           <div class="btn btn-outline-secondary" on:click={cancelChanges}>Abbrechen</div>
         </div>
 
-        <div class="btn btn-primary bi-fill-chat">H</div>
+        <div class="d-flex justify-content-end align-items-end">
+          <button class="btn btn-lg rounded-circle btn-primary" on:click={() => (showComment = true)}><i class="bi bi-chat-fill"></i></button>
+        </div>
       </div>
     </div>
   </div>

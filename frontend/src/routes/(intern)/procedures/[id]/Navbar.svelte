@@ -1,6 +1,7 @@
 <script>
   import { page } from '$app/stores';
   import { getNachfolger, getVorgänger } from '$lib/util';
+  import RequestStatus from '$lib/components/RequestStatus.svelte';
 
   export let request = $page.data.request;
 
