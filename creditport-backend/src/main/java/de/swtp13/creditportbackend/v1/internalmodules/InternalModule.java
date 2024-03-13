@@ -61,7 +61,6 @@ public class InternalModule {
     private int creditPoints;
 
     @ManyToMany(mappedBy = "internalModules")
-    @JsonIgnore
     private List<Course> courses;
 
 
