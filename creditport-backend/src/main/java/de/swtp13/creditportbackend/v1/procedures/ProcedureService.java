@@ -68,7 +68,7 @@ public class ProcedureService {
                 newProcedureDTO.setStatus(procedure.getStatus());
                 newProcedureDTO.setAnnotation(procedure.getAnnotation());
                 newProcedureDTO.setUniversity(procedure.getUniversity());
-                newProcedureDTO.setCourse(new CourseDTO(procedure.getCourse().getCourseId(),procedure.getCourse().getCourseName()));
+                newProcedureDTO.setCourse(procedure.getCourse());
                 newProcedureDTO.setCreatedAt(procedure.getCreatedAt());
                 newProcedureDTO.setLastUpdated(procedure.getLastUpdated());
                 newProcedureDTO.setRequestDetails(new ArrayList<>());

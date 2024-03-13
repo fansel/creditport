@@ -61,7 +61,6 @@ public class InternalModule {
     private int creditPoints;
 
     @ManyToMany(mappedBy = "internalModules")
-    @JsonIgnore
     private List<Course> courses;
 
 
@@ -70,6 +69,13 @@ public class InternalModule {
         this.moduleName = moduleName;
         this.number = number;
         this.creditPoints = creditPoints;
+    }
+    public InternalModule(String number, String moduleName, String moduleDescription, int creditPoints, List<Course> courses){
+        this.moduleDescription = moduleDescription;
+        this.moduleName = moduleName;
+        this.number = number;
+        this.creditPoints = creditPoints;
+        this.courses=courses;
     }
 
 
