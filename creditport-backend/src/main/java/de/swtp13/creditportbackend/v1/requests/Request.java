@@ -27,14 +27,12 @@ public class Request {
     @GeneratedValue
     @Column(
             name = "request_id",
-            columnDefinition = "INT"
-    )
+            columnDefinition = "INT")
     private int requestId;
 
     @ManyToOne
     @JoinColumn(
-           name="procedure_id",nullable = false
-    )
+           name="procedure_id",nullable = false)
     @JsonIgnore
     private Procedure procedure;
 
@@ -42,43 +40,38 @@ public class Request {
     @JoinTable(
             name = "extmod_request",
             joinColumns = @JoinColumn(name = "request_id"),
-            inverseJoinColumns = @JoinColumn(name = "external_module_id" )
-    )
+            inverseJoinColumns = @JoinColumn(name = "external_module_id" ))
     @JsonIgnore
     private List<ExternalModule> externalModules;
+
     @ManyToMany()
     @JoinTable(
             name = "intmod_request",
             joinColumns = @JoinColumn(name = "request_id"),
-            inverseJoinColumns = @JoinColumn(name = "internal_module_id" )
-    )
+            inverseJoinColumns = @JoinColumn(name = "internal_module_id" ))
     @JsonIgnore
     private List<InternalModule> internalModules;
 
     @Column(
             name = "annotation_student",
-            columnDefinition = "TEXT"
-    )
+            columnDefinition = "TEXT")
     private String annotationStudent;
 
     @Column(
             name = "annotation_committee",
-            columnDefinition = "TEXT"
-    )
+            columnDefinition = "TEXT")
     private String annotationCommittee;
 
     @Column(
             name = "request_status",
             columnDefinition = "VARCHAR",
-            nullable = false
-    )
+            nullable = false)
     @Enumerated(EnumType.STRING)
     private StatusRequest statusRequest;
 
     @Column(
             name = "created_at",
-            nullable = false
-    )
+            nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Instant createdAt;
 

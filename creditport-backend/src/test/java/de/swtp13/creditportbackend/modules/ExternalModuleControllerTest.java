@@ -9,6 +9,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.not;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -19,9 +20,20 @@ public class ExternalModuleControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    public void endpointShouldExist() throws Exception {
-        mockMvc.perform(get("/modules/internal"))
-                .andExpect(status().is(not(HttpStatus.NOT_FOUND.value())));
+    public void endpointWorks() throws Exception {
+        mockMvc.perform(get("/modules/external"))
+                .andExpect(status().isOk());
+    }
+
+    /*@Test
+    public void getbyidendpointworks() throws Exception {
+        mockMvc.perform(get("/modules/external/7b456ab2-fd34-430b-bb39-9ad15f4b851a"))
+                .andExpect(status().isOk());
+    }*/
+
+    @Test
+    public void postendpointworks() throws Exception {
+        //mockMvc.perform(post("/modules/external/").requestAttr());
     }
 
 }
