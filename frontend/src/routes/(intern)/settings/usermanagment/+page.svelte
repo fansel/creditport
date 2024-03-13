@@ -124,13 +124,6 @@
     text-decoration: none;
   }
 
-  .font-sm {
-    font-size: 0.875rem;
-  }
 
-  .left-no-radius {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-    border-left: 0;
-  }
+
 </style>

@@ -37,6 +37,11 @@ export const universities_import_schema = z.array(
   })
 );
 
-export const course_schema = z.object({
-  
-})
+export const update_course_schema = z.object({
+  courseName: z.string().min(1, { message: 'Name des Studiengangs darf nicht leer sein!' }),
+  courseId: z.string().min(1)
+});
+
+export const add_course_schema = z.object({
+  courseName: z.string().min(1, { message: 'Name des Studiengangs darf nicht leer sein!' })
+});
