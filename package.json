@@ -1,5 +1,9 @@
 {
   "dependencies": {
     "@sveltejs/adapter-node": "^4.0.1"
+  },
+  "devDependencies": {
+    "sveltekit-superforms": "^2.8.1",
+    "zod": "^3.22.4"
   }
 }
