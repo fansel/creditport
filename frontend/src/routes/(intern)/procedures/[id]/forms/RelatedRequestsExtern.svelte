@@ -2,6 +2,7 @@
   import Modal from '$lib/components/InfoModal.svelte';
 
   export let showModal;
+  export let similarRequests;
 </script>
 
 <Modal bind:showModal>

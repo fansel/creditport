@@ -10,7 +10,7 @@
 
 <div class="card">
   <div class="card-header d-flex justify-content-between">
-    <div class="FM-M">{request.externalModule.moduleName} <i class="bi bi-arrow-right"></i> {request.internalModule.moduleName}</div>
+    <!-- <div class="FM-M">{request.externalModules[0].moduleName} <i class="bi bi-arrow-right"></i> {request.internalModules[0].moduleName}</div> -->
     <div class="CP">LP: {request.creditPoints}</div>
   </div>
   <div class="card-body d-flex justify-content-between">

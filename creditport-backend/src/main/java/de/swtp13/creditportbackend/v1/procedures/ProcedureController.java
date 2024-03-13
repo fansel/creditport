@@ -2,8 +2,12 @@ package de.swtp13.creditportbackend.v1.procedures;
 
 
 import de.swtp13.creditportbackend.v1.procedures.dto.ProcedureRequestDTO;
+import de.swtp13.creditportbackend.v1.procedures.dto.ProcedureWithRequestsDTO;
 import de.swtp13.creditportbackend.v1.requests.RequestRepository;
+import de.swtp13.creditportbackend.v1.requests.RequestService;
 import de.swtp13.creditportbackend.v1.requests.StatusRequest;
+import de.swtp13.creditportbackend.v1.universities.University;
+import de.swtp13.creditportbackend.v1.universities.UniversityRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -16,6 +20,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.http.HttpStatus;
 import de.swtp13.creditportbackend.v1.requests.Request;
 import de.swtp13.creditportbackend.v1.procedures.dto.ProcedureResponseDTO;
+
+import java.time.Instant;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +41,10 @@ public class ProcedureController {
     private final ProcedureService procedureService;
     @Autowired
     private RequestRepository requestRepository;
+    @Autowired
+    private RequestService requestService;
+    @Autowired
+    private UniversityRepository universityRepository;
 
     /**
      * Constructs a {@code ProcedureController} with the necessary service.
@@ -54,8 +66,8 @@ public class ProcedureController {
             ))
     })
     @GetMapping
-    public ResponseEntity<List<Procedure>> getProceduresWithRequests() {
-        List<Procedure> proceduresWithRequests = procedureService.getProceduresWithRequests();
+    public ResponseEntity<List<ProcedureWithRequestsDTO>> getProceduresWithRequests() {
+        List<ProcedureWithRequestsDTO> proceduresWithRequests = procedureService.getProcedureDetailsWithRequests();
         return ResponseEntity.ok(proceduresWithRequests);
     }
 
@@ -92,6 +104,7 @@ public class ProcedureController {
         return ResponseEntity.ok(ids);
     }
 
+
     /**
      * PUT by ID
      * updates a procedure with specific ID in the Database
@@ -102,13 +115,21 @@ public class ProcedureController {
     })
     @PutMapping("/{id}")
     public ResponseEntity<Procedure> updateProcedure(@PathVariable("id") int procedureId, @RequestBody Procedure ProcedureDetails) {
+        if(universityRepository.findById(ProcedureDetails.getUniversity().getUniId()).isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+
         return procedureRepository.findByProcedureId(procedureId)
                 .map(procedure -> {
                     procedureService.setStatusOffen(ProcedureDetails);
                     procedure.setAnnotation(ProcedureDetails.getAnnotation());
-                    procedure.setUniversity(ProcedureDetails.getUniversity());
-                    procedure.setCourseName(ProcedureDetails.getCourseName());
-                    procedure.setRequests(ProcedureDetails.getRequests());
+                    procedure.setUniversity(universityRepository.findById(ProcedureDetails.getUniversity().getUniId()).get());
+                    procedure.setCourse(ProcedureDetails.getCourse());
+                    List<Request> requests = new ArrayList<>();
+                    for(Request request: requestRepository.findRequestsByProcedureId(procedureId)){
+                        requestService.updateRequest(requestService.toUpdateRequestDTO(request),request.getRequestId());
+                    }
+                    procedure.setRequests(requests);
                     // Add other fields to update if needed
                     return ResponseEntity.ok(procedureRepository.save(procedure));
                 }).orElse(ResponseEntity.notFound().build());
@@ -169,15 +190,24 @@ public class ProcedureController {
             @ApiResponse(responseCode = "200",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = Procedure.class))),
             @ApiResponse(responseCode = "404", description = "Procedure id not found",
+                    content = @Content),
+            @ApiResponse(responseCode = "428",
                     content = @Content)
     })
-    @PatchMapping("/archive/{id}")
+    @PostMapping("/archive/{id}")
     public ResponseEntity<Procedure> archiveProcedure(@PathVariable Integer id) {
         Optional<Procedure> optionalProcedure = procedureRepository.findByProcedureId(id);
         if (optionalProcedure.isPresent()) {
             Procedure procedure = optionalProcedure.get();
-            procedureService.setStatusArchiviert(procedure);
-            return ResponseEntity.ok(procedure);
+            if (procedure.getStatus().equals(Status.VOLLSTÄNDIG)){
+                procedure.setStatus(Status.ARCHIVIERT);
+                procedureRepository.save(procedure);
+                return ResponseEntity.ok(procedure);
+
+            }
+            else {
+                return ResponseEntity.status(428).build();
+            }
         } else {
             return ResponseEntity.notFound().build();
         }

@@ -1,6 +1,7 @@
 package de.swtp13.creditportbackend.v1.externalmodules;
 
 
+
 import de.swtp13.creditportbackend.v1.universities.University;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -57,6 +58,13 @@ public class ExternalModule {
             nullable = false
     )
     private double creditPoints;
+    @Column(
+            name = "is_verified",
+            columnDefinition = "BOOLEAN DEFAULT FALSE"
+    )
+    private boolean isVerified;
+
+
     public ExternalModule(String number,
                           String moduleName,
                           String moduleDescription, University university, double creditPoints ){

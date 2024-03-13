@@ -1,5 +1,6 @@
 package de.swtp13.creditportbackend.v1.procedures;
 
+import de.swtp13.creditportbackend.v1.courses.Course;
 import de.swtp13.creditportbackend.v1.procedures.util.IDGenerator;
 import de.swtp13.creditportbackend.v1.requests.Request;
 
@@ -59,12 +60,12 @@ public class Procedure {
             nullable = false
     )
     private University university;
-    @Column(
-            name = "course_name",
-            columnDefinition = "VARCHAR",
+    @ManyToOne
+    @JoinColumn(
+            name = "course_id",
             nullable = false
     )
-    private String courseName;
+    private Course course;
 
     @Column(
             name = "created_at",
@@ -87,35 +88,35 @@ public class Procedure {
     // Benutzerdefinierter Konstruktor ohne ID
 
 
-    public Procedure(String annotation, University university, String courseName) {
+    public Procedure(String annotation, University university, Course course) {
         this.annotation = annotation;
         this.university = university;
-        this.courseName = courseName;
+        this.course = course;
         this.status = Status.NEU;
         this.createdAt = Instant.now();
         this.lastUpdated = this.createdAt;
     }
-    public Procedure(String annotation, University university, String courseName, List<Request> requests) {
+    public Procedure(String annotation, University university, Course course, List<Request> requests) {
         this.annotation = annotation;
         this.university = university;
-        this.courseName = courseName;
+        this.course = course;
         this.status = Status.NEU;
         this.createdAt = Instant.now();
         this.lastUpdated = this.createdAt;
         this.requests = requests;
     }
 
-    public Procedure(University university, String courseName, List<Request> requests) {
+    public Procedure(University university, Course course, List<Request> requests) {
         this.university = university;
-        this.courseName = courseName;
+        this.course = course;
         this.status = Status.NEU;
         this.createdAt =Instant.now();
         this.lastUpdated = this.createdAt;
         this.requests = requests;
     }
-    public Procedure(University university, String courseName) {
+    public Procedure(University university, Course course) {
         this.university = university;
-        this.courseName = courseName;
+        this.course = course;
         this.status = Status.NEU;
         this.createdAt =Instant.now();
         this.lastUpdated = this.createdAt;

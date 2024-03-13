@@ -6,7 +6,10 @@
   <div class="row justify-content-center">
     <div class="text-center">
       <h1 class="">{$page.status} - {$page.error.message}</h1>
-      <p>Die von Ihnen gesuchte Seite existiert nicht oder wurde verschoben.</p>
+      <p>Leider ist es zu einem unerwarteten Fehler gekommen. Bitte versuche es später erneut...</p>
+      {#if $page.error.errorId}
+        <div class="mb-3">Error ID: {$page.error.errorId}</div>
+      {/if}
       <a href="/" class="btn btn-primary">Zurück zum Startseite</a>
     </div>
   </div>

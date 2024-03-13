@@ -1,20 +1,40 @@
 <script>
   import * as config from '$lib/config';
+  import { superValidate } from 'sveltekit-superforms';
   import AddUserForm from './forms/AddUserForm.svelte';
+  import UpdateUserForm from './forms/UpdateUserForm.svelte';
+  import DeleteUserForm from './forms/DeleteUserForm.svelte';
+  import { enhance } from '$app/forms';
+
   export let data;
 
   $: users = data.users;
 
   let showAddModal = false;
+  let showDeleteModal = false;
+
+  let selectedUser;
+
+  let updateForm;
+
+  function dialog_open(id) {
+    const user = users.find((u) => u.userId == id);
+    if (!user) {
+      console.error('User not found');
+    }
+    updateForm.dialog_open(user);
+  }
 </script>
 
 <AddUserForm bind:showModal={showAddModal} roles={config.user_roles} />
+<UpdateUserForm bind:this={updateForm} data={data.updateUserForm} />
+<DeleteUserForm user={selectedUser} bind:showModal={showDeleteModal} />
 
-<h4 class="mb-3 d-flex">
+<h4 class="mb-3 d-flex justify-content-between flex-wrap gap-2">
   Benutzer
-  <button class="btn btn-primary btn-sm ms-4" on:click={() => (showAddModal = true)}>
+  <button class="btn btn-primary btn-sm text-nowrap" on:click={() => (showAddModal = true)}>
     <i class="bi bi-plus-circle" />
-    Benutzer hinzufügen
+    Hinzufügen
   </button>
 </h4>
 
@@ -38,8 +58,8 @@
         <div class="col d-flex align-items-center"><span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill">{user.role}</span></div>
         <div class="col d-flex align-items-center">
           <div class="btn-group">
-            <button class="btn btn-sm btn-outline-primary">Bearbeiten</button>
-            <button class="btn btn-sm btn-outline-danger">Löschen</button>
+            <button class="btn btn-sm btn-outline-primary" on:click={() => dialog_open(user.userId)}>Bearbeiten</button>
+              <button class="btn btn-sm btn-outline-danger" on:click={() => ((showDeleteModal = true), (selectedUser = user))}>Löschen</button>
           </div>
         </div>
       </div>
@@ -97,14 +117,13 @@
   </li>
 </ul>
 
-<button class="btn btn-primary mt-2 mb-2">Speichern</button>
+<!-- <button class="btn btn-primary mt-2 mb-2">Speichern</button> -->
 
 <style>
   .btn-link {
     text-decoration: none;
   }
 
-  .font-sm {
-    font-size: 0.875rem;
-  }
+
+
 </style>

@@ -13,7 +13,7 @@
   let dialog;
   let input;
 
-  // $: console.log(procedure);
+  $: console.log(procedure);
 
   //Wenn das Modal neu geöffnet wird werden alle relevanten Werte neue gesetzt
   // $: if (showModal) {
@@ -92,20 +92,17 @@
         </div>
         <div class="col-12 col-lg-6">
           <div class="list-group">
-            <div class="list-group-item d-inline-flex justify-content-between"><strong>Modulanträge ({procedure.requests.length})</strong></div>
+            <div class="list-group-item d-inline-flex justify-content-between"><strong>Modulanträge ({procedure.requestDetails.length})</strong></div>
 
             {#if procedure}
-              {#each procedure.requests as request}
+              {#each procedure.requestDetails as request}
                 <div class="list-group-item d-inline-flex justify-content-between">
                   <div class="d-inline-flex align-item-center">
-                    {request.externalModule.moduleName} - {truncateText(request.internalModule.moduleName, 20)}
+                    {request.externalModules[0].moduleName} - {truncateText(request.internalModules[0].moduleName, 20)}
                     <RequestStatus status={request.statusRequest} />
                   </div>
                   <div class="d-flex align-items-center">
-                    <form action="?/favoriteRequest" method="POST" class="d-flex align-items-center">
-                      <input type="hidden" name="id" value={request.requestId} />
-                      <button class="btn p-0 me-2"> <i class="bi bi-star" /> </button>
-                    </form>
+
 
                     <a href="/procedures/{request.requestId}"><i class="bi bi-pencil-square" /></a>
                   </div>

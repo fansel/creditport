@@ -24,31 +24,25 @@ public class User implements UserDetails {
     @Column(
             name = "user_id",
             columnDefinition = "INT",
-            nullable = false
-    )
+            nullable = false)
     private int userId;
 
     @Column(
             name = "username",
             columnDefinition = "VARCHAR",
             unique = true,
-            nullable = false
-    )
+            nullable = false)
     private String username;
 
     @Column(
             name = "password",
             columnDefinition = "VARCHAR",
-            unique = false,
-            nullable = false
-    )
+            nullable = false)
     private String password;
 
     @Column(
             name = "role",
-            columnDefinition = "VARCHAR",
-            nullable = true
-    )
+            columnDefinition = "VARCHAR")
     @Enumerated(EnumType.STRING)
     private Role role;
 

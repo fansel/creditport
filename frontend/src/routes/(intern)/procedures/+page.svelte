@@ -290,7 +290,7 @@
           <td>{procedure.university.uniName ?? '-'}</td>
 
           <td>{procedure.courseName ?? '-'}</td>
-          <td>{procedure.requests.length ?? '-'}</td>
+          <td>{procedure.requestDetails.length ?? '-'}</td>
 
           <td><ProcedureStatus status={procedure.status} /></td>
 

@@ -6,14 +6,20 @@ import { fail, redirect } from '@sveltejs/kit';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ params }) {
-  const modules = await api.get('modules/internal');
-  const universities = await api.get('universities');
-  const newUniversity = await api.get()
+  const universities = await api.get(api.routes.university_all);
+  if(!universities.success){
+    throw error(404, { message: 'Fehler beim Laden der Universitäten' });
+  }
+  const modules = await api.get(api.routes.module_all_internal);
+
+  if (!modules.success) {
+    throw error(404, { message: 'Fehler beim Laden der Module' });
+  }
 
   //const form = await superValidate(zod(schema));
   return {
-    universities: universities,
-    modules: modules,
+    universities: universities.data,
+    modules: modules.data,
     title: 'Vorgang erstellen'
   };
 }

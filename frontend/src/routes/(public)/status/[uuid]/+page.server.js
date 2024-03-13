@@ -6,14 +6,17 @@ import { error } from '@sveltejs/kit';
 export async function load({ params }) {
   const uuid = params.uuid;
 
-  const procedure = await api.get(`procedures/${uuid}`);
+  const procedure = await api.get(api.routes.procedure_by_id(uuid));
 
-  if (!procedure || procedure == 404) {
-    throw error(404, 'Dieser Vorgang ist leider nicht vorhanden!');
+  if(!procedure.success){
+    throw error(404, 'Error')
   }
+  // if (!procedure.success || procedure == 404) {
+  //   throw error(404, 'Dieser Vorgang ist leider nicht vorhanden!');
+  // }
 
   return {
     uuid,
-    procedure
+    procedure: procedure.data
   };
 }
