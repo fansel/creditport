@@ -2,15 +2,18 @@ package de.swtp13.creditportbackend.v1.internalmodules;
 
 import de.swtp13.creditportbackend.v1.courses.Course;
 import de.swtp13.creditportbackend.v1.courses.CourseRepository;
+import de.swtp13.creditportbackend.v1.courses.CourseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,6 +32,8 @@ public class InternalModuleController {
     private InternalModuleRepository moduleRepository;
     @Autowired
     private CourseRepository courseRepository;
+    @Autowired
+    private CourseService courseService;
 
     @Operation(summary = "returns a list of all internal modules", responses = {
             @ApiResponse(responseCode = "200", content = @Content(
@@ -58,10 +63,36 @@ public class InternalModuleController {
     @Operation(summary = "creates an internal module", responses = {
             @ApiResponse(responseCode = "201")
     })
+    @Transactional
     @PostMapping
-    public ResponseEntity<?> createModule(@RequestBody InternalModule Module) {
-        System.out.println("Create Module: " + Module.getModuleName());
-        return ResponseEntity.status(201).body(moduleRepository.save(Module));
+    public ResponseEntity<InternalModule> createInternalModule(@RequestBody InternalModule moduleDetails) {
+        List<Course> courses = new ArrayList<>();
+        for (Course course: moduleDetails.getCourses()){
+            if (courseRepository.existsById(course.getCourseId())){
+                courses.add(courseRepository.findById(course.getCourseId()).get());
+            } else{
+                return ResponseEntity.notFound().build();
+            }
+        }
+        for (Course course: courses){
+            System.out.println(course.toString());
+        }
+        InternalModule internalModule = new InternalModule(
+                moduleDetails.getNumber(), moduleDetails.getModuleName(), moduleDetails.getModuleDescription(), moduleDetails.getCreditPoints(),
+                courses
+        );
+        moduleRepository.save(internalModule);
+        for (Course course: moduleDetails.getCourses()){
+            if (courseRepository.existsById(course.getCourseId())){
+                course.getInternalModules();
+                courseService.addInternalModules(course);
+                course.addInternalModule(internalModule);
+                courseRepository.save(course);
+            } else{
+                return ResponseEntity.notFound().build();
+            }
+        }
+        return ResponseEntity.ok(internalModule);
     }
 
 
@@ -90,6 +121,9 @@ public class InternalModuleController {
     })
     @DeleteMapping("/{moduleId}")
     public ResponseEntity<?> deleteModule(@PathVariable UUID moduleId ) {
+        InternalModule module = moduleRepository.getReferenceById(moduleId);
+        for (Course course: module.getCourses()) course.getInternalModules().remove(module);
+        module.getCourses().clear();
         return moduleRepository.findById(moduleId)
                 .map(Module -> {
                     moduleRepository.delete(Module);
@@ -103,15 +137,18 @@ public class InternalModuleController {
     })
     @PostMapping("/import")
     public ResponseEntity<List<InternalModule>> importModules(@RequestBody List<InternalModule> modules) {
-       /* for(InternalModule internalModule: modules){
+        moduleRepository.saveAll(modules);
+        for(InternalModule internalModule: modules){
             for(Course course: internalModule.getCourses()){
                 if(courseRepository.findById(course.getCourseId()).isEmpty()){
                     return ResponseEntity.notFound().build();
                 }
+                course.getInternalModules();
+                courseService.addInternalModules(course);
+                course.addInternalModule(internalModule);
+                courseRepository.save(course);
             }
         }
-        */
-        moduleRepository.saveAll(modules);
         return ResponseEntity.ok(modules);
     }
 }

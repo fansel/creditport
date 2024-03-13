@@ -41,12 +41,6 @@ public class InternalModule {
             columnDefinition = "VARCHAR"
     )
     private String moduleName;
-    //@Column(
-      //      name = "creditPoints",
-        //    nullable = false,
-          //  columnDefinition = "INT"
-    //)
-    //private int creditpoints;
     @Column(
            name = "module_description",
             nullable = false,
@@ -77,7 +71,4 @@ public class InternalModule {
         this.creditPoints = creditPoints;
         this.courses=courses;
     }
-
-
-
 }
