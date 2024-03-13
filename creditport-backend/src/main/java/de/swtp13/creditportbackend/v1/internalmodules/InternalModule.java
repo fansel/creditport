@@ -70,6 +70,13 @@ public class InternalModule {
         this.number = number;
         this.creditPoints = creditPoints;
     }
+    public InternalModule(String number, String moduleName, String moduleDescription, int creditPoints, List<Course> courses){
+        this.moduleDescription = moduleDescription;
+        this.moduleName = moduleName;
+        this.number = number;
+        this.creditPoints = creditPoints;
+        this.courses=courses;
+    }
 
 
 
