@@ -1,7 +1,5 @@
 package de.swtp13.creditportbackend.v1.courses;
 
-import de.swtp13.creditportbackend.v1.externalmodules.ExternalModule;
-import de.swtp13.creditportbackend.v1.internalmodules.InternalModule;
 import de.swtp13.creditportbackend.v1.internalmodules.InternalModuleRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -23,6 +21,8 @@ public class CourseController {
     private CourseRepository courseRepository;
     @Autowired
     private InternalModuleRepository internalModuleRepository;
+    @Autowired
+    private CourseService courseService;
     @Operation(summary = "returns a list of all courses", responses = {
             @ApiResponse(responseCode = "200", content = @Content(
                     mediaType = "application/json",
@@ -33,7 +33,10 @@ public class CourseController {
     public ResponseEntity<List<CourseDTO>> getAllCourses(){
         List<CourseDTO> courses = new ArrayList<>();
         for(Course course:courseRepository.findAll()){
-            courses.add(new CourseDTO(course.getCourseId(),course.getCourseName(),internalModuleRepository.findInternalModulesByCoursesContains(course)));
+            courses.add(new CourseDTO(course.getCourseId(),course.getCourseName(), internalModuleRepository.findInternalModulesByCoursesContains(course)));
+            course.getInternalModules();
+            courseService.addInternalModules(course);
+            courseRepository.save(course);
         }
         return ResponseEntity.ok(courses);
     }
