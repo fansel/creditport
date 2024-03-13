@@ -9,6 +9,9 @@
   import Comment from './Comment.svelte';
   import RequestStatus from '$root/lib/components/RequestStatus.svelte';
   import Accordion from '$root/lib/components/Accordion.svelte';
+  import Studi from '$root/lib/components/InfoModal.svelte';
+  import RelatedRequestsIntern from './forms/RelatedRequestsIntern.svelte';
+  import RelatedRequestsExtern from './forms/RelatedRequestsExtern.svelte';
 
   export let data;
   let procedure = data.procedure;
@@ -61,11 +64,15 @@
     }
     return -1; // Rückgabe -1, wenn das gesuchte moduleId nicht gefunden wurde
   }
+
+  let showComment = false;
+  let showModalExtern = false;
+  let showModalIntern = false;
 </script>
 
 <!-- <Header wide={true} /> -->
-<div class="m-2">
-  <div class="border-bottom m-3 d-flex">
+<div class="border-bottom py-3 d-flex my-3 justify-content-between">
+  <div class="d-flex">
     <div class="vorgangsnummer">
       <strong>Vorgangsnummer: </strong>
       {request.procedureId}
@@ -78,197 +85,125 @@
       {format(new Date(request.createdAt), 'dd.MM.yyyy')}
     </div>
 
-    <div class="studium mx-3">
+    <div class="ms-3 studium">
       <strong>{procedure.course.courseName} </strong>
     </div>
+  </div>
 
-    <div class="mx-2 d-flex align-items-center justify-content-between flex-grow-1">
-      <div></div>
+  <div class="status">
+    <RequestStatus status={request.statusRequest} />
+  </div>
+</div>
 
-      <div class="mx-2 status">
-        <RequestStatus status={request.statusRequest} />
+<div class="row">
+  <div class="together d-flex flex-nowrap">
+    {#if request.pdfExists}
+      <a class="btn btn-sm btn-danger" href="{config.pdf_endpoint}{request.requestId}" target="_blank">PDF</a>
+    {:else}
+      <div class="btn btn-sm btn-outline-secondary">PDF</div>
+    {/if}
+    <input type="text" class="form-control mx-3" placeholder="Link zum Modul" />
+    <div class="mx-2 btn btn-outline-primary" on:click={() => (showComment = true)}>Kommentar</div>
+    <Studi bind:showModal={showComment}>
+      <div slot="headline"><strong>Hinweis für Vorgang der Student*in</strong></div>
+      <div slot="body">
+        <p>{procedure.annotation}</p>
+      </div>
+    </Studi>
+    <div class="btn-group dropdown">
+      <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">ähnliche Anträge</button>
+      <div class="dropdown-menu">
+        <button class="dropdown-item" on:click={() => (showModalExtern = true)}>Module für aktuelles Fremdmodul</button>
+        <button class="dropdown-item" on:click={() => (showModalIntern = true)}>Akzeptierte Fremdmodule für Modulvorschlag</button>
       </div>
     </div>
   </div>
-  <div class="row">
-    <div class="col-md-6">
-      {#each request.internalModules as module, index}
-        <Accordion>
-          <div slot="head">
-            <i class="bi {module.verified ? 'bi-patch-check-fill' : 'bi-patch-check'}" />
-          </div>
-          <div slot="details">
-            <div class=" mb-1 p-1">
-              <div class="row">
-                <div class="col-md-9">
-                  <div class="mb-2">
-                    <div class="row">
-                      <label class="mb-2">Name des Moduls </label>
-                    </div>
+</div>
 
-                    <input type="text" class="form-control" placeholder="Modellierung und Programmierung" bind:value={module.moduleName} />
-                  </div>
-                </div>
-                <div class="col-md-3">
-                  <div class="mb-3">
-                    <label class="mb-2">LP</label>
-                    <input type="number" class="form-control" placeholder={module.creditPoints} />
-                  </div>
-                </div>
-              </div>
+<RelatedRequestsExtern bind:showModal={showModalExtern} />
+<RelatedRequestsIntern bind:showModal={showModalIntern} />
 
-              <div class="mb-3">
-                <label class="mb-2">Website zum Modul</label>
-                <input type="text" class="form-control" placeholder="Füge Link ein" />
-              </div>
-            </div>
-          </div>
-        </Accordion>
-      {/each}
-    </div>
-    <div class="col-md-6">
-      {#each request.internalModules as module, index}
-        <Accordion>
-          <div slot="head" class="d-flex justify-content-">
-            <span>{truncateText(module.moduleName, 55)}</span>
-          </div>
-          <div slot="details">
-            <div class="p-1">
-              <div class="row">
-                <div class="col-md-9">
+<!-- OVERVIEW -->
+<div class="row scrollable">
+  <div class="col-md-6">
+    {#each request.externalModules as module, index}
+      <Accordion>
+        <div slot="head">
+          <span>{truncateText(module.moduleName, 55)}</span>
+
+          <i class="bi {module.verified ? 'bi-patch-check-fill' : 'bi-patch-check'}" />
+        </div>
+        <div slot="details">
+          <div class=" mb-1 p-1">
+            <div class="row">
+              <div class="col-md-9">
+                <div class="mb-2">
                   <div class="row">
-                    <label class="mb-1"><strong>Name des Moduls</strong> </label>
+                    <label class="mb-2">Name des Moduls </label>
                   </div>
 
-                  <select class="form-select" aria-label="Default select example" bind:value={selectedModule[index]}>
-                    {#each modules as modul, index}
-                      <option value={index}>{modul.moduleName}</option>
-                    {/each}
-                  </select>
-                </div>
-                <div class="col-md-3">
-                  <div class="mb-3">
-                    <label class="mb-1"><strong>LP</strong></label>
-                    <input type="text" class="form-control" disabled placeholder={(request.internalModules[index] = modules[selectedModule[index]]).creditPoints} />
-                    <!-- <p class="border p-2 rounded">{module.creditPoints}</p> -->
-                  </div>
+                  <input type="text" class="form-control" placeholder="Modellierung und Programmierung" bind:value={module.moduleName} />
                 </div>
               </div>
-
-              <div class="mb-3">
-                <label class="mb-2"><strong>Modulbeschreibung</strong></label>
-                <p class="moduleDescription border p-2 rounded">
-                  <!-- {#if modules[moduleData.selectedModul[selectedModulIndex]].moduleDescription} -->
-                  {(module = modules[selectedModule[index]].moduleDescription)}
-                  <!-- {/if} -->
-                </p>
-                <!-- <input type="text" class="form-control" disabled placeholder={truncateText(modules[0].moduleDescription, 25)} /> -->
+              <div class="col-md-3">
+                <div class="mb-3">
+                  <label class="mb-2">LP</label>
+                  <input type="number" class="form-control" placeholder={module.creditPoints} bind:value={module.creditPoints} />
+                </div>
               </div>
             </div>
           </div>
-        </Accordion>
-      {/each}
-    </div>
+        </div>
+      </Accordion>
+    {/each}
   </div>
+  <div class="col-md-6">
+    {#each request.internalModules as module, index}
+      <Accordion>
+        <div slot="head" class="d-flex justify-content-">
+          <span>{truncateText(module.moduleName, 55)}</span>
+        </div>
+        <div slot="details">
+          <div class="p-1">
+            <div class="row">
+              <div class="col-md-9">
+                <div class="row">
+                  <label class="mb-1"><strong>Name des Moduls</strong> </label>
+                </div>
 
-  <!-- OVERVIEW MODULE MAPPING -->
-  <div class="modules-mapping row">
-    <div class="external col-md-6">
-      <div class="accordion" id="accordionExample">
-        {#each request.externalModules as module, index}
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-external-{index}" aria-expanded="true" aria-controls="collapseOne">
-                <span>{truncateText(module.moduleName, 55)}</span>
-                <span><i class="bi {module.verified ? 'bi-patch-check-fill' : 'bi-patch-check'}"></i></span>
-              </button>
-            </h2>
-            <div id="collapse-external-{index}" class="accordion-collapse collapse {index === 0 ? 'show' : ''}" data-bs-parent="#accordionExample">
-              <div class="accordion-body">
-                <div class=" mb-1 p-1">
-                  <div class="row">
-                    <div class="col-md-9">
-                      <div class="mb-2">
-                        <div class="row">
-                          <label class="mb-2">Name des Moduls </label>
-                        </div>
-
-                        <input type="text" class="form-control" placeholder="Modellierung und Programmierung" bind:value={module.moduleName} />
-                      </div>
-                    </div>
-                    <div class="col-md-3">
-                      <div class="mb-3">
-                        <label class="mb-2">LP</label>
-                        <input type="number" class="form-control" placeholder={module.creditPoints} />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="mb-3">
-                    <label class="mb-2">Website zum Modul</label>
-                    <input type="text" class="form-control" placeholder="Füge Link ein" />
-                  </div>
+                <select class="form-select" aria-label="Default select example" bind:value={selectedModule[index]}>
+                  {#each modules as modul, index}
+                    <option value={index}>{modul.moduleName}</option>
+                  {/each}
+                </select>
+              </div>
+              <div class="col-md-3">
+                <div class="mb-3">
+                  <label class="mb-1"><strong>LP</strong></label>
+                  <input type="text" class="form-control" disabled placeholder={(request.internalModules[index] = modules[selectedModule[index]]).creditPoints} />
+                  <!-- <p class="border p-2 rounded">{module.creditPoints}</p> -->
                 </div>
               </div>
             </div>
-          </div>
-        {/each}
-      </div>
-    </div>
 
-    <div class="internal col-md-6">
-      <div class="accordion" id="accordionExample">
-        {#each request.internalModules as module, index}
-          <div class="accordion-item">
-            <h2 class="accordion-header">
-              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{index}" aria-expanded="true" aria-controls="collapseOne">
-                <span>{truncateText((request.internalModules[index] = modules[selectedModule[index]]).moduleName, 50)}</span>
-              </button>
-            </h2>
-            <div id="collapse{index}" class="accordion-collapse collapse {index === 0 ? 'show' : ''}" data-bs-parent="#accordionExample">
-              <div class="accordion-body">
-                <div class=" mb-1 p-1">
-                  <div class="row">
-                    <div class="col-md-9">
-                      <div class="mb-2">
-                        <div class="row">
-                          <label class="mb-2">Name des Moduls </label>
-                        </div>
-
-                        <select class="form-select" aria-label="Default select example" bind:value={selectedModule[index]}>
-                          {#each modules as modul, index}
-                            <option value={index}>{modul.moduleName}</option>
-                          {/each}
-                        </select>
-                      </div>
-                    </div>
-                    <div class="col-md-3">
-                      <div class="mb-3">
-                        <label class="mb-2">LP</label>
-                        <input type="text" class="form-control" disabled placeholder={(request.internalModules[index] = modules[selectedModule[index]]).creditPoints} />
-                        <!-- <p class="border p-2 rounded">{module.creditPoints}</p> -->
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="mb-3">
-                    <label class="mb-2">Modulbeschreibung</label>
-                    <p class="moduleDescription border p-2 rounded">
-                      <!-- {#if modules[moduleData.selectedModul[selectedModulIndex]].moduleDescription} -->
-                      {(module = modules[selectedModule[index]].moduleDescription)}
-                      <!-- {/if} -->
-                    </p>
-                    <!-- <input type="text" class="form-control" disabled placeholder={truncateText(modules[0].moduleDescription, 25)} /> -->
-                  </div>
-                </div>
-              </div>
+            <div class="mb-3">
+              <label class="mb-2"><strong>Modulbeschreibung</strong></label>
+              <p class="moduleDescription border p-2 rounded">
+                <!-- {#if modules[moduleData.selectedModul[selectedModulIndex]].moduleDescription} -->
+                {(module = modules[selectedModule[index]].moduleDescription)}
+                <!-- {/if} -->
+              </p>
+              <!-- <input type="text" class="form-control" disabled placeholder={truncateText(modules[0].moduleDescription, 25)} /> -->
             </div>
           </div>
-        {/each}
-      </div>
-    </div>
+        </div>
+      </Accordion>
+    {/each}
   </div>
-  <div class="row">
+</div>
+
+<div class="fest">
+  <div class="row border-top">
     <div class="col-md-6">
       <div class="m-2">
         <strong>LP Summe: </strong>
@@ -282,7 +217,7 @@
       </div>
     </div>
   </div>
-  <!-- <div class="comment my-3" style="margin-right: 20px">
+  <div class="comment my-3" style="margin-right: 20px">
     <Comment bind:annotationCommittee={request.annotationCommittee} bind:annotationStudent={request.annotationStudent} />
   </div>
   <div class="buttons d-flex ms-auto">
@@ -290,8 +225,7 @@
     <div class="btn btn-sm btn-outline-secondary mx-1 d-flex" on:click={cancelChanges}>Abbrechen</div>
     <button type="submit" class="btn btn-sm btn-success mx-1 d-flex justfiy-content-end">Weiterleiten</button>
     <button type="submit" class="btn btn-sm btn-danger mx-1 d-flex justfiy-content-end">Formal ablehnen</button>
-  </div> -->
-  PDF
+  </div>
 </div>
 
 <style>
@@ -313,6 +247,8 @@
     max-height: 120px;
     overflow-y: auto;
   }
-  .dates {
+  .scrollable {
+    max-height: 500px;
+    overflow-y: auto;
   }
 </style>
