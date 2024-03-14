@@ -7,6 +7,9 @@ export async function load({ params }) {
   const uuid = params.uuid;
 
   const procedure = await api.get(api.routes.procedure_by_id(uuid));
+  const allExternalModules = await api.get(api.routes.module_all_external);
+  const allInternalModules = await api.get(api.routes.module_all_internal);
+
 
   if(!procedure.success){
     throw error(404, 'Error')
@@ -17,6 +20,8 @@ export async function load({ params }) {
 
   return {
     uuid,
-    procedure: procedure.data
+    procedure: procedure.data,
+    allInternalModules: allInternalModules.data,
+    allExternalModules: allExternalModules.data
   };
 }
