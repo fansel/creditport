@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -186,7 +187,10 @@ public class RequestController {
             @ApiResponse(responseCode = "404", description = "Request id not found", content = @Content)
     })
     @PutMapping("/approval/{requestId}")
-    public ResponseEntity<?> acceptRequest(@PathVariable int requestId, @RequestBody Request RequestDetails) {
+    public ResponseEntity<?> acceptRequest(
+            @PathVariable int requestId,
+            @RequestBody Request RequestDetails,
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
         if (RequestDetails.getAnnotationCommittee().isBlank() || RequestDetails.getAnnotationCommittee().isEmpty()){
             return ResponseEntity.badRequest().body("Committee Annotation is not allowed to be null!");
         }
@@ -205,7 +209,9 @@ public class RequestController {
             @ApiResponse(responseCode = "404", description = "Request id not found", content = @Content)
     })
     @DeleteMapping("/{requestId}")
-    public ResponseEntity<?> deleteRequest(@PathVariable int requestId) {
+    public ResponseEntity<?> deleteRequest(
+            @PathVariable int requestId,
+            @RequestHeader(value =HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
         return requestRepository.findByRequestId(requestId)
                 .map(Request -> {
                     requestRepository.delete(Request);

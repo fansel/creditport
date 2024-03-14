@@ -148,13 +148,15 @@ export const actions = {
     };
 
     const res = await api.post(`universities`, body, null, { req_type: api.content_type.json, res_type: api.content_type.json });
-    // Extrahiere die uniId aus dem Response-Body
-    const { uniId } = res;
-    const {uniName} = res;
-
-    console.log(res+ " server.js");
-    console.log(uniId+" server.js");
+    
+    let uniId = res.data.uniId;
+    let uniName = res.data.uniName;
 
     return { success: true, uniId: uniId, uniName: uniName};
+  },
+
+  addModul: async ({ request }) => {
+    const formData = await request.formData();
+  
   }
 };
