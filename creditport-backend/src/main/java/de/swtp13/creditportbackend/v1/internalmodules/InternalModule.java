@@ -2,6 +2,7 @@ package de.swtp13.creditportbackend.v1.internalmodules;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.swtp13.creditportbackend.v1.courses.Course;
+import jakarta.annotation.PreDestroy;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -57,6 +58,11 @@ public class InternalModule {
     @ManyToMany(mappedBy = "internalModules")
     private List<Course> courses;
 
+    public void removeCourseAssociations(){
+        for(Course course: this.courses){
+            course.getInternalModules().remove(this);
+        }
+    }
 
     public InternalModule(String number, String moduleName, String moduleDescription, int creditPoints){
         this.moduleDescription = moduleDescription;

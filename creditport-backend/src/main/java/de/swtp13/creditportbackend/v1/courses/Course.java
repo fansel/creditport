@@ -38,7 +38,9 @@ public class Course {
     )
     private String courseName;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {
+            CascadeType.PERSIST,CascadeType.MERGE
+})
     @JoinTable(
             name= "course_intmodule",
             joinColumns = @JoinColumn(name = "course_id"),
@@ -81,5 +83,9 @@ public class Course {
             internalModules = new ArrayList<>();
         }
         internalModules.add(newInternalModule);
+    }
+    public void removeInternalModule(InternalModule internalModule){
+        this.internalModules.remove(internalModule);
+        internalModule.getCourses().remove(this);
     }
 }

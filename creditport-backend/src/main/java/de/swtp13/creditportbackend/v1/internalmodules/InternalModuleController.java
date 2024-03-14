@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -111,29 +112,43 @@ public class InternalModuleController {
             @PathVariable UUID moduleId,
             @RequestBody InternalModuleDTO ModuleDetails,
             @RequestHeader(value =HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
+        System.out.println("0");
         return moduleRepository.findById(moduleId)
                 .map(Module -> {
                     Module.setNumber(ModuleDetails.getNumber());
                     Module.setModuleName(ModuleDetails.getModuleName());
                     Module.setModuleDescription(ModuleDetails.getModuleDescription());
                     Module.setCreditPoints(ModuleDetails.getCreditPoints());
+                    System.out.println(1);
                     List<Course> courses = new ArrayList<>();
+                    Module.setCourses(courses); //sic
                     for(UUID courseId:ModuleDetails.getCourseIds()){
+                        System.out.println(2);
                         if(courseRepository.findById(courseId).isPresent()){
                             Course course = courseRepository.findById(courseId).get();
                             courses.add(course);
+                            System.out.println(3);
                         }
                     }
                     Module.setCourses(courses);
-
+                    System.out.println(4);
                     InternalModule updatedModule = moduleRepository.save(Module);
+                    System.out.println(5);
                     for(UUID courseId:ModuleDetails.getCourseIds()){
+                        System.out.println(6);
                         if(courseRepository.findById(courseId).isPresent()){
+                            System.out.println(7);
                             Course course = courseRepository.findById(courseId).get();
-                            course.getInternalModules();
-                            courseService.addInternalModules(course);
-                            course.addInternalModule(updatedModule);
-                            courseRepository.save(course);
+                            if( !course.getInternalModules().contains(moduleRepository.findById(ModuleDetails.getId()).get())){
+                                System.out.println(8);
+                                courseService.addInternalModules(course);
+                                course.addInternalModule(updatedModule);
+                                courseRepository.save(course);
+                                System.out.println(9);
+                            }
+
+
+
                         }
                     }
                     return ResponseEntity.ok(updatedModule);
@@ -150,13 +165,26 @@ public class InternalModuleController {
             @PathVariable UUID moduleId,
             @RequestHeader(value =HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
         InternalModule module = moduleRepository.getReferenceById(moduleId);
-        for (Course course: module.getCourses()) course.getInternalModules().remove(module);
+        for (Course course: module.getCourses()) {
+            System.out.println("1");
+            course.getInternalModules().remove(module);
+            System.out.println("2");
+            courseRepository.save(course);
+            //course.removeInternalModule(module);
+        }
+        System.out.println("3");
         module.getCourses().clear();
-        return moduleRepository.findById(moduleId)
+        System.out.println("4");
+        module.removeCourseAssociations();
+        System.out.println("5");
+        moduleRepository.save(module);
+        moduleRepository.delete(module);
+        return ResponseEntity.ok().build();
+       /* return moduleRepository.findById(moduleId)
                 .map(Module -> {
                     moduleRepository.delete(Module);
                     return ResponseEntity.noContent().build();
-                }).orElse(ResponseEntity.notFound().build());
+                }).orElse(ResponseEntity.notFound().build());*/
     }
 
     // import Module data from json file
