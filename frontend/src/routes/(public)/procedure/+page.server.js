@@ -10,18 +10,25 @@ export async function load({ params }) {
   if(!universities.success){
     throw error(404, { message: 'Fehler beim Laden der Universitäten' });
   }
-  const modules = await api.get(api.routes.module_all_internal);
 
-  if (!modules.success) {
-    throw error(404, { message: 'Fehler beim Laden der Module' });
+  const internalModules = await api.get(api.routes.module_all_internal);
+  if (!internalModules.success) {
+    throw error(404, { message: 'Fehler beim Laden der internen Module' });
   }
+
+  const externalModules = await api.get(api.routes.module_all_external);
+  if (!externalModules.success) {
+    throw error(404, { message: 'Fehler beim Laden der externen Module' });
+  }
+
   const courses = await api.get(api.routes.course_all);
   if (!courses.success){
     throw error(404, { message: 'Fehler beim Laden der Studiengänge' });
   }
   return {
     universities: universities.data,
-    modules: modules.data,
+    internalModules: internalModules.data,
+    externalModules: externalModules.data,
     courses: courses.data,
     title: 'Vorgang erstellen'
   };

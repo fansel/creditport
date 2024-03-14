@@ -17,7 +17,8 @@
   import Module from './module.svelte';
   import Send from './send.svelte';
 
-  $: modules = data.modules;
+  $: internalModules = data.internalModules;
+  $: externalModules = data.externalModules;
   $: universities = data.universities;
   $: courses = data.courses;
   $: uniId = form?.uniId;
@@ -80,7 +81,7 @@
       {
         moduleData: {
           selectedInternalModulIds:[0],
-          selectedExternalModulIds: [null] // Ein Array für die Titel
+          selectedExternalModulIds: [0] // Ein Array für die Titel
         }
       }
     ];
@@ -89,7 +90,7 @@
   function addTitleToRequest(requestIndex) {
     requests[requestIndex].moduleData.selectedExternalModulIds = [
       ...requests[requestIndex].moduleData.selectedExternalModulIds,
-      null // Füge einen weiteren Titel hinzu (initial null, kann nach Bedarf angepasst werden)
+      0 // Füge einen weiteren Titel hinzu (initial null, kann nach Bedarf angepasst werden)
     ];
   }
 
@@ -100,14 +101,14 @@
     ];
   }
 
-  function removeTitleFromRequest(requestIndex, titleIndex) {
+  function removeExternalModulFromRequest(requestIndex, titleIndex) {
     const request = requests[requestIndex];
     const titles = [...request.moduleData.selectedExternalModulIds];
     titles.splice(titleIndex, 1);
     requests[requestIndex].moduleData.selectedExternalModulIds = titles;
   }
 
-  function removeModuleFromRequest(requestIndex, moduleIndex) {
+  function removeInternalModulFromRequest(requestIndex, moduleIndex) {
     const request = requests[requestIndex];
     const selectedModuls = [...request.moduleData.selectedModul];
     selectedModuls.splice(moduleIndex, 1);
@@ -129,15 +130,15 @@
   <div class={activeTab == 'pills-module' ? '' : 'visually-hidden'}>
     <Module
       bind:modulesForm
-      {removeModuleFromRequest}
-      {removeTitleFromRequest}
+      {removeInternalModulFromRequest}
+      {removeExternalModulFromRequest}
       {addTitleToRequest}
       {addModuleToRequest}
       {requests}
       {removeRequest}
       bind:generalData
-      {modules}
-      
+      {internalModules}
+      {externalModules}
       {goToNextTab}
       {addRequest}
     />
