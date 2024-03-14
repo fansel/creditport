@@ -24,7 +24,7 @@ public class University {
     @Column(name = "uni_id", updatable = false, nullable = false)
     private UUID uniId;
 
-    @Column(name = "uni_name", columnDefinition = "VARCHAR", nullable = false)
+    @Column(name = "uni_name", columnDefinition = "VARCHAR", nullable = false, unique = true)
     private String uniName;
 
 
