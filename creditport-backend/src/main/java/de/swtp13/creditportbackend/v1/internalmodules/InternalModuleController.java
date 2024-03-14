@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -67,12 +68,12 @@ public class InternalModuleController {
     @Transactional
     @PostMapping
     public ResponseEntity<InternalModule> createInternalModule(
-            @RequestBody InternalModule moduleDetails,
+            @RequestBody InternalModuleDTO moduleDetails,
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
         List<Course> courses = new ArrayList<>();
-        for (Course course: moduleDetails.getCourses()){
-            if (courseRepository.existsById(course.getCourseId())){
-                courses.add(courseRepository.findById(course.getCourseId()).get());
+        for (UUID courseId: moduleDetails.getCourseIds()){
+            if (courseRepository.existsById(courseId)){
+                courses.add(courseRepository.findById(courseId).get());
             } else{
                 return ResponseEntity.notFound().build();
             }
@@ -85,8 +86,9 @@ public class InternalModuleController {
                 courses
         );
         moduleRepository.save(internalModule);
-        for (Course course: moduleDetails.getCourses()){
-            if (courseRepository.existsById(course.getCourseId())){
+        for (UUID courseId: moduleDetails.getCourseIds()){
+            if (courseRepository.existsById(courseId)){
+                Course course = courseRepository.findById(courseId).get();
                 course.getInternalModules();
                 courseService.addInternalModules(course);
                 course.addInternalModule(internalModule);
@@ -107,7 +109,7 @@ public class InternalModuleController {
     @PutMapping("/{moduleId}")
     public ResponseEntity<InternalModule> updateModule(
             @PathVariable UUID moduleId,
-            @RequestBody InternalModule ModuleDetails,
+            @RequestBody InternalModuleDTO ModuleDetails,
             @RequestHeader(value =HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
         return moduleRepository.findById(moduleId)
                 .map(Module -> {
@@ -115,6 +117,13 @@ public class InternalModuleController {
                     Module.setModuleName(ModuleDetails.getModuleName());
                     Module.setModuleDescription(ModuleDetails.getModuleDescription());
                     Module.setCreditPoints(ModuleDetails.getCreditPoints());
+                    List<Course> courses = new ArrayList<>();
+                    for(UUID courseId:ModuleDetails.getCourseIds()){
+                        if(courseRepository.findById(courseId).isPresent()){
+                            courses.add(courseRepository.findById(courseId).get());
+                        }
+                    }
+                    Module.setCourses(courses);
                     InternalModule updatedModule = moduleRepository.save(Module);
                     return ResponseEntity.ok(updatedModule);
                 }).orElse(ResponseEntity.notFound().build());
