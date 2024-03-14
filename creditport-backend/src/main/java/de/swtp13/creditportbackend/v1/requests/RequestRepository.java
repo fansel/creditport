@@ -40,5 +40,6 @@ public interface RequestRepository extends JpaRepository<Request,Integer> {
 
     @Query("SELECT r FROM Requests r WHERE r.statusRequest='ANGENOMMEN' OR r.statusRequest='ABGELEHNT'")
     public List<Request> getModulesFromApprovedRequests();
+    public List<Request> findAllByInternalModulesContains(InternalModule internalModule);
 
 }

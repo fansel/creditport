@@ -3,6 +3,8 @@ package de.swtp13.creditportbackend.v1.internalmodules;
 import de.swtp13.creditportbackend.v1.courses.Course;
 import de.swtp13.creditportbackend.v1.courses.CourseRepository;
 import de.swtp13.creditportbackend.v1.courses.CourseService;
+import de.swtp13.creditportbackend.v1.requests.Request;
+import de.swtp13.creditportbackend.v1.requests.RequestRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -37,6 +39,8 @@ public class InternalModuleController {
     private CourseRepository courseRepository;
     @Autowired
     private CourseService courseService;
+    @Autowired
+    private RequestRepository requestRepository;
 
     @Operation(summary = "returns a list of all internal modules", responses = {
             @ApiResponse(responseCode = "200", content = @Content(
@@ -119,32 +123,23 @@ public class InternalModuleController {
                     Module.setModuleName(ModuleDetails.getModuleName());
                     Module.setModuleDescription(ModuleDetails.getModuleDescription());
                     Module.setCreditPoints(ModuleDetails.getCreditPoints());
-                    System.out.println(1);
                     List<Course> courses = new ArrayList<>();
                     Module.setCourses(courses); //sic
                     for(UUID courseId:ModuleDetails.getCourseIds()){
-                        System.out.println(2);
                         if(courseRepository.findById(courseId).isPresent()){
                             Course course = courseRepository.findById(courseId).get();
                             courses.add(course);
-                            System.out.println(3);
                         }
                     }
                     Module.setCourses(courses);
-                    System.out.println(4);
                     InternalModule updatedModule = moduleRepository.save(Module);
-                    System.out.println(5);
                     for(UUID courseId:ModuleDetails.getCourseIds()){
-                        System.out.println(6);
                         if(courseRepository.findById(courseId).isPresent()){
-                            System.out.println(7);
                             Course course = courseRepository.findById(courseId).get();
                             if( !course.getInternalModules().contains(moduleRepository.findById(ModuleDetails.getId()).get())){
-                                System.out.println(8);
                                 courseService.addInternalModules(course);
                                 course.addInternalModule(updatedModule);
                                 courseRepository.save(course);
-                                System.out.println(9);
                             }
 
 
@@ -166,17 +161,15 @@ public class InternalModuleController {
             @RequestHeader(value =HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
         InternalModule module = moduleRepository.getReferenceById(moduleId);
         for (Course course: module.getCourses()) {
-            System.out.println("1");
             course.getInternalModules().remove(module);
-            System.out.println("2");
             courseRepository.save(course);
             //course.removeInternalModule(module);
         }
-        System.out.println("3");
+        for(Request request:requestRepository.findAllByInternalModulesContains(module)){
+            request.getInternalModules().remove(module);
+        }
         module.getCourses().clear();
-        System.out.println("4");
         module.removeCourseAssociations();
-        System.out.println("5");
         moduleRepository.save(module);
         moduleRepository.delete(module);
         return ResponseEntity.ok().build();
