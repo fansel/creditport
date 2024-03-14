@@ -5,6 +5,7 @@
   import DeleteCourseForm from './form/DeleteCourseForm.svelte';
   import UpdateModuleForm from './form/UpdateModuleForm.svelte';
   import DeleteModuleForm from './form/DeleteModuleForm.svelte';
+  import AddModuleForm from './form/AddModuleForm.svelte';
 
   export let data;
 
@@ -14,6 +15,7 @@
   let updateCourseForm;
   let addCourseForm;
   let updateModuleForm;
+  let addModuleForm;
 
   let showDeleteModuleModal = false;
   let showDeleteCourseModal = false;
@@ -64,6 +66,7 @@
 <UpdateCourseForm bind:this={updateCourseForm} data={data.updateCourseForm} />
 <UpdateModuleForm bind:this={updateModuleForm} data={data.updateModuleForm} />
 <AddCourseForm bind:this={addCourseForm} data={data.addCourseForm} />
+<AddModuleForm bind:this={addModuleForm} data={data.addModuleForm} />
 <DeleteCourseForm course={selectedCourse} bind:showModal={showDeleteCourseModal} />
 <DeleteModuleForm module={selectedModule} bind:showModal={showDeleteModuleModal} />
 
@@ -106,7 +109,7 @@
   <h4 class="m-0">Dazugehörige Module</h4>
 
   <div class="d-flex flex-wrap gap-2">
-    <button class="btn btn-primary btn-sm text-nowrap" on:click={test}>
+    <button class="btn btn-primary btn-sm text-nowrap" on:click={addModuleForm.dialog_open({ courses: [selectedCourse] })}>
       <i class="bi bi-plus-circle" />
       Modul hinzufügen
     </button>

@@ -63,12 +63,6 @@
     });
     const res = await response.json();
 
-    if (res.success) {
-      successToast('Erfolreich gespeichert');
-    } else {
-      failureToast('Leider ist ein Fehler aufgetreten');
-    }
-
     await invalidateAll();
   }
 </script>

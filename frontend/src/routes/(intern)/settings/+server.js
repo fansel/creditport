@@ -1,5 +1,6 @@
 import { json } from '@sveltejs/kit';
 import * as config from '$lib/config.js';
+import { setFlash } from 'sveltekit-flash-message/server';
 
 /** @type {import('../$types').RequestHandler} */
 export async function POST({ request, cookies }) {
@@ -18,5 +19,6 @@ export async function POST({ request, cookies }) {
     cookies.set('theme', 'light', { secure: config.secure_connection, path: '/' });
   }
 
+  setFlash({type: 'success', message: 'Erfolgreich gespeichert'}, cookies)
   return json({ success: true });
 }

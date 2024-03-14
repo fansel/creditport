@@ -135,3 +135,12 @@ export const change_password_schema = z
     message: 'Nicht das selbe Passwort.',
     path: ['confirm_password']
   });
+
+export const add_internal_modul_schema = z.object({
+  moduleId: z.string(),
+  number: z.string(),
+  moduleName: z.string().min(1, { message: 'Name des Moduls darf nicht leer sein!' }),
+  moduleDescription: z.string(),
+  creditPoints: z.number().default(1),
+  courses: z.array(course_schema)
+});

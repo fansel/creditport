@@ -3,7 +3,7 @@ import * as api from '$lib/api';
 import { redirect, error, fail } from '@sveltejs/kit';
 import { superValidate, setError, message } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import { add_course_schema, update_course_schema, update_internal_modul_schema } from '$root/lib/schema';
+import { add_course_schema, add_internal_modul_schema, update_course_schema, update_internal_modul_schema } from '$root/lib/schema';
 import { zfd } from 'zod-form-data';
 import { setFlash } from 'sveltekit-flash-message/server';
 
@@ -28,6 +28,7 @@ export async function load({ locals }) {
 
     const updateModuleForm = superValidate(zod(update_internal_modul_schema));
     // const importUniForm = superValidate(zod(universities_upload_schema));
+    const addModuleForm = superValidate(zod(add_internal_modul_schema));
 
     return {
       title: 'Einstellungen',
@@ -36,7 +37,8 @@ export async function load({ locals }) {
       modules: modules.data,
       updateCourseForm,
       addCourseForm,
-      updateModuleForm
+      updateModuleForm,
+      addModuleForm
       // updateUniForm,
       // importUniForm
     };
@@ -56,9 +58,9 @@ export const actions = {
 
     const res = await api.post(api.routes.course_all, form.data, locals.user?.token);
 
-    console.log(res);
-
     if (!res.success) {
+      console.log(res);
+
       setError(form, 'courseName', 'Leider konnte der Studiengang nicht erstellt werden.');
       return message(form, { type: 'error', message: 'Fehler beim erstellen des Studiengangs' }, cookies);
     }
@@ -134,7 +136,7 @@ export const actions = {
 
     const res = await api.del(api.routes.module_internal_by_id(result.data.id), locals.user?.token, { res_type: api.content_type.plain });
 
-    console.log(res)
+    console.log(res);
 
     if (!res.success) {
       setFlash({ type: 'error', message: 'Fehler beim löschen des Moduls' }, cookies);
@@ -142,5 +144,24 @@ export const actions = {
     }
 
     return { success: true };
+  },
+  addModule: async ({ locals, request, cookies }) => {
+    const form = await superValidate(request, zod(add_internal_modul_schema));
+
+    console.log(form);
+
+    if (!form.valid) {
+      return fail(400, form);
+    }
+
+    const res = await api.post(api.routes.module_all_internal, form.data, locals.user?.token);
+
+    if (!res.success) {
+      console.log(res);
+      setError(form, 'moduleName', 'Leider konnte das Module nicht erstellt werden.');
+      return message(form, { type: 'error', message: 'Fehler beim erstellen des Moduls' }, cookies);
+    }
+
+    return message(form, { type: 'success', message: 'Erfolgreich erstellt.' }, cookies);
   }
 };
