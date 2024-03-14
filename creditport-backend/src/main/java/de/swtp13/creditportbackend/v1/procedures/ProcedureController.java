@@ -181,8 +181,7 @@ public class ProcedureController {
                 return ResponseEntity.status(428).build();
             }
         }
-
-        procedure.setStatus(Status.WEITERGELEITET);
+        if (procedure.getStatus().equals(Status.IN_BEARBEITUNG)) procedure.setStatus(Status.WEITERGELEITET);
         return ResponseEntity.ok(procedureRepository.save(procedure));
     }
 
