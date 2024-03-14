@@ -19,6 +19,7 @@
 
   $: modules = data.modules;
   $: universities = data.universities;
+  $: courses = data.courses;
   $: uniId = form?.uniId;
   $: uniName = form?.uniName;
   console.log(uniId+" page.svelte");
@@ -122,7 +123,7 @@
   <hr />
 
   <div class={activeTab == 'pills-general' ? '' : 'visually-hidden'}>
-    <General bind:generalData {goToNextTab} {uniId} {uniName} {universities} />
+    <General bind:generalData {goToNextTab} {uniId} {uniName} {courses} {universities} />
   </div>
 
   <div class={activeTab == 'pills-module' ? '' : 'visually-hidden'}>

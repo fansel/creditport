@@ -6,6 +6,7 @@
   export let universities;
   export let uniId;
   export let uniName;
+  export let courses;
 
 
   let showAddUniversity = false;
@@ -35,7 +36,7 @@
           <input type="text" name="universityName" class="form-control" id="newUniversityName" bind:value={newUniversityName} />
         </div>
         <button type="submit" class="btn btn-primary" on:click={() => (showUniversityName = true)}>Hinzufügen</button>
-        <!-- <button type="submit" class="btn btn-primary" on:click={() => (showAddUniversity = false)}>abbrechen</button> -->
+        <button type="submit" class="btn btn-primary" on:click={() => (showAddUniversity = false)}>abbrechen</button>
       </form>
     </div>
   </div>
@@ -77,7 +78,12 @@
     </div>
     <div class="mb-3">
       <label for="" class="mb-2">Studiengang der Universität Leipzig an dem die Anrechnung erfolgen soll</label>
-      <input type="text" id="futureStudies" bind:value={generalData.internalCourseName} class="form-control" placeholder="B.Sc. Wirtschaftsinformatik" />
+      <select class="form-select" name="uniId" id="uniId" aria-label="Default select example" bind:value={generalData.universityId}>
+        {#each courses as course , index}
+          <option value={course.courseId}>{course.courseName} </option>
+        {/each}
+      </select>
+      <!-- <input type="text" id="futureStudies" bind:value={generalData.internalCourseName} class="form-control" placeholder="B.Sc. Wirtschaftsinformatik" /> -->
     </div>
     <div class="form-floating">
       <textarea class="form-control" placeholder="Leave a comment here" id="globalAnnotation" bind:value={generalData.annotation} style="height: 100px" />

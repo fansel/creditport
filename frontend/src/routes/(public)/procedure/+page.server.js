@@ -15,14 +15,14 @@ export async function load({ params }) {
   if (!modules.success) {
     throw error(404, { message: 'Fehler beim Laden der Module' });
   }
-  //console.log(universities.data);
-  //console.log(modules.data);
-
-
-  //const form = await superValidate(zod(schema));
+  const courses = await api.get(api.routes.course_all);
+  if (!courses.success){
+    throw error(404, { message: 'Fehler beim Laden der Studiengänge' });
+  }
   return {
     universities: universities.data,
     modules: modules.data,
+    courses: courses.data,
     title: 'Vorgang erstellen'
   };
 }
