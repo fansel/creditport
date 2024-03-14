@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -65,7 +66,9 @@ public class InternalModuleController {
     })
     @Transactional
     @PostMapping
-    public ResponseEntity<InternalModule> createInternalModule(@RequestBody InternalModule moduleDetails) {
+    public ResponseEntity<InternalModule> createInternalModule(
+            @RequestBody InternalModule moduleDetails,
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
         List<Course> courses = new ArrayList<>();
         for (Course course: moduleDetails.getCourses()){
             if (courseRepository.existsById(course.getCourseId())){
@@ -102,7 +105,10 @@ public class InternalModuleController {
             @ApiResponse(responseCode = "404", description = "Internal module id not found", content = @Content)
     })
     @PutMapping("/{moduleId}")
-    public ResponseEntity<InternalModule> updateModule(@PathVariable UUID moduleId, @RequestBody InternalModule ModuleDetails) {
+    public ResponseEntity<InternalModule> updateModule(
+            @PathVariable UUID moduleId,
+            @RequestBody InternalModule ModuleDetails,
+            @RequestHeader(value =HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
         return moduleRepository.findById(moduleId)
                 .map(Module -> {
                     Module.setNumber(ModuleDetails.getNumber());
@@ -120,7 +126,9 @@ public class InternalModuleController {
             @ApiResponse(responseCode = "404", description = "Internal module id not found", content = @Content)
     })
     @DeleteMapping("/{moduleId}")
-    public ResponseEntity<?> deleteModule(@PathVariable UUID moduleId ) {
+    public ResponseEntity<?> deleteModule(
+            @PathVariable UUID moduleId,
+            @RequestHeader(value =HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
         InternalModule module = moduleRepository.getReferenceById(moduleId);
         for (Course course: module.getCourses()) course.getInternalModules().remove(module);
         module.getCourses().clear();
@@ -136,7 +144,9 @@ public class InternalModuleController {
             @ApiResponse(responseCode = "200")
     })
     @PostMapping("/import")
-    public ResponseEntity<List<InternalModule>> importModules(@RequestBody List<InternalModule> modules) {
+    public ResponseEntity<List<InternalModule>> importModules(
+            @RequestBody List<InternalModule> modules,
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
         moduleRepository.saveAll(modules);
         for(InternalModule internalModule: modules){
             for(Course course: internalModule.getCourses()){
