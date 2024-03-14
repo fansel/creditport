@@ -125,11 +125,13 @@ public class ProcedureController {
                     procedure.setAnnotation(ProcedureDetails.getAnnotation());
                     procedure.setUniversity(universityRepository.findById(ProcedureDetails.getUniversity().getUniId()).get());
                     procedure.setCourse(ProcedureDetails.getCourse());
-                    List<Request> requests = new ArrayList<>();
+
+                    /*List<Request> requests = new ArrayList<>();
                     for(Request request: requestRepository.findRequestsByProcedureId(procedureId)){
                         requestService.updateRequest(requestService.toUpdateRequestDTO(request),request.getRequestId());
                     }
-                    procedure.setRequests(requests);
+                    procedure.setRequests(requests);*/
+                    procedure.setLastUpdated(Instant.now());
                     // Add other fields to update if needed
                     return ResponseEntity.ok(procedureRepository.save(procedure));
                 }).orElse(ResponseEntity.notFound().build());
