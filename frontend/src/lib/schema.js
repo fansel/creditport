@@ -125,3 +125,13 @@ export const procedure_schema = z.object({
   lastUpdated: z.string(),
   requestDetails: z.array(show_request_schema.omit({ procedureId: true }))
 });
+
+export const change_password_schema = z
+  .object({
+    password: z.string().min(1, { message: 'Passwort darf nicht leer sein.' }),
+    confirm_password: z.string()
+  })
+  .refine((data) => data.password == data.confirm_password, {
+    message: 'Nicht das selbe Passwort.',
+    path: ['confirm_password']
+  });

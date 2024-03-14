@@ -20,7 +20,7 @@ export const routes = {
    */
   login: 'auth/login',
   register: 'users/register',
-  user_update_password: '/users/update/password',
+  user_update_password: 'users/update/password',
   user_all: 'users',
   user_by_id: (id) => `users/${id}`,
 

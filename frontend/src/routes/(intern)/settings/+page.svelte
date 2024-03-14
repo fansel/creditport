@@ -1,8 +1,11 @@
 <script>
   import { browser } from '$app/environment';
-  import { enhance } from '$app/forms';
   import { invalidateAll } from '$app/navigation';
+  import { change_password_schema } from '$root/lib/schema.js';
   import { successToast } from '$root/lib/toast';
+  import { superForm } from 'sveltekit-superforms/client';
+  import * as flashModule from 'sveltekit-flash-message/client';
+  import { zod } from 'sveltekit-superforms/adapters';
 
   export let data;
 
@@ -30,6 +33,19 @@
       }
     }
   }
+
+  const { form, errors, enhance } = superForm(data.changePasswordForm, {
+    syncFlashMessage: true,
+    flashMessage: {
+      module: flashModule
+    },
+    onError({ result }) {
+      console.error(result.error.message);
+    },
+    validators: zod(change_password_schema),
+    validationMethod: 'auto',
+    customValidity: false
+  });
 
   async function submitSettings(event) {
     const data = {
@@ -107,18 +123,24 @@
   </div>
 </div>
 
-<form action="?/changePassword" method="POST">
+<form action="?/changePassword" method="POST" use:enhance>
   <h4 class="mb-3">Sicherheit</h4>
   <div class="row mb-3">
     <div class="col-md-4 col-form-label"><span>Passwort ändern</span></div>
     <div class="col">
       <div class="mb-3">
-        <label for="formAktuellesPassword" class="form-label">Aktuelles Passwort</label>
-        <input type="password" class="form-control" id="formAktuellesPassword" name="aktuellesPassword" />
+        <label for="formAktuellesPassword" class="form-label">Passwort</label>
+        <input type="password" name="password" placeholder="" class="form-control {$errors.password ? 'is-invalid' : ''}" bind:value={$form.password} />
+        {#if $errors.password}
+          <div class="invalid-feedback">{$errors.password}</div>
+        {/if}
       </div>
       <div class="mb-3">
-        <label for="formNeuesPassword" class="form-label">Neues Passwort</label>
-        <input type="password" class="form-control" id="formNeuesPassword" name="neuesPassword" />
+        <label for="formNeuesPassword" class="form-label">Wiederhole Passwort</label>
+        <input type="password" name="confirm_password" placeholder="" class="form-control {$errors.confirm_password ? 'is-invalid' : ''}" bind:value={$form.confirm_password} />
+        {#if $errors.confirm_password}
+          <div class="invalid-feedback">{$errors.confirm_password}</div>
+        {/if}
       </div>
       <button class="btn btn-primary" type="submit">Passwort ändern</button>
     </div>
