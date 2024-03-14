@@ -89,7 +89,7 @@ dialog[open]::backdrop {
 }
 
 .cp-table-body {
-  overflow-y: auto;
+  /* overflow-y: auto; */
 }
 
 .cp-table-item {

@@ -1,52 +1,51 @@
 <script>
+  import { format, parseISO } from 'date-fns';
   import Modal from '$lib/components/InfoModal.svelte';
+  import RequestStatus from '$root/lib/components/RequestStatus.svelte';
 
   export let showModal;
   export let similarRequests;
+
+  let searchTerm = '';
+  let searchResults;
+  let searchResultsCount = 0;
 </script>
 
 <Modal bind:showModal>
   <h2 slot="headline" class="m-0">ähnliche Anträge</h2>
 
-  <!-- body -->
-  <!-- alle Fremdmodule für dieses Modul -->
+  <div slot="body">
+    <div class="m-1">
+      <ul class="list-group mb-3 cp-table border">
+        <li class="cp-table-header border-bottom font-sm">
+          <div class="row text-center fw-bold">
+            <div class="col-3">erstellt am</div>
+            <div class="col-3">AntragsId</div>
+            <div class="col-3">Status</div>
+            <div class="col-3">Link</div>
+          </div>
+        </li>
 
-  <form action="" slot="body" class="p-3">
-    <div class="row form-inline d-flex align-items-center no-wrap mb-3">
-      <div class="col-4">
-        <strong>für Fremdmodule </strong>
-      </div>
-      <div class="col-8">
-        <input type="text" placeholder="Suche" class="form-control form-control-sm" />
-      </div>
+        <div class="cp-table-body font-sm">
+          {#each similarRequests as request}
+            <div class="row p-2 text-center scrollable">
+              <div class="col-3">{format(new Date(request.createdAt), 'dd.MM.yyyy')}</div>
+              <div class="col-3 text-center">{request.requestId}</div>
+              <div class="col-3">
+                <RequestStatus status={request.statusRequest} />
+              </div>
+              <div class="col-3"><a href="/procedures/{request.requestId}" target="_blank"><i class="bi bi-box-arrow-up-right"></i></a></div>
+            </div>
+          {/each}
+        </div>
+      </ul>
     </div>
-
-    <div class="table-responsive">
-      <table class="table table-sm table-hover table-responsive border align-middle shadow-sm">
-        <thead>
-          <tr>
-            <th>Datum</th>
-            <th>Universität</th>
-            <th>Modulname</th>
-            <th>Status</th>
-            <th />
-          </tr>
-        </thead>
-
-        <tbody>
-          <tr>
-            <td>22.11.23 </td>
-            <td>Universität Halle</td>
-
-            <td>Mathe I</td>
-            <td><span class="badge bg-danger-subtle border border-danger-subtle text-secondary-emphasis rounded-pill">abgelehnt</span></td>
-
-            <td>
-              <div class="btn-group text-nowrap float-end" role="group" />
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </form>
+  </div>
 </Modal>
+
+<style>
+  .scrollable {
+    max-height: 200px;
+    overflow-y: auto;
+  }
+</style>

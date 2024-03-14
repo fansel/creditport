@@ -19,6 +19,8 @@
   import SuperDebug from 'sveltekit-superforms';
   import UpdateExternalModule from './forms/UpdateExternalModule.svelte';
 
+  import VirtualList from '@sveltejs/svelte-virtual-list';
+
   export let data;
 
   const { form, messages, errors, enhance } = superForm(data.updateRequestForm, {
@@ -42,6 +44,8 @@
   let showComment = false;
   let showModalExtern = false;
   let updateModuleForm;
+
+  console.log(data.user.role);
 
   function updateStatus(status) {
     $form.statusRequest = status_requests[status].match;
@@ -81,6 +85,7 @@
     }
     updateModuleForm.dialog_open(module);
   }
+  console.log('similar: ', data.similarRequests);
 </script>
 
 <RelatedRequestsExtern bind:showModal={showModalExtern} bind:similarRequests={data.similarRequests} />
@@ -227,11 +232,11 @@
     <div class="buttons d-flex hstack gap-1">
       <button type="submit" class="btn btn-sm btn-primary d-flex">Speichern</button>
 
-      {#if data.users == user_roles.STUDY_OFFICE || user_roles.ADMIN}
+      {#if data.user.role == user_roles.STUDY_OFFICE}
         <button type="submit" class="btn btn-sm btn-outline-danger d-flex justfiy-content-end" on:click={formalAblehnen}>Formal Ablehnen</button>
         <button type="submit" class="btn btn-sm btn-outline-warning d-flex justfiy-content-end" on:click={() => updateStatus(2)}>Rückfrage nötig</button>
       {/if}
-      {#if data.users == user_roles.EXAM_COMITEE}
+      {#if data.user.role == user_roles.EXAM_COMITEE || data.user.role == user_roles.ADMIN}
         <button type="submit" class="btn btn-sm btn-success d-flex justfiy-content-end" on:click={() => updateStatus(3)}>Annehmen</button>
         <button type="submit" class="btn btn-sm btn-danger d-flex justfiy-content-end" on:click={() => updateStatus(4)}>Ablehnen</button>
         <button type="submit" class="btn btn-sm btn-outline-warning d-flex justfiy-content-end" on:click={() => updateStatus(2)}>Rückfrage nötig</button>
