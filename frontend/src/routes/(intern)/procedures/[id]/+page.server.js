@@ -78,7 +78,7 @@ export const actions = {
       internalModuleIds: form.data.internalModules.map((r) => r.moduleId),
       annotationStudent: form.data.annotationStudent,
       annotationCommittee: form.data.annotationCommittee,
-      statusRequest: status_requests[0].match == form.data.statusRequest ? status_requests[1].match : form.data.statusRequest,
+      statusRequest: form.data.statusRequest,
       createdAt: form.data.createdAt,
       pdfExists: form.data.pdfExists,
       moduleLink: form.data.moduleLink,
@@ -99,19 +99,6 @@ export const actions = {
     if (!form.valid) {
       return message(form, { type: 'error', message: 'Dein Input ist ungültig' }, cookies);
     }
-
-    // const body = {
-    //   requestId: form.data.requestId,
-    //   externalModuleIds: form.data.externalModules.map((r) => r.moduleId),
-    //   internalModuleIds: form.data.internalModules.map((r) => r.moduleId),
-    //   annotationStudent: form.data.annotationStudent,
-    //   annotationCommittee: form.data.annotationCommittee,
-    //   statusRequest: form.data.statusRequest,
-    //   createdAt: form.data.createdAt,
-    //   pdfExists: form.data.pdfExists,
-    //   moduleLink: form.data.moduleLink,
-    //   favored: false
-    // };
 
     const res = await api.put(api.routes.module_external_by_id(form.data.moduleId), form.data, locals.user?.token);
 

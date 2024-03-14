@@ -230,7 +230,11 @@
       <Comment bind:annotationCommittee={$form.annotationCommittee} bind:annotationStudent={$form.annotationStudent} />
     </div>
     <div class="buttons d-flex hstack gap-1">
-      <button type="submit" class="btn btn-sm btn-primary d-flex">Speichern</button>
+      {#if data.request.statusRequest == status_requests[0].match}
+        <button type="submit" class="btn btn-sm btn-primary d-flex" on:click={() => updateStatus(1)}>Speichern</button>
+      {:else}
+        <button type="submit" class="btn btn-sm btn-primary d-flex">Speichern</button>
+      {/if}
 
       {#if data.user.role == user_roles.STUDY_OFFICE}
         <button type="submit" class="btn btn-sm btn-outline-danger d-flex justfiy-content-end" on:click={formalAblehnen}>Formal Ablehnen</button>
@@ -241,6 +245,7 @@
         <button type="submit" class="btn btn-sm btn-danger d-flex justfiy-content-end" on:click={() => updateStatus(4)}>Ablehnen</button>
         <button type="submit" class="btn btn-sm btn-outline-warning d-flex justfiy-content-end" on:click={() => updateStatus(2)}>Rückfrage nötig</button>
       {/if}
+      <button type="submit" class="btn btn-sm btn-outline-secondary d-flex justfiy-content-end" on:click={() => updateStatus(0)}>Zurücksetzen</button>
 
       <!-- <button type="button" class="btn btn-sm btn-outline-primary d-flex justfiy-content-end">Status ändern</button> -->
     </div>
