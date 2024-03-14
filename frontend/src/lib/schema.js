@@ -1,5 +1,5 @@
 import z from 'zod';
-import { user_roles, status_requests } from '$lib/config';
+import { user_roles, status_requests, status_procedures } from '$lib/config';
 /**
  * Alle globalen ZOD Schemas für Superform Integration
  */
@@ -60,20 +60,20 @@ export const update_external_module = z.object({
   moduleDescription: z.string(),
   university: universities_schema,
   creditPoints: z.number(),
-  verified: z.boolean(),
-})
+  verified: z.boolean()
+});
 
 export const full_request_schema = z.object({
   procedureId: z.number(),
   requestId: z.number(),
   externalModules: z.array(update_external_module),
-  internalModules: z.array(z.object({moduleId: z.string()})),
+  internalModules: z.array(z.object({ moduleId: z.string() })),
   annotationStudent: z.string(),
   annotationCommittee: z.string(),
   statusRequest: z.enum(status_requests.map((status) => status.match)),
   createdAt: z.string(),
   pdfExists: z.boolean(),
-  moduleLink: z.string()
+  moduleLink: z.string().nullable()
 });
 
 export const request_schema = z.object({
@@ -86,5 +86,21 @@ export const request_schema = z.object({
   statusRequest: z.enum(status_requests.map((status) => status.match)),
   createdAt: z.string(),
   pdfExists: z.boolean(),
-  moduleLink: z.string()
+  moduleLink: z.string().nullable()
+});
+
+export const course_schema = z.object({
+  courseName: z.string(),
+  courseId: z.string()
+});
+
+export const procedure_schema = z.object({
+  procedureId: z.number(),
+  annotation: z.string().nullable(),
+  university: universities_schema,
+  course: course_schema,
+  createdAt: z.string(),
+  status: z.enum(status_procedures.map((status) => status.match)),
+  lastUpdated: z.string(),
+  requestDetails: z.array(full_request_schema.omit({ procedureId: true }))
 });
