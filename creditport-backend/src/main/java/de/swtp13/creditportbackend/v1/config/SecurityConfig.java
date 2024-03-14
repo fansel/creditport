@@ -47,7 +47,7 @@ public class SecurityConfig {
                                         API_VERSION + "/courses",
                                         API_VERSION + "/procedures/??????")
                                 .permitAll()
-                                .requestMatchers("/swagger-ui/**", "/api-docs")
+                                .requestMatchers("/swagger-ui/**", "/api-docs/**")
                                 .permitAll()
                                 .requestMatchers(API_VERSION + "/pdf/**")
                                 .permitAll()
