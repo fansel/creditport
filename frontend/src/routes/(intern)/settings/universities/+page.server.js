@@ -16,7 +16,7 @@ export async function load({ params, locals, cookies }) {
     const res = await api.get(api.routes.university_all);
 
     if (!res.success) {
-      throw error(res.status, { message: 'Fehler beim Laden der Universitäten' });
+      throw error(res.http_code, { message: 'Fehler beim Laden der Universitäten' });
     }
 
     const updateUniForm = superValidate(zod(universities_schema));

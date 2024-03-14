@@ -37,6 +37,24 @@ export const universities_upload_schema = z.object({
   file: z.instanceof(File, { message: 'Please upload a file.' }).refine((f) => f.size < 100_000, 'Max 100 kB upload size.')
 });
 
+export const courses_upload_schema = z.object({
+  file: z.instanceof(File, { message: 'Please upload a file.' }).refine((f) => f.size < 100_000, 'Max 100 kB upload size.')
+});
+
+export const courses_import_schema = z.array(
+  z.object({
+    courseName: z.string(),
+    modules: z.array(
+      z.object({
+        number: z.string(),
+        moduleName: z.string().min(1),
+        moduleDescription: z.string(),
+        creditPoints: z.number()
+      })
+    )
+  })
+);
+
 export const universities_import_schema = z.array(
   z.object({
     uniName: z.string(),
@@ -142,5 +160,5 @@ export const add_internal_modul_schema = z.object({
   moduleName: z.string().min(1, { message: 'Name des Moduls darf nicht leer sein!' }),
   moduleDescription: z.string(),
   creditPoints: z.number().default(1),
-  courses: z.array(course_schema)
+  courseIds: z.array(z.string())
 });

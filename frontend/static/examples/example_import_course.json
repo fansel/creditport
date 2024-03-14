@@ -1,0 +1,13 @@
+[
+  {
+    "courseName": "string",
+    "modules": [
+      {
+        "number": "string",
+        "moduleName": "string",
+        "moduleDescription": "string",
+        "creditPoints": 0
+      }
+    ]
+  }
+]

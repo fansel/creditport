@@ -1,9 +1,9 @@
 import * as config from '$lib/config';
 import * as api from '$lib/api';
 import { redirect, error, fail } from '@sveltejs/kit';
-import { superValidate, setError, message } from 'sveltekit-superforms';
+import { message, setError, superValidate, withFiles } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import { add_course_schema, add_internal_modul_schema, update_course_schema, update_internal_modul_schema } from '$root/lib/schema';
+import { add_course_schema, add_internal_modul_schema, courses_import_schema, courses_upload_schema, update_course_schema, update_internal_modul_schema } from '$root/lib/schema';
 import { zfd } from 'zod-form-data';
 import { setFlash } from 'sveltekit-flash-message/server';
 
@@ -16,18 +16,18 @@ export async function load({ locals }) {
     const modules = await api.get(api.routes.module_all_internal);
 
     if (!courses.success) {
-      throw error(courses.status, { message: 'Fehler beim Laden der Studiengänge' });
+      throw error(courses.http_code, { message: 'Fehler beim Laden der Studiengänge' });
     }
 
     if (!modules.success) {
-      throw error(courses.status, { message: 'Fehler beim Laden der Internen Module' });
+      throw error(courses.http_code, { message: 'Fehler beim Laden der Internen Module' });
     }
 
     const updateCourseForm = superValidate(zod(update_course_schema));
     const addCourseForm = superValidate(zod(add_course_schema));
 
     const updateModuleForm = superValidate(zod(update_internal_modul_schema));
-    // const importUniForm = superValidate(zod(universities_upload_schema));
+    const importCourseForm = superValidate(zod(courses_upload_schema));
     const addModuleForm = superValidate(zod(add_internal_modul_schema));
 
     return {
@@ -38,7 +38,8 @@ export async function load({ locals }) {
       updateCourseForm,
       addCourseForm,
       updateModuleForm,
-      addModuleForm
+      addModuleForm,
+      importCourseForm
       // updateUniForm,
       // importUniForm
     };
@@ -49,18 +50,78 @@ export async function load({ locals }) {
 
 /** @type {import('./$types').Actions} */
 export const actions = {
+  importCourse: async ({ locals, request, cookies }) => {
+    const form = await superValidate(request, zod(courses_upload_schema));
+
+    if (!form.valid) {
+      return message(withFiles({ form }), { type: 'error', message: 'Bitte wähle eine Datei aus' }, { status: 400 });
+    }
+
+    try {
+      const parsedText = await form.data.file.text();
+      const parsedJsonObj = JSON.parse(parsedText);
+
+      // Überprüfe ob das importierte Objekt die korrekte Form hat
+      const result = courses_import_schema.safeParse(parsedJsonObj);
+
+      if (!result.success) {
+        setError(form, 'file', 'Nicht das richtige JSON Format');
+        return message(form, { type: 'error', message: 'Fehler beim importieren der Universitäten' }, { status: 400 });
+      }
+
+      for (let index = 0; index < result.data.length; index++) {
+        const course = result.data[index];
+
+        // Lege erst den Studiengang an
+        const resCourse = await api.post(api.routes.course_all, { courseName: course.courseName }, locals.user?.token, { res_type: api.content_type.json });
+
+        if (!resCourse.success) {
+          return message(form, { type: 'error', message: 'Fehler beim importieren der Studiengänge' }, { status: 400 });
+        }
+
+        for (let z = 0; z < course.modules.length; z++) {
+          const module = course.modules[z];
+
+          const body = course.modules.map((m) => ({
+            number: m.number,
+            moduleName: m.moduleName,
+            moduleDescription: m.moduleDescription,
+            creditPoints: m.creditPoints,
+            courses: [
+              {
+                courseId: resCourse.data.courseId,
+                courseName: resCourse.data.courseName
+              }
+            ]
+          }));
+
+          const res = await api.post(api.routes.module_internal_import, body, locals.user?.token, { res_type: api.content_type.plain });
+
+          if (!res.success) {
+            console.log(res);
+            return message(form, { type: 'error', message: 'Fehler beim anlegen eines Moduls' }, { status: 400 });
+          }
+        }
+      }
+
+      return message(form, { type: 'success', message: 'Studiengänge wurden erfolgreich importiert.' }, { status: 200 });
+    } catch (error) {
+      console.error(error);
+      setError(form, 'file', 'Fehler beim parsen der JSON Datei');
+      return fail(400, withFiles({ form }));
+    }
+  },
   addCourse: async ({ locals, request, cookies }) => {
     const form = await superValidate(request, zod(add_course_schema));
 
     if (!form.valid) {
-      return fail(400, form);
+      return message({ type: 'error', message: 'Fehler beim anlegen des Moduls' });
     }
 
     const res = await api.post(api.routes.course_all, form.data, locals.user?.token);
 
     if (!res.success) {
       console.log(res);
-
       setError(form, 'courseName', 'Leider konnte der Studiengang nicht erstellt werden.');
       return message(form, { type: 'error', message: 'Fehler beim erstellen des Studiengangs' }, cookies);
     }
