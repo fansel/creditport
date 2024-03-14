@@ -118,7 +118,7 @@ public class ProcedureController {
         if(universityRepository.findById(ProcedureDetails.getUniversity().getUniId()).isEmpty()){
             return ResponseEntity.notFound().build();
         }
-        if()
+
         return procedureRepository.findByProcedureId(procedureId)
                 .map(procedure -> {
                     procedureService.setStatusOffen(ProcedureDetails);
