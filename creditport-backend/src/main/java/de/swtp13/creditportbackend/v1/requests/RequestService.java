@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -41,9 +40,7 @@ public class RequestService {
         if ((procedure.getStatus().equals(Status.OFFEN) || procedure.getStatus().equals(Status.NEU)) && bearbeitet){
             procedure.setStatus(Status.IN_BEARBEITUNG);
             procedureRepository.save(procedure);
-            return;
         }
-
         else {
             boolean entschieden = true;
             for (Request request : requests) {
@@ -53,7 +50,7 @@ public class RequestService {
                 }
             }
             if (procedure.getStatus().equals(Status.WEITERGELEITET) && entschieden) {
-                procedure.setStatus(Status.VOLLSTÄNDIG);
+                procedure.setStatus(Status.VOLLSTAENDIG);
                 procedureRepository.save(procedure);
             }
         }

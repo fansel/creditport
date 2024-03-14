@@ -1,6 +1,6 @@
 package de.swtp13.creditportbackend.v1.internalmodules;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import de.swtp13.creditportbackend.v1.courses.Course;
 import jakarta.annotation.PreDestroy;
 import jakarta.persistence.*;
@@ -32,27 +32,25 @@ public class InternalModule {
     @Column(
             name= "number",
             columnDefinition = "VARCHAR",
-            nullable = false
-    )
+            nullable = false)
     private String number;
 
     @Column(
             name = "module_name",
             nullable = false,
-            columnDefinition = "VARCHAR"
-    )
+            columnDefinition = "VARCHAR")
     private String moduleName;
+
     @Column(
            name = "module_description",
             nullable = false,
-           columnDefinition = "VARCHAR"
-    )
+           columnDefinition = "VARCHAR")
     private String moduleDescription;
+
     @Column(
             name = "credit_points",
             columnDefinition = "INT",
-            nullable = false
-    )
+            nullable = false)
     private int creditPoints;
 
     @ManyToMany(mappedBy = "internalModules")

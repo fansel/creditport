@@ -27,41 +27,39 @@ public class ExternalModule {
     @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(name = "module_id", updatable = false, nullable = false)
     private UUID moduleId;
+
     @Column(
             name = "module_number",
             columnDefinition = "VARCHAR",
-            nullable = true
-    )
+            nullable = true)
     private String moduleNumber;
     @Column(
             name = "module_name",
             nullable = false,
-            columnDefinition = "VARCHAR"
-    )
+            columnDefinition = "VARCHAR")
     private String moduleName;
 
     @Column(
             name = "module_description",
             nullable = false,
-            columnDefinition = "VARCHAR"
-    )
+            columnDefinition = "VARCHAR")
     private String moduleDescription;
+
     @ManyToOne()
     @JoinColumn(
             name = "uni_id",
-            nullable = false
-    )
+            nullable = false)
     private University university;
+
     @Column(
             name = "credit_points",
             columnDefinition = "DOUBLE PRECISION",
-            nullable = false
-    )
+            nullable = false)
     private double creditPoints;
+
     @Column(
             name = "is_verified",
-            columnDefinition = "BOOLEAN DEFAULT FALSE"
-    )
+            columnDefinition = "BOOLEAN DEFAULT FALSE")
     private boolean isVerified;
 
 

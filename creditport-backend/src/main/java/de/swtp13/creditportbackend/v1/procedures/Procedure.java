@@ -5,9 +5,7 @@ import de.swtp13.creditportbackend.v1.procedures.util.IDGenerator;
 import de.swtp13.creditportbackend.v1.requests.Request;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import de.swtp13.creditportbackend.v1.universities.University;
@@ -15,7 +13,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity(name = "Procedures")
@@ -32,52 +29,48 @@ public class Procedure {
     @Id
     @GenericGenerator(
             name = "id-generator",
-            type = IDGenerator.class
-    )
+            type = IDGenerator.class)
     @GeneratedValue(generator = "id-generator")
     @Column(
             name = "procedure_id",
             columnDefinition = "INT",
-            nullable = false
-    )
+            nullable = false)
     private int procedureId;
+
     @Column(
             name = "status",
             columnDefinition = "VARCHAR",
             // Zugehöriger Status muss noch festgelegt werden, z.B. nicht geoeffnet, geoeffnet, bearbeitet, abgelehnt, angenommen, Nachfrage noetig
-            nullable = false
-    )
+            nullable = false)
     @Enumerated(EnumType.STRING)
     private Status status;
+
     @Column(
             name = "annotation",
-            columnDefinition = "TEXT"
-    )
+            columnDefinition = "TEXT")
     private String annotation;
+
     @ManyToOne
     @JoinColumn(
             name = "uni_id",
-            nullable = false
-    )
+            nullable = false)
     private University university;
+
     @ManyToOne
     @JoinColumn(
             name = "course_id",
-            nullable = false
-    )
+            nullable = false)
     private Course course;
 
     @Column(
             name = "created_at",
-            nullable = false
-    )
+            nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Instant createdAt;
 
     @Column(
             name = "last_updated_on",
-            nullable = false
-    )
+            nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Instant lastUpdated;
 
