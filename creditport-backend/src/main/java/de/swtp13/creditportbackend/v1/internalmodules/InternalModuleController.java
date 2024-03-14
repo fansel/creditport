@@ -120,11 +120,22 @@ public class InternalModuleController {
                     List<Course> courses = new ArrayList<>();
                     for(UUID courseId:ModuleDetails.getCourseIds()){
                         if(courseRepository.findById(courseId).isPresent()){
-                            courses.add(courseRepository.findById(courseId).get());
+                            Course course = courseRepository.findById(courseId).get();
+                            courses.add(course);
                         }
                     }
                     Module.setCourses(courses);
+
                     InternalModule updatedModule = moduleRepository.save(Module);
+                    for(UUID courseId:ModuleDetails.getCourseIds()){
+                        if(courseRepository.findById(courseId).isPresent()){
+                            Course course = courseRepository.findById(courseId).get();
+                            course.getInternalModules();
+                            courseService.addInternalModules(course);
+                            course.addInternalModule(updatedModule);
+                            courseRepository.save(course);
+                        }
+                    }
                     return ResponseEntity.ok(updatedModule);
                 }).orElse(ResponseEntity.notFound().build());
     }
