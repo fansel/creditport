@@ -31,9 +31,8 @@ export const actions = {
 
     const res = await api.put(api.routes.procedure_by_id(form.data.procedureId), body, locals.user?.token);
 
-    console.log(res);
-
     if (!res.success) {
+      console.log(res);
       return message(form, { type: 'error', message: 'Fehler beim Speichern des Vorgangs.' }, { status: 400 });
     }
 
@@ -67,6 +66,36 @@ export const actions = {
     }
 
     setFlash({ type: 'success', message: 'Erfolgreich archiviert.' }, cookies);
+    return { success: true };
+  },
+  forwardProcedure: async ({ locals, request, cookies }) => {
+    const formData = await request.formData();
+
+    const schema = zfd.formData({
+      procedureId: zfd.text()
+    });
+
+    const result = schema.safeParse(formData);
+
+    if (!result.success) {
+      setFlash({ type: 'error', message: 'Keine ID angegeben!' }, cookies);
+      return fail(400, { errors: 'keine ID angegeben' });
+    }
+
+    const res = await api.post(api.routes.procedure_forward(result.data.procedureId), {}, locals.user?.token, { res_type: api.content_type.plain });
+
+    if (!res.success) {
+      console.log(res);
+      if (res.http_code == 428) {
+        setFlash({ type: 'error', message: 'Nicht alle Anträge bearbeitet, kann nicht weitergeleitet werden!' }, cookies);
+        return fail(res.http_code, { errors: 'Nicht alle Anträge bearbeitet, kann nicht weitergeleitet werden!' });
+      }
+      setFlash({ type: 'error', message: 'Fehler beim Weiterleiten des Vorgangs.' }, cookies);
+
+      return fail(400, { errors: 'Fehler' });
+    }
+
+    setFlash({ type: 'success', message: 'Erfolgreich Weitergeleitet.' }, cookies);
     return { success: true };
   }
 };
