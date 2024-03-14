@@ -2,13 +2,11 @@ package de.swtp13.creditportbackend.v1.courses;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.swtp13.creditportbackend.v1.internalmodules.InternalModule;
-import de.swtp13.creditportbackend.v1.internalmodules.InternalModuleRepository;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
-import de.swtp13.creditportbackend.v1.courses.CourseRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,26 +22,23 @@ public class Course {
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(name = "UUID",strategy = "org.hibernate.id.UUIDGenerator")
-     @Column(
-             name = "course_id",
-             updatable = false,
-             nullable = false
-     )
+    @Column(
+            name = "course_id",
+            updatable = false,
+            nullable = false)
     private UUID courseId;
 
     @Column(
             name = "course_name",
             columnDefinition = "VARCHAR",
-            nullable = false
-    )
+            nullable = false)
     private String courseName;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name= "course_intmodule",
             joinColumns = @JoinColumn(name = "course_id"),
-            inverseJoinColumns = @JoinColumn(name = "internal_module_id")
-    )
+            inverseJoinColumns = @JoinColumn(name = "internal_module_id"))
     @JsonIgnore
     private List<InternalModule> internalModules;
 

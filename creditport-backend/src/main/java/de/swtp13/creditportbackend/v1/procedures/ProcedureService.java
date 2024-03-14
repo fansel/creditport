@@ -1,7 +1,6 @@
 package de.swtp13.creditportbackend.v1.procedures;
 
 import de.swtp13.creditportbackend.v1.courses.Course;
-import de.swtp13.creditportbackend.v1.courses.CourseDTO;
 import de.swtp13.creditportbackend.v1.courses.CourseRepository;
 import de.swtp13.creditportbackend.v1.externalmodules.ExternalModule;
 import de.swtp13.creditportbackend.v1.externalmodules.ExternalModuleRepository;
@@ -155,7 +154,7 @@ public class ProcedureService {
     }
 
     public void setStatusArchiviert(Procedure procedure){
-        if (procedure.getStatus().equals(Status.VOLLSTÄNDIG)){
+        if (procedure.getStatus().equals(Status.VOLLSTAENDIG)){
             procedure.setStatus(Status.ARCHIVIERT);
             procedureRepository.save(procedure);
         }

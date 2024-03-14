@@ -7,7 +7,6 @@ import de.swtp13.creditportbackend.v1.procedures.dto.ProcedureWithRequestsDTO;
 import de.swtp13.creditportbackend.v1.requests.RequestRepository;
 import de.swtp13.creditportbackend.v1.requests.RequestService;
 import de.swtp13.creditportbackend.v1.requests.StatusRequest;
-import de.swtp13.creditportbackend.v1.universities.University;
 import de.swtp13.creditportbackend.v1.universities.UniversityRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -25,7 +24,6 @@ import de.swtp13.creditportbackend.v1.procedures.dto.ProcedureResponseDTO;
 
 import java.time.Instant;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -211,7 +209,7 @@ public class ProcedureController {
         Optional<Procedure> optionalProcedure = procedureRepository.findByProcedureId(id);
         if (optionalProcedure.isPresent()) {
             Procedure procedure = optionalProcedure.get();
-            if (procedure.getStatus().equals(Status.VOLLSTÄNDIG)){
+            if (procedure.getStatus().equals(Status.VOLLSTAENDIG)){
                 procedure.setStatus(Status.ARCHIVIERT);
                 procedureRepository.save(procedure);
                 return ResponseEntity.ok(procedure);
