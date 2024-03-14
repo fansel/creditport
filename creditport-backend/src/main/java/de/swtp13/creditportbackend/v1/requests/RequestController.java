@@ -47,7 +47,7 @@ public class RequestController {
             )//)
     })
     @GetMapping
-    public ResponseEntity<List<UpdateRequestDTO>> getAllRequests() {
+    public ResponseEntity<List<UpdateRequestDTO>> getAllRequests(@RequestHeader(value =HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
         System.out.println("Get all requests");
         List<UpdateRequestDTO> requestDTOS = new ArrayList<>();
         for(Request request: requestRepository.findAll()){
