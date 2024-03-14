@@ -114,27 +114,36 @@ public class ProcedureController {
             @ApiResponse(responseCode = "404", description = "Procedure id not found", content = @Content)
     })
     @PutMapping("/{id}")
-    public ResponseEntity<Procedure> updateProcedure(@PathVariable("id") int procedureId, @RequestBody Procedure ProcedureDetails) {
-        if(universityRepository.findById(ProcedureDetails.getUniversity().getUniId()).isEmpty()){
+    public ResponseEntity<Procedure> updateProcedure(@PathVariable("id") int procedureId, @RequestBody String annotation) {
+        /*if(universityRepository.findById(ProcedureDetails.getUniversity().getUniId()).isEmpty()){
             return ResponseEntity.notFound().build();
         }
 
-        return procedureRepository.findByProcedureId(procedureId)
+*/      Optional<Procedure> procedure = procedureRepository.findById(procedureId);
+        if(procedure.isPresent()){
+            procedure.get().setAnnotation(annotation);
+        procedure.get().setStatus(Status.IN_BEARBEITUNG);
+        procedure.get().setLastUpdated(Instant.now());
+        procedureRepository.save(procedure.get());
+        return ResponseEntity.ok(procedure.get());
+        } else return ResponseEntity.notFound().build();
+
+       /* return procedureRepository.findByProcedureId(procedureId)
                 .map(procedure -> {
                     procedureService.setStatusOffen(ProcedureDetails);
                     procedure.setAnnotation(ProcedureDetails.getAnnotation());
-                    procedure.setUniversity(universityRepository.findById(ProcedureDetails.getUniversity().getUniId()).get());
-                    procedure.setCourse(ProcedureDetails.getCourse());
+                   // procedure.setUniversity(universityRepository.findById(ProcedureDetails.getUniversity().getUniId()).get());
+                    /*procedure.setCourse(ProcedureDetails.getCourse());
 
                     /*List<Request> requests = new ArrayList<>();
                     for(Request request: requestRepository.findRequestsByProcedureId(procedureId)){
                         requestService.updateRequest(requestService.toUpdateRequestDTO(request),request.getRequestId());
                     }
-                    procedure.setRequests(requests);*/
-                    procedure.setLastUpdated(Instant.now());
+                    procedure.setRequests(requests);
+                    procedure.;
                     // Add other fields to update if needed
                     return ResponseEntity.ok(procedureRepository.save(procedure));
-                }).orElse(ResponseEntity.notFound().build());
+                }).orElse(ResponseEntity.notFound().build());*/
     }
 
     @Operation(summary = "creates a procedure", responses = {
