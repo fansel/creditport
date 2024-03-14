@@ -5,6 +5,7 @@
   import { superForm } from 'sveltekit-superforms';
 
   import { truncateText } from '$root/lib/util.js';
+  import { status_requests, user_roles } from '$root/lib/config';
 
   import Header from '$lib/components/InternHeader.svelte';
   import Comment from './Comment.svelte';
@@ -41,6 +42,15 @@
   let showComment = false;
   let showModalExtern = false;
   let updateModuleForm;
+
+  function updateStatus(status) {
+    $form.statusRequest = status_requests[status].match;
+  }
+  function formalAblehnen() {
+    $form.statusRequest = status_requests[4].match;
+    $form.annotationCommittee = 'Formal abgelehnt (siehe Anmerkung für Studenten)';
+    $form.annotationStudent = 'Formal abgelehnt ' + ($form.annotationStudent ? ':\n' : '') + $form.annotationStudent;
+  }
 
   // let requestBackup = JSON.parse(JSON.stringify(data.request));
 
@@ -214,10 +224,20 @@
     <div class="comment my-3">
       <Comment bind:annotationCommittee={$form.annotationCommittee} bind:annotationStudent={$form.annotationStudent} />
     </div>
-    <div class="buttons d-flex ms-auto">
+    <div class="buttons d-flex hstack gap-1">
       <button type="submit" class="btn btn-sm btn-primary d-flex">Speichern</button>
-      <button type="button" class="btn btn-sm btn-outline-primary mx-1 d-flex justfiy-content-end">Status ändern</button>
-      <button type="button" class="btn btn-sm btn-danger mx-1 d-flex justfiy-content-end">Formal ablehnen</button>
+
+      {#if data.users == user_roles.STUDY_OFFICE || user_roles.ADMIN}
+        <button type="submit" class="btn btn-sm btn-outline-danger d-flex justfiy-content-end" on:click={formalAblehnen}>Formal Ablehnen</button>
+        <button type="submit" class="btn btn-sm btn-outline-warning d-flex justfiy-content-end" on:click={() => updateStatus(2)}>Rückfrage nötig</button>
+      {/if}
+      {#if data.users == user_roles.EXAM_COMITEE}
+        <button type="submit" class="btn btn-sm btn-success d-flex justfiy-content-end" on:click={() => updateStatus(3)}>Annehmen</button>
+        <button type="submit" class="btn btn-sm btn-danger d-flex justfiy-content-end" on:click={() => updateStatus(4)}>Ablehnen</button>
+        <button type="submit" class="btn btn-sm btn-outline-warning d-flex justfiy-content-end" on:click={() => updateStatus(2)}>Rückfrage nötig</button>
+      {/if}
+
+      <!-- <button type="button" class="btn btn-sm btn-outline-primary d-flex justfiy-content-end">Status ändern</button> -->
     </div>
   </div>
 </form>
