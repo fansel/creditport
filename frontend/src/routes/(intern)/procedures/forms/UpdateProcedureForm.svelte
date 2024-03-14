@@ -61,7 +61,7 @@
       <div class="row">
         <div class="col-12 col-lg-6">
           <div class="row mb-3">
-            <div class="col-md-3">
+            <div class="col-xl-3">
               <label for="id" class="col-form-label">Vorgangsnummer</label>
             </div>
             <div class="col">
@@ -74,7 +74,7 @@
             </div>
           </div>
           <div class=" row mb-3">
-            <div class="col-md-3">
+            <div class="col-xl-3">
               <label for="university" class="col-form-label">Universität</label>
             </div>
             <div class="col">
@@ -84,11 +84,11 @@
                   {$errors.university?.uniName}
                 </div>
               {/if}
-              <input type="hidden" bind:value={$form.university.uniId} name="university.uniId">
+              <input type="hidden" bind:value={$form.university.uniId} name="university.uniId" />
             </div>
           </div>
           <div class="row mb-3">
-            <div class="col-md-3">
+            <div class="col-xl-3">
               <label for="courseName" class="col-form-label"> Studiengang </label>
             </div>
             <div class="col">
@@ -98,8 +98,7 @@
                   {$errors.course?.courseName}
                 </div>
               {/if}
-              <input type="hidden" bind:value={$form.course.courseId} name="course.courseId">
-
+              <input type="hidden" bind:value={$form.course.courseId} name="course.courseId" />
             </div>
           </div>
           <div class="mb-3">
@@ -118,8 +117,8 @@
             <div class="list-group-item d-inline-flex justify-content-between"><strong>Modulanträge ({$form.requestDetails.length})</strong></div>
 
             {#each $form.requestDetails as _, i}
-            <input type="hidden" bind:value={$form.requestDetails[i].moduleLink} name="{$form.requestDetails[i].moduleLink}">
-              <div class="list-group-item d-inline-flex justify-content-between">
+              <input type="hidden" bind:value={$form.requestDetails[i].moduleLink} name={$form.requestDetails[i].moduleLink} />
+              <div class="list-group-item d-inline-flex justify-content-between flex-wrap">
                 <div class="hstack align-items-start">
                   <ul>
                     {#each $form.requestDetails[i].externalModules as _, z}
@@ -132,10 +131,11 @@
                     {/each}
                   </ul>
                 </div>
-
-                <div class="d-flex align-items-start gap-2">
+                <div>
                   <RequestStatus status={$form.requestDetails[i].statusRequest} />
+                </div>
 
+                <div>
                   <a href="/procedures/{$form.requestDetails[i].requestId}"><i class="bi bi-pencil-square" /></a>
                 </div>
               </div>
