@@ -25,7 +25,7 @@ export const status_procedures = [
 // Status die ein Antrag haben kann, Reihenfolge ist wichtig
 export const status_requests = [
   { text_intern: 'Nicht bearbeitet', color: '#6c757d', text_color: 'white', text_extern: 'Nicht bearbeitet', match: 'NICHT_BEARBEITET' },
-  { text_intern: 'Bearbeitet', color: '#ffc107', text_color: 'white', text_extern: 'Bearbeitet', match: 'BEARBEITET' },
+  { text_intern: 'Bearbeitet', color: '#ffc107', text_color: 'white', text_extern: 'In Bearbeitung', match: 'BEARBEITET' },
   { text_intern: 'Rückfrage nötig', color: '#ffc107', text_color: 'white', text_extern: 'Rückfrage nötig', match: 'RÜCKFRAGE_NÖTIG' },
   { text_intern: 'Angenommen', color: '#198754', text_color: 'white', text_extern: 'Angenommen', match: 'ANGENOMMEN' },
   { text_intern: 'Abgelehnt', color: '#dc3545', text_color: 'white', text_extern: 'Abgelehnt', match: 'ABGELEHNT' }

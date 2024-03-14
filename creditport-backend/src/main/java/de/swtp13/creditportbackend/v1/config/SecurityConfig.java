@@ -38,6 +38,7 @@ public class SecurityConfig {
                                         API_VERSION + "/procedures",
                                         API_VERSION + "/modules/external",
                                         API_VERSION + "/auth/login")
+
                                 .permitAll()
                                 .requestMatchers(HttpMethod.GET,
                                         API_VERSION + "/universities",
@@ -45,6 +46,10 @@ public class SecurityConfig {
                                         API_VERSION + "/modules/internal",
                                         API_VERSION + "/courses",
                                         API_VERSION + "/procedures/??????")
+                                .permitAll()
+                                .requestMatchers("/swagger-ui/**", "/api-docs")
+                                .permitAll()
+                                .requestMatchers(API_VERSION + "/pdf/**")
                                 .permitAll()
                                 .requestMatchers(API_VERSION + "/actuator/health")
                                 .permitAll()
