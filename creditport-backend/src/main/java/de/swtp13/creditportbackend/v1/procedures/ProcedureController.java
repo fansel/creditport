@@ -1,6 +1,7 @@
 package de.swtp13.creditportbackend.v1.procedures;
 
 
+import de.swtp13.creditportbackend.v1.procedures.dto.AnnotationDTO;
 import de.swtp13.creditportbackend.v1.procedures.dto.ProcedureRequestDTO;
 import de.swtp13.creditportbackend.v1.procedures.dto.ProcedureWithRequestsDTO;
 import de.swtp13.creditportbackend.v1.requests.RequestRepository;
@@ -110,18 +111,18 @@ public class ProcedureController {
      * updates a procedure with specific ID in the Database
      */
     @Operation(summary = "updates the procedure with the given id", responses = {
-            @ApiResponse(responseCode = "200"),
+            @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AnnotationDTO.class))),
             @ApiResponse(responseCode = "404", description = "Procedure id not found", content = @Content)
     })
     @PutMapping("/{id}")
-    public ResponseEntity<Procedure> updateProcedure(@PathVariable("id") int procedureId, @RequestBody String annotation) {
+    public ResponseEntity<Procedure> updateProcedure(@PathVariable("id") int procedureId, @RequestBody AnnotationDTO annotationDTO) {
         /*if(universityRepository.findById(ProcedureDetails.getUniversity().getUniId()).isEmpty()){
             return ResponseEntity.notFound().build();
         }
 
 */      Optional<Procedure> procedure = procedureRepository.findById(procedureId);
         if(procedure.isPresent()){
-            procedure.get().setAnnotation(annotation);
+            procedure.get().setAnnotation(annotationDTO.getAnnotation());
         procedure.get().setStatus(Status.IN_BEARBEITUNG);
         procedure.get().setLastUpdated(Instant.now());
         procedureRepository.save(procedure.get());
