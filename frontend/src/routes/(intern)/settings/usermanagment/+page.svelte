@@ -10,12 +10,13 @@
 
   $: users = data.users;
 
-  let showAddModal = false;
+  // let showAddModal = false;
   let showDeleteModal = false;
 
   let selectedUser;
 
   let updateForm;
+  let addForm;
 
   function dialog_open(id) {
     const user = users.find((u) => u.userId == id);
@@ -26,13 +27,14 @@
   }
 </script>
 
-<AddUserForm bind:showModal={showAddModal} roles={config.user_roles} />
+<!-- <AddUserForm bind:showModal={showAddModal} roles={config.user_roles} /> -->
 <UpdateUserForm bind:this={updateForm} data={data.updateUserForm} />
+<AddUserForm bind:this={addForm} data={data.addUserForm} />
 <DeleteUserForm user={selectedUser} bind:showModal={showDeleteModal} />
 
 <h4 class="mb-3 d-flex justify-content-between flex-wrap gap-2">
   Benutzer
-  <button class="btn btn-primary btn-sm text-nowrap" on:click={() => (showAddModal = true)}>
+  <button class="btn btn-primary btn-sm text-nowrap" on:click={addForm.dialog_open()}>
     <i class="bi bi-plus-circle" />
     Hinzufügen
   </button>

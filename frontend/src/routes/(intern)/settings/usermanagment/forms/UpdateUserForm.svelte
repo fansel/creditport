@@ -70,6 +70,18 @@
 
       <div class="row mb-3">
         <div class="col-md-3">
+          <label for="name" class="col-form-label">Passwort</label>
+        </div>
+        <div class="col">
+          <input type="password" name="password" placeholder="" class="form-control {$errors.password ? 'is-invalid' : ''}" bind:value={$form.password} />
+          {#if $errors.password}
+            <div class="invalid-feedback">{$errors.password}</div>
+          {/if}
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-3">
           <label for="roleSelectUpdate" class="col-form-label">Rolle</label>
         </div>
         <div class="col">

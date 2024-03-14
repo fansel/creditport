@@ -11,13 +11,21 @@ export const login_schema = z.object({
 
 export const user_schema = z.object({
   username: z.string().min(1, { message: 'Name darf nicht leer sein.' }),
+  password: z.string().min(1, { message: 'Passwort darf nicht leer sein.' }),
   role: z.enum(Object.values(user_roles)),
   userId: z.number()
 });
 
-export const add_user_schema = user_schema.extend({
-  password: z.string().min(1, { message: 'Passwort darf nicht leer sein.' })
-});
+export const add_user_schema = user_schema
+  .extend({
+    confirm_password: z.string()
+  })
+  .refine((data) => data.password == data.confirm_password, {
+    message: 'Nicht das selbe Passwort.',
+    path: ['confirm_password']
+  });
+
+export const register_user_schema = user_schema.omit({ userId: true });
 
 export const universities_schema = z.object({
   uniId: z.string().min(1),
@@ -106,6 +114,7 @@ export const show_request_schema = z.object({
   pdfExists: z.boolean(),
   moduleLink: z.string().nullable()
 });
+
 export const procedure_schema = z.object({
   procedureId: z.number(),
   annotation: z.string().nullable(),
