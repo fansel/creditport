@@ -36,8 +36,6 @@
     }
   });
 
-  $: console.log($errors);
-
   export function dialog_open(data) {
     reset({ data });
     dialog.showModal();

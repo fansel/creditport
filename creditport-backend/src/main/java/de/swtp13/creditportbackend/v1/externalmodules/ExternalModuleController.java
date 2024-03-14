@@ -79,7 +79,10 @@ public class ExternalModuleController {
             @ApiResponse(responseCode = "404", description = "External module id not found", content = @Content)
     })
     @PutMapping("/{moduleId}")
-    public ResponseEntity<ExternalModule> updateModule(@PathVariable UUID moduleId, @RequestBody ExternalModule ModuleDetails) {
+    public ResponseEntity<ExternalModule> updateModule(
+            @PathVariable UUID moduleId,
+            @RequestBody ExternalModule ModuleDetails,
+            @RequestHeader(value =HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
         return moduleRepository.findById(moduleId)
                 .map(Module -> {
                     Module.setModuleName(ModuleDetails.getModuleName());
@@ -99,7 +102,9 @@ public class ExternalModuleController {
             @ApiResponse(responseCode = "404", description = "External module id not found", content = @Content)
     })
     @DeleteMapping("/{moduleId}")
-    public ResponseEntity<?> deleteModule(@PathVariable UUID moduleId) {
+    public ResponseEntity<?> deleteModule(
+            @PathVariable UUID moduleId,
+            @RequestHeader(value =HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
         return moduleRepository.findById(moduleId)
                 .map(Module -> {
                     moduleRepository.delete(Module);
@@ -112,7 +117,16 @@ public class ExternalModuleController {
             @ApiResponse(responseCode = "200")
     })
     @PostMapping("/import")
-    public ResponseEntity<List<ExternalModule>> importModules(@RequestBody List<ExternalModule> modules) {
+    public ResponseEntity<List<ExternalModule>> importModules(
+            @RequestBody List<ExternalModule> modules,
+            @RequestHeader(value =HttpHeaders.AUTHORIZATION, required = false, defaultValue="") String token) {
+        for (ExternalModule externalModule: modules){
+            if(managementService.isAuthorized(token)){
+                externalModule.setVerified(true);
+            } else {
+                externalModule.setVerified(false);
+            }
+        }
         moduleRepository.saveAll(modules);
         return ResponseEntity.ok(modules);
     }

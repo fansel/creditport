@@ -96,6 +96,15 @@ public class Procedure {
         this.createdAt = Instant.now();
         this.lastUpdated = this.createdAt;
     }
+
+    public Procedure(String annotation, University university, Course course, Status status){
+        this.annotation = annotation;
+        this.university = university;
+        this.course = course;
+        this.status = status;
+        this.createdAt = Instant.now();
+        this.lastUpdated = this.createdAt;
+    }
     public Procedure(String annotation, University university, Course course, List<Request> requests) {
         this.annotation = annotation;
         this.university = university;

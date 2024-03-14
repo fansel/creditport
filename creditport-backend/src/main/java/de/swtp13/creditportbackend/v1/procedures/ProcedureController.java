@@ -1,6 +1,7 @@
 package de.swtp13.creditportbackend.v1.procedures;
 
 
+import de.swtp13.creditportbackend.v1.procedures.dto.AnnotationDTO;
 import de.swtp13.creditportbackend.v1.procedures.dto.ProcedureRequestDTO;
 import de.swtp13.creditportbackend.v1.procedures.dto.ProcedureWithRequestsDTO;
 import de.swtp13.creditportbackend.v1.requests.RequestRepository;
@@ -14,6 +15,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -66,7 +68,7 @@ public class ProcedureController {
             ))
     })
     @GetMapping
-    public ResponseEntity<List<ProcedureWithRequestsDTO>> getProceduresWithRequests() {
+    public ResponseEntity<List<ProcedureWithRequestsDTO>> getProceduresWithRequests(@RequestHeader(value =HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
         List<ProcedureWithRequestsDTO> proceduresWithRequests = procedureService.getProcedureDetailsWithRequests();
         return ResponseEntity.ok(proceduresWithRequests);
     }
@@ -99,7 +101,7 @@ public class ProcedureController {
             @ApiResponse(responseCode = "200")
     })
     @GetMapping("/ids")
-    public ResponseEntity<List<Integer>> getProcedureIds(){
+    public ResponseEntity<List<Integer>> getProcedureIds(@RequestHeader(value =HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token){
         List<Integer> ids = procedureRepository.findAllIds();
         return ResponseEntity.ok(ids);
     }
@@ -110,31 +112,40 @@ public class ProcedureController {
      * updates a procedure with specific ID in the Database
      */
     @Operation(summary = "updates the procedure with the given id", responses = {
-            @ApiResponse(responseCode = "200"),
+            @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AnnotationDTO.class))),
             @ApiResponse(responseCode = "404", description = "Procedure id not found", content = @Content)
     })
     @PutMapping("/{id}")
-    public ResponseEntity<Procedure> updateProcedure(@PathVariable("id") int procedureId, @RequestBody Procedure ProcedureDetails) {
-        if(universityRepository.findById(ProcedureDetails.getUniversity().getUniId()).isEmpty()){
+    public ResponseEntity<Procedure> updateProcedure(@PathVariable("id") int procedureId, @RequestBody AnnotationDTO annotationDTO) {
+        /*if(universityRepository.findById(ProcedureDetails.getUniversity().getUniId()).isEmpty()){
             return ResponseEntity.notFound().build();
         }
 
-        return procedureRepository.findByProcedureId(procedureId)
+*/      Optional<Procedure> procedure = procedureRepository.findById(procedureId);
+        if(procedure.isPresent()){
+            procedure.get().setAnnotation(annotationDTO.getAnnotation());
+        procedure.get().setStatus(Status.IN_BEARBEITUNG);
+        procedure.get().setLastUpdated(Instant.now());
+        procedureRepository.save(procedure.get());
+        return ResponseEntity.ok(procedure.get());
+        } else return ResponseEntity.notFound().build();
+
+       /* return procedureRepository.findByProcedureId(procedureId)
                 .map(procedure -> {
                     procedureService.setStatusOffen(ProcedureDetails);
                     procedure.setAnnotation(ProcedureDetails.getAnnotation());
-                    procedure.setUniversity(universityRepository.findById(ProcedureDetails.getUniversity().getUniId()).get());
-                    procedure.setCourse(ProcedureDetails.getCourse());
+                   // procedure.setUniversity(universityRepository.findById(ProcedureDetails.getUniversity().getUniId()).get());
+                    /*procedure.setCourse(ProcedureDetails.getCourse());
 
                     /*List<Request> requests = new ArrayList<>();
                     for(Request request: requestRepository.findRequestsByProcedureId(procedureId)){
                         requestService.updateRequest(requestService.toUpdateRequestDTO(request),request.getRequestId());
                     }
-                    procedure.setRequests(requests);*/
-                    procedure.setLastUpdated(Instant.now());
+                    procedure.setRequests(requests);
+                    procedure.;
                     // Add other fields to update if needed
                     return ResponseEntity.ok(procedureRepository.save(procedure));
-                }).orElse(ResponseEntity.notFound().build());
+                }).orElse(ResponseEntity.notFound().build());*/
     }
 
     @Operation(summary = "creates a procedure", responses = {
@@ -158,7 +169,7 @@ public class ProcedureController {
                     content = @Content)
     })
     @PostMapping("/forward/{id}")
-    public ResponseEntity<?> forwardProcedure(@PathVariable("id") int id) {
+    public ResponseEntity<?> forwardProcedure(@PathVariable("id") int id,@RequestHeader(value =HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
         Procedure procedure = procedureRepository.findByProcedureId(id).orElse(null);
         if (procedure == null) {
             return ResponseEntity.notFound().build();
@@ -180,7 +191,7 @@ public class ProcedureController {
             @ApiResponse(responseCode = "404", description = "Procedure id not found", content = @Content)
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteProcedure(@PathVariable int id) {
+    public ResponseEntity<?> deleteProcedure(@PathVariable int id,@RequestHeader(value =HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
         return procedureRepository.findById(id)
                 .map(procedure -> {
                     procedureRepository.delete(procedure);
@@ -197,7 +208,7 @@ public class ProcedureController {
                     content = @Content)
     })
     @PostMapping("/archive/{id}")
-    public ResponseEntity<Procedure> archiveProcedure(@PathVariable Integer id) {
+    public ResponseEntity<Procedure> archiveProcedure(@PathVariable Integer id,@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
         Optional<Procedure> optionalProcedure = procedureRepository.findByProcedureId(id);
         if (optionalProcedure.isPresent()) {
             Procedure procedure = optionalProcedure.get();
