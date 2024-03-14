@@ -7,7 +7,7 @@
   export let colorTag;
 </script>
 
-<div class="col-md">
+<div class="col">
   <div class="card">
     <div class="card-header bg-{colorTag}">
       {header}

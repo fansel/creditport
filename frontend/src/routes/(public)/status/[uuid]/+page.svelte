@@ -3,9 +3,9 @@
   import ProcedureStatus from '$root/lib/components/ProcedureStatus.svelte';
   import RequestStatus from '$root/lib/components/RequestStatus.svelte';
   import StatusComponent from './StatusComponent.svelte';
-  import Antrag from './Antrag.svelte';
   import Accordion from '$root/lib/components/Accordion.svelte';
   import Mapping from './Mapping.svelte';
+  import { status_requests } from '$lib/config';
 
   export let data;
 
@@ -21,43 +21,60 @@
   const fremduni = procedure.university;
 
   // function to count request within procedure
-  function countRequests(procedure, status) {
+  function countRequestsHelper(procedure, status) {
     let count = 0;
 
     procedure.requests.forEach((request) => {
-      if (request.statusRequest === status) {
+      if (request.statusRequest === status_requests[status].match) {
         count++;
       }
     });
 
     return count;
   }
+
+  function countRequests(status) {
+    return countRequestsHelper(data.procedure, status);
+  }
+
+  const sumLP = (list) => list.reduce((sum, item) => sum + item.creditPoints, 0);
 </script>
 
 <div class="card mt-5">
   <div class="card-header">
-    <div class="d-flex justify-content-between">
-      <div class="align-self-start"><strong>Vorgang:</strong> {procedureId} mit <strong>{requests.length}</strong> Anträgen</div>
-      <div class="d-flex justify-content-center flex-grow-1"><strong>Status:</strong> <ProcedureStatus extern={true} status={data.procedure.status} /></div>
-      <div class="align-self-end">
-        erstellt am <strong>{format(new Date(procedure.createdAt), 'dd.MM.yyyy')}</strong>
-      </div>
+    <div class="row">
+      <div class="col-12 col-md-4 justify-content-center justify-content-md-start d-flex"><strong>Vorgang:</strong> {procedureId}</div>
+      <div class="col-12 col-md-4 d-flex justify-content-center flex-grow-1"><strong>Status:</strong> <ProcedureStatus extern={true} status={data.procedure.status} /></div>
+      <label for="" class="col-12 col-md-4 d-flex justify-content-center justify-content-md-end">
+        erstellt am&nbsp; <strong>{format(new Date(procedure.createdAt), 'dd.MM.yyyy')}</strong>
+      </label>
     </div>
   </div>
-  <div class="card-body status-container d-flex">
-    <StatusComponent header="ANGENOMMEN" statusCount={countRequests(data.procedure, 'ANGENOMMEN')} colorTag="success" />
-    <StatusComponent header="ABGELEHNT" statusCount={countRequests(data.procedure, 'ABGELEHNT')} colorTag="danger" />
-    <StatusComponent header="IN BEARBEITUNG" statusCount={countRequests(data.procedure, 'IN_BEARBEITET')} colorTag="warning" />
-    <StatusComponent header="NICHT BEARBEITET" statusCount={countRequests(data.procedure, 'NICHT_BEARBEITET')} />
-  </div>
+
+  <!-- <div class="overview">
+    <div class="row pt-2">
+      <div class="col-6 col-md-3 d-flex justify-content-center align-items-center">
+        {countRequests(3)}&nbsp;x<RequestStatus status={status_requests[3].match} extern={true}></RequestStatus>
+      </div>
+      <div class="col-6 col-md-3 d-flex justify-content-center align-items-center">
+        {countRequests(4)}&nbsp;x<RequestStatus status={status_requests[4].match} extern={true}></RequestStatus>
+      </div>
+      <div class="col-6 col-md-3 d-flex justify-content-center align-items-center">
+        {countRequests(2) + countRequests(1)}&nbsp;x<RequestStatus status={status_requests[1].match} extern={true}></RequestStatus>
+      </div>
+      <div class="col-6 col-md-3 d-flex justify-content-center align-items-center">
+        {countRequests(0)}&nbsp;x<RequestStatus status={status_requests[0].match} extern={true}></RequestStatus>
+      </div>
+    </div>
+  </div> -->
 
   <!-- NEUE VERSION -->
   <div class="new-version mx-2">
     {#each requests as request}
       <Accordion>
         <div slot="head" class="fs-6 d-flex">
-          <div class="fw-bold justify-content-start">LP</div>
-          <RequestStatus class="ml-auto" status={request.statusRequest} />
+          <div class="fw-bold justify-content-start">requestID: {request.requestId}</div>
+          <RequestStatus status={request.statusRequest} extern={true} />
         </div>
         <div slot="details">
           <div class=" p-2">
