@@ -1,11 +1,12 @@
 <script>
   import VirtualList from '@sveltejs/svelte-virtual-list';
   import AddCourseForm from './form/AddCourseForm.svelte';
-  import UpdateCourseForm from './form/UpdateCourseForm.svelte';
+  import UpdateCourseForm from './form/UpdateCoursesForm.svelte';
   import DeleteCourseForm from './form/DeleteCourseForm.svelte';
   import UpdateModuleForm from './form/UpdateModuleForm.svelte';
   import DeleteModuleForm from './form/DeleteModuleForm.svelte';
   import AddModuleForm from './form/AddModuleForm.svelte';
+  import ImportCourseForm from './form/ImportCourseForm.svelte';
 
   export let data;
 
@@ -16,6 +17,7 @@
   let addCourseForm;
   let updateModuleForm;
   let addModuleForm;
+  let importCourseForm;
 
   let showDeleteModuleModal = false;
   let showDeleteCourseModal = false;
@@ -66,9 +68,10 @@
 <UpdateCourseForm bind:this={updateCourseForm} data={data.updateCourseForm} />
 <UpdateModuleForm bind:this={updateModuleForm} data={data.updateModuleForm} />
 <AddCourseForm bind:this={addCourseForm} data={data.addCourseForm} />
-<AddModuleForm bind:this={addModuleForm} data={data.addModuleForm} />
+<AddModuleForm bind:this={addModuleForm} data={data.addModuleForm} courses={data.courses}/>
 <DeleteCourseForm course={selectedCourse} bind:showModal={showDeleteCourseModal} />
 <DeleteModuleForm module={selectedModule} bind:showModal={showDeleteModuleModal} />
+<ImportCourseForm bind:this={importCourseForm} data={data.importCourseForm} />
 
 <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
   <h4 class="m-0">Interne Studiengänge</h4>
@@ -78,7 +81,7 @@
       <i class="bi bi-plus-circle" />
       Neu
     </button>
-    <button class="btn btn-primary btn-sm" on:click={test}>
+    <button class="btn btn-primary btn-sm" on:click={importCourseForm.dialog_open()}>
       <i class="bi bi-cloud-arrow-up" />
       Importieren
     </button>
@@ -109,7 +112,7 @@
   <h4 class="m-0">Dazugehörige Module</h4>
 
   <div class="d-flex flex-wrap gap-2">
-    <button class="btn btn-primary btn-sm text-nowrap" on:click={addModuleForm.dialog_open({ courses: [selectedCourse] })}>
+    <button class="btn btn-primary btn-sm text-nowrap" on:click={addModuleForm.dialog_open}>
       <i class="bi bi-plus-circle" />
       Modul hinzufügen
     </button>

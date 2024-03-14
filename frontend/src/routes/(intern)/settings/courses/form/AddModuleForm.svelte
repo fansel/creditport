@@ -9,6 +9,7 @@
   import SuperDebug from 'sveltekit-superforms';
 
   export let data;
+  export let courses;
   // export let showModal;
 
   let dialog;
@@ -34,13 +35,18 @@
     }
   });
 
-  export function dialog_open(data) {
-    reset({ data });
+  export function dialog_open() {
+    reset();
+    // courseName = name;
     dialog.showModal();
   }
 
   export function dialog_close() {
     dialog.close();
+  }
+
+  function findCourseById(id) {
+    return courses.find((c) => c.courseId == id);
   }
 </script>
 
@@ -58,7 +64,7 @@
     <div class="body p-3">
       <row class="mb-3">
         <div class="col">
-          <!-- <p><i class="bi bi-question-circle me-2" /> Lege ein Module für den Studiengang <span class="fw-bold">{$form.course.courseName}</span> an.</p> -->
+          <p><i class="bi bi-question-circle me-2" /> Lege ein Module für beliebig viele Studiengänge an.</p>
         </div>
       </row>
       <!-- <input type="hidden" bind:value={$}> -->
@@ -108,6 +114,20 @@
           {#if $errors.creditPoints}
             <div class="invalid-feedback">{$errors.creditPoints}</div>
           {/if}
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-3">
+          <label for="name" class="col-form-label">Studiengänge</label>
+        </div>
+        <div class="col">
+          <select multiple class="form-select" size="3" aria-label="Size 3 select example" bind:value={$form.courseIds}>
+            {#each courses as course}
+              <option value={course.courseId} selected={$form.courseIds.includes(course.courseId)}>{course.courseName}</option>
+            {/each}
+          </select>
+          <div class="text-muted">Mehrfachauswahl erlaubt</div>
         </div>
       </div>
     </div>
