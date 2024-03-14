@@ -44,6 +44,8 @@ public class SecurityConfig {
                                         API_VERSION + "/modules/external",
                                         API_VERSION + "/modules/internal",
                                         API_VERSION + "/courses",
+                                        API_VERSION + "/pdf/**",
+                                        API_VERSION + "/swagger-ui/**",
                                         API_VERSION + "/procedures/??????")
                                 .permitAll()
                                 .requestMatchers(API_VERSION + "/actuator/health")

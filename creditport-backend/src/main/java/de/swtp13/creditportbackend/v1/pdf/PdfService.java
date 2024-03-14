@@ -109,14 +109,14 @@ public class PdfService {
     private void addHeadingToDocument(Document document, Procedure procedure) {
         try {
 
-        String firstHaldOfProcedureId = (String.valueOf(procedure.getProcedureId())).substring(0, 3);
-        String secondHaldOfProcedureId = (String.valueOf(procedure.getProcedureId())).substring(3);
-        String procedureIdShow = firstHaldOfProcedureId + "-" + secondHaldOfProcedureId;
-        Paragraph heading = new Paragraph("Dein Antrag: " + procedureIdShow )
-                .setTextAlignment(TextAlignment.CENTER)
-                .addStyle(headingStyle);
-        document.add(heading);
-        System.out.println("Added heading to document wihout error");
+            String firstHaldOfProcedureId = (String.valueOf(procedure.getProcedureId())).substring(0, 3);
+            String secondHaldOfProcedureId = (String.valueOf(procedure.getProcedureId())).substring(3);
+            String procedureIdShow = firstHaldOfProcedureId + "-" + secondHaldOfProcedureId;
+            Paragraph heading = new Paragraph("Dein Antrag: " + procedureIdShow )
+                    .setTextAlignment(TextAlignment.CENTER)
+                    .addStyle(headingStyle);
+            document.add(heading);
+            System.out.println("Added heading to document wihout error");
         } catch (Exception e) {
             System.out.println("Error while adding heading to document: " + e.getMessage());
         }
@@ -214,34 +214,34 @@ public class PdfService {
 
     private void addDataRowsToTable(Table table, List<Request> requests) {
         for (Request request : requests) {
-            // Maximale Anzahl der Module ermitteln
-            int maxModules = Math.max(request.getExternalModules().size(), request.getInternalModules().size());
+            List<ExternalModule> externalModules = request.getExternalModules();
+            List<InternalModule> internalModules = request.getInternalModules();
+            int maxModules = Math.max(externalModules.size(), internalModules.size());
 
             for (int i = 0; i < maxModules; i++) {
                 // Externe Moduldaten hinzufügen
-                if (i < request.getExternalModules().size()) {
-                    ExternalModule externalModule = request.getExternalModules().get(i);
+                if (i < externalModules.size()) {
+                    ExternalModule externalModule = externalModules.get(i);
                     table.addCell(createCell(externalModule.getModuleName()));
                     table.addCell(createCell(String.valueOf(externalModule.getCreditPoints())));
                 } else {
-                    // Leere Zellen hinzufügen, wenn keine externen Module mehr vorhanden sind
                     table.addCell(createCell(""));
                     table.addCell(createCell(""));
                 }
 
                 // Interne Moduldaten hinzufügen
-                if (i < request.getInternalModules().size()) {
-                    InternalModule internalModule = request.getInternalModules().get(i);
+                if (i < internalModules.size()) {
+                    InternalModule internalModule = internalModules.get(i);
                     table.addCell(createCell(internalModule.getModuleName()));
                     table.addCell(createCell(String.valueOf(internalModule.getCreditPoints())));
                 } else {
-                    // Leere Zellen hinzufügen, wenn keine internen Module mehr vorhanden sind
                     table.addCell(createCell(""));
                     table.addCell(createCell(""));
                 }
             }
         }
     }
+
 
 
     private Cell createHeaderCell(String content) {
@@ -324,7 +324,7 @@ public class PdfService {
 
 
 
-    }
+}
 
 
 
