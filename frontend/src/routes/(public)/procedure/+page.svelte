@@ -21,6 +21,7 @@
   $: universities = data.universities;
   $: uniId = form?.uniId;
   $: uniName = form?.uniName;
+  console.log(uniId+" page.svelte");
   
 
   // $: console.log($tabProcedureForm);

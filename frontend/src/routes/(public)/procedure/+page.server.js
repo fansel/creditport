@@ -1,7 +1,7 @@
 import * as api from '$lib/api.js';
 import { file, zfd } from 'zod-form-data';
 import z from 'zod';
-import { fail, redirect } from '@sveltejs/kit';
+import { fail, redirect, error } from '@sveltejs/kit';
 //import { superValidate } from 'sveltekit-superforms';
 
 /** @type {import('./$types').PageServerLoad} */
@@ -15,6 +15,9 @@ export async function load({ params }) {
   if (!modules.success) {
     throw error(404, { message: 'Fehler beim Laden der Module' });
   }
+  //console.log(universities.data);
+  //console.log(modules.data);
+
 
   //const form = await superValidate(zod(schema));
   return {
@@ -149,7 +152,8 @@ export const actions = {
     const { uniId } = res;
     const {uniName} = res;
 
-    console.log(res);
+    console.log(res+ " server.js");
+    console.log(uniId+" server.js");
 
     return { success: true, uniId: uniId, uniName: uniName};
   }

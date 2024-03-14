@@ -7,13 +7,11 @@
   export let uniId;
   export let uniName;
 
-  const dispatch = createEventDispatcher();
-
-  let universityId = '';
 
   let showAddUniversity = false;
   let showUniversityName = false;
   let newUniversityName = '';
+  
   //let newUniForm;
 
   function addUniversity() {
@@ -43,7 +41,7 @@
   </div>
 {/if}
 
-{#if uniId}
+{#if uniId !== undefined}
 <label for="uniName">Der Name der hinzugefügten Universität lautet: </label>
   <div id="uniName" class="border rounded mb-2">
 
