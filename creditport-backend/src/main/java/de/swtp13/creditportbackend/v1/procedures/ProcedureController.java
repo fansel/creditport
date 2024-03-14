@@ -179,8 +179,13 @@ public class ProcedureController {
                 return ResponseEntity.status(428).build();
             }
         }
-        if (procedure.getStatus().equals(Status.IN_BEARBEITUNG)) procedure.setStatus(Status.WEITERGELEITET);
-        return ResponseEntity.ok(procedureRepository.save(procedure));
+        if (procedure.getStatus().equals(Status.IN_BEARBEITUNG)) {
+            procedure.setStatus(Status.WEITERGELEITET);
+            return ResponseEntity.ok(procedureRepository.save(procedure));
+        } else {
+            return ResponseEntity.status(428).build();
+        }
+
     }
 
     @Operation(summary = "deletes a procedure", responses = {
