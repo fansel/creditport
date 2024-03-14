@@ -116,7 +116,6 @@ public class InternalModuleController {
             @PathVariable UUID moduleId,
             @RequestBody InternalModuleDTO ModuleDetails,
             @RequestHeader(value =HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
-        System.out.println("0");
         return moduleRepository.findById(moduleId)
                 .map(Module -> {
                     Module.setNumber(ModuleDetails.getNumber());
@@ -133,6 +132,9 @@ public class InternalModuleController {
                     }
                     Module.setCourses(courses);
                     InternalModule updatedModule = moduleRepository.save(Module);
+                    for(Course course:courseRepository.findAllByInternalModulesContains(moduleRepository.findById(moduleId).get())){
+                        course.getInternalModules().remove(moduleRepository.findById(moduleId).get());
+                    }
                     for(UUID courseId:ModuleDetails.getCourseIds()){
                         if(courseRepository.findById(courseId).isPresent()){
                             Course course = courseRepository.findById(courseId).get();
