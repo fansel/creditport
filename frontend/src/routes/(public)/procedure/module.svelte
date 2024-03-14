@@ -4,15 +4,16 @@
   export let requests;
   export let removeRequest;
   export let generalData;
-  export let modules;
+  export let internalModules;
+  export let externalModules;
   //export let universities;
   // export let activeTab;
   export let goToNextTab;
   export let addRequest;
   export let addTitleToRequest;
   export let addModuleToRequest;
-  export let removeTitleFromRequest;
-  export let removeModuleFromRequest;
+  export let removeExternalModulFromRequest;
+  export let removeInternalModulFromRequest;
 </script>
 
 <form action="?/requests" method="POST" enctype="multipart/form-data" id="requests" bind:this={modulesForm}>
@@ -30,15 +31,21 @@
           <h2 class="accordion-header" id="headingOne">
             <button class="accordion-button position-relative" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{index}" aria-expanded="false" aria-controls="collapseOne">
               <div class="col-md col-md-62">
-                {#each moduleData.selectedExternalModulIds as selectedExternalModulIds, modulIndex}
-                  <h6 class="h6" key= modulIndex}>{selectedExternalModulIds ? `${selectedExternalModulIds} ` : 'Neues Modul'}</h6>
+                <!-- {#each moduleData.selectedExternalModulIds as selectedExternalModulIds, modulIndex}
+                  <h6 class="h6" key= {modulIndex}>{selectedExternalModulIds ? `${selectedExternalModulIds} ` : 'Neues Modul'}</h6>
+                {/each} -->
+                {#each moduleData.selectedExternalModulIds as selectedExternalModulIds, selectedModulIndex}
+                  <h6 class="h6" key={selectedModulIndex}>
+                    <!-- wie kann ich nichts selecten? -->
+                    {selectedExternalModulIds!== undefined ? `${externalModules[moduleData.selectedExternalModulIds[selectedModulIndex]].moduleName}` : 'Neues Modul'}
+                  </h6>
                 {/each}
               </div>
               <div class="col-md">
                 {#each moduleData.selectedInternalModulIds as selectedInternalModulIds, selectedModulIndex}
                   <h6 class="h6" key={selectedModulIndex}>
                     <!-- wie kann ich nichts selecten? -->
-                    {selectedInternalModulIds!== undefined ? `${modules[moduleData.selectedInternalModulIds[selectedModulIndex]].moduleName}` : 'Neues Modul'}
+                    {selectedInternalModulIds!== undefined ? `${internalModules[moduleData.selectedInternalModulIds[selectedModulIndex]].moduleName}` : 'Neues Modul'}
                   </h6>
                 {/each}
                 <button class="btn p-0 position-absolute top-50 end-0 translate-middle-y me-5" on:click={() => removeRequest(index)} type="button"><i class="bi bi-trash3-fill" /> </button>
@@ -52,15 +59,54 @@
               <div class="col-md">
                 <h5 class="h5">Externe Modul(e)</h5>
 
-                {#each moduleData.selectedExternalModulIds as selectedExternalModulIds, modulIndex}
-                  <div class=" border mb-5 border-3 rounded p-2">
+                {#each moduleData.selectedExternalModulIds as selectedExternalModulIds, selectedModulIndex}
+                <div class="border mb-5 border-3 rounded p-2">
+                  <div class="row">
+                    <div class="mb-3 col-md-10">
+                      <label for={`externalModule${selectedModulIndex}`} class="mb-2"
+                        >Name
+                        <button class="btn p-0 me-3" on:click={() => removeExternalModulFromRequest(index, selectedModulIndex)} type="button">
+                          <i class="bi bi-trash3-fill" />
+                        </button>
+                      </label>
+                      <select
+                        class="form-select"
+                        name={`externalModule${index}-${selectedModulIndex}`}
+                        id={`externalModule${index}-${selectedModulIndex}`}
+                        aria-label="Default select example"
+                        bind:value={moduleData.selectedExternalModulIds[selectedModulIndex]}
+                      >
+                        
+                        {#each externalModules as modul, index}
+                          <option value={index}>{modul.moduleName}</option>
+                        {/each}
+                      </select>
+                    </div>
+                    <div class="col-md-2">
+                      <label for={`creditPoints${index}-${selectedModulIndex}`} class="pt-1 mb-2">LP</label>
+                      <div type="number" class="form-control border rounded text-center mb-2" style="height: 36px">
+                        {#if externalModules[moduleData.selectedExternalModulIds[selectedModulIndex]].creditPoints}
+                          <p>{externalModules[moduleData.selectedExternalModulIds[selectedModulIndex]].creditPoints ?? ''}</p>
+                        {/if}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md">
+                    <p class="moduleDescription border p-3 rounded">
+                      {#if externalModules[moduleData.selectedExternalModulIds[selectedModulIndex]].moduleDescription}
+                        {externalModules[moduleData.selectedExternalModulIds[selectedModulIndex]].moduleDescription}
+                      {/if}
+                    </p>
+                  </div>
+                </div>
+                <!-- <div class=" border mb-5 border-3 rounded p-2">
                     <div class="row">
                       <div class="col-md-10">
                         <div class="mb-3">
                           <div class="row">
                             <label for={`externalModule${index}-$ modulIndex}`} class="mb-2"
                               >Name des Moduls
-                              <button class="btn p-0 me-3" on:click={() => removeTitleFromRequest(index, modulIndex)} type="button">
+                              <button class="btn p-0 me-3" on:click={() => removeExternalModulFromRequest(index, modulIndex)} type="button">
                                 <i class="bi bi-trash3-fill" />
                               </button>
                             </label>
@@ -93,7 +139,7 @@
                       <label for={`moduleLink${index}-$ modulIndex}`} class="mb-2">Website zum Modul</label>
                       <input type="text" class="form-control" name={`moduleLink${index}-$ modulIndex}`} id={`moduleLink${index}-$ modulIndex}`} placeholder="http://uni-leipzig.de/module_xyz" />
                     </div>
-                  </div>
+                  </div> -->
                 {/each}
 
                 <button
@@ -114,7 +160,7 @@
                       <div class="mb-3 col-md-10">
                         <label for={`internalModule${selectedModulIndex}`} class="mb-2"
                           >Name
-                          <button class="btn p-0 me-3" on:click={() => removeModuleFromRequest(index, selectedModulIndex)} type="button">
+                          <button class="btn p-0 me-3" on:click={() => removeInternalModulFromRequest(index, selectedModulIndex)} type="button">
                             <i class="bi bi-trash3-fill" />
                           </button>
                         </label>
@@ -126,7 +172,7 @@
                           bind:value={moduleData.selectedInternalModulIds[selectedModulIndex]}
                         >
                           <!-- <option value={0} disabled selected hidden>Bitte treffen Sie eine Auswahl</option> -->
-                          {#each modules as modul, index}
+                          {#each internalModules as modul, index}
                             <option value={index}>{modul.moduleName}</option>
                           {/each}
                         </select>
@@ -134,16 +180,16 @@
                       <div class="col-md-2">
                         <label for={`creditPoints${index}-${selectedModulIndex}`} class="pt-1 mb-2">LP</label>
                         <div type="number" class="form-control border rounded text-center mb-2" style="height: 36px">
-                          {#if modules[moduleData.selectedInternalModulIds[selectedModulIndex]].creditPoints}
-                            <p>{modules[moduleData.selectedInternalModulIds[selectedModulIndex]].creditPoints ?? ''}</p>
+                          {#if internalModules[moduleData.selectedInternalModulIds[selectedModulIndex]].creditPoints}
+                            <p>{internalModules[moduleData.selectedInternalModulIds[selectedModulIndex]].creditPoints ?? ''}</p>
                           {/if}
                         </div>
                       </div>
                     </div>
                     <div class="col-md">
                       <p class="moduleDescription border p-3 rounded">
-                        {#if modules[moduleData.selectedInternalModulIds[selectedModulIndex]].moduleDescription}
-                          {modules[moduleData.selectedInternalModulIds[selectedModulIndex]].moduleDescription}
+                        {#if internalModules[moduleData.selectedInternalModulIds[selectedModulIndex]].moduleDescription}
+                          {internalModules[moduleData.selectedInternalModulIds[selectedModulIndex]].moduleDescription}
                         {/if}
                       </p>
                     </div>

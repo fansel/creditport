@@ -94,6 +94,18 @@ export const course_schema = z.object({
   courseId: z.string()
 });
 
+export const show_request_schema = z.object({
+  procedureId: z.number(),
+  requestId: z.number(),
+  externalModules: z.array(update_external_module),
+  internalModules: z.array(update_internal_modul_schema),
+  annotationStudent: z.string(),
+  annotationCommittee: z.string(),
+  statusRequest: z.enum(status_requests.map((status) => status.match)),
+  createdAt: z.string(),
+  pdfExists: z.boolean(),
+  moduleLink: z.string().nullable()
+});
 export const procedure_schema = z.object({
   procedureId: z.number(),
   annotation: z.string().nullable(),
@@ -102,5 +114,5 @@ export const procedure_schema = z.object({
   createdAt: z.string(),
   status: z.enum(status_procedures.map((status) => status.match)),
   lastUpdated: z.string(),
-  requestDetails: z.array(full_request_schema.omit({ procedureId: true }))
+  requestDetails: z.array(show_request_schema.omit({ procedureId: true }))
 });

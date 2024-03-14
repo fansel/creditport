@@ -1,9 +1,9 @@
 <script>
   import { format, parseISO } from 'date-fns';
-  import { enhance } from '$app/forms';
   import { onMount } from 'svelte';
   import { formatProcdureID } from '$lib/util.js';
   import { status_procedures } from '$lib/config';
+  import { enhance } from '$app/forms';
 
   import UpdateProcedureForm from './forms/UpdateProcedureForm.svelte';
   import ProcedureStatus from '$lib/components/ProcedureStatus.svelte';
@@ -66,11 +66,41 @@
    */
   function compareByProperty(property, sortingDirection = false) {
     if (property != '') {
-      return function (a, b) {
-        const comparison = a[property].localeCompare(b[property]);
-        return sortingDirection ? -comparison : comparison;
-      };
+      // Bei unter Objekten
+      if (property.includes('.')) {
+        return function (a, b) {
+          const aValue = getProperty(a, property);
+          const bValue = getProperty(b, property);
+
+          if (aValue === undefined || bValue === undefined) {
+            // Wenn eine der Eigenschaften nicht vorhanden ist, gib 0 zurück, um die Reihenfolge nicht zu ändern
+            return 0;
+          }
+
+          const comparison = aValue.localeCompare(bValue);
+          return sortingDirection ? -comparison : comparison;
+        };
+      } else {
+        return function (a, b) {
+          const comparison = a[property].localeCompare(b[property]);
+          return sortingDirection ? -comparison : comparison;
+        };
+      }
     }
+  }
+
+  function getProperty(obj, property) {
+    const properties = property.split('.');
+    let value = obj;
+
+    for (let prop of properties) {
+      if (value[prop] === undefined) {
+        return undefined;
+      }
+      value = value[prop];
+    }
+
+    return value;
   }
 
   // Filter zurücksetzen
@@ -150,8 +180,8 @@
           <button class="dropdown-item" class:active={sortingByField == 'createdAt'} tabindex="0" on:click={() => (sortingByField = 'createdAt')}>Erstellt am</button>
           <button class="dropdown-item" class:active={sortingByField == 'lastUpdated'} tabindex="0" on:click={() => (sortingByField = 'lastUpdated')}>Bearbeitet am</button>
           <button class="dropdown-item" class:active={sortingByField == 'status'} tabindex="0" on:click={() => (sortingByField = 'status')}>Status</button>
-          <button class="dropdown-item" class:active={sortingByField == 'university'} tabindex="0" on:click={() => (sortingByField = 'university')}>Universität</button>
-          <button class="dropdown-item" class:active={sortingByField == 'courseName'} tabindex="0" on:click={() => (sortingByField = 'courseName')}>Studiengang</button>
+          <button class="dropdown-item" class:active={sortingByField == 'university.uniName'} tabindex="0" on:click={() => (sortingByField = 'university.uniName')}>Universität</button>
+          <button class="dropdown-item" class:active={sortingByField == 'course.courseName'} tabindex="0" on:click={() => (sortingByField = 'course.courseName')}>Studiengang</button>
         </div>
       </div>
     </div>
@@ -296,20 +326,17 @@
           <td>{formatProcdureID(String(procedure.procedureId))} </td>
           <td>{procedure.university.uniName ?? '-'}</td>
 
-          <td>{procedure.courseName ?? '-'}</td>
+          <td>{procedure.course.courseName ?? '-'}</td>
           <td>{procedure.requestDetails.length ?? '-'}</td>
 
           <td><ProcedureStatus status={procedure.status} /></td>
 
           <td>
             <div class="btn-group text-nowrap float-end" role="group">
-              <form method="POST" use:enhance>
-                <button class="text-danger btn p-1 me-2" formaction="?/archiv"> <i class="bi bi-archive" /> </button>
-
-                <input type="hidden" name="id" value={procedure.procedureId} />
-                <button type="button" on:click={() => dialog_open(procedure.procedureId)} class="btn btn-sm btn-primary btn-group-right"
-                  ><i class="bi bi-pencil-square" /></button
-                >
+              <form method="POST" action="?/archiveProcedure" use:enhance>
+                <button class="text-danger btn p-1 me-2"> <i class="bi bi-archive" /> </button>
+                <input type="hidden" name="procedureId" value={procedure.procedureId} />
+                <button type="button" on:click={() => dialog_open(procedure.procedureId)} class="btn btn-sm btn-primary btn-group-right"><i class="bi bi-pencil-square" /></button>
               </form>
             </div>
           </td>
