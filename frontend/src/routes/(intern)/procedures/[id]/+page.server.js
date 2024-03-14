@@ -6,6 +6,7 @@ import { fail } from '@sveltejs/kit';
 import { superValidate, message } from 'sveltekit-superforms/server';
 import { full_request_schema, update_external_module } from '$root/lib/schema';
 import { zod } from 'sveltekit-superforms/adapters';
+import { status_requests } from '$root/lib/config';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ params, locals }) {
@@ -77,7 +78,7 @@ export const actions = {
       internalModuleIds: form.data.internalModules.map((r) => r.moduleId),
       annotationStudent: form.data.annotationStudent,
       annotationCommittee: form.data.annotationCommittee,
-      statusRequest: form.data.statusRequest,
+      statusRequest: status_requests[0].match == form.data.statusRequest ? status_requests[1].match : form.data.statusRequest,
       createdAt: form.data.createdAt,
       pdfExists: form.data.pdfExists,
       moduleLink: form.data.moduleLink,
