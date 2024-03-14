@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -61,7 +62,9 @@ public class CourseController {
             @ApiResponse(responseCode = "201")
     })
     @PostMapping
-    public ResponseEntity<Course> createCourse(@RequestBody Course course) {
+    public ResponseEntity<Course> createCourse(
+            @RequestBody Course course,
+            @RequestHeader(value =HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
         return ResponseEntity.status(201).body(courseRepository.save(course));
     }
     @Operation(summary = "updates the course with the given id", responses = {
@@ -69,7 +72,10 @@ public class CourseController {
             @ApiResponse(responseCode = "404", description = "Course id not found", content = @Content)
     })
     @PutMapping("/{courseId}")
-    public ResponseEntity<Course> updateCourse(@PathVariable UUID courseId, @RequestBody Course CourseDetails) {
+    public ResponseEntity<Course> updateCourse(
+            @PathVariable UUID courseId,
+            @RequestBody Course CourseDetails,
+            @RequestHeader(value =HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
         if (CourseDetails.getInternalModules() == null){
             CourseDetails.setInternalModules(courseRepository.getReferenceById(courseId).getInternalModules());
         }
@@ -86,7 +92,9 @@ public class CourseController {
             @ApiResponse(responseCode = "404", description = "Course id not found", content = @Content)
     })
     @DeleteMapping("/{courseId}")
-    public ResponseEntity<?> deleteCourse(@PathVariable UUID courseId){
+    public ResponseEntity<?> deleteCourse(
+            @PathVariable UUID courseId,
+            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token){
         return courseRepository.findById(courseId)
                 .map(course -> {
                     courseRepository.delete(course);
