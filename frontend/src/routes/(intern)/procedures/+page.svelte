@@ -1,9 +1,9 @@
 <script>
   import { format, parseISO } from 'date-fns';
-  import { enhance } from '$app/forms';
   import { onMount } from 'svelte';
   import { formatProcdureID } from '$lib/util.js';
   import { status_procedures } from '$lib/config';
+  import { enhance } from '$app/forms';
 
   import UpdateProcedureForm from './forms/UpdateProcedureForm.svelte';
   import ProcedureStatus from '$lib/components/ProcedureStatus.svelte';
@@ -303,13 +303,10 @@
 
           <td>
             <div class="btn-group text-nowrap float-end" role="group">
-              <form method="POST" use:enhance>
-                <button class="text-danger btn p-1 me-2" formaction="?/archiv"> <i class="bi bi-archive" /> </button>
-
-                <input type="hidden" name="id" value={procedure.procedureId} />
-                <button type="button" on:click={() => dialog_open(procedure.procedureId)} class="btn btn-sm btn-primary btn-group-right"
-                  ><i class="bi bi-pencil-square" /></button
-                >
+              <form method="POST" action="?/archiveProcedure" use:enhance>
+                <button class="text-danger btn p-1 me-2"> <i class="bi bi-archive" /> </button>
+                <input type="hidden" name="procedureId" value={procedure.procedureId} />
+                <button type="button" on:click={() => dialog_open(procedure.procedureId)} class="btn btn-sm btn-primary btn-group-right"><i class="bi bi-pencil-square" /></button>
               </form>
             </div>
           </td>

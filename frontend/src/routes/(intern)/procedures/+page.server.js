@@ -1,9 +1,11 @@
 import * as config from '$lib/config';
 import * as api from '$lib/api';
-import { error } from '@sveltejs/kit';
+import { error, fail } from '@sveltejs/kit';
 import { superValidate, message } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
-import { procedure_schema } from '$root/lib/schema';
+import { procedure_schema, procedure_by_id_schema } from '$root/lib/schema';
+import { zfd } from 'zod-form-data';
+import { setFlash } from 'sveltekit-flash-message/server';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ params, locals }) {
@@ -25,39 +27,46 @@ export const actions = {
       return message(form, { type: 'error', message: 'Fehlerhafter Input!' }, { status: 400 });
     }
 
-    console.log(form.data)
-
-
-    const body = {
-      procedureId: form.data.procedureId,
-      annotation: form.data.annotation,
-      university: form.data.university,
-      course: form.data.course,
-      createdAt: form.data.createdAt,
-      requests: form.data.requestDetails.map((r) => ({
-        requestId: r.requestId,
-        annotationStudent: r.annotationStudent,
-        annotationCommittee: r.annotationCommittee,
-        favored: false,
-        moduleLink: r.moduleLink,
-        pdfExists: r.pdfExists,
-        createdAt: r.createdAt,
-        internalModuleIds: r.internalModules.map((r) => r.moduleId),
-        externalModuleIds: r.externalModules.map((r) => r.moduleId),
-        statusRequest: r.statusRequest
-      }))
-    };
-
-    console.log(body)
+    const body = { annotation: form.data.annotation };
 
     const res = await api.put(api.routes.procedure_by_id(form.data.procedureId), body, locals.user?.token);
 
-    console.log(res)
+    console.log(res);
 
     if (!res.success) {
       return message(form, { type: 'error', message: 'Fehler beim Speichern des Vorgangs.' }, { status: 400 });
     }
 
     return message(form, { type: 'success', message: 'Erfolgreich gespeichert.' });
+  },
+  archiveProcedure: async ({ locals, request, cookies }) => {
+    const formData = await request.formData();
+
+    const schema = zfd.formData({
+      procedureId: zfd.text()
+    });
+
+    const result = schema.safeParse(formData);
+
+    if (!result.success) {
+      setFlash({ type: 'error', message: 'Keine ID angegeben!' }, cookies);
+      return fail(400, { errors: 'keine ID angegeben' });
+    }
+
+    const res = await api.post(api.routes.procedure_archive(result.data.procedureId), {}, locals.user?.token, { res_type: api.content_type.plain });
+
+    if (!res.success) {
+      console.log(res);
+      if (res.http_code == 428) {
+        setFlash({ type: 'error', message: 'Vorgang nicht vollständig, kann nicht archiviert werden!' }, cookies);
+        return fail(res.http_code, { errors: 'Vorgang nicht vollständig, kann nicht archiviert werden!' });
+      }
+      setFlash({ type: 'error', message: 'Fehler beim Archivieren des Vorgangs.' }, cookies);
+
+      return fail(400, { errors: 'Fehler' });
+    }
+
+    setFlash({ type: 'success', message: 'Erfolgreich archiviert.' }, cookies);
+    return { success: true };
   }
 };
