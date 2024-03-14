@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -67,7 +68,7 @@ public class ProcedureController {
             ))
     })
     @GetMapping
-    public ResponseEntity<List<ProcedureWithRequestsDTO>> getProceduresWithRequests() {
+    public ResponseEntity<List<ProcedureWithRequestsDTO>> getProceduresWithRequests(@RequestHeader(value =HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
         List<ProcedureWithRequestsDTO> proceduresWithRequests = procedureService.getProcedureDetailsWithRequests();
         return ResponseEntity.ok(proceduresWithRequests);
     }
@@ -100,7 +101,7 @@ public class ProcedureController {
             @ApiResponse(responseCode = "200")
     })
     @GetMapping("/ids")
-    public ResponseEntity<List<Integer>> getProcedureIds(){
+    public ResponseEntity<List<Integer>> getProcedureIds(@RequestHeader(value =HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token){
         List<Integer> ids = procedureRepository.findAllIds();
         return ResponseEntity.ok(ids);
     }
@@ -168,7 +169,7 @@ public class ProcedureController {
                     content = @Content)
     })
     @PostMapping("/forward/{id}")
-    public ResponseEntity<?> forwardProcedure(@PathVariable("id") int id) {
+    public ResponseEntity<?> forwardProcedure(@PathVariable("id") int id,@RequestHeader(value =HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
         Procedure procedure = procedureRepository.findByProcedureId(id).orElse(null);
         if (procedure == null) {
             return ResponseEntity.notFound().build();
@@ -190,7 +191,7 @@ public class ProcedureController {
             @ApiResponse(responseCode = "404", description = "Procedure id not found", content = @Content)
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteProcedure(@PathVariable int id) {
+    public ResponseEntity<?> deleteProcedure(@PathVariable int id,@RequestHeader(value =HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
         return procedureRepository.findById(id)
                 .map(procedure -> {
                     procedureRepository.delete(procedure);
@@ -207,7 +208,7 @@ public class ProcedureController {
                     content = @Content)
     })
     @PostMapping("/archive/{id}")
-    public ResponseEntity<Procedure> archiveProcedure(@PathVariable Integer id) {
+    public ResponseEntity<Procedure> archiveProcedure(@PathVariable Integer id,@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
         Optional<Procedure> optionalProcedure = procedureRepository.findByProcedureId(id);
         if (optionalProcedure.isPresent()) {
             Procedure procedure = optionalProcedure.get();

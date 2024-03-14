@@ -107,7 +107,7 @@ public class UniversityController {
             @ApiResponse(responseCode = "404", description = "University id not found", content = @Content)
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUniversity(@PathVariable UUID id) {
+    public ResponseEntity<?> deleteUniversity(@PathVariable UUID id,@RequestHeader(value =HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
         return universityRepository.findById(id)
                 .map(university -> {
                     universityRepository.delete(university);
@@ -122,7 +122,7 @@ public class UniversityController {
             @ApiResponse(responseCode = "200")
     })
     @PostMapping("/import")
-    public ResponseEntity<List<University>> importUniversities(@RequestBody List<University> universities) {
+    public ResponseEntity<List<University>> importUniversities(@RequestBody List<University> universities,@RequestHeader(value =HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
         universityRepository.saveAll(universities);
         return ResponseEntity.ok(universities);
     }
