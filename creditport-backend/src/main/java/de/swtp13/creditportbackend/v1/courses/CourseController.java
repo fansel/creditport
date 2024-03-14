@@ -24,6 +24,7 @@ public class CourseController {
     private InternalModuleRepository internalModuleRepository;
     @Autowired
     private CourseService courseService;
+
     @Operation(summary = "returns a list of all courses", responses = {
             @ApiResponse(responseCode = "200", content = @Content(
                     mediaType = "application/json",
@@ -41,6 +42,7 @@ public class CourseController {
         }
         return ResponseEntity.ok(courses);
     }
+
     @Operation(summary = "returns a single course", responses = {
             @ApiResponse(responseCode = "200",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = Course.class))),
@@ -58,6 +60,7 @@ public class CourseController {
                 internalModuleRepository.findInternalModulesByCoursesContains(courseRepository.findById(courseId).get()))
                 );
     }
+
     @Operation(summary = "creates a course", responses = {
             @ApiResponse(responseCode = "201")
     })
@@ -67,6 +70,7 @@ public class CourseController {
             @RequestHeader(value =HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
         return ResponseEntity.status(201).body(courseRepository.save(course));
     }
+
     @Operation(summary = "updates the course with the given id", responses = {
             @ApiResponse(responseCode = "200"),
             @ApiResponse(responseCode = "404", description = "Course id not found", content = @Content)
@@ -87,6 +91,7 @@ public class CourseController {
                     return ResponseEntity.ok(updatedCourse);
                 }).orElse(ResponseEntity.notFound().build());
     }
+
     @Operation(summary = "deletes a course", responses = {
             @ApiResponse(responseCode = "204", content = @Content),
             @ApiResponse(responseCode = "404", description = "Course id not found", content = @Content)
