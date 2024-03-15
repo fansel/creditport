@@ -216,12 +216,17 @@ public class PdfService {
         for (Request request : requests) {
             List<ExternalModule> externalModules = request.getExternalModules();
             List<InternalModule> internalModules = request.getInternalModules();
-            int maxModules = Math.max(externalModules.size(), internalModules.size());
+            int externalSize = externalModules.size();
+            int internalSize = internalModules.size();
+            int maxModules = Math.max(externalSize, internalSize);
 
             for (int i = 0; i < maxModules; i++) {
-                // Externe Moduldaten hinzufügen
-                if (i < externalModules.size()) {
-                    ExternalModule externalModule = externalModules.get(i);
+                ExternalModule externalModule = null;
+                InternalModule internalModule = null;
+
+                // Externe Moduldaten hinzufügen oder duplizieren
+                if (externalSize > 0) {
+                    externalModule = externalModules.get(i % externalSize);
                     table.addCell(createCell(externalModule.getModuleName()));
                     table.addCell(createCell(String.valueOf(externalModule.getCreditPoints())));
                 } else {
@@ -229,9 +234,9 @@ public class PdfService {
                     table.addCell(createCell(""));
                 }
 
-                // Interne Moduldaten hinzufügen
-                if (i < internalModules.size()) {
-                    InternalModule internalModule = internalModules.get(i);
+                // Interne Moduldaten hinzufügen oder duplizieren
+                if (internalSize > 0) {
+                    internalModule = internalModules.get(i % internalSize);
                     table.addCell(createCell(internalModule.getModuleName()));
                     table.addCell(createCell(String.valueOf(internalModule.getCreditPoints())));
                 } else {
@@ -241,6 +246,7 @@ public class PdfService {
             }
         }
     }
+
 
 
 
