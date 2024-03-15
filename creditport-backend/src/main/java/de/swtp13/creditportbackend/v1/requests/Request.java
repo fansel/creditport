@@ -36,7 +36,7 @@ public class Request {
     @JsonIgnore
     private Procedure procedure;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REFRESH})
+    @ManyToMany(cascade = {CascadeType.MERGE,CascadeType.REFRESH})
     @JoinTable(
             name = "extmod_request",
             joinColumns = @JoinColumn(name = "request_id"),
@@ -44,7 +44,7 @@ public class Request {
     @JsonIgnore
     private List<ExternalModule> externalModules;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REFRESH})
+    @ManyToMany(cascade = {CascadeType.MERGE,CascadeType.REFRESH})
     @JoinTable(
             name = "intmod_request",
             joinColumns = @JoinColumn(name = "request_id"),

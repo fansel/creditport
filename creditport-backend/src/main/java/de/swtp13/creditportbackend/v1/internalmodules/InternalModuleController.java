@@ -73,8 +73,7 @@ public class InternalModuleController {
     @Transactional
     @PostMapping
     public ResponseEntity<InternalModule> createInternalModule(
-            @RequestBody InternalModuleDTO moduleDetails,
-            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
+            @RequestBody InternalModuleDTO moduleDetails) {
         List<Course> courses = new ArrayList<>();
         for (UUID courseId: moduleDetails.getCourseIds()){
             if (courseRepository.existsById(courseId)){
@@ -114,8 +113,7 @@ public class InternalModuleController {
     @PutMapping("/{moduleId}")
     public ResponseEntity<InternalModule> updateModule(
             @PathVariable UUID moduleId,
-            @RequestBody InternalModuleDTO ModuleDetails,
-            @RequestHeader(value =HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
+            @RequestBody InternalModuleDTO ModuleDetails) {
         return moduleRepository.findById(moduleId)
                 .map(Module -> {
                     Module.setNumber(ModuleDetails.getNumber());
@@ -159,8 +157,7 @@ public class InternalModuleController {
     })
     @DeleteMapping("/{moduleId}")
     public ResponseEntity<?> deleteModule(
-            @PathVariable UUID moduleId,
-            @RequestHeader(value =HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
+            @PathVariable UUID moduleId) {
         InternalModule module = moduleRepository.getReferenceById(moduleId);
         for (Course course: module.getCourses()) {
             course.getInternalModules().remove(module);
@@ -188,8 +185,7 @@ public class InternalModuleController {
     })
     @PostMapping("/import")
     public ResponseEntity<List<InternalModule>> importModules(
-            @RequestBody List<InternalModule> modules,
-            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
+            @RequestBody List<InternalModule> modules) {
         moduleRepository.saveAll(modules);
         for(InternalModule internalModule: modules){
             for(Course course: internalModule.getCourses()){

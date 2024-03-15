@@ -82,7 +82,7 @@ public class ExternalModuleController {
     public ResponseEntity<ExternalModule> updateModule(
             @PathVariable UUID moduleId,
             @RequestBody ExternalModule ModuleDetails,
-            @RequestHeader(value =HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
+            @RequestHeader(value =HttpHeaders.AUTHORIZATION, required = false, defaultValue="") String token) {
         return moduleRepository.findById(moduleId)
                 .map(Module -> {
                     Module.setModuleName(ModuleDetails.getModuleName());
@@ -90,7 +90,7 @@ public class ExternalModuleController {
                     Module.setUniversity(ModuleDetails.getUniversity());
                     Module.setModuleNumber(ModuleDetails.getModuleNumber());
                     Module.setCreditPoints(ModuleDetails.getCreditPoints());
-                    Module.setVerified(ModuleDetails.isVerified());
+                    if(managementService.isAuthorized(token)) Module.setVerified(ModuleDetails.isVerified());
                     ExternalModule updatedModule = moduleRepository.save(Module);
                     return ResponseEntity.ok(updatedModule);
                 }).orElse(ResponseEntity.notFound().build());
@@ -103,8 +103,7 @@ public class ExternalModuleController {
     })
     @DeleteMapping("/{moduleId}")
     public ResponseEntity<?> deleteModule(
-            @PathVariable UUID moduleId,
-            @RequestHeader(value =HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
+            @PathVariable UUID moduleId) {
         return moduleRepository.findById(moduleId)
                 .map(Module -> {
                     moduleRepository.delete(Module);

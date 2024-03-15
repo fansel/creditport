@@ -35,7 +35,7 @@ public class Course {
     private String courseName;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {
-            CascadeType.PERSIST,CascadeType.MERGE
+            CascadeType.MERGE
 })
     @JoinTable(
             name= "course_intmodule",

@@ -189,8 +189,7 @@ public class RequestController {
     @PutMapping("/approval/{requestId}")
     public ResponseEntity<?> acceptRequest(
             @PathVariable int requestId,
-            @RequestBody Request RequestDetails,
-            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
+            @RequestBody Request RequestDetails) {
         if (RequestDetails.getAnnotationCommittee().isBlank() || RequestDetails.getAnnotationCommittee().isEmpty()){
             return ResponseEntity.badRequest().body("Committee Annotation is not allowed to be null!");
         }
@@ -210,8 +209,7 @@ public class RequestController {
     })
     @DeleteMapping("/{requestId}")
     public ResponseEntity<?> deleteRequest(
-            @PathVariable int requestId,
-            @RequestHeader(value =HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
+            @PathVariable int requestId) {
         return requestRepository.findByRequestId(requestId)
                 .map(Request -> {
                     requestRepository.delete(Request);

@@ -66,7 +66,7 @@ public class ProcedureController {
             ))
     })
     @GetMapping
-    public ResponseEntity<List<ProcedureWithRequestsDTO>> getProceduresWithRequests(@RequestHeader(value =HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
+    public ResponseEntity<List<ProcedureWithRequestsDTO>> getProceduresWithRequests() {
         List<ProcedureWithRequestsDTO> proceduresWithRequests = procedureService.getProcedureDetailsWithRequests();
         return ResponseEntity.ok(proceduresWithRequests);
     }
@@ -99,7 +99,7 @@ public class ProcedureController {
             @ApiResponse(responseCode = "200")
     })
     @GetMapping("/ids")
-    public ResponseEntity<List<Integer>> getProcedureIds(@RequestHeader(value =HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token){
+    public ResponseEntity<List<Integer>> getProcedureIds(){
         List<Integer> ids = procedureRepository.findAllIds();
         return ResponseEntity.ok(ids);
     }
@@ -167,7 +167,7 @@ public class ProcedureController {
                     content = @Content)
     })
     @PostMapping("/forward/{id}")
-    public ResponseEntity<?> forwardProcedure(@PathVariable("id") int id,@RequestHeader(value =HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
+    public ResponseEntity<?> forwardProcedure(@PathVariable("id") int id) {
         Procedure procedure = procedureRepository.findByProcedureId(id).orElse(null);
         if (procedure == null) {
             return ResponseEntity.notFound().build();
@@ -193,7 +193,7 @@ public class ProcedureController {
             @ApiResponse(responseCode = "404", description = "Procedure id not found", content = @Content)
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteProcedure(@PathVariable int id,@RequestHeader(value =HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
+    public ResponseEntity<?> deleteProcedure(@PathVariable int id) {
         return procedureRepository.findById(id)
                 .map(procedure -> {
                     procedureRepository.delete(procedure);
@@ -210,7 +210,7 @@ public class ProcedureController {
                     content = @Content)
     })
     @PostMapping("/archive/{id}")
-    public ResponseEntity<Procedure> archiveProcedure(@PathVariable Integer id,@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
+    public ResponseEntity<Procedure> archiveProcedure(@PathVariable Integer id) {
         Optional<Procedure> optionalProcedure = procedureRepository.findByProcedureId(id);
         if (optionalProcedure.isPresent()) {
             Procedure procedure = optionalProcedure.get();
