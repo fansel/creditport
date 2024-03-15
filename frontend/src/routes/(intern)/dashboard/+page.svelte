@@ -62,7 +62,7 @@
 
               <td>{procedure.university.uniName ?? '-'}</td>
 
-              <td>{procedure.courseName ?? '-'}</td>
+              <td>{procedure.course?.courseName ?? '-'}</td>
               <td><span class="badge bg-primary rounded-pill">{procedure.requestDetails.length} Anträge</span></td>
               <td><ProcedureStatus status={procedure.status} /></td>
 

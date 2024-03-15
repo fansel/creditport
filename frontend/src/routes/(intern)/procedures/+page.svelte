@@ -5,7 +5,7 @@
   import { status_procedures } from '$lib/config';
   import { enhance } from '$app/forms';
 
-  import UpdateProcedureForm from './forms/UpdateProcedureForm.svelte';
+  import ShowProcedureForm from './forms/ShowProcedureForm.svelte';
   import ProcedureStatus from '$lib/components/ProcedureStatus.svelte';
 
   /* https://www.npmjs.com/package/date-picker-svelte */
@@ -156,7 +156,7 @@
   }
 </script>
 
-<UpdateProcedureForm bind:this={updateProcedureForm} data={data.updateProcedureForm} />
+<ShowProcedureForm bind:this={updateProcedureForm} data={data.updateProcedureForm} />
 
 <div class="row py-3 mb-3 pb-md-1 border-bottom align-items-center">
   <div class="col-md">
@@ -266,7 +266,7 @@
                   : 'false'}"
               >
                 {status.text_intern}
-                <span class="badge bg-secondary-subtle text-dark text-end ms-3">{countStatus(procedures, status.match)}</span>
+                <span class="badge bg-secondary-subtle text-bs-dark text-end ms-3">{countStatus(procedures, status.match)}</span>
               </label>
             {/each}
           </div>
@@ -284,7 +284,7 @@
     {/if}
   </div>
 
-  <div>
+  <!-- <div>
     <nav aria-label="..." class="">
       <ul class="pagination pagination-sm mb-0">
         <li class="page-item"><button class="page-link" aria-label="Previous"><span aria-hidden="true">&laquo;</span></button></li>
@@ -302,7 +302,7 @@
         <li class="page-item"><button class="page-link" aria-label="Next"><span aria-hidden="true">&raquo;</span></button></li>
       </ul>
     </nav>
-  </div>
+  </div> -->
 </div>
 
 <div class="table-responsive">
@@ -354,7 +354,7 @@
     {/if}
   </div>
 
-  <div>
+  <!-- <div>
     <nav aria-label="..." class="">
       <ul class="pagination pagination-sm mb-0">
         <li class="page-item"><button class="page-link" aria-label="Previous"><span aria-hidden="true">&laquo;</span></button></li>
@@ -372,7 +372,7 @@
         <li class="page-item"><button class="page-link" aria-label="Next"><span aria-hidden="true">&raquo;</span></button></li>
       </ul>
     </nav>
-  </div>
+  </div> -->
 </div>
 
 <style>

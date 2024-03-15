@@ -127,7 +127,7 @@ export const show_request_schema = z.object({
   procedureId: z.number(),
   requestId: z.number(),
   externalModules: z.array(update_external_module),
-  internalModules: z.array(update_internal_modul_schema.omit({ courseIds: true })),
+  internalModules: z.array(update_internal_modul_schema.omit({ courseIds: true, id: true })),
   annotationStudent: z.string(),
   annotationCommittee: z.string(),
   statusRequest: z.enum(status_requests.map((status) => status.match)),

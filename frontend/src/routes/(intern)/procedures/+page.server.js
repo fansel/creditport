@@ -20,24 +20,24 @@ export async function load({ params, locals }) {
 
 /** @type {import('./$types').Actions} */
 export const actions = {
-  updateProcedure: async ({ locals, request }) => {
-    const form = await superValidate(request, zod(procedure_schema));
+  // updateProcedure: async ({ locals, request }) => {
+  //   const form = await superValidate(request, zod(procedure_schema));
 
-    if (!form.valid) {
-      return message(form, { type: 'error', message: 'Fehlerhafter Input!' }, { status: 400 });
-    }
+  //   if (!form.valid) {
+  //     return message(form, { type: 'error', message: 'Fehlerhafter Input!' }, { status: 400 });
+  //   }
 
-    const body = { annotation: form.data.annotation };
+  //   const body = { annotation: form.data.annotation };
 
-    const res = await api.put(api.routes.procedure_by_id(form.data.procedureId), body, locals.user?.token);
+  //   const res = await api.put(api.routes.procedure_by_id(form.data.procedureId), body, locals.user?.token);
 
-    if (!res.success) {
-      console.log(res);
-      return message(form, { type: 'error', message: 'Fehler beim Speichern des Vorgangs.' }, { status: 400 });
-    }
+  //   if (!res.success) {
+  //     console.log(res);
+  //     return message(form, { type: 'error', message: 'Fehler beim Speichern des Vorgangs.' }, { status: 400 });
+  //   }
 
-    return message(form, { type: 'success', message: 'Erfolgreich gespeichert.' });
-  },
+  //   return message(form, { type: 'success', message: 'Erfolgreich gespeichert.' });
+  // },
   archiveProcedure: async ({ locals, request, cookies }) => {
     const formData = await request.formData();
 
@@ -69,33 +69,26 @@ export const actions = {
     return { success: true };
   },
   forwardProcedure: async ({ locals, request, cookies }) => {
-    const formData = await request.formData();
+    const form = await superValidate(request, zod(procedure_schema));
 
-    const schema = zfd.formData({
-      procedureId: zfd.text()
-    });
-
-    const result = schema.safeParse(formData);
-
-    if (!result.success) {
-      setFlash({ type: 'error', message: 'Keine ID angegeben!' }, cookies);
-      return fail(400, { errors: 'keine ID angegeben' });
+    if (!form.valid) {
+      return message(form, { type: 'error', message: 'Fehlerhafter Input!' }, { status: 400 });
     }
 
-    const res = await api.post(api.routes.procedure_forward(result.data.procedureId), {}, locals.user?.token, { res_type: api.content_type.plain });
+    console.log(form.data.procedureId);
+
+    const res = await api.post(api.routes.procedure_forward(form.data.procedureId), {}, locals.user?.token, { res_type: api.content_type.plain });
 
     if (!res.success) {
       console.log(res);
-      if (res.http_code == 428) {
-        setFlash({ type: 'error', message: 'Nicht alle Anträge bearbeitet, kann nicht weitergeleitet werden!' }, cookies);
-        return fail(res.http_code, { errors: 'Nicht alle Anträge bearbeitet, kann nicht weitergeleitet werden!' });
-      }
-      setFlash({ type: 'error', message: 'Fehler beim Weiterleiten des Vorgangs.' }, cookies);
 
-      return fail(400, { errors: 'Fehler' });
+      if (res.http_code == 428) {
+        return message(form, { type: 'error', message: 'Nicht alle Anträge wurden bearbeitet, Weiterleiten fehlgeschlagen.' }, { status: 428 });
+      }
+
+      return message(form, { type: 'error', message: 'Fehler beim Weiterleiten des Vorgangs' }, { status: 400 });
     }
 
-    setFlash({ type: 'success', message: 'Erfolgreich Weitergeleitet.' }, cookies);
-    return { success: true };
+    return message(form, { type: 'success', message: 'Erfolgreich Weitergeleitet.' });
   }
 };

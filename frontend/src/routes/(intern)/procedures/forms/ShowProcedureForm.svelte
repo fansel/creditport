@@ -28,6 +28,9 @@
     onError({ result }) {
       console.error(result.error.message);
     },
+    onSubmit(data) {
+      console.log(data)
+    },
     clearOnSubmit: 'none',
     resetForm: false,
     validators: zod(procedure_schema),
@@ -46,22 +49,6 @@
   export function dialog_close() {
     dialog.close();
   }
-
-  async function forwardProcedure() {
-    const data = new FormData();
-    data.append('procedureId', $form.procedureId);
-
-    console.dir(form);
-
-    const response = await fetch('?/forwardProcedure', {
-      method: 'POST',
-      body: data
-    });
-    const responseData = await response.json();
-    await invalidateAll();
-    dialog_close();
-
-  }
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
@@ -74,7 +61,7 @@
 
   <!-- <SuperDebug data={$form} /> -->
 
-  <form action="?/updateProcedure" method="POST" use:enhance>
+  <form action="?/forwardProcedure" method="POST" use:enhance>
     <!-- Body -->
     <div class="body p-3">
       <div class="row">
@@ -121,9 +108,9 @@
             </div>
           </div>
           <div class="mb-3">
-            <label for="annotation" class="col-form-label"> Kommentare </label>
+            <label for="annotation" class="col-form-label">Kommentar des Studenten</label>
 
-            <textarea type="text" bind:value={$form.annotation} name="annotation" class="form-control {$errors.annotation ? 'is-invalid' : ''}" placeholder="" style="min-height: 120px;" />
+            <textarea type="text" bind:value={$form.annotation} name="annotation" class="form-control {$errors.annotation ? 'is-invalid' : ''}" placeholder="" style="min-height: 120px;" disabled/>
             {#if $errors.annotation}
               <div class="invalid-feedback">
                 {$errors.annotation}
@@ -166,15 +153,14 @@
 
     <!-- Footer -->
     <div class="p-3 d-md-flex justify-content-between border-top align-items-center flex-wrap gap-2">
-      <div>
+      <div class="d-flex align-items-center">
         {#if $form.createdAt}
-          <div class="form-text mb-3" id="basic-addon4">Erstellt am {format(parseISO($form.createdAt), 'dd.MM.yyyy HH:mm')}</div>
+          <div class="form-text mb-3 mb-md-0 mt-0" id="basic-addon4">Erstellt am {format(parseISO($form.createdAt), 'dd.MM.yyyy HH:mm')}</div>
         {/if}
       </div>
       <div class="vstack flex-md-row justify-content-md-end gap-2">
-        <button type="button" class="btn btn-outline-primary" on:click={forwardProcedure}>Weiterleiten<i class="ms-2 bi bi-arrow-right" /></button>
-        <button class="btn btn-outline-secondary" on:click={dialog_close} type="button">Abbrechen</button>
-        <button class="btn btn-primary" type="submit">Speichern</button>
+        <button type="submit" class="btn btn-outline-primary">Weiterleiten<i class="ms-2 bi bi-arrow-right" /></button>
+        <button class="btn btn-outline-secondary" on:click={dialog_close} type="button">Schließen</button>
       </div>
     </div>
   </form>

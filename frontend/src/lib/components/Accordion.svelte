@@ -39,13 +39,14 @@
   }
 
   .card-header {
-    background-color: #f8f9fa;
+    /* background-color: #f8f9fa; */
+    background-color: var(--bs-card-cap-bg);
     border-bottom: none;
     padding: 0.75rem 1.25rem;
     margin-bottom: 0;
   }
 
-  .card-header.closed{
+  .card-header.closed {
     border: none;
     border-radius: var(--bs-card-inner-border-radius);
   }

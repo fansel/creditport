@@ -105,3 +105,12 @@ dialog[open]::backdrop {
 .cp-table-item:hover {
   background-color: rgba(0, 0, 0, 0.075);
 }
+
+/* DARK Mode fixen */
+.date-time-field input {
+  background-color: var(--bs-body-bg) !important;
+}
+
+.text-bs-dark {
+  color: var(--bs-body-color) !important;
+}

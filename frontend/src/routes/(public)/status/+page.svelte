@@ -107,14 +107,14 @@
     border: none;
     outline: 1px solid #6c757d;
     margin: 0 1rem 0 0;
-    background-color: white;
+    background-color: var(--bs-body-bg);
     text-align: center;
     border-radius: 0.5rem;
     transition: all 150ms ease-in-out;
   }
 
   .digit:focus {
-    color: blue;
+    /* color: blue; */
     outline: 0.3rem solid #0d6efd;
   }
 

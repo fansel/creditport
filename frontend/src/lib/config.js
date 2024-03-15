@@ -18,7 +18,7 @@ export const status_procedures = [
   { text_intern: 'Offen', color: '#6c757d', text_color: 'white', text_extern: 'in Bearbeitung', match: 'OFFEN', hide: true },
   { text_intern: 'in Bearbeitung', color: '#6c757d', text_color: 'white', text_extern: 'in Bearbeitung', match: 'IN_BEARBEITUNG', hide: true },
   { text_intern: 'Weitergeleitet', color: '#6c757d', text_color: 'white', text_extern: 'in Bearbeitung', match: 'WEITERGELEITET', hide: true },
-  { text_intern: 'Vollständig', color: '#6c757d', text_color: 'white', text_extern: 'Vollständig', match: 'VOLLSTÄNDIG', hide: true },
+  { text_intern: 'Vollständig', color: '#6c757d', text_color: 'white', text_extern: 'Vollständig', match: 'VOLLSTAENDIG', hide: true },
   { text_intern: 'Archiviert', color: '#6c757d', text_color: 'white', text_extern: 'Vollständig', match: 'ARCHIVIERT', hide: true } // Achtung, im Backend noch nicht implementiert
 ];
 
