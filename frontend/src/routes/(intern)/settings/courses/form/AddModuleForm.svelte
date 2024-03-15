@@ -36,17 +36,13 @@
   });
 
   export function dialog_open() {
-    reset();
+    // reset();
     // courseName = name;
     dialog.showModal();
   }
 
   export function dialog_close() {
     dialog.close();
-  }
-
-  function findCourseById(id) {
-    return courses.find((c) => c.courseId == id);
   }
 </script>
 
@@ -122,12 +118,14 @@
           <label for="name" class="col-form-label">Studiengänge</label>
         </div>
         <div class="col">
-          <select multiple class="form-select" size="3" aria-label="Size 3 select example" bind:value={$form.courseIds}>
+          <select multiple class="form-select {$errors.courseIds?._errors ? 'is-invalid' : ''}" size="3" aria-label="Size 3 select example" bind:value={$form.courseIds}>
             {#each courses as course}
               <option value={course.courseId} selected={$form.courseIds.includes(course.courseId)}>{course.courseName}</option>
             {/each}
           </select>
-          <div class="text-muted">Mehrfachauswahl erlaubt</div>
+          {#if $errors.courseIds?._errors}
+            <div class="invalid-feedback">{$errors.courseIds?._errors}</div>
+          {/if}
         </div>
       </div>
     </div>

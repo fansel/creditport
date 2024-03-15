@@ -9,6 +9,7 @@
   import SuperDebug from 'sveltekit-superforms';
 
   export let data;
+  export let courses;
   // export let showModal;
 
   let dialog;
@@ -16,6 +17,7 @@
   // $: if (dialog && showModal) dialog.showModal();
 
   const { form, errors, enhance, reset } = superForm(data, {
+    dataType: 'json',
     syncFlashMessage: true,
     flashMessage: {
       module: flashModule
@@ -47,8 +49,8 @@
     var stringWithoutNewLines = inputString.replace(/\n/g, '');
 
     // Leerzeichen ersetzen, die nicht alleine stehen
-    var stringWithoutSingleSpaces = stringWithoutNewLines.replace(/(?<=\S)(\s+)/g, function(match) {
-        return match.length > 1 ? ' ' : match;
+    var stringWithoutSingleSpaces = stringWithoutNewLines.replace(/(?<=\S)(\s+)/g, function (match) {
+      return match.length > 1 ? ' ' : match;
     });
 
     return stringWithoutSingleSpaces;
@@ -66,7 +68,7 @@
     <button class="btn-close" type="button" aria-label="Close" on:click={() => dialog_close()} />
   </div>
 
-  <!-- <SuperDebug data={$form} /> -->
+  <SuperDebug data={$form} />
 
   <form action="?/updateModule" method="POST" use:enhance>
     <!-- Body -->
@@ -117,6 +119,22 @@
           <input type="number" name="creditPoints" placeholder="" class="form-control {$errors.creditPoints ? 'is-invalid' : ''}" bind:value={$form.creditPoints} />
           {#if $errors.creditPoints}
             <div class="invalid-feedback">{$errors.creditPoints}</div>
+          {/if}
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-3">
+          <label for="name" class="col-form-label">Studiengänge</label>
+        </div>
+        <div class="col">
+          <select multiple class="form-select {$errors.courseIds?._errors ? 'is-invalid' : ''}" size="3" aria-label="Size 3 select example" bind:value={$form.courseIds}>
+            {#each courses as course}
+              <option value={course.courseId} selected={$form.courseIds.includes(course.courseId)}>{course.courseName}</option>
+            {/each}
+          </select>
+          {#if $errors.courseIds?._errors}
+            <div class="invalid-feedback">{$errors.courseIds?._errors}</div>
           {/if}
         </div>
       </div>

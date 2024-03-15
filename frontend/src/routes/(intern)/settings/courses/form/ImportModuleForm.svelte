@@ -48,7 +48,7 @@
     <button class="btn-close" type="button" aria-label="Close" on:click={() => dialog_close()} />
   </div>
 
-  <form action="?/importUni" method="POST" enctype="multipart/form-data" use:enhance>
+  <form action="?/importModules" method="POST" enctype="multipart/form-data" use:enhance>
     <!-- Body -->
     <div class="body p-3">
       <div class="row mb-3">

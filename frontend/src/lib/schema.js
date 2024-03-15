@@ -72,11 +72,12 @@ export const add_course_schema = z.object({
 });
 
 export const update_internal_modul_schema = z.object({
-  moduleId: z.string(),
+  id: z.string(),
   number: z.string(),
   moduleName: z.string().min(1, { message: 'Name des Moduls darf nicht leer sein!' }),
   moduleDescription: z.string(),
-  creditPoints: z.number().default(1)
+  creditPoints: z.number().default(1),
+  courseIds: z.array(z.string()).min(1, { message: 'Es muss mindestens ein Studiengang ausgewählt sein.' })
 });
 
 export const update_external_module = z.object({
@@ -88,6 +89,8 @@ export const update_external_module = z.object({
   creditPoints: z.number(),
   verified: z.boolean()
 });
+
+export const modules_import_schema = z.array(update_internal_modul_schema.omit({ id: true, courseIds: true }).extend({ moduleId: z.string(), courses: z.array(update_course_schema) }));
 
 export const full_request_schema = z.object({
   procedureId: z.number(),
@@ -124,7 +127,7 @@ export const show_request_schema = z.object({
   procedureId: z.number(),
   requestId: z.number(),
   externalModules: z.array(update_external_module),
-  internalModules: z.array(update_internal_modul_schema),
+  internalModules: z.array(update_internal_modul_schema.omit({ courseIds: true })),
   annotationStudent: z.string(),
   annotationCommittee: z.string(),
   statusRequest: z.enum(status_requests.map((status) => status.match)),
@@ -160,5 +163,5 @@ export const add_internal_modul_schema = z.object({
   moduleName: z.string().min(1, { message: 'Name des Moduls darf nicht leer sein!' }),
   moduleDescription: z.string(),
   creditPoints: z.number().default(1),
-  courseIds: z.array(z.string())
+  courseIds: z.array(z.string()).min(1, { message: 'Es muss mindestens ein Studiengang ausgewählt sein.' })
 });

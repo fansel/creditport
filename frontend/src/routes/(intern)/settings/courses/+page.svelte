@@ -7,6 +7,7 @@
   import DeleteModuleForm from './form/DeleteModuleForm.svelte';
   import AddModuleForm from './form/AddModuleForm.svelte';
   import ImportCourseForm from './form/ImportCourseForm.svelte';
+  import ImportModuleForm from './form/ImportModuleForm.svelte';
 
   export let data;
 
@@ -18,6 +19,7 @@
   let updateModuleForm;
   let addModuleForm;
   let importCourseForm;
+  let importModuleForm;
 
   let showDeleteModuleModal = false;
   let showDeleteCourseModal = false;
@@ -61,17 +63,24 @@
     if (!module) {
       console.error('Module not found');
     }
-    updateModuleForm.dialog_open(module);
+    const copy = { ...module };
+    copy.courseIds = copy.courses.map((c) => c.courseId);
+    copy.id = copy.moduleId;
+    delete copy.moduleId;
+    delete copy.courses;
+
+    updateModuleForm.dialog_open(copy);
   }
 </script>
 
 <UpdateCourseForm bind:this={updateCourseForm} data={data.updateCourseForm} />
-<UpdateModuleForm bind:this={updateModuleForm} data={data.updateModuleForm} />
+<UpdateModuleForm bind:this={updateModuleForm} data={data.updateModuleForm} courses={data.courses} />
 <AddCourseForm bind:this={addCourseForm} data={data.addCourseForm} />
-<AddModuleForm bind:this={addModuleForm} data={data.addModuleForm} courses={data.courses}/>
+<AddModuleForm bind:this={addModuleForm} data={data.addModuleForm} courses={data.courses} />
 <DeleteCourseForm course={selectedCourse} bind:showModal={showDeleteCourseModal} />
 <DeleteModuleForm module={selectedModule} bind:showModal={showDeleteModuleModal} />
 <ImportCourseForm bind:this={importCourseForm} data={data.importCourseForm} />
+<ImportModuleForm bind:this={importModuleForm} data={data.importModuleForm} />
 
 <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
   <h4 class="m-0">Interne Studiengänge</h4>
@@ -116,7 +125,7 @@
       <i class="bi bi-plus-circle" />
       Modul hinzufügen
     </button>
-    <button class="btn btn-primary btn-sm" on:click={test}>
+    <button class="btn btn-primary btn-sm" on:click={importModuleForm.dialog_open}>
       <i class="bi bi-cloud-arrow-up" />
       Module importieren
     </button>

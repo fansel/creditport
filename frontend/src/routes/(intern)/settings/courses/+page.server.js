@@ -28,6 +28,7 @@ export async function load({ locals }) {
 
     const updateModuleForm = superValidate(zod(update_internal_modul_schema));
     const importCourseForm = superValidate(zod(courses_upload_schema));
+    const importModuleForm = superValidate(zod(courses_upload_schema));
     const addModuleForm = superValidate(zod(add_internal_modul_schema));
 
     return {
@@ -39,7 +40,8 @@ export async function load({ locals }) {
       addCourseForm,
       updateModuleForm,
       addModuleForm,
-      importCourseForm
+      importCourseForm,
+      importModuleForm
       // updateUniForm,
       // importUniForm
     };
@@ -111,6 +113,69 @@ export const actions = {
       return fail(400, withFiles({ form }));
     }
   },
+  importModules: async ({ locals, request, cookies }) => {
+    const form = await superValidate(request, zod(courses_upload_schema));
+
+    if (!form.valid) {
+      return message(withFiles({ form }), { type: 'error', message: 'Bitte wähle eine Datei aus' }, { status: 400 });
+    }
+
+    return { form };
+
+    // try {
+    //   const parsedText = await form.data.file.text();
+    //   const parsedJsonObj = JSON.parse(parsedText);
+
+    //   // Überprüfe ob das importierte Objekt die korrekte Form hat
+    //   const result = courses_import_schema.safeParse(parsedJsonObj);
+
+    //   if (!result.success) {
+    //     setError(form, 'file', 'Nicht das richtige JSON Format');
+    //     return message(form, { type: 'error', message: 'Fehler beim importieren der Universitäten' }, { status: 400 });
+    //   }
+
+    //   for (let index = 0; index < result.data.length; index++) {
+    //     const course = result.data[index];
+
+    //     // Lege erst den Studiengang an
+    //     const resCourse = await api.post(api.routes.course_all, { courseName: course.courseName }, locals.user?.token, { res_type: api.content_type.json });
+
+    //     if (!resCourse.success) {
+    //       return message(form, { type: 'error', message: 'Fehler beim importieren der Studiengänge' }, { status: 400 });
+    //     }
+
+    //     for (let z = 0; z < course.modules.length; z++) {
+    //       const module = course.modules[z];
+
+    //       const body = course.modules.map((m) => ({
+    //         number: m.number,
+    //         moduleName: m.moduleName,
+    //         moduleDescription: m.moduleDescription,
+    //         creditPoints: m.creditPoints,
+    //         courses: [
+    //           {
+    //             courseId: resCourse.data.courseId,
+    //             courseName: resCourse.data.courseName
+    //           }
+    //         ]
+    //       }));
+
+    //       const res = await api.post(api.routes.module_internal_import, body, locals.user?.token, { res_type: api.content_type.plain });
+
+    //       if (!res.success) {
+    //         console.log(res);
+    //         return message(form, { type: 'error', message: 'Fehler beim anlegen eines Moduls' }, { status: 400 });
+    //       }
+    //     }
+    //   }
+
+    //   return message(form, { type: 'success', message: 'Studiengänge wurden erfolgreich importiert.' }, { status: 200 });
+    // } catch (error) {
+    //   console.error(error);
+    //   setError(form, 'file', 'Fehler beim parsen der JSON Datei');
+    //   return fail(400, withFiles({ form }));
+    // }
+  },
   addCourse: async ({ locals, request, cookies }) => {
     const form = await superValidate(request, zod(add_course_schema));
 
@@ -144,6 +209,8 @@ export const actions = {
     const res = await api.del(api.routes.course_by_id(result.data.id), locals.user?.token, { res_type: api.content_type.plain });
 
     if (!res.success) {
+      console.log(res);
+
       setFlash({ type: 'error', message: 'Fehler beim löschen des Studiengangs' }, cookies);
       return fail(400, { errors: 'Fehler beim löschen des Studiengangs' });
     }
@@ -154,12 +221,14 @@ export const actions = {
     const form = await superValidate(request, zod(update_course_schema));
 
     if (!form.valid) {
-      return fail(400, form);
+      return fail(400, { form });
     }
 
     const res = await api.put(api.routes.course_by_id(form.data.courseId), form.data, locals.user?.token);
 
     if (!res.success) {
+      console.log(res);
+
       setError(form, 'courseName', 'Leider konnte der Studiengang nicht bearbeitet werden.');
       return message(form, { type: 'error', message: 'Fehler beim bearbeiten des Studiengangs' }, { status: 400 });
     }
@@ -170,12 +239,14 @@ export const actions = {
     const form = await superValidate(request, zod(update_internal_modul_schema));
 
     if (!form.valid) {
-      return fail(400, form);
+      return fail(400, { form });
     }
 
-    const res = await api.put(api.routes.module_internal_by_id(form.data.moduleId), form.data, locals.user?.token);
+    const res = await api.put(api.routes.module_internal_by_id(form.data.id), form.data, locals.user?.token, { res_type: api.content_type.plain });
 
     if (!res.success) {
+      console.log(res);
+
       setError(form, 'moduleName', 'Leider konnte das Module nicht bearbeitet werden.');
       return message(form, { type: 'error', message: 'Fehler beim bearbeiten des Moduls' }, { status: 400 });
     }
@@ -197,9 +268,9 @@ export const actions = {
 
     const res = await api.del(api.routes.module_internal_by_id(result.data.id), locals.user?.token, { res_type: api.content_type.plain });
 
-    console.log(res);
-
     if (!res.success) {
+      console.log(res);
+
       setFlash({ type: 'error', message: 'Fehler beim löschen des Moduls' }, cookies);
       return fail(400, { errors: 'Fehler beim löschen des Moduls' });
     }
@@ -209,13 +280,11 @@ export const actions = {
   addModule: async ({ locals, request, cookies }) => {
     const form = await superValidate(request, zod(add_internal_modul_schema));
 
-    console.log(form);
-
     if (!form.valid) {
-      return fail(400, form);
+      return fail(400, { form });
     }
 
-    const res = await api.post(api.routes.module_all_internal, form.data, locals.user?.token);
+    const res = await api.post(api.routes.module_all_internal, form.data, locals.user?.token, { res_type: api.content_type.plain });
 
     if (!res.success) {
       console.log(res);

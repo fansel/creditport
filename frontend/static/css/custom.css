@@ -7,6 +7,10 @@
   white-space: nowrap;
 }
 
+.invalid-feedback {
+  display: block;
+}
+
 /* BUTTON */
 button.reset-btn {
   background-color: transparent;
