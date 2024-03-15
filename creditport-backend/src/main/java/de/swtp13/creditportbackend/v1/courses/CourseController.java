@@ -80,8 +80,8 @@ public class CourseController {
             @PathVariable UUID courseId,
             @RequestBody Course CourseDetails,
             @RequestHeader(value =HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
-        if (CourseDetails.getInternalModules() == null){
-            CourseDetails.setInternalModules(courseRepository.getReferenceById(courseId).getInternalModules());
+        if (CourseDetails.getInternalModules() == null || CourseDetails.getInternalModules().isEmpty()){
+            CourseDetails.setInternalModules(courseRepository.findById(courseId).get().getInternalModules());
         }
         return courseRepository.findById(courseId)
                 .map(Course -> {
