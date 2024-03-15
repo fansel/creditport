@@ -69,6 +69,8 @@ public class UserController {
     ) {
         return userRepository.findById(id)
                 .map(user -> {
+                    if (user.getRole() == Role.ADMIN && userRepository.findAllByRole(user.getRole()).size() <= 1)
+                        return ResponseEntity.status(423).build();
             userRepository.delete(user);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }).orElse(ResponseEntity.notFound().build());
