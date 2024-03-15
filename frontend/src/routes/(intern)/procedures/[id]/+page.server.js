@@ -22,6 +22,8 @@ export async function load({ params, locals }) {
     throw redirect(300, '/');
   }
 
+  const uuid = params.id;
+
   const modules = await api.get(api.routes.module_all_internal, locals.user?.token);
   const request = await api.get(api.routes.request_by_id_related(id), locals.user?.token);
   const procedure = await api.get(api.routes.procedure_by_id(request.data.procedureId), locals.user?.token);
@@ -52,6 +54,7 @@ export async function load({ params, locals }) {
   }
 
   return {
+    uuid,
     modules: modules.data,
     request: request.data,
     procedure: procedure.data,

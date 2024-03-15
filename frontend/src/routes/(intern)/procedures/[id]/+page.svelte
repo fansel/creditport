@@ -1,5 +1,6 @@
 <script>
   import * as config from '$lib/config';
+  import * as api from '$lib/api';
   import { format, parseISO } from 'date-fns';
   import { page } from '$app/stores';
   import { superForm } from 'sveltekit-superforms';
@@ -128,7 +129,9 @@
   <div class="row">
     <div class="together hstack gap-2">
       {#if $form.pdfExists}
-        <a class="btn btn-sm btn-danger fw-bold" href="{config.pdf_endpoint}{$form.requestId}" target="_blank">PDF</a>
+        <a target="_blank" class="btn btn-danger" href={api.routes.pdf_overview_download(data.uuid)}>PDF</a>
+
+        <!-- <a class="btn btn-sm btn-danger fw-bold" href="{config.pdf_endpoint}{$form.requestId}" target="_blank">PDF</a> -->
       {:else}
         <div class="disabled d-flex flex-center btn btn-outline-danger"><i class="bi bi-ban" /></div>
       {/if}

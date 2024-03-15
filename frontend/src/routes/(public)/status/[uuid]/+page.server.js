@@ -22,6 +22,6 @@ export async function load({ params }) {
     uuid,
     procedure: procedure.data,
     allInternalModules: allInternalModules.data,
-    allExternalModules: allExternalModules.data
+    allExternalModules: allExternalModules.data,
   };
 }

@@ -5,7 +5,8 @@
   import StatusComponent from './StatusComponent.svelte';
   import Accordion from '$root/lib/components/Accordion.svelte';
   import Mapping from './Mapping.svelte';
-  import { status_requests } from '$lib/config';
+  import { api_endpoint, status_requests } from '$lib/config';
+  import * as api from '$lib/api';
 
   export let data;
 
@@ -70,10 +71,14 @@
 
   <!-- NEUE VERSION -->
   <div class="new-version mx-2">
-    {#each requests as request}
+    <div class="pdf d-flex justify-content-center mt-3">
+      <a target="_blank" class="btn btn-primary" href={api.routes.pdf_overview_download(data.uuid)}>Download Overview PDF</a>
+    </div>
+    {#each requests as request, index}
       <Accordion>
-        <div slot="head" class="fs-6 d-flex">
-          <div class="fw-bold justify-content-start">requestID: {request.requestId}</div>
+        <div slot="head" class="fs-6 d-flex w-100">
+          <!-- <div class="fw-bold justify-content-start">requestID: {request.requestId}</div> -->
+          Antrag: {index + 1}
           <RequestStatus status={request.statusRequest} extern={true} />
         </div>
         <div slot="details">

@@ -42,18 +42,23 @@
       {/each}
     </div>
     <div class="col-sm-12 col-xs-12 col-lg-4 comment d-flex flex-grow-1">
-      {#if comment}
-        <div class="mb-3 vstack">
-          <label class="mb-2 fw-bold" for="">Anmerkung des Studienbüros</label>
+      <div class="mb-3 vstack">
+        <label class="mb-2 fw-bold" for="">Anmerkung des Studienbüros</label>
+        {#if comment}
           <!-- <textarea type="text" class="form-control auto-resize-textarea" rows={(x, y) => Math.ceil(Math.max(x, y) * 1.5)}>{comment}</textarea> -->
           <textarea readonly type="text" class="form-control auto-resize-textarea" rows="4">{comment}</textarea>
-        </div>
-      {:else}
+        {:else}
+          <label readonly type="text" class="form-control auto-resize-textarea" rows="2">
+            <i class="bi bi-exclamation-triangle" />
+            Keine Anmerkungen verfügbar!</label
+          >
+        {/if}
+      </div>
+      <!-- {:else}
         <label class="fw-bold">
           <i class="bi bi-exclamation-triangle" />
           Keine Anmerkungen verfügbar</label
-        >
-      {/if}
+        > -->
     </div>
   </div>
 </div>

@@ -5,14 +5,14 @@ services:
     image: postgres:16.0-alpine
     container_name: postgres-db
 
-    ports: 
+    ports:
       - 5432:5432
     environment:
       POSTGRES_PASSWORD: admin
       POSTGRES_USER: admin
       POSTGRES_DB: production
     volumes:
-      - 'creditport-db:/var/lib/postgresql/data'
+      - "creditport-db:/var/lib/postgresql/data"
     networks:
       - creditport-net
   db-gui:
@@ -28,7 +28,7 @@ services:
       - "pgadmin-data:/var/lib/pgadmin"
       - ./servers.json:/var/lib/pgadmin/servers.json
     networks:
-        - creditport-net
+      - creditport-net
 
   javadoc:
     container_name: creditport-javadoc
@@ -49,12 +49,11 @@ services:
       - PUBLIC_ENV=production
       - PUBLIC_SECURE_CONNECTION=false
       - ORIGIN=http://172.26.92.92:3000
-      - PUBLIC_PDF_ENDPOINT=http://172.26.92.92:8080/pdf/download/
+      - PUBLIC_PDF_ENDPOINT=http://172.26.92.92:8080/api/v1
     networks:
       - creditport-net
     restart: unless-stopped
     pull_policy: always
-
 
   backend:
     container_name: creditport-backend
@@ -74,7 +73,6 @@ services:
     restart: unless-stopped
     pull_policy: always
 
-
 networks:
   creditport-net:
     driver: bridge
@@ -85,6 +83,3 @@ volumes:
     name: creditport-db
   pgadmin-data:
     name: pgadmin-data
-
-
-    

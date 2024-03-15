@@ -68,7 +68,7 @@
     <button class="btn-close" type="button" aria-label="Close" on:click={() => dialog_close()} />
   </div>
 
-  <SuperDebug data={$form} />
+  <!-- <SuperDebug data={$form} /> -->
 
   <form action="?/updateModule" method="POST" use:enhance>
     <!-- Body -->

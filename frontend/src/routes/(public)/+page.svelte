@@ -13,7 +13,7 @@
 </div>
 
 <div class="d-flex justify-content-center align-items-center">
-  <div class="border rounded-3 p-3 m-3">
+  <div class="border rounded-3 p-3 m-3 bg-white">
     <img src="/uni-logo.png" class="uni-logo" alt="" />
   </div>
 </div>
