@@ -176,14 +176,14 @@ public class ProcedureController {
         List<Request> requestList = procedure.getRequests();
         for (Request request : requestList) {
             if (request.getStatusRequest() != StatusRequest.BEARBEITET) {
-                return ResponseEntity.status(428).build();
+                return ResponseEntity.status(428).body("All request need to be \"BEARBEITET\"");
             }
         }
         if (procedure.getStatus().equals(Status.IN_BEARBEITUNG)) {
             procedure.setStatus(Status.WEITERGELEITET);
             return ResponseEntity.ok(procedureRepository.save(procedure));
         } else {
-            return ResponseEntity.status(428).build();
+            return ResponseEntity.status(428).body("Procedure already \"WEITERGELEITET\" or \"VOLLSTÄNDIG\"");
         }
 
     }
