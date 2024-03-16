@@ -3,13 +3,13 @@
   //import { enhance } from '$app/forms';
   import { page } from '$app/stores';
   import { tabProcedureForm } from '$lib/stores';
- // import { superForm } from 'sveltekit-superforms';
+  import { superForm } from 'sveltekit-superforms/client';
 
 
   //const { form } = superForm(data.form);
   export let data;
   export let form;
-
+  //const {addUniversityForm, messages, errors, enhance} = superForm(data.addUniversityForm);
 
   //components
   import General from './general.svelte';
@@ -23,7 +23,9 @@
   $: courses = data.courses;
   $: uniId = form?.uniId;
   $: uniName = form?.uniName;
-  console.log(uniId+" page.svelte");
+
+  
+  //console.log(uniId+" page.svelte");
   
 
   // $: console.log($tabProcedureForm);
@@ -56,8 +58,7 @@
   //Logik zum einlesen der Daten aus den allgemeinen Angaben
   let generalData = {
     universityId: '',
-    externalCourseName: '',
-    internalCouseName: '',
+    internalCourseId: '',
     annotation: ''
   };
 
@@ -74,49 +75,53 @@
     //addTitleToRequest(0)
   });
  
+ 
   
+
   function addRequest() {
     requests = [
       ...requests,
       {
         moduleData: {
-          selectedInternalModulIds:[0],
-          selectedExternalModulIds: [0] // Ein Array für die Titel
+          selectedInternalModuleIndex:[0],
+          selectedExternalModuleIndex: [0] // Ein Array für die Titel
         }
       }
     ];
   }
 
   function addTitleToRequest(requestIndex) {
-    requests[requestIndex].moduleData.selectedExternalModulIds = [
-      ...requests[requestIndex].moduleData.selectedExternalModulIds,
+    requests[requestIndex].moduleData.selectedExternalModuleIndex = [
+      ...requests[requestIndex].moduleData.selectedExternalModuleIndex,
       0 // Füge einen weiteren Titel hinzu (initial null, kann nach Bedarf angepasst werden)
     ];
   }
 
   function addModuleToRequest(requestIndex) {
-    requests[requestIndex].moduleData.selectedModul = [
-      ...requests[requestIndex].moduleData.selectedModul,
+    requests[requestIndex].moduleData.selectedInternalModuleIndex = [
+      ...requests[requestIndex].moduleData.selectedInternalModuleIndex,
       0 // Füge einen weiteren selectedModul hinzu (initial 0, kann nach Bedarf angepasst werden)
     ];
   }
 
   function removeExternalModulFromRequest(requestIndex, titleIndex) {
     const request = requests[requestIndex];
-    const titles = [...request.moduleData.selectedExternalModulIds];
+    const titles = [...request.moduleData.selectedExternalModuleIndex];
     titles.splice(titleIndex, 1);
-    requests[requestIndex].moduleData.selectedExternalModulIds = titles;
+    requests[requestIndex].moduleData.selectedExternalModuleIndex = titles;
   }
 
   function removeInternalModulFromRequest(requestIndex, moduleIndex) {
     const request = requests[requestIndex];
-    const selectedModuls = [...request.moduleData.selectedModul];
+    const selectedModuls = [...request.moduleData.selectedInternalModuleIndex];
     selectedModuls.splice(moduleIndex, 1);
-    requests[requestIndex].moduleData.selectedModul = selectedModuls;
+    requests[requestIndex].moduleData.selectedInternalModuleIndex = selectedModuls;
   }
   function removeRequest(index) {
     if (requests.length > 1) requests = requests.filter((_, i) => i !== index);
   }
+
+ 
 </script>
 
 <main>
@@ -141,6 +146,7 @@
       {externalModules}
       {goToNextTab}
       {addRequest}
+      
     />
   </div>
 

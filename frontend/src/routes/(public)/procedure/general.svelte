@@ -1,5 +1,6 @@
 <script>
-  import { createEventDispatcher } from 'svelte';
+  
+  import { superForm } from 'sveltekit-superforms/client';
 
   export let generalData;
   export let goToNextTab;
@@ -7,22 +8,21 @@
   export let uniId;
   export let uniName;
   export let courses;
-
+  //export let addUniversityForm;
+  // export let data;
+  // const {addUniversityForm, messages, errors, enhance} = superForm(data.addUniversityForm);
 
   let showAddUniversity = false;
   let showUniversityName = false;
   let newUniversityName = '';
   
+  
   //let newUniForm;
 
-  function addUniversity() {
-    // Hier können Sie die Logik implementieren, um die neue Universität hinzuzufügen
-    // Zum Beispiel: universities.push({ uniName: newUniversityName });
+  if (uniId !== undefined) {
+    generalData.universityId = uniId;
+}
 
-    // Schließen Sie das Modal und gehen Sie zum nächsten Tab
-    //showAddUniversity = false;
-    showUniversityName = true;
-  }
 </script>
 
 <!-- Tab General -->
@@ -36,7 +36,7 @@
           <input type="text" name="universityName" class="form-control" id="newUniversityName" bind:value={newUniversityName} />
         </div>
         <button type="submit" class="btn btn-primary" on:click={() => (showUniversityName = true)}>Hinzufügen</button>
-        <button type="submit" class="btn btn-primary" on:click={() => (showAddUniversity = false)}>abbrechen</button>
+        <button type="button" class="btn btn-primary" on:click={() => (showAddUniversity = false)}>abbrechen</button>
       </form>
     </div>
   </div>
@@ -72,13 +72,10 @@
         <!-- <input type="text" id="uni" bind:value={generalData.university} class="form-control" placeholder="Universität Bremen" required /> -->
       </div>
     {/if}
-    <div class="mb-3">
-      <label for="" class="mb-2">Studiengang der anzurechnenden Module</label>
-      <input type="text" id="formerStudies" bind:value={generalData.externalCourseName} class="form-control" placeholder="B.Sc. Informatik" />
-    </div>
+    
     <div class="mb-3">
       <label for="" class="mb-2">Studiengang der Universität Leipzig an dem die Anrechnung erfolgen soll</label>
-      <select class="form-select" name="uniId" id="uniId" aria-label="Default select example" bind:value={generalData.universityId}>
+      <select class="form-select" name="internalCourseId" id="internalCourseId" aria-label="Default select example" bind:value={generalData.internalCourseId}>
         {#each courses as course , index}
           <option value={course.courseId}>{course.courseName} </option>
         {/each}
