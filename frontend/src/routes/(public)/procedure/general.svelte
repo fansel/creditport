@@ -1,6 +1,6 @@
 <script>
-  
   import { superForm } from 'sveltekit-superforms/client';
+  import AddUniForm from '$root/routes/(intern)/settings/universities/forms/AddUniForm.svelte';
 
   export let generalData;
   export let goToNextTab;
@@ -15,40 +15,34 @@
   let showAddUniversity = false;
   let showUniversityName = false;
   let newUniversityName = '';
-  
-  
+  let showAddModal = false;
+
+  // console.log(testUni);
+
   //let newUniForm;
 
   if (uniId !== undefined) {
     generalData.universityId = uniId;
-}
+  }
 
+  function dialog_open(id) {
+    const uni = universities.find((u) => u.uniId == id);
+    if (!uni) {
+      console.error('Uni not found');
+    }
+    updateForm.dialog_open(uni);
+  }
 </script>
 
+<AddUniForm bind:showModal={showAddModal} />
+
 <!-- Tab General -->
-{#if showAddUniversity}
-  <div class="full-border rounded mb-4 p-4">
-    <div class="">
-      <p class="text-warning">Sie sind dabei eine neue Universität hinzuzufügen. Bitte achten Sie auf die korrekte Schreibweise!</p>
-      <form action="?/addUniversity" method="POST" id="requests">
-        <div class="mb-3">
-          <label for="newUniversityName" class="form-label">Name der Universität</label>
-          <input type="text" name="universityName" class="form-control" id="newUniversityName" bind:value={newUniversityName} />
-        </div>
-        <button type="submit" class="btn btn-primary" on:click={() => (showUniversityName = true)}>Hinzufügen</button>
-        <button type="button" class="btn btn-primary" on:click={() => (showAddUniversity = false)}>abbrechen</button>
-      </form>
-    </div>
-  </div>
-{/if}
 
 {#if uniId !== undefined}
-<label for="uniName">Der Name der hinzugefügten Universität lautet: </label>
+  <label for="uniName">Der Name der hinzugefügten Universität lautet: </label>
   <div id="uniName" class="border rounded mb-2">
-
     <div class="p-2">
-
-       {uniName}
+      {uniName}
       <!-- <p>die id lautet: {uniId}</p> -->
     </div>
   </div>
@@ -66,17 +60,22 @@
             <option value={university.uniId}>{university.uniName} </option>
           {/each}
         </select>
-        <p class="text-info">falls Ihre Universität nicht in der Liste auftaucht können Sie diese manuell hinzufügen</p>
-        <button type="button" class="btn btn-primary" on:click={() => (showAddUniversity = true)}>Neue Universität hinzufügen</button>
+        <div class="py-2">Universität nicht gefunden <i class="bi bi-question-circle"></i></div>
+        <!-- <button type="button" class="btn btn-primary" on:click={() => (showAddUniversity = true)}>Neue Universität hinzufügen</button> -->
+        <button class="btn btn-primary btn-sm text-nowrap" on:click={() => (showAddModal = true)}>
+          <i class="bi bi-plus-circle" />
+          Hinzufügen
+          <!-- </button> <button type="button" class="btn btn-primary" on:click={() => (showAddUniversity = false)}>abbrechen</button> -->
+        </button>
 
         <!-- <input type="text" id="uni" bind:value={generalData.university} class="form-control" placeholder="Universität Bremen" required /> -->
       </div>
     {/if}
-    
+
     <div class="mb-3">
       <label for="" class="mb-2">Studiengang der Universität Leipzig an dem die Anrechnung erfolgen soll</label>
       <select class="form-select" name="internalCourseId" id="internalCourseId" aria-label="Default select example" bind:value={generalData.internalCourseId}>
-        {#each courses as course , index}
+        {#each courses as course, index}
           <option value={course.courseId}>{course.courseName} </option>
         {/each}
       </select>
