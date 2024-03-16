@@ -90,6 +90,19 @@ export const update_external_module = z.object({
   verified: z.boolean()
 });
 
+export const add_external_module = z.object({
+  moduleNumber: z.string().optional(),
+  moduleName: z.string().min(1),
+  moduleDescription: z.string().optional(),
+  // university: universities_schema,
+  university: z.object({
+    uniId: z.string(),
+    uniName: z.string(),
+    verified: z.boolean()
+  }),
+  creditPoints: z.number(),
+})
+
 export const modules_import_schema = z.array(update_internal_modul_schema.omit({ id: true, courseIds: true }).extend({ moduleId: z.string(), courses: z.array(update_course_schema) }));
 
 export const full_request_schema = z.object({
