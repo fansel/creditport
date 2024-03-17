@@ -172,21 +172,14 @@ export const actions = {
     // return { success: true, procedureId: res.procedureId };
     //zugriff $page.form.procesureId
   },
-
-  addUniversity: async ({ request }) => {
-    // const addUniversityForm = await superValidate(request, zod(addUniversitySchema));
-    // console.log(addUniversityForm);
-    // if (!form.valid) {
-    //   // Again, return { form } and things will just work.
-    //   return fail(400, { form });
-    // }
+  addUni: async ({ locals, request }) => {
     const formData = await request.formData();
 
-    const addUniversitySchema = zfd.formData({
-      universityName: zfd.text()
+    const schema = zfd.formData({
+      name: zfd.text()
     });
 
-    const result = addUniversitySchema.safeParse(formData);
+    const result = schema.safeParse(formData);
 
     if (!result.success) {
       const data = {
@@ -197,19 +190,11 @@ export const actions = {
     }
 
     const body = {
-      uniName: result.data.universityName
+      uniName: result.data.name
     };
 
-    const res = await api.post(`universities`, body, null, { req_type: api.content_type.json, res_type: api.content_type.json });
-    
-    let uniId = res.data.uniId;
-    let uniName = res.data.uniName;
+    const res = await api.post(api.routes.university_all, body, locals.user?.token);
 
-    return { success: true, uniId: uniId, uniName: uniName};
-  },
-
-  addModul: async ({ request }) => {
-    const formData = await request.formData();
-  
+    return { success: true };
   }
 };
