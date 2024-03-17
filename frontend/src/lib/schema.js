@@ -33,6 +33,10 @@ export const universities_schema = z.object({
   verified: z.boolean().default(false)
 });
 
+// export const add_university = z.object({
+//   uniName: z.string().min(1, { message: 'Uni Name darf nicht leer sein.'})
+// })
+
 export const universities_upload_schema = z.object({
   file: z.instanceof(File, { message: 'Please upload a file.' }).refine((f) => f.size < 100_000, 'Max 100 kB upload size.')
 });
@@ -101,6 +105,10 @@ export const add_external_module = z.object({
     verified: z.boolean()
   }),
   creditPoints: z.number(),
+})
+
+export const add_university = z.object({
+  uniName: z.string()
 })
 
 export const modules_import_schema = z.array(update_internal_modul_schema.omit({ id: true, courseIds: true }).extend({ moduleId: z.string(), courses: z.array(update_course_schema) }));

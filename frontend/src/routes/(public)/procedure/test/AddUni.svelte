@@ -3,7 +3,7 @@
   import { getContext } from 'svelte';
   import { superForm } from 'sveltekit-superforms';
   import * as config from '$lib/config';
-  import { add_external_module } from '$root/lib/schema';
+  import { add_university } from '$root/lib/schema';
   import * as flashModule from 'sveltekit-flash-message/client';
   import { zod } from 'sveltekit-superforms/adapters';
   import SuperDebug from 'sveltekit-superforms';
@@ -12,7 +12,7 @@
 
   let dialog;
 
-  const { form, messages, errors, enhance } = superForm(data.form, {
+  const { form, messages, errors, enhance } = superForm(data.uniForm, {
     dataType: 'json',
     syncFlashMessage: true,
     flashMessage: {
@@ -23,7 +23,7 @@
     },
     clearOnSubmit: 'none',
     resetForm: false,
-    validators: zod(add_external_module),
+    validators: zod(add_university),
     validationMethod: 'auto',
     customValidity: false
   });
@@ -36,42 +36,24 @@
     dialog.close();
   }
 
-  $form.moduleNumber = '';
-  $form.moduleDescription = '';
-  $form.creditPoints = 5;
+  console.log('uniForm: ', $form);
 
-  $form.university.uniId = data.testUni.uniId;
-  $form.university.uniName = data.testUni.uniName;
-  $form.university.verified = data.testUni.verified;
-
-  console.log('moduleForm: ', $form);
+  $form.uniName = '';
 </script>
 
 <dialog bind:this={dialog}>
   <div class="headline dialog-header border-bottom">
-    <h2 class="m-0">Fremdmodul hinzufügen</h2>
+    <h2 class="m-0">Universität hinzufügen</h2>
     <button class="btn-close" type="button" aria-label="Close" on:click={() => dialog_close()} />
   </div>
 
   <SuperDebug data={$form} />
 
-  <form action="?/addExternalModule" method="POST" use:enhance>
+  <form action="?/addUni" method="POST" use:enhance>
     <!-- Body -->
     <div class="body p-3">
-      <label for="" class="mt-2">Name des Moduls </label>
-      <input type="text" class="form-control" placeholder="" bind:value={$form.moduleName} />
-
-      <label for="" class="mt-2">Nummer des Moduls </label>
-      <input type="text" class="form-control" placeholder="" bind:value={$form.moduleNumber} />
-
-      <label for="" class="mt-2">Beschreibung des Moduls </label>
-      <input type="text" class="form-control" placeholder="" bind:value={$form.moduleDescription} />
-
-      <label for="" class="mt-2">Universität </label>
-      <input disabled type="text" class="form-control" placeholder="" value={$form.university.uniName} />
-
-      <label for="" class="mt-2">Credit Points </label>
-      <input type="number" class="form-control" placeholder="" bind:value={$form.creditPoints} />
+      <label for="" class="mt-2">Name der Universität</label>
+      <input type="text" class="form-control" placeholder="" bind:value={$form.uniName} />
     </div>
 
     <!-- Footer -->
