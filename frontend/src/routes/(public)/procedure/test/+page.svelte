@@ -8,6 +8,7 @@
   import * as flashModule from 'sveltekit-flash-message/client';
 
   import SuperDebug from 'sveltekit-superforms';
+  import AddExternalModule from './AddExternalModule.svelte';
 
   export let data;
 
@@ -34,9 +35,18 @@
   $form.university.uniId = data.testUni.uniId;
   $form.university.uniName = data.testUni.uniName;
   $form.university.verified = data.testUni.verified;
+
+  let showModal;
 </script>
 
-<SuperDebug data={form} />
+<AddExternalModule bind:this={showModal} {data} />
+
+<!-- <SuperDebug data={form} /> -->
+
+<button class="btn btn-primary btn-sm" on:click={() => showModal.dialog_open()}>
+  <i class="bi bi-plus-circle" />
+  Fremdmodul
+</button>
 
 <form action="?/addExternalModule" method="POST" use:enhance>
   <label for="" class="mt-2">Name des Moduls </label>
