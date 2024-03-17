@@ -4,7 +4,7 @@ import { zfd } from 'zod-form-data';
 import { z } from 'zod';
 import { fail } from '@sveltejs/kit';
 import { superValidate, message } from 'sveltekit-superforms/server';
-import { add_external_module, add_university } from '$root/lib/schema';
+import { add_external_module, add_university, modulantraege as lastStep } from '$root/lib/schema';
 import { zod } from 'sveltekit-superforms/adapters';
 import { status_requests } from '$root/lib/config';
 
@@ -24,6 +24,7 @@ export async function load({ params }) {
       courses: courses.data,
       form: await superValidate(zod(add_external_module)),
       uniForm: await superValidate(zod(add_university)),
+      multiForm: await (superValidate(zod(lastStep))),
       title: 'Vorgang erstellen',
     };
   }
@@ -36,7 +37,7 @@ export const actions = {
       if (!form.valid) {
         return message(form, { type: 'error', message: 'Dein Input ist ungültig' }, cookies);
       }
-      console.log("validation successful :)")
+      console.log("validation extModule successful")
   
       const res = await api.post(api.routes.module_all_external, form.data, locals.user?.token);
   
@@ -53,7 +54,7 @@ export const actions = {
       if (!uniForm.valid) {
         return message(form, { type: 'error', message: 'Dein Input ist ungültig' }, cookies);
       }
-      console.log("validation successful :)")
+      console.log("validation uni successful")
   
       const res = await api.post(api.routes.university_all, uniForm.data, locals.user?.token);
   
@@ -63,5 +64,22 @@ export const actions = {
       }
   
       return message(uniForm, { type: 'success', message: 'Universität erfolgreich hinzugefügt' }, cookies);
+    },
+    multiForm: async ({ locals, request, cookies }) => {
+      const multiForm = await superValidate(request, zod(lastStep));
+  
+      if (!multiForm.valid) {
+        return message(form, { type: 'error', message: 'Dein Input ist ungültig' }, cookies);
+      }
+      console.log("validation procedure successful")
+  
+      const res = await api.post(api.routes.procedure_all, multiForm.data, locals.user?.token);
+  
+      if (!res.success) {
+        console.log("res: ", res)
+        return message(multiForm, { type: 'error', message: 'Fehler beim Erstellen des Vorgangs' }, cookies);
+      }
+  
+      return message(multiForm, { type: 'success', message: 'Vorgang erfolgreich abgesendet' }, cookies);
     }
   };

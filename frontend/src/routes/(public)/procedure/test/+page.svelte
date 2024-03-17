@@ -1,7 +1,7 @@
 <script>
   import { page } from '$app/stores';
   import { superForm } from 'sveltekit-superforms';
-  import { add_external_module } from '$root/lib/schema';
+  import { allgemeine_angaben, modulantraege } from '$root/lib/schema';
   import { zod } from 'sveltekit-superforms/adapters';
   import * as config from '$lib/config';
   import * as api from '$lib/api';
@@ -14,6 +14,28 @@
   export let data;
   let showAddFremdmodul;
   let showAddUni;
+
+  const steps = [zod(allgemeine_angaben), zod(modulantraege)];
+  let step = 1;
+
+  $: options.validators = steps[step - 1];
+
+  const { form, errors, message, enhance, validateForm, options } = superForm(data.multiForm, {
+    dataType: 'json',
+    async onSubmit({ cancel }) {
+      if (step == steps.length) return;
+      else cancel();
+
+      const result = await validateForm({ update: true });
+      if (result.valid) step = step + 1;
+    },
+
+    async onUpdated({ form }) {
+      if (form.valid) step = 1;
+    }
+  });
+
+  $form.annotation = '';
 </script>
 
 <!-- MODALS -->
@@ -63,9 +85,9 @@
   <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
     <div class="uni">
       <label class="mb-2" for="">Universität der anzurechnenden Module</label>
-      <select class="form-select" value="0">
+      <select class="form-select" bind:value={$form.universityId}>
         {#each data.universities as university, index}
-          <option>{university.uniName}</option>
+          <option value={university.uniId}>{university.uniName}</option>
         {/each}
       </select>
 
@@ -79,12 +101,13 @@
 
     <div class="studiengang mt-3">
       <label class="mb-2" for="">Studiengang der Universität Leipzig an dem die Anrechnung erfolgen soll</label>
-      <select class="form-select" value="0">
+      <select class="form-select" bind:value={$form.couseId}>
         {#each data.courses as course, index}
-          <option>{course.courseName}</option>
+          <option value={course.courseId}>{course.courseName}</option>
         {/each}
       </select>
     </div>
+    <SuperDebug data={form} />
   </div>
 
   <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">2</div>

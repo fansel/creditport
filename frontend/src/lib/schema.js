@@ -10,7 +10,7 @@ export const allgemeine_angaben = z.object({
   courseId: z.string()
 })
 
-export const modulantraege = z.object({
+export const modulantraege = allgemeine_angaben.extend({
   requests: z.array(z.object({
     externalModuleId: z.array(z.string()),
     internalModuleId: z.array(z.string()),
