@@ -4,6 +4,22 @@ import { user_roles, status_requests, status_procedures } from '$lib/config';
  * Alle globalen ZOD Schemas für Superform Integration
  */
 
+export const allgemeine_angaben = z.object({
+  annotation: z.string(),
+  universityId: z.string(),
+  courseId: z.string()
+})
+
+export const modulantraege = z.object({
+  requests: z.array(z.object({
+    externalModuleId: z.array(z.string()),
+    internalModuleId: z.array(z.string()),
+    annotationStudent: z.string(),
+    annotationCommittee: z.string(),
+    moduleLink: z.string()
+  }))
+})
+
 export const login_schema = z.object({
   username: z.string(),
   password: z.string()
