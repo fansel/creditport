@@ -4,21 +4,50 @@ import { user_roles, status_requests, status_procedures } from '$lib/config';
  * Alle globalen ZOD Schemas für Superform Integration
  */
 
+export const add_external_module = z.object({
+  moduleNumber: z.string(),
+  moduleName: z.string().min(1),
+  moduleDescription: z.string(),
+  // university: universities_schema,
+  university: z.object({
+    uniId: z.string()
+    // uniName: z.string(),
+    // verified: z.boolean()
+  }),
+  creditPoints: z.number()
+});
+
+export const default_request = {
+  annotationStudent: '',
+  annotationCommittee: '',
+  externalModuleId: [''],
+  internalModuleId: [''],
+  moduleLink: '',
+  file: null
+};
+
 export const allgemeine_angaben = z.object({
   annotation: z.string(),
-  universityId: z.string(),
-  courseId: z.string()
-})
+  universityId: z.string().refine((universityId) => universityId != '', { message: 'Bitte wähle eine Universität aus.' }),
+  courseId: z.string().refine((courseId) => courseId != '', { message: 'Bitte wähle einen Studiengang aus.' })
+});
 
 export const modulantraege = allgemeine_angaben.extend({
-  requests: z.array(z.object({
-    externalModuleId: z.array(z.string()),
-    internalModuleId: z.array(z.string()),
-    annotationStudent: z.string(),
-    annotationCommittee: z.string(),
-    moduleLink: z.string()
-  }))
-})
+  requests: z
+    .array(
+      z.object({
+        externalModuleId: z.array(z.string().min(1, { message: 'Bitte wähle ein Modul aus.' })).min(1, { message: 'Bitte wähle mindestens ein externes Modul aus.' }),
+        internalModuleId: z.array(z.string().min(1, { message: 'Bitte wähle ein Modul aus.' })).min(1, { message: 'Bitte wähle mindestens ein internes Modul aus.' }),
+        annotationStudent: z.string(),
+        annotationCommittee: z.string(),
+        moduleLink: z.string(),
+        file: z.instanceof(File, { message: 'Bitte lade eine Modulbeschreibung hoch.' }).refine((f) => f.size < 100_000, 'Max 100 kB upload size.')
+      })
+    )
+    .min(1, { message: 'Bitte gebe mindestens einen Antrag an.' })
+});
+
+export const modulantraege_senden = modulantraege.shape.requests.element.omit({ file: true });
 
 export const login_schema = z.object({
   username: z.string(),
@@ -110,22 +139,9 @@ export const update_external_module = z.object({
   verified: z.boolean()
 });
 
-export const add_external_module = z.object({
-  moduleNumber: z.string().optional(),
-  moduleName: z.string().min(1),
-  moduleDescription: z.string().optional(),
-  // university: universities_schema,
-  university: z.object({
-    uniId: z.string(),
-    uniName: z.string(),
-    verified: z.boolean()
-  }),
-  creditPoints: z.number(),
-})
-
 export const add_university = z.object({
-  uniName: z.string()
-})
+  uniName: z.string().min(1, { message: 'Name darf nicht leer sein.' })
+});
 
 export const modules_import_schema = z.array(update_internal_modul_schema.omit({ id: true, courseIds: true }).extend({ moduleId: z.string(), courses: z.array(update_course_schema) }));
 

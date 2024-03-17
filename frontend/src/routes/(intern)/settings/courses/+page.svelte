@@ -1,13 +1,13 @@
 <script>
   import VirtualList from '@sveltejs/svelte-virtual-list';
-  import AddCourseForm from './form/AddCourseForm.svelte';
-  import UpdateCourseForm from './form/UpdateCoursesForm.svelte';
-  import DeleteCourseForm from './form/DeleteCourseForm.svelte';
-  import UpdateModuleForm from './form/UpdateModuleForm.svelte';
-  import DeleteModuleForm from './form/DeleteModuleForm.svelte';
-  import AddModuleForm from './form/AddModuleForm.svelte';
-  import ImportCourseForm from './form/ImportCourseForm.svelte';
-  import ImportModuleForm from './form/ImportModuleForm.svelte';
+  import AddCourseForm from './forms/AddCourseForm.svelte';
+  import UpdateCourseForm from './forms/UpdateCoursesForm.svelte';
+  import DeleteCourseForm from './forms/DeleteCourseForm.svelte';
+  import UpdateModuleForm from './forms/UpdateModuleForm.svelte';
+  import DeleteModuleForm from './forms/DeleteModuleForm.svelte';
+  import AddModuleForm from './forms/AddModuleForm.svelte';
+  import ImportCourseForm from './forms/ImportCourseForm.svelte';
+  import ImportModuleForm from './forms/ImportModuleForm.svelte';
 
   export let data;
 

@@ -21,11 +21,12 @@
     onError({ result }) {
       console.error(result.error.message);
     },
-    clearOnSubmit: 'none',
-    resetForm: false,
     validators: zod(add_university),
     validationMethod: 'auto',
-    customValidity: false
+    customValidity: false,
+    onResult({ result }) {
+      if (result.status == 200) dialog_close();
+    }
   });
 
   export function dialog_open() {
@@ -36,9 +37,9 @@
     dialog.close();
   }
 
-  console.log('uniForm: ', $form);
+  // console.log('uniForm: ', $form);
 
-  $form.uniName = '';
+  // $form.uniName = '';
 </script>
 
 <dialog bind:this={dialog}>
@@ -53,7 +54,10 @@
     <!-- Body -->
     <div class="body p-3">
       <label for="" class="mt-2">Name der Universität</label>
-      <input type="text" class="form-control" placeholder="" bind:value={$form.uniName} />
+      <input type="text" class="form-control {$errors.uniName ? 'is-invalid' : ''}" placeholder="" bind:value={$form.uniName} />
+      {#if $errors.uniName}
+        <div class="invalid-feedback">{$errors.uniName}</div>
+      {/if}
     </div>
 
     <!-- Footer -->

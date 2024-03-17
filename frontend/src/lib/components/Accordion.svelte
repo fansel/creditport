@@ -1,5 +1,5 @@
 <script>
-  export let open = false;
+  export let open = true; // TODO change to false
   import { slide } from 'svelte/transition';
   const handleClick = () => (open = !open);
 </script>
@@ -7,10 +7,13 @@
 <div class="accordion">
   <div class="card {open ? 'open' : 'closed'}">
     <button class="reset-btn card-header btn m-0 {open ? 'open' : 'closed'}" type="button" on:click={handleClick}>
-      <h5 class="mb-0 d-flex justify-content-between">
+      <h5 class="mb-0 d-flex justify-content-between align-items-center">
         <slot name="head" />
         <!-- <button class="btn btn-link" on:click={handleClick}> </button> -->
-        <span class="{!open ? 'bi-chevron-down' : 'bi-chevron-up '} small" />
+        <div>
+          <slot name="icon"/>
+          <span class="{!open ? 'bi-chevron-down' : 'bi-chevron-up '} small" />
+        </div>
       </h5>
     </button>
 

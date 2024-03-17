@@ -74,6 +74,7 @@ export const routes = {
    * ----------------------------------------------------------------------
    */
   pdf_overview_download: (id) => `${config.pdf_endpoint}/pdf/overview/${id}`, // GET
+  pdf_upload: (id) => `pdf/upload/${id}`, // POST
 
   /**
    * ----------------------------------------------------------------------
@@ -132,7 +133,9 @@ async function send({ method, path, data, token, req_type = content_type.json, r
 
     switch (res_type) {
       case content_type.json:
-        body = await res.json();
+        const text = await res.text();
+
+        body = text ? JSON.parse(text) : '';
         break;
       case content_type.plain:
         body = await res.text();
