@@ -18,6 +18,7 @@
     flashMessage: {
       module: flashModule
     },
+    invalidateAll: false,
     onError({ result }) {
       console.error(result.error.message);
     },

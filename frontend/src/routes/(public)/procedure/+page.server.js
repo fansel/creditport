@@ -30,6 +30,8 @@ export async function load({ params }) {
     throw error(404, { message: 'Fehler beim Laden der externen Module' });
   }
 
+  console.log('Server Load ausgeführt');
+
   const default_procedure = {
     // annotation: 'hallo',
     // universityId: '698152a1-8637-480e-a4be-696e8c1fc90a',
@@ -38,7 +40,7 @@ export async function load({ params }) {
   };
 
   return {
-    universities: universities.data,
+    universities: universities.data.filter((u) => u.verified == true),
     courses: courses.data,
     external_modules: external_modules.data,
     internal_modules: internal_modules.data,
@@ -57,33 +59,33 @@ export const actions = {
     if (!form.valid) {
       return message(form, { type: 'error', message: 'Dein Input ist ungültig' }, { status: 400 });
     }
-    console.log('validation extModule successful');
 
-    const res = await api.post(api.routes.module_all_external, form.data, locals.user?.token);
+    console.log(form.data);
+
+    const res = await api.post(api.routes.module_all_external, form.data, null);
 
     if (!res.success) {
       console.log('res: ', res);
-      return message(form, { type: 'error', message: 'Fehler beim Erstellen' }, { status: 400 });
+      return message(form, { type: 'error', message: 'Fehler beim Erstellen des Moduls' }, { status: 400 });
     }
 
-    return message(form, { type: 'success', message: 'Wurde erfolgreich gespeichert' }, { status: 200 });
+    return message(form, { type: 'success', message: 'Modul wurde erfolgreich hinzugefügt' }, { status: 200 });
   },
   addUni: async ({ locals, request, cookies }) => {
-    const uniForm = await superValidate(request, zod(add_university));
+    const form = await superValidate(request, zod(add_university));
 
-    if (!uniForm.valid) {
+    if (!form.valid) {
       return message(form, { type: 'error', message: 'Dein Input ist ungültig' }, { status: 400 });
     }
-    console.log('validation uni successful');
 
-    const res = await api.post(api.routes.university_all, uniForm.data, locals.user?.token);
+    const res = await api.post(api.routes.university_all, form.data, null);
 
     if (!res.success) {
       console.log('res: ', res);
-      return message(uniForm, { type: 'error', message: 'Fehler beim Erstellen' }, { status: 400 });
+      return message(form, { type: 'error', message: 'Fehler beim Erstellen der Universität' }, { status: 400 });
     }
 
-    return message(uniForm, { type: 'success', message: 'Universität erfolgreich hinzugefügt' }, { status: 200 });
+    return message(form, { type: 'success', message: 'Universität erfolgreich hinzugefügt' }, { status: 200 });
   },
   multiForm: async ({ locals, request, cookies }) => {
     const multiForm = await superValidate(request, zod(lastStep));
@@ -108,7 +110,7 @@ export const actions = {
       }))
     };
 
-    const res = await api.post(api.routes.procedure_all, body, locals.user?.token);
+    const res = await api.post(api.routes.procedure_all, body, null);
 
     if (!res.success) {
       console.log(res);
@@ -119,12 +121,10 @@ export const actions = {
 
     for (let i = 0; i < res.data.requests.length; i++) {
       const requestId = res.data.requests[i].requestId;
-      console.log(requestId);
+      const form_data = new FormData();
+      form_data.append('file', multiForm.data.requests[i].file);
 
-      const formData = new FormData();
-      formData.append('file', multiForm.data.requests[i].file);
-
-      const pdf_res = await api.post(api.routes.pdf_upload(requestId), formData, null, { req_type: api.content_type.file, res_type: api.content_type.plain });
+      const pdf_res = await api.post(api.routes.pdf_upload(requestId), form_data, null, { req_type: api.content_type.file, res_type: api.content_type.plain });
       if (!pdf_res.success) {
         return message(multiForm, { type: 'error', message: 'Fehler beim Hochladen der PDF' }, { status: 400 });
       }

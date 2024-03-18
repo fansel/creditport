@@ -43,7 +43,7 @@ dialog {
   border: none;
   min-width: 50rem;
   border-radius: 10px;
-  position: relative;
+  /* position: relative; */
   padding: 0;
 }
 

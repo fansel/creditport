@@ -24,6 +24,7 @@
     validators: zod(add_external_module),
     validationMethod: 'auto',
     customValidity: false,
+    invalidateAll: false,
     onResult({ result }) {
       if (result.status == 200) dialog_close();
     }
@@ -66,7 +67,7 @@
     <!-- Body -->
     <div class="body p-3">
       <div class="row mb-3">
-        <div class="col-md-3"><label for="" class="mt-2"> </label>Name</div>
+        <div class="col-md-3"><label for="" class="mt-2" />Name</div>
         <div class="col">
           <input type="text" class="form-control {$errors.moduleName ? 'is-invalid' : ''}" placeholder="Name des Moduls" bind:value={$form.moduleName} />
           {#if $errors.moduleName}
@@ -95,7 +96,7 @@
       </div>
 
       <div class="row mb-3">
-        <div class="col-md-3"><label for="" class="mt-2">Credit Points </label></div>
+        <div class="col-md-3"><label for="" class="mt-2">Leistungspunkte</label></div>
         <div class="col"><input type="number" class="form-control" placeholder="" bind:value={$form.creditPoints} /></div>
       </div>
     </div>

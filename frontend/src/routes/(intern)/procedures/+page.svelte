@@ -25,7 +25,7 @@
   let searchResults;
   let searchResultsCount = 0;
   let sortingByField = 'createdAt';
-  let sortingDirection = false; //true DESC - false ASC
+  let sortingDirection = true; //true DESC - false ASC
   let filtered = false;
 
   let startDateCreatedAt = null;

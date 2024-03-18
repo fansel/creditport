@@ -18,7 +18,7 @@ export async function load({ params, locals }) {
 
   return {
     title: 'Dashboard',
-    procedures: res.data,
+    procedures: res.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)),
     open_procedures: offen,
     archived_procedures: archiviert,
     processing_procdures: in_bearbeitung

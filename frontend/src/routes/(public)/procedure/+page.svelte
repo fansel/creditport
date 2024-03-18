@@ -30,6 +30,7 @@
 
   const { form, errors, message, enhance, validateForm, options } = superForm(data.multiForm, {
     syncFlashMessage: true,
+    resetForm: true,
     flashMessage: {
       module: flashModule
     },
@@ -307,7 +308,7 @@
     </div>
 
     <div class="annotation mb-3">
-      <label class="col-form-label" for=""> Anmerkungen für den Bearbeiter </label>
+      <label class="col-form-label" for=""> Anmerkungen für den/die Bearbeiter:in</label>
 
       <textarea rows="4" type="text" bind:value={$form.annotation} class="form-control {$errors?.annotation ? 'is-invalid' : ''}" />
       {#if $errors?.annotation}
@@ -360,7 +361,7 @@
     </div>
 
     <div class="annotation mb-3">
-      <label class="col-form-label" for="">Anmerkungen für den Bearbeiter</label>
+      <label class="col-form-label" for="">Anmerkungen für den/die Bearbeiter:in</label>
 
       <textarea rows="4" type="text" bind:value={$form.annotation} class="form-control {$errors?.annotation ? 'is-invalid' : ''}" />
       {#if $errors?.annotation}
@@ -375,6 +376,8 @@
     <SuperDebug data={$form} /> -->
   {/if}
 </form>
+
+<!-- <SuperDebug data={$form} /> -->
 
 <style>
   .reset-disable-look {
@@ -428,7 +431,7 @@
 
   .status-circle.active {
     background-color: var(--bs-primary);
-    color: var(--bs-body-bg);
+    color: var(--bs-light);
   }
 
   .status-leiste {

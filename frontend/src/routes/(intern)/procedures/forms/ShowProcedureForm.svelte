@@ -29,7 +29,7 @@
       console.error(result.error.message);
     },
     onSubmit(data) {
-      console.log(data)
+      console.log(data);
     },
     clearOnSubmit: 'none',
     resetForm: false,
@@ -54,7 +54,7 @@
 <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-noninteractive-element-interactions -->
 <dialog bind:this={dialog}>
   <div class="dialog-header border-bottom">
-    <h2 class="m-0">Vorgang bearbeiten <ProcedureStatus status={$form.status} /></h2>
+    <h2 class="m-0">Vorgang bearbeiten<ProcedureStatus status={$form.status} /></h2>
 
     <button class="btn-close" type="button" aria-label="Close" on:click={() => dialog_close()} />
   </div>
@@ -110,7 +110,7 @@
           <div class="mb-3">
             <label for="annotation" class="col-form-label">Kommentar des Studenten</label>
 
-            <textarea type="text" bind:value={$form.annotation} name="annotation" class="form-control {$errors.annotation ? 'is-invalid' : ''}" placeholder="" style="min-height: 120px;" disabled/>
+            <textarea type="text" bind:value={$form.annotation} name="annotation" class="form-control {$errors.annotation ? 'is-invalid' : ''}" placeholder="" style="min-height: 120px;" disabled />
             {#if $errors.annotation}
               <div class="invalid-feedback">
                 {$errors.annotation}
@@ -118,34 +118,37 @@
             {/if}
           </div>
         </div>
+
         <div class="col-12 col-lg-6">
-          <div class="list-group">
-            <div class="list-group-item d-inline-flex justify-content-between"><strong>Modulanträge ({$form.requestDetails.length})</strong></div>
+          <div class="border rounded list-group ">
+            <div class=" list-group-item d-inline-flex justify-content-between"><strong>Modulanträge ({$form.requestDetails.length})</strong></div>
 
-            {#each $form.requestDetails as _, i}
-              <input type="hidden" bind:value={$form.requestDetails[i].moduleLink} name={$form.requestDetails[i].moduleLink} />
-              <div class="list-group-item d-flex justify-content-between flex-wrap">
-                <div class="hstack align-items-start flex-wrap flex-md-nowrap">
-                  <ul>
-                    {#each $form.requestDetails[i].externalModules as _, z}
-                      <li>{$form.requestDetails[i].externalModules[z].moduleName}</li>
-                    {/each}
-                  </ul>
-                  <ul>
-                    {#each $form.requestDetails[i].internalModules as _, z}
-                      <li>{$form.requestDetails[i].internalModules[z].moduleName}</li>
-                    {/each}
-                  </ul>
-                </div>
-                <div class="p-2">
-                  <RequestStatus status={$form.requestDetails[i].statusRequest} />
-                </div>
+            <div class="" style="height: 300px; overflow-y: auto;">
+              {#each $form.requestDetails as _, i}
+                <input type="hidden" bind:value={$form.requestDetails[i].moduleLink} name={$form.requestDetails[i].moduleLink} />
+                <div class="list-group-item d-flex justify-content-between flex-wrap">
+                  <div class="hstack align-items-start flex-wrap flex-md-nowrap">
+                    <ul>
+                      {#each $form.requestDetails[i].externalModules as _, z}
+                        <li>{$form.requestDetails[i].externalModules[z].moduleName}</li>
+                      {/each}
+                    </ul>
+                    <ul>
+                      {#each $form.requestDetails[i].internalModules as _, z}
+                        <li>{$form.requestDetails[i].internalModules[z].moduleName}</li>
+                      {/each}
+                    </ul>
+                  </div>
+                  <div class="p-2">
+                    <RequestStatus status={$form.requestDetails[i].statusRequest} />
+                  </div>
 
-                <div class="p-2">
-                  <a href="/procedures/{$form.requestDetails[i].requestId}"><i class="bi bi-pencil-square" /></a>
+                  <div class="p-2">
+                    <a href="/procedures/{$form.requestDetails[i].requestId}"><i class="bi bi-pencil-square" /></a>
+                  </div>
                 </div>
-              </div>
-            {/each}
+              {/each}
+            </div>
           </div>
         </div>
       </div>
