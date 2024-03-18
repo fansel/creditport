@@ -6,7 +6,7 @@ import { user_roles, status_requests, status_procedures } from '$lib/config';
 
 export const add_external_module = z.object({
   moduleNumber: z.string(),
-  moduleName: z.string().min(1),
+  moduleName: z.string().min(1, { message: 'Bitte gebe einen Modulnamen an.' }),
   moduleDescription: z.string(),
   // university: universities_schema,
   university: z.object({

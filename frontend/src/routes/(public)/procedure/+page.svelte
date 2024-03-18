@@ -30,6 +30,7 @@
 
   const { form, errors, message, enhance, validateForm, options } = superForm(data.multiForm, {
     syncFlashMessage: true,
+    resetForm: true,
     flashMessage: {
       module: flashModule
     },
@@ -376,6 +377,8 @@
   {/if}
 </form>
 
+<SuperDebug data={$form} />
+
 <style>
   .reset-disable-look {
     background-color: var(--bs-body-bg);
@@ -428,7 +431,7 @@
 
   .status-circle.active {
     background-color: var(--bs-primary);
-    color: var(--bs-body-bg);
+    color: var(--bs-light);
   }
 
   .status-leiste {
