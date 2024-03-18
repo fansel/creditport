@@ -133,6 +133,8 @@ public class ProcedureService {
             newRequest.setProcedure(newProcedure);
             newRequest.setStatusRequest(StatusRequest.NICHT_BEARBEITET);
             newRequest.setCreatedAt(Instant.now());
+            newRequest.setInternalModules(internalModules);
+            newRequest.setExternalModules(externalModules);
             newRequest = requestRepository.save(newRequest);
             RequestResponseDTO requestResponseDTO = new RequestResponseDTO();
             requestResponseDTO.setRequestId(newRequest.getRequestId());
