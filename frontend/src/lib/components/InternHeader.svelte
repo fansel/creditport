@@ -4,7 +4,7 @@
   export let wide = false;
 </script>
 
-<nav class="navbar navbar-expand-md navbar-light shadow-sm p-3 sticky-top" aria-label="Fourth navbar example">
+<nav class="navbar navbar-expand-md navbar-light shadow-sm p-3 sticky-top navbar-bg " aria-label="Fourth navbar example">
   <div class={wide ? 'container-fluid' : 'container'}>
     <a class="navbar-brand" href="/"><i class="bi bi-send" /> </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
@@ -39,5 +39,8 @@
   .profil-btn {
     border: none;
     background-color: transparent;
+  }
+  .navbar-bg {
+    background-color: var(--bs-body-bg);
   }
 </style>

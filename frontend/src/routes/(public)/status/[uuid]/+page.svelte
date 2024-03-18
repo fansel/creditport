@@ -44,8 +44,8 @@
 <div class="card mt-5">
   <div class="card-header">
     <div class="row">
-      <div class="col-12 col-md-4 justify-content-center justify-content-md-start d-flex"><strong>Vorgang:</strong> {procedureId}</div>
-      <div class="col-12 col-md-4 d-flex justify-content-center flex-grow-1"><strong>Status:</strong> <ProcedureStatus extern={true} status={data.procedure.status} /></div>
+      <div class="col-12 col-md-4 justify-content-center justify-content-md-start d-flex"><span class="fw-bold me-2">Vorgangsnummer:</span>{procedureId}</div>
+      <div class="col-12 col-md-4 d-flex justify-content-center flex-grow-1"><ProcedureStatus extern={true} status={data.procedure.status} /></div>
       <label for="" class="col-12 col-md-4 d-flex justify-content-center justify-content-md-end">
         erstellt am&nbsp; <strong>{format(new Date(procedure.createdAt), 'dd.MM.yyyy')}</strong>
       </label>
@@ -78,7 +78,7 @@
       <Accordion>
         <div slot="head" class="fs-6 d-flex w-100">
           <!-- <div class="fw-bold justify-content-start">requestID: {request.requestId}</div> -->
-          Antrag: {index + 1}
+          Antrag {index + 1}
           <RequestStatus status={request.statusRequest} extern={true} />
         </div>
         <div slot="details">
@@ -87,7 +87,7 @@
               externalModules={allExternalModules.filter((module) => request.externalModuleIds.includes(module.moduleId))}
               internalModules={allInternalModules.filter((module) => request.internalModuleIds.includes(module.moduleId))}
               comment={request.annotationStudent}
-            ></Mapping>
+            />
           </div>
         </div>
       </Accordion>
