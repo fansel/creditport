@@ -63,7 +63,7 @@ export const routes = {
    * ----------------------------------------------------------------------
    */
   module_all_internal: 'modules/internal', // POST, GET
-  module_all_external: `modules/external`, // POST, GET
+  module_all_external: 'modules/external', // POST, GET
   module_internal_import: `modules/internal/import`, // POST
   module_external_import: `modules/external/import`, // POST
   module_internal_by_id: (id) => `modules/internal/${id}`, // GET, PUT, DELETE

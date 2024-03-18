@@ -30,7 +30,7 @@ export async function load({ params }) {
     throw error(404, { message: 'Fehler beim Laden der externen Module' });
   }
 
-  console.log("Server Load ausgeführt")
+  console.log('Server Load ausgeführt');
 
   const default_procedure = {
     // annotation: 'hallo',
@@ -40,7 +40,7 @@ export async function load({ params }) {
   };
 
   return {
-    universities: universities.data,
+    universities: universities.data.filter((u) => u.verified == true),
     courses: courses.data,
     external_modules: external_modules.data,
     internal_modules: internal_modules.data,

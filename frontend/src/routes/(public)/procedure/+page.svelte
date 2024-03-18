@@ -308,7 +308,7 @@
     </div>
 
     <div class="annotation mb-3">
-      <label class="col-form-label" for=""> Anmerkungen für den Bearbeiter </label>
+      <label class="col-form-label" for=""> Anmerkungen für den/die Bearbeiter:in</label>
 
       <textarea rows="4" type="text" bind:value={$form.annotation} class="form-control {$errors?.annotation ? 'is-invalid' : ''}" />
       {#if $errors?.annotation}
@@ -361,7 +361,7 @@
     </div>
 
     <div class="annotation mb-3">
-      <label class="col-form-label" for="">Anmerkungen für den Bearbeiter</label>
+      <label class="col-form-label" for="">Anmerkungen für den/die Bearbeiter:in</label>
 
       <textarea rows="4" type="text" bind:value={$form.annotation} class="form-control {$errors?.annotation ? 'is-invalid' : ''}" />
       {#if $errors?.annotation}
@@ -377,7 +377,7 @@
   {/if}
 </form>
 
-<SuperDebug data={$form} />
+<!-- <SuperDebug data={$form} /> -->
 
 <style>
   .reset-disable-look {
