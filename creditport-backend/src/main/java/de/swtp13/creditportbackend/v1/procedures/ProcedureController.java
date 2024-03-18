@@ -194,8 +194,12 @@ public class ProcedureController {
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProcedure(@PathVariable int id) {
+        for(Request request:requestRepository.findRequestsByProcedureId(id)){
+            requestRepository.delete(request);
+        }
         return procedureRepository.findById(id)
                 .map(procedure -> {
+
                     procedureRepository.delete(procedure);
                     return ResponseEntity.noContent().build();
                 }).orElse(ResponseEntity.notFound().build());
