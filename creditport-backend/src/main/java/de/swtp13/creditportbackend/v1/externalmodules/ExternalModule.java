@@ -33,6 +33,7 @@ public class ExternalModule {
             columnDefinition = "VARCHAR",
             nullable = true)
     private String moduleNumber;
+
     @Column(
             name = "module_name",
             nullable = false,
