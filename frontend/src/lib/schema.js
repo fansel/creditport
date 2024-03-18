@@ -41,7 +41,7 @@ export const modulantraege = allgemeine_angaben.extend({
         annotationStudent: z.string(),
         annotationCommittee: z.string(),
         moduleLink: z.string(),
-        file: z.instanceof(File, { message: 'Bitte lade eine Modulbeschreibung hoch.' }).refine((f) => f.size < 100_000, 'Max 100 kB upload size.')
+        file: z.instanceof(File, { message: 'Bitte lade eine Modulbeschreibung hoch.' }).refine((f) => f.size < 10_000_000, 'Max 10 MB upload size.')
       })
     )
     .min(1, { message: 'Bitte gebe mindestens einen Antrag an.' })

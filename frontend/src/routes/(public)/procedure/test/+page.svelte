@@ -11,16 +11,22 @@
   import AddExternalModule from './forms/AddExternalModule.svelte';
   import AddUni from './forms/AddUni.svelte';
   import Accordion from '$root/lib/components/Accordion.svelte';
+  import { tweened } from 'svelte/motion';
+  import { cubicOut } from 'svelte/easing';
 
   export let data;
 
   let showAddFremdmodul;
   let showAddUni;
 
-  const steps = [zod(allgemeine_angaben), zod(modulantraege)];
+  const stepPercentage = tweened(1, { duration: 300, easing: cubicOut });
+
+  $: $stepPercentage = ((step - 1) / 2) * 100;
+
+  const steps = [zod(allgemeine_angaben), zod(modulantraege), zod(modulantraege)];
   let step = 1;
 
-	$: options.validators = steps[step - 1];
+  $: options.validators = steps[step - 1];
 
   const { form, errors, message, enhance, validateForm, options } = superForm(data.multiForm, {
     syncFlashMessage: true,
@@ -28,10 +34,11 @@
       module: flashModule
     },
     dataType: 'json',
-    validationMethod: 'onblur',
+    validationMethod: 'onsubmit',
+
     async onSubmit({ cancel }) {
       console.log('Submit on Client');
-      if (step == steps.length) return;
+      if (step == 3) return;
       else cancel();
 
       const result = await validateForm({ update: true });
@@ -54,6 +61,23 @@
     return data.internal_modules.find((m) => m.moduleId == id);
   }
 
+  function findUniById(id) {
+    return data.universities.find((u) => u.uniId == id);
+
+  }
+
+  function findCourseById(id) {
+    return data.courses.find((c) => c.courseId == id);
+  }
+
+  function switchStep(toStep) {
+    if (toStep < step) {
+      step = toStep;
+    } else {
+      alert('Du kannst nicht vorspringen.');
+    }
+  }
+
   $: console.log($errors);
 </script>
 
@@ -61,52 +85,21 @@
 <AddExternalModule bind:this={showAddFremdmodul} {data} />
 <AddUni bind:this={showAddUni} {data} />
 
-<!-- <ul class="d-flex nav nav-pills mb-3 my-2" id="pills-tab" role="tablist">
-  <li class="nav-item d-flex justify-content-between" role="presentation">
-    <button
-      class="nav-link active rounded-circle border-3 border border-primary status-circle"
-      id="pills-home-tab"
-      data-bs-toggle="pill"
-      data-bs-target="#pills-home"
-      type="button"
-      role="tab"
-      aria-controls="pills-1"
-      aria-selected="true">1</button
-    >
-  </li>
-  <li class="nav-item d-flex justify-content-between" role="presentation">
-    <button
-      class="nav-link rounded-circle border-3 border border-primary status-circle"
-      id="pills-profile-tab"
-      data-bs-toggle="pill"
-      data-bs-target="#pills-profile"
-      type="button"
-      role="tab"
-      aria-controls="pills-2"
-      aria-selected="false">2</button
-    >
-  </li>
-  <li class="nav-item d-flex justify-content-between" role="presentation">
-    <button
-      class="nav-link rounded-circle border-3 border border-primary status-circle"
-      id="pills-contact-tab"
-      data-bs-toggle="pill"
-      data-bs-target="#pills-contact"
-      type="button"
-      role="tab"
-      aria-controls="pills-3"
-      aria-selected="false">3</button
-    >
-  </li>
-</ul> -->
-
-<div class="position-relative m-4">
-  <div class="progress" role="progressbar" aria-label="Progress" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="height: 1px;">
-    <div class="progress-bar" style="width: {(step / 3) * 100}" />
+<!-- Status Leiste -->
+<div class="position-relative status-leiste">
+  <div class="progress" role="progressbar" aria-label="Progress" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="height: 2px;">
+    <div class="progress-bar" style="width: {$stepPercentage}%" />
   </div>
-  <button type="button" class="position-absolute top-0 start-0 translate-middle btn btn-sm btn-primary rounded-pill" style="width: 2rem; height:2rem;">1</button>
-  <button type="button" class="position-absolute top-0 start-50 translate-middle btn btn-sm btn-primary rounded-pill" style="width: 2rem; height:2rem;">2</button>
-  <button type="button" class="position-absolute top-0 start-100 translate-middle btn btn-sm btn-secondary rounded-pill" style="width: 2rem; height:2rem;">3</button>
+  <button type="button" on:click={() => switchStep(1)} class="fw-bold {step == 1 ? 'active' : ''} status-circle position-absolute top-0 start-0 translate-middle btn rounded-pill">1</button>
+  <button type="button" on:click={() => switchStep(2)} class="fw-bold {step == 2 ? 'active' : ''} status-circle position-absolute top-0 start-50 translate-middle btn rounded-pill">2</button>
+  <button type="button" on:click={() => switchStep(3)} class="fw-bold {step == 3 ? 'active' : ''} status-circle position-absolute top-0 start-100 translate-middle btn rounded-pill">3</button>
+  <!-- {#if step == 1}
+    <div class="position-absolute mt-4 translate-middle-x start-0 fw-bold text-primary">Allgemeine Angaben</div>
+  {:else if step == 2}
+    <div class="position-absolute mt-4 start-50 translate-middle-x fw-bold text-primary">Modulanträge</div>
+  {:else}
+    <div class="position-absolute mt-4 start-100 translate-middle-x fw-bold text-primary">Zusammenfassung</div>
+  {/if} -->
 </div>
 
 <hr />
@@ -115,13 +108,14 @@
   {#if step == 1}
     <div class="uni mb-3">
       <label class="mb-2" for="">Universität der anzurechnenden Module</label>
-      <select class="form-select {$errors.universityId ? 'is-invalid' : ''}" bind:value={$form.universityId}>
+      <select class="form-select {$errors?.universityId ? 'is-invalid' : ''}" bind:value={$form.universityId}>
+        <option value="">-</option>
         {#each data.universities as university, index}
           <option value={university.uniId}>{university.uniName}</option>
         {/each}
       </select>
-      {#if $errors.universityId}
-        <div class="invalid-feedback">{$errors.universityId}</div>
+      {#if $errors?.universityId}
+        <div class="invalid-feedback">{$errors?.universityId}</div>
       {/if}
 
       <div class="py-2">Universität nicht gefunden <i class="bi bi-question-circle" /></div>
@@ -134,32 +128,36 @@
 
     <div class="studiengang mb-3">
       <label class="mb-2" for="">Studiengang der Universität Leipzig an dem die Anrechnung erfolgen soll</label>
-      <select class="form-select {$errors.courseId ? 'is-invalid' : ''}" bind:value={$form.courseId}>
+      <select class="form-select {$errors?.courseId ? 'is-invalid' : ''}" bind:value={$form.courseId}>
+        <option value="">-</option>
         {#each data.courses as course, index}
           <option value={course.courseId}>{course.courseName}</option>
         {/each}
       </select>
-      {#if $errors.courseId}
-        <div class="invalid-feedback">{$errors.courseId}</div>
+      {#if $errors?.courseId}
+        <div class="invalid-feedback">{$errors?.courseId}</div>
       {/if}
     </div>
     <div class="annotation mb-3">
       <label class="col-form-label" for=""> Anmerkungen für den Bearbeiter </label>
 
-      <textarea rows="4" type="text" bind:value={$form.annotation} class="form-control {$errors.annotation ? 'is-invalid' : ''}" />
-      {#if $errors.annotation}
-        <div class="invalid-feedback">{$errors.annotation}</div>
+      <textarea rows="4" type="text" bind:value={$form.annotation} class="form-control {$errors?.annotation ? 'is-invalid' : ''}" />
+      {#if $errors?.annotation}
+        <div class="invalid-feedback">{$errors?.annotation}</div>
       {/if}
     </div>
-    <button class="btn btn-primary" type="submit">Next step</button>
+    <hr />
+    <button class="btn btn-primary" type="submit">Weiter</button>
     <!-- <SuperDebug data={$form} /> -->
-  {:else}
+  {:else if step == 2}
     {#each $form.requests as _, i}
       <Accordion>
         <div slot="head">
           <h1 class="fs-4 m-0 fw-bold">Antrag {i + 1}</h1>
         </div>
-        <button class="btn text-danger" slot="icon" on:click={() => ($form.requests = [...$form.requests.slice(0, i), ...$form.requests.slice(i + 1)])}><i class="bi bi-trash" /> </button>
+        <button type="button" class="btn text-danger" slot="icon" on:click={() => ($form.requests = [...$form.requests.slice(0, i), ...$form.requests.slice(i + 1)])}
+          ><i class="bi bi-trash" />
+        </button>
         <div slot="details">
           <div class="mb-3">
             <div class="row">
@@ -172,14 +170,14 @@
                     <div class="row">
                       <div class="col-md-9">
                         <label for="" class="col-form-label">Name</label>
-                        <select name="" id="" class="form-control {$errors.requests[i]?.externalModuleId[j] ? 'is-invalid' : ''}" bind:value={$form.requests[i].externalModuleId[j]}>
+                        <select name="" id="" class="form-control {$errors?.requests?.[i]?.externalModuleId?.[j] ? 'is-invalid' : ''}" bind:value={$form.requests[i].externalModuleId[j]}>
                           <option value="">-</option>
                           {#each externalModulsByUni as module}
                             <option value={module.moduleId}>{module.moduleName}</option>
                           {/each}
                         </select>
-                        {#if $errors.requests[i]?.externalModuleId[j]}
-                          <div class="invalid-feedback">{$errors.requests[i]?.externalModuleId[j]}</div>
+                        {#if $errors?.requests?.[i]?.externalModuleId?.[j]}
+                          <div class="invalid-feedback">{$errors?.requests?.[i]?.externalModuleId?.[j]}</div>
                         {/if}
                       </div>
                       <div class="col-md-3">
@@ -194,7 +192,7 @@
                       </div>
                     </div>
                     <button
-                      class="btn btn-sm btn-outline-danger w-100 mt-3"
+                      class="btn btn-sm btn-outline-secondary w-100 mt-3"
                       type="button"
                       on:click={() => ($form.requests[i].externalModuleId = [...$form.requests[i].externalModuleId.slice(0, j), ...$form.requests[i].externalModuleId.slice(j + 1)])}
                     >
@@ -203,8 +201,8 @@
                   </div>
                 {/each}
 
-                {#if $errors.requests[i]?.externalModuleId?._errors}
-                  <div class="invalid-feedback d-block mb-3">{$errors.requests[i]?.externalModuleId?._errors}</div>
+                {#if $errors?.requests?.[i]?.externalModuleId?._errors}
+                  <div class="invalid-feedback d-block mb-3">{$errors?.requests?.[i]?.externalModuleId?._errors}</div>
                 {/if}
 
                 <div class="mb-3">
@@ -221,20 +219,18 @@
               <div class="col-md-6">
                 <h2 class="fs-5">Interne Module ({data.internal_modules.reduce((sum, obj) => ($form.requests[i].internalModuleId.includes(obj.moduleId) ? sum + obj.creditPoints : sum), 0)} LP)</h2>
                 {#each $form.requests[i].internalModuleId as _, j}
-                  <!-- {$form.requests[i].externalModuleId[j]} -->
-
                   <div class="border-bottom pb-4 mb-3">
                     <div class="row">
                       <div class="col-md-9">
                         <label for="" class="col-form-label">Name</label>
-                        <select name="" id="" class="form-control {$errors.requests[i]?.externalModuleId[j] ? 'is-invalid' : ''}" bind:value={$form.requests[i].internalModuleId[j]}>
+                        <select name="" id="" class="form-control {$errors?.requests?.[i]?.internalModuleId?.[j] ? 'is-invalid' : ''}" bind:value={$form.requests[i].internalModuleId[j]}>
                           <option value="">-</option>
                           {#each internalModulesByCourse as module}
                             <option value={module.moduleId}>{module.moduleName}</option>
                           {/each}
                         </select>
-                        {#if $errors.requests[i]?.internalModuleId[j]}
-                          <div class="invalid-feedback">{$errors.requests[i]?.internalModuleId[j]}</div>
+                        {#if $errors?.requests?.[i]?.internalModuleId?.[j]}
+                          <div class="invalid-feedback">{$errors?.requests?.[i]?.internalModuleId?.[j]}</div>
                         {/if}
                       </div>
                       <div class="col-md-3">
@@ -251,7 +247,7 @@
                       </div>
                     </div>
                     <button
-                      class="btn btn-sm btn-outline-danger w-100 mt-3"
+                      class="btn btn-sm btn-outline-secondary w-100 mt-3"
                       type="button"
                       on:click={() => ($form.requests[i].internalModuleId = [...$form.requests[i].internalModuleId.slice(0, j), ...$form.requests[i].internalModuleId.slice(j + 1)])}
                     >
@@ -260,8 +256,8 @@
                   </div>
                 {/each}
 
-                {#if $errors.requests[i]?.internalModuleId?._errors}
-                  <div class="invalid-feedback d-block mb-3">{$errors.requests[i]?.internalModuleId?._errors}</div>
+                {#if $errors?.requests?.[i]?.internalModuleId?._errors}
+                  <div class="invalid-feedback d-block mb-3">{$errors?.requests?.[i]?.internalModuleId?._errors}</div>
                 {/if}
 
                 <div class="mb-3">
@@ -275,9 +271,14 @@
           </div>
           <div class="mb-3">
             <label for="" class="col-form-label">Website zum Modul</label>
-            <input type="text" class="form-control {$errors.requests[i]?.moduleLink ? 'is-invalid' : ''}" placeholder="https://uni-leipzig.de/module_xyz" bind:value={$form.requests[i].moduleLink} />
-            {#if $errors.requests[i]?.moduleLink}
-              <div class="invalid-feedback">{$errors.requests[i]?.moduleLink}</div>
+            <input
+              type="text"
+              class="form-control {$errors?.requests?.[i]?.moduleLink ? 'is-invalid' : ''}"
+              placeholder="https://uni-leipzig.de/module_xyz"
+              bind:value={$form.requests[i].moduleLink}
+            />
+            {#if $errors?.requests?.[i]?.moduleLink}
+              <div class="invalid-feedback">{$errors?.requests?.[i]?.moduleLink}</div>
             {/if}
           </div>
           <div class="mb-3">
@@ -285,20 +286,20 @@
             <input
               type="file"
               name="file"
-              class="form-control {$errors.requests[i]?.file ? 'is-invalid' : ''}"
+              class="form-control {$errors?.requests?.[i]?.file ? 'is-invalid' : ''}"
               on:input={(e) => ($form.requests[i].file = e.currentTarget.files?.item(0))}
               accept="application/pdf"
             />
-            {#if $errors.requests[i]?.file}
-              <div class="invalid-feedback">{$errors.requests[i]?.file}</div>
+            {#if $errors?.requests?.[i]?.file}
+              <div class="invalid-feedback">{$errors?.requests?.[i]?.file}</div>
             {/if}
           </div>
         </div>
       </Accordion>
     {/each}
 
-    {#if $errors.requests?._errors}
-      <div class="invalid-feedback d-block mb-3">{$errors.requests?._errors}</div>
+    {#if $errors?.requests?._errors}
+      <div class="invalid-feedback d-block mb-3">{$errors?.requests?._errors}</div>
     {/if}
 
     <div class="mb-3 border-bottom pb-3">
@@ -308,33 +309,84 @@
     <div class="annotation mb-3">
       <label class="col-form-label" for=""> Anmerkungen für den Bearbeiter </label>
 
-      <textarea rows="4" type="text" bind:value={$form.annotation} class="form-control {$errors.annotation ? 'is-invalid' : ''}" />
-      {#if $errors.annotation}
-        <div class="invalid-feedback">{$errors.annotation}</div>
+      <textarea rows="4" type="text" bind:value={$form.annotation} class="form-control {$errors?.annotation ? 'is-invalid' : ''}" />
+      {#if $errors?.annotation}
+        <div class="invalid-feedback">{$errors?.annotation}</div>
       {/if}
     </div>
 
-    <SuperDebug data={$form} />
+    <!-- <SuperDebug data={$form} /> -->
+    <hr />
 
-    <button class="btn btn-primary w-100">Weiter <i class="bi bi-arrow-right" /> </button>
+    <button class="btn btn-primary" type="submit">Weiter</button>
+  {:else}
+    <div class="list-group mb-3">
+      <div class="list-group-item d-inline-flex justify-content-between">
+        <span class="fw-bold">Universität</span>
+        {findUniById($form.universityId).uniName}
+      </div>
+      <div class="list-group-item d-inline-flex justify-content-between">
+        <span class="fw-bold">Studiengang</span>
+        {findCourseById($form.courseId).courseName}
+      </div>
+    </div>
+
+    <div class="list-group mb-3">
+      <div class="list-group-item d-inline-flex justify-content-between"><strong>Modulanträge ({$form.requests.length})</strong></div>
+      {#each $form.requests as _, i}
+        <div class="list-group-item d-flex justify-content-between flex-wrap">
+          <div class="hstack align-items-start flex-wrap flex-md-nowrap">
+            <ul>
+              {#each $form.requests[i].externalModuleId as _, z}
+                <li>{findExternalModuleById($form.requests[i].externalModuleId[z]).moduleName}</li>
+              {/each}
+            </ul>
+            <ul>
+              {#each $form.requests[i].internalModuleId as _, z}
+                <li>{findInternalModuleById($form.requests[i].internalModuleId[z]).moduleName}</li>
+              {/each}
+            </ul>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            {#if $form.requests[i].moduleLink}
+              <i class="icon-xl bi bi-link" />
+            {/if}
+            {#if $form.requests[i].file}
+              <i class="icon-xl bi bi-file-earmark-pdf" />
+            {/if}
+          </div>
+        </div>
+      {/each}
+    </div>
+
+    <div class="annotation mb-3">
+      <label class="col-form-label" for="">Anmerkungen für den Bearbeiter</label>
+
+      <textarea rows="4" type="text" bind:value={$form.annotation} class="form-control {$errors?.annotation ? 'is-invalid' : ''}" />
+      {#if $errors?.annotation}
+        <div class="invalid-feedback">{$errors?.annotation}</div>
+      {/if}
+    </div>
+    <hr />
+
+    <button class="btn btn-primary" type="submit">Senden</button>
+
+    <!-- <br />
+    <SuperDebug data={$form} /> -->
   {/if}
 </form>
-
-<!-- <div class="tab-content my-2" id="pills-tabContent">
-  <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" />
-
-  <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">2</div>
-  <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">3</div>
-</div> -->
-
-<!-- <button class="btn btn-primary btn-sm" on:click={() => showAddFremdmodul.dialog_open()}>
-  <i class="bi bi-plus-circle" />
-  Fremdmodul
-</button> -->
 
 <style>
   .reset-disable-look {
     background-color: var(--bs-body-bg);
+  }
+
+  .icon-xl {
+    font-size: 1.5rem;
+  }
+
+  ul {
+    margin: 1rem 0rem;
   }
 
   .fake-textarea {
@@ -348,5 +400,44 @@
     border: var(--bs-border-width) solid var(--bs-border-color);
     margin: 0;
     overflow-y: auto;
+  }
+
+  .status-circle:focus {
+    background-color: var(--bs-body-bg);
+    color: var(--bs-primary);
+    border: 3px solid var(--bs-primary);
+  }
+
+  .status-circle:hover {
+    background-color: var(--bs-primary);
+    color: var(--bs-body-bg);
+    border: 3px solid var(--bs-primary);
+  }
+
+  .status-circle {
+    width: 50px;
+    height: 50px;
+    background-color: var(--bs-body-bg);
+    color: var(--bs-primary);
+    border: 3px solid var(--bs-primary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.25rem; /* Schriftgröße der Zahl */
+  }
+
+  .status-circle.active {
+    background-color: var(--bs-primary);
+    color: var(--bs-body-bg);
+  }
+
+  .status-leiste {
+    margin: 3rem 1.5rem 3rem 1.5rem;
+  }
+
+  @media screen and (max-width: 768px) {
+    .status-circle {
+      font-size: 1rem;
+    }
   }
 </style>

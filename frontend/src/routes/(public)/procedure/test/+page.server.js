@@ -43,7 +43,7 @@ export async function load({ params }) {
     internal_modules: internal_modules.data,
     externalModuleForm: await superValidate(zod(add_external_module)),
     uniForm: await superValidate(zod(add_university)),
-    multiForm: await superValidate(default_procedure, zod(lastStep)),
+    multiForm: await superValidate(default_procedure, zod(lastStep), {errors: false}),
     title: 'Vorgang erstellen'
   };
 }
@@ -125,7 +125,7 @@ export const actions = {
       const pdf_res = await api.post(api.routes.pdf_upload(requestId), formData, null, { req_type: api.content_type.form_data, res_type: api.content_type.plain });
       console.log(pdf_res);
       if (!pdf_res.success) {
-        return message(multiForm, { type: 'error', message: 'Fehler beim Hochladen der PDF.' }, { status: 400 });
+        return message(multiForm, { type: 'error', message: 'Fehler beim Hochladen der PDF' }, { status: 400 });
       }
     }
 
