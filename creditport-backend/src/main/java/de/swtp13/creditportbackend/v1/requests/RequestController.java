@@ -13,7 +13,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,7 +46,7 @@ public class RequestController {
             )//)
     })
     @GetMapping
-    public ResponseEntity<List<UpdateRequestDTO>> getAllRequests(@RequestHeader(value =HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
+    public ResponseEntity<List<UpdateRequestDTO>> getAllRequests() {
         System.out.println("Get all requests");
         List<UpdateRequestDTO> requestDTOS = new ArrayList<>();
         for(Request request: requestRepository.findAll()){
