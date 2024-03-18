@@ -3,20 +3,16 @@ package de.swtp13.creditportbackend.modules;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.swtp13.creditportbackend.v1.externalmodules.ExternalModule;
 import de.swtp13.creditportbackend.v1.externalmodules.ExternalModuleRepository;
-import de.swtp13.creditportbackend.v1.universities.University;
 import de.swtp13.creditportbackend.v1.universities.UniversityRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.nio.charset.Charset;
 import java.util.UUID;
 
-import static org.hamcrest.Matchers.not;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
