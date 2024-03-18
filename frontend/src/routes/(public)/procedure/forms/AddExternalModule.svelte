@@ -60,32 +60,48 @@
     <button class="btn-close" type="button" aria-label="Close" on:click={() => dialog_close()} />
   </div>
 
-  <SuperDebug data={$form} />
+  <!-- <SuperDebug data={$form} /> -->
 
   <form action="?/addExternalModule" method="POST" use:enhance>
     <!-- Body -->
     <div class="body p-3">
-      <label for="" class="mt-2">Name des Moduls </label>
-      <input type="text" class="form-control {$errors.moduleName ? 'is-invalid' : ''}" placeholder="" bind:value={$form.moduleName} />
-      {#if $errors.moduleName}
-        <div class="invalid-feedback">{$errors.moduleName}</div>
-      {/if}
+      <div class="row mb-3">
+        <div class="col-md-3"><label for="" class="mt-2"> </label>Name</div>
+        <div class="col">
+          <input type="text" class="form-control {$errors.moduleName ? 'is-invalid' : ''}" placeholder="Name des Moduls" bind:value={$form.moduleName} />
+          {#if $errors.moduleName}
+            <div class="invalid-feedback">{$errors.moduleName}</div>
+          {/if}
+        </div>
+      </div>
 
-      <label for="" class="mt-2">Nummer des Moduls </label>
-      <input type="text" class="form-control" placeholder="" bind:value={$form.moduleNumber} />
-      {#if $errors.moduleNumber}
-        <div class="invalid-feedback">{$errors.moduleNumber}</div>
-      {/if}
-      
-      <label for="" class="mt-2">Beschreibung des Moduls </label>
-      <input type="text" class="form-control" placeholder="" bind:value={$form.moduleDescription} />
+      <div class="row mb-3">
+        <div class="col-md-3"><label for="" class="mt-2">Nummer</label></div>
+        <div class="col">
+          <input type="text" class="form-control" placeholder="Nummer des Moduls" bind:value={$form.moduleNumber} />
+          {#if $errors.moduleNumber}
+            <div class="invalid-feedback">{$errors.moduleNumber}</div>
+          {/if}
+        </div>
+      </div>
 
-      <label for="" class="mt-2">Credit Points </label>
-      <input type="number" class="form-control" placeholder="" bind:value={$form.creditPoints} />
+      <div class="row mb-3">
+        <div class="col-md-3">
+          <label for="" class="mt-2">Beschreibung</label>
+        </div>
+        <div class="col">
+          <input type="text" class="form-control" placeholder="Beschreibung des Moduls " bind:value={$form.moduleDescription} />
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-3"><label for="" class="mt-2">Credit Points </label></div>
+        <div class="col"><input type="number" class="form-control" placeholder="" bind:value={$form.creditPoints} /></div>
+      </div>
     </div>
 
     <!-- Footer -->
-    <div class="p-3 d-flex justify-content-end align-items-center border-top">
+    <div class="p-3 mb-3 d-flex justify-content-end align-items-center border-top">
       <button class="btn btn-outline-secondary me-3" on:click={dialog_close} type="button">Abbrechen</button>
       <button class="btn btn-primary" type="submit">Speichern</button>
     </div>
