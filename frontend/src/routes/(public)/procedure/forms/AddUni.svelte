@@ -48,16 +48,22 @@
     <button class="btn-close" type="button" aria-label="Close" on:click={() => dialog_close()} />
   </div>
 
-  <SuperDebug data={$form} />
+  <!-- <SuperDebug data={$form} /> -->
 
   <form action="?/addUni" method="POST" use:enhance>
     <!-- Body -->
     <div class="body p-3">
-      <label for="" class="mt-2">Name der Universität</label>
-      <input type="text" class="form-control {$errors.uniName ? 'is-invalid' : ''}" placeholder="" bind:value={$form.uniName} />
-      {#if $errors.uniName}
-        <div class="invalid-feedback">{$errors.uniName}</div>
-      {/if}
+      <div class="row">
+        <div class="col-md-3">
+          <label for="" class="mt-2">Name</label>
+        </div>
+        <div class="col">
+          <input type="text" class="form-control {$errors.uniName ? 'is-invalid' : ''}" placeholder="Neue Universität" bind:value={$form.uniName} />
+          {#if $errors.uniName}
+            <div class="invalid-feedback">{$errors.uniName}</div>
+          {/if}
+        </div>
+      </div>
     </div>
 
     <!-- Footer -->

@@ -66,8 +66,7 @@ public class CourseController {
     })
     @PostMapping
     public ResponseEntity<Course> createCourse(
-            @RequestBody Course course,
-            @RequestHeader(value =HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
+            @RequestBody Course course) {
         return ResponseEntity.status(201).body(courseRepository.save(course));
     }
 
@@ -78,8 +77,7 @@ public class CourseController {
     @PutMapping("/{courseId}")
     public ResponseEntity<Course> updateCourse(
             @PathVariable UUID courseId,
-            @RequestBody Course CourseDetails,
-            @RequestHeader(value =HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token) {
+            @RequestBody Course CourseDetails) {
         if (CourseDetails.getInternalModules() == null || CourseDetails.getInternalModules().isEmpty()){
             CourseDetails.setInternalModules(courseRepository.findById(courseId).get().getInternalModules());
         }
@@ -98,8 +96,7 @@ public class CourseController {
     })
     @DeleteMapping("/{courseId}")
     public ResponseEntity<?> deleteCourse(
-            @PathVariable UUID courseId,
-            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = true, defaultValue="") String token){
+            @PathVariable UUID courseId){
         return courseRepository.findById(courseId)
                 .map(course -> {
                     courseRepository.delete(course);

@@ -4,7 +4,8 @@ import * as config from '$lib/config';
 export const content_type = {
   plain: 'text/plain',
   json: 'application/json',
-  form_data: 'multipart/form-data'
+  form_data: 'multipart/form-data',
+  file: ''
 };
 
 /**
@@ -74,6 +75,7 @@ export const routes = {
    * ----------------------------------------------------------------------
    */
   pdf_overview_download: (id) => `${config.pdf_endpoint}/pdf/overview/${id}`, // GET
+  pdf_download: (id) => `${config.pdf_endpoint}/pdf/download/${id}`, // GET
   pdf_upload: (id) => `pdf/upload/${id}`, // POST
 
   /**
@@ -110,12 +112,12 @@ async function send({ method, path, data, token, req_type = content_type.json, r
         opts.headers['Content-Type'] = req_type;
 
         break;
-      case content_type.plain:
+
+      case content_type.file:
         opts.body = data;
-        opts.headers['Content-Type'] = req_type;
 
         break;
-      case content_type.form_data:
+      default:
         opts.body = data;
         opts.headers['Content-Type'] = req_type;
 
