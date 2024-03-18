@@ -106,7 +106,6 @@
 
 <form action="?/multiForm" method="POST" use:enhance>
   {#if step == 1}
-  <h2 class="fs-5 fw-bold text-primary">Algemeine Angaben</h2>
     <div class="uni mb-3">
       <label class="mb-2" for="">Universität der anzurechnenden Module</label>
       <select class="form-select {$errors?.universityId ? 'is-invalid' : ''}" bind:value={$form.universityId}>
@@ -324,35 +323,35 @@
     <div class="list-group mb-3">
       <div class="list-group-item d-inline-flex justify-content-between">
         <span class="fw-bold">Universität</span>
-        {findUniById($form.universityId).uniName}
+        {findUniById($form.universityId)?.uniName}
       </div>
       <div class="list-group-item d-inline-flex justify-content-between">
         <span class="fw-bold">Studiengang</span>
-        {findCourseById($form.courseId).courseName}
+        {findCourseById($form.courseId)?.courseName}
       </div>
     </div>
 
     <div class="list-group mb-3">
-      <div class="list-group-item d-inline-flex justify-content-between"><strong>Modulanträge ({$form.requests.length})</strong></div>
+      <div class="list-group-item d-inline-flex justify-content-between"><strong>Modulanträge ({$form.requests?.length})</strong></div>
       {#each $form.requests as _, i}
         <div class="list-group-item d-flex justify-content-between flex-wrap">
           <div class="hstack align-items-start flex-wrap flex-md-nowrap">
             <ul>
               {#each $form.requests[i].externalModuleId as _, z}
-                <li>{findExternalModuleById($form.requests[i].externalModuleId[z]).moduleName}</li>
+                <li>{findExternalModuleById($form.requests?.[i]?.externalModuleId[z])?.moduleName}</li>
               {/each}
             </ul>
             <ul>
               {#each $form.requests[i].internalModuleId as _, z}
-                <li>{findInternalModuleById($form.requests[i].internalModuleId[z]).moduleName}</li>
+                <li>{findInternalModuleById($form.requests?.[i]?.internalModuleId[z])?.moduleName}</li>
               {/each}
             </ul>
           </div>
           <div class="d-flex align-items-center gap-2">
-            {#if $form.requests[i].moduleLink}
+            {#if $form.requests?.[i]?.moduleLink}
               <i class="icon-xl bi bi-link" />
             {/if}
-            {#if $form.requests[i].file}
+            {#if $form.requests?.[i]?.file}
               <i class="icon-xl bi bi-file-earmark-pdf" />
             {/if}
           </div>

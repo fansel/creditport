@@ -129,7 +129,7 @@
   <div class="row">
     <div class="together hstack gap-2">
       {#if $form.pdfExists}
-        <a target="_blank" class="btn btn-danger" href={api.routes.pdf_overview_download(data.uuid)}>PDF</a>
+        <a target="_blank" class="btn btn-danger" href={api.routes.pdf_download(data.uuid)}>PDF</a>
 
         <!-- <a class="btn btn-sm btn-danger fw-bold" href="{config.pdf_endpoint}{$form.requestId}" target="_blank">PDF</a> -->
       {:else}

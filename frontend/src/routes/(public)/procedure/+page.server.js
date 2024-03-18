@@ -7,6 +7,7 @@ import { superValidate, message } from 'sveltekit-superforms/server';
 import { add_external_module, add_university, default_request, modulantraege as lastStep, modulantraege_senden } from '$root/lib/schema';
 import { zod } from 'sveltekit-superforms/adapters';
 import { status_requests } from '$root/lib/config';
+import { redirect } from 'sveltekit-flash-message/server';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ params }) {
@@ -43,7 +44,7 @@ export async function load({ params }) {
     internal_modules: internal_modules.data,
     externalModuleForm: await superValidate(zod(add_external_module)),
     uniForm: await superValidate(zod(add_university)),
-    multiForm: await superValidate(default_procedure, zod(lastStep), {errors: false}),
+    multiForm: await superValidate(default_procedure, zod(lastStep), { errors: false }),
     title: 'Vorgang erstellen'
   };
 }
@@ -118,17 +119,21 @@ export const actions = {
 
     for (let i = 0; i < res.data.requests.length; i++) {
       const requestId = res.data.requests[i].requestId;
+      console.log(requestId);
 
       const formData = new FormData();
       formData.append('file', multiForm.data.requests[i].file);
 
-      const pdf_res = await api.post(api.routes.pdf_upload(requestId), formData, null, { req_type: api.content_type.form_data, res_type: api.content_type.plain });
-      console.log(pdf_res);
+      const pdf_res = await api.post(api.routes.pdf_upload(requestId), formData, null, { req_type: api.content_type.file, res_type: api.content_type.plain });
       if (!pdf_res.success) {
         return message(multiForm, { type: 'error', message: 'Fehler beim Hochladen der PDF' }, { status: 400 });
       }
     }
 
-    return message(multiForm, { type: 'success', message: 'Vorgang erfolgreich abgesendet' }, { status: 200 });
+    if (!procedure_id) {
+      return message(multiForm, { type: 'error', message: 'Fehler beim Erstellen des Vorgangs' }, { status: 400 });
+    }
+
+    throw redirect(307, `/status/${procedure_id}`, { type: 'success', message: 'Vorgang erfolgreich erstellt.' }, cookies);
   }
 };
