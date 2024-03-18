@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
 import java.util.UUID;
-/*
+
 
 @Component  // Diese Annotation gibt an, dass diese Klasse ein Component ist, und von Spring automatisch erkannt und instanziiert wird.
 public class DataLoader implements CommandLineRunner {
@@ -789,7 +789,7 @@ public class DataLoader implements CommandLineRunner {
         userRepository.save(examComittee);
         System.out.println("Users were saved in the database!");
 
-    }}*/
-public class DataLoader { }
+    }}
+//public class DataLoader { }
 
 
