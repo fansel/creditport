@@ -1,200 +1,134 @@
 import * as api from '$lib/api.js';
-import { file, zfd } from 'zod-form-data';
-import z from 'zod';
-import { fail, redirect, error } from '@sveltejs/kit';
-import { superValidate } from 'sveltekit-superforms/server';
+import { error } from '@sveltejs/kit';
+import { zfd } from 'zod-form-data';
+import { z } from 'zod';
+import { fail } from '@sveltejs/kit';
+import { superValidate, message } from 'sveltekit-superforms/server';
+import { add_external_module, add_university, default_request, modulantraege as lastStep, modulantraege_senden } from '$root/lib/schema';
 import { zod } from 'sveltekit-superforms/adapters';
-
-const addUniversitySchema = z.object({
-    universityName: z.string().min(1)
-   });
-
-
-
-
-
+import { status_requests } from '$root/lib/config';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ params }) {
-  // const addUniversityForm = await superValidate(zod(addUniversitySchema));
-  // console.log(addUniversityForm)
   const universities = await api.get(api.routes.university_all);
-  if(!universities.success){
+  if (!universities.success) {
     throw error(404, { message: 'Fehler beim Laden der Universitäten' });
   }
-
-  const internalModules = await api.get(api.routes.module_all_internal);
-  if (!internalModules.success) {
-    throw error(404, { message: 'Fehler beim Laden der internen Module' });
+  const courses = await api.get(api.routes.course_all);
+  if (!courses.success) {
+    throw error(404, { message: 'Fehler beim Laden der Studiengänge' });
   }
 
-  const externalModules = await api.get(api.routes.module_all_external);
-  if (!externalModules.success) {
+  const external_modules = await api.get(api.routes.module_all_external);
+  if (!external_modules.success) {
     throw error(404, { message: 'Fehler beim Laden der externen Module' });
   }
 
-  const courses = await api.get(api.routes.course_all);
-  if (!courses.success){
-    throw error(404, { message: 'Fehler beim Laden der Studiengänge' });
+  const internal_modules = await api.get(api.routes.module_all_internal);
+  if (!internal_modules.success) {
+    throw error(404, { message: 'Fehler beim Laden der externen Module' });
   }
+
+  const default_procedure = {
+    // annotation: 'hallo',
+    // universityId: '698152a1-8637-480e-a4be-696e8c1fc90a',
+    // courseId: '6298a54f-e1b1-41f6-a4d9-331e4265fc69',
+    requests: [default_request]
+  };
+
   return {
     universities: universities.data,
-    internalModules: internalModules.data,
-    externalModules: externalModules.data,
     courses: courses.data,
-    title: 'Vorgang erstellen',
-   // addUniversityForm
+    external_modules: external_modules.data,
+    internal_modules: internal_modules.data,
+    externalModuleForm: await superValidate(zod(add_external_module)),
+    uniForm: await superValidate(zod(add_university)),
+    multiForm: await superValidate(default_procedure, zod(lastStep), {errors: false}),
+    title: 'Vorgang erstellen'
   };
 }
 
 /** @type {import('./$types').Actions} */
 export const actions = {
-  requests: async ({ request }) => {
-    const formData = await request.formData();
+  addExternalModule: async ({ locals, request, cookies }) => {
+    const form = await superValidate(request, zod(add_external_module));
 
-    function createDynamicSchema(count) {
-      const dynamicFields = {};
+    if (!form.valid) {
+      return message(form, { type: 'error', message: 'Dein Input ist ungültig' }, { status: 400 });
+    }
+    console.log('validation extModule successful');
 
-      for (let i = 0; i < count; i++) {
-        const internalModulesCount = formData.get(`internalModulesCount${i}`) || 0;
-        const externalModulesCount = formData.get(`externalModulesCount${i}`) || 0;
-        for (let j = 0; j < internalModulesCount; j++) {
-          const internalModuleId = `internalModuleId${i}-${j}`;
-          dynamicFields[internalModuleId] = zfd.text().optional();
-        }
-        for (let j = 0; j < externalModulesCount; j++) {
-          //const creditPoints = `creditPoints${i}-${j}`;
-          const externalModuleId = `externalModuleId${i}-${j}`;
+    const res = await api.post(api.routes.module_all_external, form.data, locals.user?.token);
 
-          // const moduleLink = `moduleLink${i}-${j}`;
-          // const annotation = `annotation${i}-${j}`;
-          // const formFile = `formFile${i}-${j}`;
-
-          // dynamicFields[creditPoints] = zfd.numeric(); // Hier kannst du den Validatortyp anpassen
-          dynamicFields[externalModuleId] = zfd.text().optional();
-
-          // dynamicFields[moduleLink] = zfd.text(z.string().optional());
-          // dynamicFields[annotation] = zfd.text(z.string().optional());
-          // dynamicFields[formFile] = zfd.file(z.instanceof(File).optional());
-        }
-        const annotationStudent = `annotation${i}`;
-        const moduleLink = `moduleLink${i}`;
-        dynamicFields[annotationStudent] = zfd.text().optional();
-        dynamicFields[moduleLink] = zfd.text().optional();
-      }
-
-      return zfd.formData({
-        globalAnnotation: zfd.text(z.string().optional()),
-        universityId: zfd.text().optional(),
-        internalCourseId: zfd.text().optional(),
-        ...dynamicFields
-      });
+    if (!res.success) {
+      console.log('res: ', res);
+      return message(form, { type: 'error', message: 'Fehler beim Erstellen' }, { status: 400 });
     }
 
-    const requestCount = formData.get('requestCount') || 0;
-    const schema = createDynamicSchema(requestCount);
-    //console.log(JSON.stringify(schema,null,2)+ "schema");
-//console.log(schema+" schemaaa");
-    //const form = await superValidate(request, schema);
-    //console.log(form)
-    const result = schema.safeParse(formData);
-    console.log("result"+JSON.stringify(result, null, 2)+ " result");
-    //console.log(result.data.globalAnnotation);
-
-    if (!result.success) {
-      // const data = {
-      //   data: Object.fromEntries(formData),
-      //   errors: result.error.flatten().fieldErrors
-      // };
-      return fail(400, {});
-    }
-
-    function createBody(count) {
-      const bodyFields = [];
-     
-      for (let i = 0; i < count; i++) {
-        const internalModulesCount = formData.get(`internalModulesCount${i}`) || 0;
-        const externalModulesCount = formData.get(`externalModulesCount${i}`) || 0;
-        const externalModuleFields = [];
-        const internalModuleFields = [];
-        for(let j = 0; j<internalModulesCount; j++){
-          
-             //result.data[`internalModuleId${i}-${j}`],
-          
-          internalModuleFields.push(result.data[`internalModuleId${i}-${j}`]);
-        }
-        for(let j=0; j<externalModulesCount; j++){
-          externalModuleFields.push(result.data[`externalModuleId${i}-${j}`]);
-        }
-
-        const field = {
-          externalModuleId: externalModuleFields,
-          internalModuleId: internalModuleFields,
-          annotationStudent: result.data[`annotation${i}`],
-          moduleLink: result.data[`moduleLink${i}`]
-       
-          // externalModule: result.data[`externalModule${i}`],
-          // internalModule: result.data[`internalModule${i}`],
-          // annotation: result.data[`annotation${i}`],
-          // creditPoints: result.data[`creditPoints${i}`],
-          // moduleLink: result.data[`moduleLink${i}`]
-        };
-
-        bodyFields.push(field);
-      }
-
-      return {
-        annotation: result.data.globalAnnotation,
-        universityId: result.data.universityId,
-        courseId: result.data.internalCourseId,
-        requests: bodyFields
-      };
-    }
-
-    const body = createBody(requestCount);
-    console.log("body"+JSON.stringify(body, null, 2)+ "body");
-
-    const res = await api.post(`procedures`, body, null, { req_type: api.content_type.json, res_type: api.content_type.json });
-
-    console.log(res.data.procedureId+" pups");
-
-    for (let i = 0; i < requestCount; i++) {
-      // Nur wenn eine PDF vorhanden ist soll auch eine abgeschickt werden
-      if (result.data[`formFile${i}`]) {
-        const fileUpload = new FormData();
-        fileUpload.append('file', result.data[`formFile${i}`]);
-        const resPDF = await api.post(`pdf/upload/${res.requests[i].requestId}`, fileUpload, null, { req_type: api.content_type.form_data, res_type: api.content_type.plain });
-        console.log(resPDF);
-      }
-    }
-
-    throw redirect(302, `/status/${res.procedureId}`);
-    // return { success: true, procedureId: res.procedureId };
-    //zugriff $page.form.procesureId
+    return message(form, { type: 'success', message: 'Wurde erfolgreich gespeichert' }, { status: 200 });
   },
-  addUni: async ({ locals, request }) => {
-    const formData = await request.formData();
+  addUni: async ({ locals, request, cookies }) => {
+    const uniForm = await superValidate(request, zod(add_university));
 
-    const schema = zfd.formData({
-      name: zfd.text()
-    });
-
-    const result = schema.safeParse(formData);
-
-    if (!result.success) {
-      const data = {
-        data: Object.fromEntries(formData),
-        errors: result.error.flatten().fieldErrors
-      };
-      return fail(400, data);
+    if (!uniForm.valid) {
+      return message(form, { type: 'error', message: 'Dein Input ist ungültig' }, { status: 400 });
     }
+    console.log('validation uni successful');
+
+    const res = await api.post(api.routes.university_all, uniForm.data, locals.user?.token);
+
+    if (!res.success) {
+      console.log('res: ', res);
+      return message(uniForm, { type: 'error', message: 'Fehler beim Erstellen' }, { status: 400 });
+    }
+
+    return message(uniForm, { type: 'success', message: 'Universität erfolgreich hinzugefügt' }, { status: 200 });
+  },
+  multiForm: async ({ locals, request, cookies }) => {
+    const multiForm = await superValidate(request, zod(lastStep));
+
+    console.log('Submit on Server');
+
+    if (!multiForm.valid) {
+      return message(multiForm, { type: 'error', message: 'Dein Input ist ungültig' }, { status: 400 });
+    }
+    console.log('validation procedure successfull');
 
     const body = {
-      uniName: result.data.name
+      annotation: multiForm.data.annotation,
+      universityId: multiForm.data.universityId,
+      courseId: multiForm.data.courseId,
+      requests: multiForm.data.requests.map((r) => ({
+        annotationStudent: r.annotationStudent,
+        annotationCommittee: r.annotationCommittee,
+        externalModuleId: r.externalModuleId,
+        internalModuleId: r.internalModuleId,
+        moduleLink: r.moduleLink
+      }))
     };
 
-    const res = await api.post(api.routes.university_all, body, locals.user?.token);
+    const res = await api.post(api.routes.procedure_all, body, locals.user?.token);
 
-    return { success: true };
+    if (!res.success) {
+      console.log(res);
+      return message(multiForm, { type: 'error', message: 'Fehler beim Erstellen des Vorgangs' }, { status: 400 });
+    }
+
+    const procedure_id = res.data.procedureId;
+
+    for (let i = 0; i < res.data.requests.length; i++) {
+      const requestId = res.data.requests[i].requestId;
+
+      const formData = new FormData();
+      formData.append('file', multiForm.data.requests[i].file);
+
+      const pdf_res = await api.post(api.routes.pdf_upload(requestId), formData, null, { req_type: api.content_type.form_data, res_type: api.content_type.plain });
+      console.log(pdf_res);
+      if (!pdf_res.success) {
+        return message(multiForm, { type: 'error', message: 'Fehler beim Hochladen der PDF' }, { status: 400 });
+      }
+    }
+
+    return message(multiForm, { type: 'success', message: 'Vorgang erfolgreich abgesendet' }, { status: 200 });
   }
 };
