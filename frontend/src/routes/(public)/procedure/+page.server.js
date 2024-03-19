@@ -95,7 +95,7 @@ export const actions = {
     if (!multiForm.valid) {
       return message(multiForm, { type: 'error', message: 'Dein Input ist ungültig' }, { status: 400 });
     }
-    console.log('validation procedure successfull');
+    console.log('Validation Procedure Successfully');
 
     const body = {
       annotation: multiForm.data.annotation,

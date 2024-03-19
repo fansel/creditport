@@ -157,7 +157,7 @@
 
   // const selectedUni = getContext('selectedUni');
   // $: console.log(selectedModules);
-  $: console.log('Errors', $errors);
+  // $: console.log('Errors', $errors);
 </script>
 
 <!-- MODALS -->
@@ -171,9 +171,9 @@
   <div class="progress" role="progressbar" aria-label="Progress" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="height: 2px;">
     <div class="progress-bar" style="width: {$stepPercentage}%" />
   </div>
-  <div on:click={() => switchStep(1)} class="fw-bold {step >= 1 ? 'active' : ''} status-circle position-absolute top-0 start-0 translate-middle rounded-pill">1</div>
-  <div on:click={() => switchStep(2)} class="fw-bold {step >= 2 ? 'active' : ''} status-circle position-absolute top-0 start-50 translate-middle rounded-pill">2</div>
-  <div on:click={() => switchStep(3)} class="fw-bold {step >= 3 ? 'active' : ''} status-circle position-absolute top-0 start-100 translate-middle rounded-pill">3</div>
+  <button on:click={() => switchStep(1)} class="fw-bold {step < 2 ? 'no-hover' : ''} {step >= 1 ? 'active' : ''} status-circle position-absolute top-0 start-0 translate-middle rounded-pill">1</button>
+  <button on:click={() => switchStep(2)} class="fw-bold {step < 3 ? 'no-hover' : ''} {step >= 2 ? 'active' : ''} status-circle position-absolute top-0 start-50 translate-middle rounded-pill">2</button>
+  <button on:click={() => switchStep(3)} class="fw-bold {step < 4 ? 'no-hover' : ''} {step >= 3 ? 'active' : ''} status-circle position-absolute top-0 start-100 translate-middle rounded-pill">3</button>
 </div>
 
 <!-- {#if step == 1}
@@ -526,11 +526,9 @@
     border: 3px solid var(--bs-primary);
   }
 
-  /* .status-circle:hover {
-    background-color: var(--bs-primary);
-    color: var(--bs-body-bg);
-    border: 3px solid var(--bs-primary);
-  } */
+  .status-circle.no-hover:hover {
+    cursor: auto;
+  }
 
   .status-circle {
     width: 50px;
