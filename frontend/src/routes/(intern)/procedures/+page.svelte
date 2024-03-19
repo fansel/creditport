@@ -10,7 +10,7 @@
 
   /* https://www.npmjs.com/package/date-picker-svelte */
   import { DateInput, localeFromDateFnsLocale } from 'date-picker-svelte';
-  import de from 'date-fns/locale/index.js';
+  import { de } from 'date-fns/locale/index.js';
 
   export let data;
 

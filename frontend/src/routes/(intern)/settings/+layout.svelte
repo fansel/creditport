@@ -14,9 +14,9 @@
   <li class="nav-item">
     <a href="/settings/" class="nav-link {$page.data.subtitle == 'Allgemein' ? 'active' : ''}">Allgemein</a>
   </li>
-  <li class="nav-item">
+  <!-- <li class="nav-item">
     <a href="/settings/notifications" class="nav-link {$page.data.subtitle == 'Benachrichtigungen' ? 'active' : ''}">Benachrichtigungen</a>
-  </li>
+  </li> -->
 
   {#if $page.data.user.role == config.user_roles.ADMIN}
     <li class="nav-item">

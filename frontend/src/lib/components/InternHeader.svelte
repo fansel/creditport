@@ -16,8 +16,8 @@
         <li class="nav-item"><a href="/dashboard" class="nav-link px-2 {$page.data.title == 'Dashboard' ? 'fw-bold' : ''}">Dashboard</a></li>
         <li class="nav-item"><a href="/procedures" class="nav-link px-2 {$page.data.title == 'Vorgänge' ? 'fw-bold' : ''}">Vorgänge</a></li>
 
-        <li class="nav-item"><a href="/procedures" class="nav-link px-2 {$page.data.title == 'Faq' ? 'fw-bold' : ''}">Markierte</a></li>
-        <li class="nav-item"><a href="/procedures" class="nav-link px-2 {$page.data.title == 'Impressum' ? 'fw-bold' : ''}">Archiv</a></li>
+        <!-- <li class="nav-item"><a href="/procedures" class="nav-link px-2 {$page.data.title == 'Faq' ? 'fw-bold' : ''}">Markierte</a></li> -->
+        <!-- <li class="nav-item"><a href="/procedures" class="nav-link px-2 {$page.data.title == 'Impressum' ? 'fw-bold' : ''}">Archiv</a></li> -->
       </ul>
 
       <div class="dropdown profil-dropdown">
