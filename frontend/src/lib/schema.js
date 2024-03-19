@@ -1,11 +1,12 @@
 import z from 'zod';
-import { user_roles, status_requests, status_procedures } from '$lib/config';
+import { user_roles, status_requests, status_procedures, max_upload_size_in_bytes } from '$lib/config';
+import { formatBytes } from './util';
 /**
  * Alle globalen ZOD Schemas für Superform Integration
  */
 
 export const add_external_module = z.object({
-  moduleNumber: z.string(),
+  moduleNumber: z.string().min(1, { message: 'Bitte gebe eine Modulnummer an.' }),
   moduleName: z.string().min(1, { message: 'Bitte gebe einen Modulnamen an.' }),
   moduleDescription: z.string(),
   // university: universities_schema,
@@ -14,17 +15,19 @@ export const add_external_module = z.object({
     // uniName: z.string(),
     // verified: z.boolean()
   }),
-  creditPoints: z.number()
+  creditPoints: z.number().int().min(1, { message: 'Bitte gebe eine positive Ganzzahl an.' })
 });
 
-export const default_request = {
+export const default_request = (id) => ({
+  id,
   annotationStudent: '',
   annotationCommittee: '',
-  externalModuleId: [''],
-  internalModuleId: [''],
+  externalModuleId: [],
+  internalModuleId: [],
   moduleLink: '',
-  file: null
-};
+  file: null,
+  sumExternalLp: 0
+});
 
 export const allgemeine_angaben = z.object({
   annotation: z.string(),
@@ -36,12 +39,14 @@ export const modulantraege = allgemeine_angaben.extend({
   requests: z
     .array(
       z.object({
+        sumExternalLp: z.number().default(0),
+        id: z.string(),
         externalModuleId: z.array(z.string().min(1, { message: 'Bitte wähle ein Modul aus.' })).min(1, { message: 'Bitte wähle mindestens ein externes Modul aus.' }),
         internalModuleId: z.array(z.string().min(1, { message: 'Bitte wähle ein Modul aus.' })).min(1, { message: 'Bitte wähle mindestens ein internes Modul aus.' }),
         annotationStudent: z.string(),
         annotationCommittee: z.string(),
         moduleLink: z.string(),
-        file: z.instanceof(File, { message: 'Bitte lade eine Modulbeschreibung hoch.' }).refine((f) => f.size < 1_000_000, 'Max 1 MB upload size.')
+        file: z.instanceof(File, { message: 'Bitte lade eine Modulbeschreibung hoch.' }).refine((f) => f.size < max_upload_size_in_bytes, `Max ${formatBytes(max_upload_size_in_bytes)} upload size.`)
       })
     )
     .min(1, { message: 'Bitte gebe mindestens einen Antrag an.' })
@@ -83,11 +88,11 @@ export const universities_schema = z.object({
 // })
 
 export const universities_upload_schema = z.object({
-  file: z.instanceof(File, { message: 'Please upload a file.' }).refine((f) => f.size < 1_000_000, 'Max 1 MB upload size.')
+  file: z.instanceof(File, { message: 'Please upload a file.' }).refine((f) => f.size < max_upload_size_in_bytes, `Max ${formatBytes(max_upload_size_in_bytes)} upload size.`)
 });
 
 export const courses_upload_schema = z.object({
-  file: z.instanceof(File, { message: 'Please upload a file.' }).refine((f) => f.size < 1_000_000, 'Max 1 MB upload size.')
+  file: z.instanceof(File, { message: 'Please upload a file.' }).refine((f) => f.size < max_upload_size_in_bytes, `Max ${formatBytes(max_upload_size_in_bytes)} upload size.`)
 });
 
 export const courses_import_schema = z.array(

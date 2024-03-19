@@ -125,10 +125,10 @@
       <i class="bi bi-plus-circle" />
       Modul hinzufügen
     </button>
-    <button class="btn btn-primary btn-sm" on:click={importModuleForm.dialog_open}>
+    <!-- <button class="btn btn-primary btn-sm" on:click={importModuleForm.dialog_open}>
       <i class="bi bi-cloud-arrow-up" />
       Module importieren
-    </button>
+    </button> -->
   </div>
 </div>
 

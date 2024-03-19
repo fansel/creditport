@@ -9,8 +9,12 @@
   import SuperDebug from 'sveltekit-superforms';
 
   export let data;
+  export let selectedModules;
+  export let selectedModulesPush;
 
   let dialog;
+  let requestId;
+  let j;
 
   const { form, messages, errors, enhance, reset } = superForm(data.externalModuleForm, {
     dataType: 'json',
@@ -25,12 +29,20 @@
     validationMethod: 'auto',
     customValidity: false,
     invalidateAll: false,
+    resetForm: true,
     onResult({ result }) {
-      if (result.status == 200) dialog_close();
+      if (result.status == 200) {
+        selectedModules.get(requestId).set(j, result.data.form.message.selectedModule)
+        selectedModulesPush = true;
+        dialog_close();
+      }
     }
   });
 
-  export function dialog_open(uni_id) {
+  export function dialog_open(uni_id, id, newJ) {
+    j = newJ;
+    requestId = id;
+    console.log(j)
     const data = {
       university: {
         uniId: uni_id
@@ -77,9 +89,9 @@
       </div>
 
       <div class="row mb-3">
-        <div class="col-md-3"><label for="" class="mt-2">Nummer</label></div>
+        <div class="col-md-3"><label for="" class="mt-2">Modulnummer</label></div>
         <div class="col">
-          <input type="text" class="form-control" placeholder="Nummer des Moduls" bind:value={$form.moduleNumber} />
+          <input type="text" class="form-control {$errors.moduleNumber ? 'is-invalid' : ''}" placeholder="Nummer des Moduls" bind:value={$form.moduleNumber} />
           {#if $errors.moduleNumber}
             <div class="invalid-feedback">{$errors.moduleNumber}</div>
           {/if}
@@ -88,16 +100,24 @@
 
       <div class="row mb-3">
         <div class="col-md-3">
-          <label for="" class="mt-2">Beschreibung</label>
+          <label for="" class="mt-2">Modulbeschreibung</label>
         </div>
         <div class="col">
-          <input type="text" class="form-control" placeholder="Beschreibung des Moduls " bind:value={$form.moduleDescription} />
+          <textarea type="text" rows="4" class="form-control {$errors.moduleDescription ? 'is-invalid' : ''}" placeholder="Beschreibung des Moduls " bind:value={$form.moduleDescription} />
+          {#if $errors.moduleDescription}
+            <div class="invalid-feedback">{$errors.moduleDescription}</div>
+          {/if}
         </div>
       </div>
 
       <div class="row mb-3">
         <div class="col-md-3"><label for="" class="mt-2">Leistungspunkte</label></div>
-        <div class="col"><input type="number" class="form-control" placeholder="" bind:value={$form.creditPoints} /></div>
+        <div class="col">
+          <input type="number" class="form-control {$errors.creditPoints ? 'is-invalid' : ''}" placeholder="" bind:value={$form.creditPoints} />
+          {#if $errors.creditPoints}
+            <div class="invalid-feedback">{$errors.creditPoints}</div>
+          {/if}
+        </div>
       </div>
     </div>
 

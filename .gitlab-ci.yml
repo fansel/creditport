@@ -79,7 +79,7 @@ test_backend:
 build_backend:
   stage: build
   needs: ['test_backend']
-  when: on_success
+  when: manual
   image:
     name: gcr.io/kaniko-project/executor:v1.14.0-debug
     entrypoint: ['']
@@ -103,7 +103,7 @@ build_backend:
 build_frontend:
   stage: build
   needs: ['test_frontend']
-  when: on_success
+  when: manual
   image:
     name: gcr.io/kaniko-project/executor:v1.14.0-debug
     entrypoint: ['']
@@ -140,7 +140,7 @@ build_frontend:
 deploy:
   stage: deploy
   needs: ['build_frontend', 'build_backend']
-  when: on_success
+  when: manual
   image: nginx:1.25.3-alpine
   variables:
     DOCKER_HOST: ssh://$DEPLOY_USER@$DEPLOY_SERVER

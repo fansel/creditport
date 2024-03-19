@@ -61,62 +61,12 @@
         <div class="col d-flex align-items-center">
           <div class="btn-group">
             <button class="btn btn-sm btn-outline-primary" on:click={() => dialog_open(user.userId)}>Bearbeiten</button>
-              <button class="btn btn-sm btn-outline-danger" on:click={() => ((showDeleteModal = true), (selectedUser = user))}>Löschen</button>
+            <button class="btn btn-sm btn-outline-danger" on:click={() => ((showDeleteModal = true), (selectedUser = user))}>Löschen</button>
           </div>
         </div>
       </div>
     </li>
   {/each}
-</ul>
-
-<h4 class="mb-3">Rollen</h4>
-<p>Die Nutzerrollen sind unveränderlich</p>
-
-<ul class="list-group mb-4 font-sm" >
-  <li class="list-group-item">
-    <div class="row">
-      <div class="col-2 break-word">Berechtigungen</div>
-      {#each Object.entries(config.user_roles) as [key, value] (key)}
-        <div class="col" ><span  class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill">{value}</span></div>
-      {/each}
-    </div>
-  </li>
-
-  <li class="list-group-item">
-    <div class="row">
-      <div class="col-2 d-flex align-items-center">Anträge ansehen</div>
-      <div class="col d-flex align-items-center"><input type="checkbox" name="" id="" class="form-check-input" checked disabled /></div>
-      <div class="col d-flex align-items-center"><input type="checkbox" name="" id="" class="form-check-input" disabled /></div>
-      <div class="col d-flex align-items-center"><input type="checkbox" name="" id="" class="form-check-input" disabled /></div>
-    </div>
-  </li>
-
-  <li class="list-group-item">
-    <div class="row">
-      <div class="col-2 d-flex align-items-center">Anträge bearbeiten</div>
-      <div class="col d-flex align-items-center"><input type="checkbox" name="" id="" class="form-check-input" disabled /></div>
-      <div class="col d-flex align-items-center"><input type="checkbox" name="" id="" class="form-check-input" checked disabled /></div>
-      <div class="col d-flex align-items-center"><input type="checkbox" name="" id="" class="form-check-input" disabled /></div>
-    </div>
-  </li>
-
-  <li class="list-group-item">
-    <div class="row">
-      <div class="col-2 d-flex align-items-center">Anträge weiterleiten</div>
-      <div class="col d-flex align-items-center"><input type="checkbox" name="" id="" class="form-check-input" disabled /></div>
-      <div class="col d-flex align-items-center"><input type="checkbox" name="" id="" class="form-check-input" disabled /></div>
-      <div class="col d-flex align-items-center"><input type="checkbox" name="" id="" class="form-check-input" checked disabled /></div>
-    </div>
-  </li>
-
-  <li class="list-group-item">
-    <div class="row">
-      <div class="col-2 d-flex align-items-center">Anträge löschen</div>
-      <div class="col d-flex align-items-center"><input type="checkbox" name="" id="" class="form-check-input" checked disabled /></div>
-      <div class="col d-flex align-items-center"><input type="checkbox" name="" id="" class="form-check-input" disabled /></div>
-      <div class="col d-flex align-items-center"><input type="checkbox" name="" id="" class="form-check-input" disabled /></div>
-    </div>
-  </li>
 </ul>
 
 <!-- <button class="btn btn-primary mt-2 mb-2">Speichern</button> -->
@@ -126,8 +76,7 @@
     text-decoration: none;
   }
 
-
-  .break-word {
+   .break-word {
     word-break: break-all;
-  }
+  } 
 </style>

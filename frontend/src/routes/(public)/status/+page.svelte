@@ -62,7 +62,7 @@
     if (uuid.length == 6) {
 
       //Zusätlich sollte serverseitig angefragt werden ob diese uuid überhaupt exisitert
-      const res = await fetch('uuid-lookup', { method: 'POST', body: JSON.stringify({ uuid }) });
+      const res = await fetch('/uuid-lookup', { method: 'POST', body: JSON.stringify({ uuid }) });
       const content = await res.json();
 
       console.log(content.success)

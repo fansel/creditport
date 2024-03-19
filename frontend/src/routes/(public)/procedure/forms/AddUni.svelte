@@ -7,18 +7,22 @@
   import * as flashModule from 'sveltekit-flash-message/client';
   import { zod } from 'sveltekit-superforms/adapters';
   import SuperDebug from 'sveltekit-superforms';
+  import { setContext } from 'svelte';
 
   export let data;
+  export let selectedUni;
+  export let selectedUniPush;
 
   let dialog;
 
-  const { form, messages, errors, enhance } = superForm(data.uniForm, {
+  const { form, messages, errors, enhance, reset } = superForm(data.uniForm, {
     dataType: 'json',
     syncFlashMessage: true,
     flashMessage: {
       module: flashModule
     },
     invalidateAll: false,
+    resetForm: true,
     onError({ result }) {
       console.error(result.error.message);
     },
@@ -26,11 +30,16 @@
     validationMethod: 'auto',
     customValidity: false,
     onResult({ result }) {
-      if (result.status == 200) dialog_close();
+      if (result.status == 200) {
+        selectedUni = result.data.form.message.selectedUni;
+        selectedUniPush = true;
+        dialog_close();
+      }
     }
   });
 
   export function dialog_open() {
+    reset({});
     dialog.showModal();
   }
 

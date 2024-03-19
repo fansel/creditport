@@ -10,6 +10,8 @@ import { setFlash } from 'sveltekit-flash-message/server';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ params, locals, cookies }) {
+  if (!locals.user) throw redirect(302, `/login`);
+
   //Muss später noch auf die Rolle angepasst werden #TODO
   if (locals.user.role == config.user_roles.ADMIN) {
     //Nutzerliste

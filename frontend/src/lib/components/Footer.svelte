@@ -15,7 +15,7 @@
       <li class="nav-item"><a href="/" class="nav-link px-2 text-body-secondary">Home</a></li>
       <li class="nav-item"><a href="/faq" class="nav-link px-2 text-body-secondary">FAQs</a></li>
       <li class="nav-item"><a href="/impressum" class="nav-link px-2 text-body-secondary">Impressum</a></li>
-      <li class="nav-item"><a href="/dashboard" class="nav-link px-2 text-body-secondary">Dashboard</a></li>
+      <!-- <li class="nav-item"><a href="/dashboard" class="nav-link px-2 text-body-secondary">Dashboard</a></li> -->
     </ul>
   </footer>
 </div>

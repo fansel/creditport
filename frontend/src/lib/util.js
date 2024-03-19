@@ -99,3 +99,48 @@ export function isDateBetween(date, date1, date2) {
   // Überprüfen, ob das Datum zwischen date1 und date2 liegt
   return date >= date1 && date <= date2;
 }
+
+export function hasDefinedAttributes(obj) {
+  let count = 0;
+  
+  function countAttributes(obj) {
+      for (let key in obj) {
+          if (typeof obj[key] === 'object') {
+              countAttributes(obj[key]); // Rekursiver Aufruf für verschachtelte Objekte
+          } else if (obj[key] !== undefined) {
+              count++; // Zähle das Attribut, wenn es nicht undefined ist und kein Objekt
+          }
+      }
+  }
+  
+  countAttributes(obj);
+  return count;
+}
+
+export function randomUUID() {
+  let uuid = '';
+  const chars = '0123456789abcdef';
+
+  for (let i = 0; i < 32; i++) {
+      const index = Math.floor(Math.random() * 16);
+      uuid += chars[index];
+      if (i === 7 || i === 11 || i === 15 || i === 19) {
+          uuid += '-';
+      }
+  }
+
+  return uuid;
+}
+
+
+export function formatBytes(bytes) {
+  if (bytes < 1000) {
+      return bytes + ' Bytes';
+  } else if (bytes < 1000 * 1000) {
+      return (bytes / 1000).toFixed(2) + ' KB';
+  } else if (bytes < 1000 * 1000 * 1000) {
+      return (bytes / (1000 * 1000)).toFixed(2) + ' MB';
+  } else {
+      return (bytes / (1000 * 1000 * 1000)).toFixed(2) + ' GB';
+  }
+}

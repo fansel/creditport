@@ -13,11 +13,16 @@
   import Accordion from '$root/lib/components/Accordion.svelte';
   import { tweened } from 'svelte/motion';
   import { cubicOut } from 'svelte/easing';
+  import { getContext, onMount } from 'svelte';
+  import { hasDefinedAttributes, randomUUID } from '$lib/util';
 
   export let data;
 
   let showAddFremdmodul;
   let showAddUni;
+
+  let selectedUni;
+  let selectedUniPush = false;
 
   const stepPercentage = tweened(1, { duration: 300, easing: cubicOut });
 
@@ -28,17 +33,18 @@
 
   $: options.validators = steps[step - 1];
 
-  const { form, errors, message, enhance, validateForm, options } = superForm(data.multiForm, {
+  const { form, errors, message, enhance, validateForm, options, reset, submitting, delayed, timeout } = superForm(data.multiForm, {
+    delayMs: 0,
     syncFlashMessage: true,
     resetForm: true,
     flashMessage: {
       module: flashModule
     },
+    taintedMessage: true,
     dataType: 'json',
     validationMethod: 'onsubmit',
-
     async onSubmit({ cancel }) {
-      console.log('Submit on Client');
+      console.log('Submit on Client with step: ', step);
       if (step == 3) return;
       else cancel();
 
@@ -50,6 +56,28 @@
       if (form.valid) step = 1;
     }
   });
+
+  let selectedModules = new Map();
+  let selectedModulesPush;
+
+  $: if (selectedModules && selectedModulesPush) {
+    // Iteration über alle äußeren Schlüssel
+    for (let requestId of selectedModules.keys()) {
+      // Iteration über alle inneren Schlüssel-Wert-Paare
+      for (let [j, modulesObj] of selectedModules.get(requestId).entries()) {
+        const index = $form.requests.findIndex((r) => r.id === requestId);
+        $form.requests[index].externalModuleId[j] = modulesObj.moduleId;
+      }
+    }
+
+    selectedModulesPush = false;
+  }
+
+  // Wähle die neu erstellte Uni aus
+  $: if (selectedUni && selectedUniPush) {
+    $form.universityId = selectedUni?.uniId;
+    selectedUniPush = false;
+  }
 
   $: externalModulsByUni = data.external_modules.filter((m) => m.university?.uniId == $form.universityId);
   $: internalModulesByCourse = data.internal_modules.filter((m) => m.courses?.some((c) => c.courseId == $form.courseId));
@@ -72,27 +100,98 @@
 
   function switchStep(toStep) {
     if (toStep < step) {
+      if (toStep == 1) {
+        confirm('Willst du zu diesem Schritt springen? Beachte das deine Eingaben zurückgesetzt werden!');
+
+        if (confirm) {
+          step = toStep;
+          resetForm();
+        }
+        return;
+      }
+
       step = toStep;
-    } else {
-      alert('Du kannst nicht vorspringen.');
     }
   }
 
-  $: console.log($errors);
+  // Erstellt ein neues Request Accordion
+  function addAccordion() {
+    const id = randomUUID();
+    selectedModules.set(id, new Map());
+    $form.requests = [...$form.requests, default_request(id)];
+  }
+
+  // Löscht das Request Accordion an der i-ten Stelle
+  function deleteAccordion(i) {
+    selectedModules.delete($form.requests[i].id);
+    $form.requests = [...$form.requests.slice(0, i), ...$form.requests.slice(i + 1)];
+  }
+
+  // i - Index vom Antrag , j - Stelle vom ExternalModule beides in Bezug auf das Array
+  function deleteExternalModule(i, j, moduleIsInMap = false) {
+    if (moduleIsInMap) {
+      selectedModules.get($form.requests[i].id).delete(j);
+    }
+
+    // Veringere alle Indizies um eins
+    const modifiedMap = new Map();
+    selectedModules.get($form.requests[i].id).forEach((value, key) => {
+      modifiedMap.set(key - 1, value);
+    });
+
+    selectedModules.set($form.requests[i].id, modifiedMap);
+
+    $form.requests[i].externalModuleId = [...$form.requests[i].externalModuleId.slice(0, j), ...$form.requests[i].externalModuleId.slice(j + 1)];
+
+    // Die IDs der Form updaten
+    selectedModulesPush = true;
+  }
+
+  // Reaktives Statement für die Summe der externen LP
+  $: $form.requests?.forEach((r) => {
+    r.sumExternalLp = r.externalModuleId.reduce(
+      (acc, curr, i) =>
+        acc +
+        (curr === ''
+          ? 0
+          : data.external_modules.some((m) => m.moduleId == curr)
+          ? data.external_modules.find((m) => m.moduleId == curr).creditPoints
+          : selectedModules?.get(r.id)?.get(i)?.creditPoints),
+      0
+    );
+  });
+
+  function resetForm() {
+    reset({});
+    addAccordion();
+  }
+
+  onMount(() => {
+    addAccordion();
+  });
+
+  // const selectedUni = getContext('selectedUni');
+  // $: console.log(selectedModules);
+  // $: console.log('Errors', $errors);
 </script>
 
 <!-- MODALS -->
-<AddExternalModule bind:this={showAddFremdmodul} {data} />
-<AddUni bind:this={showAddUni} {data} />
+<AddExternalModule bind:this={showAddFremdmodul} {data} bind:selectedModules bind:selectedModulesPush />
+<AddUni bind:this={showAddUni} {data} bind:selectedUni bind:selectedUniPush />
+
+<!-- <button on:click={console.log(selectedModules)}>dsfsdf</button> -->
 
 <!-- Status Leiste -->
 <div class="position-relative status-leiste">
   <div class="progress" role="progressbar" aria-label="Progress" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="height: 2px;">
     <div class="progress-bar" style="width: {$stepPercentage}%" />
   </div>
-  <button type="button" on:click={() => switchStep(1)} class="fw-bold {step == 1 ? 'active' : ''} status-circle position-absolute top-0 start-0 translate-middle btn rounded-pill">1</button>
-  <button type="button" on:click={() => switchStep(2)} class="fw-bold {step == 2 ? 'active' : ''} status-circle position-absolute top-0 start-50 translate-middle btn rounded-pill">2</button>
-  <button type="button" on:click={() => switchStep(3)} class="fw-bold {step == 3 ? 'active' : ''} status-circle position-absolute top-0 start-100 translate-middle btn rounded-pill">3</button>
+  <button on:click={() => switchStep(1)} class="fw-bold {step < 2 ? 'no-hover' : ''} {step >= 1 ? 'active' : ''} status-circle position-absolute top-0 start-0 translate-middle rounded-pill">1</button>
+  <button on:click={() => switchStep(2)} class="fw-bold {step < 3 ? 'no-hover' : ''} {step >= 2 ? 'active' : ''} status-circle position-absolute top-0 start-50 translate-middle rounded-pill">2</button
+  >
+  <button on:click={() => switchStep(3)} class="fw-bold {step < 4 ? 'no-hover' : ''} {step >= 3 ? 'active' : ''} status-circle position-absolute top-0 start-100 translate-middle rounded-pill"
+    >3</button
+  >
 </div>
 
 <!-- {#if step == 1}
@@ -110,7 +209,11 @@
     <div class="uni mb-3">
       <label class="mb-2" for="">Universität der anzurechnenden Module</label>
       <select class="form-select {$errors?.universityId ? 'is-invalid' : ''}" bind:value={$form.universityId}>
-        <option value="">-</option>
+        {#if !selectedUni}
+          <option value="">-</option>
+        {:else}
+          <option value={selectedUni?.uniId}>{selectedUni?.uniName}</option>
+        {/if}
         {#each data.universities as university, index}
           <option value={university.uniId}>{university.uniName}</option>
         {/each}
@@ -140,7 +243,7 @@
       {/if}
     </div>
     <div class="annotation mb-3">
-      <label class="col-form-label" for=""> Anmerkungen für den Bearbeiter </label>
+      <label class="col-form-label" for="">Anmerkungen für den/die Bearbeiter:in</label>
 
       <textarea rows="4" type="text" bind:value={$form.annotation} class="form-control {$errors?.annotation ? 'is-invalid' : ''}" />
       {#if $errors?.annotation}
@@ -152,54 +255,76 @@
     <!-- <SuperDebug data={$form} /> -->
   {:else if step == 2}
     {#each $form.requests as _, i}
-      <Accordion>
+      <Accordion invalid={hasDefinedAttributes($errors?.requests?.[i]) > 0}>
         <div slot="head">
           <h1 class="fs-4 m-0 fw-bold">Antrag {i + 1}</h1>
         </div>
-        <button type="button" class="btn text-danger" slot="icon" on:click={() => ($form.requests = [...$form.requests.slice(0, i), ...$form.requests.slice(i + 1)])}
-          ><i class="bi bi-trash" />
-        </button>
+        <button type="button" class="btn text-danger" slot="icon" on:click={() => deleteAccordion(i)}><i class="bi bi-trash" /> </button>
         <div slot="details">
           <div class="mb-3">
             <div class="row">
               <div class="col-md-6">
-                <h2 class="fs-5">Externe Module ({data.external_modules.reduce((sum, obj) => ($form.requests[i].externalModuleId.includes(obj.moduleId) ? sum + obj.creditPoints : sum), 0)} LP)</h2>
+                <h2 class="fs-5">Externe Module ({$form.requests[i].sumExternalLp} LP)</h2>
                 {#each $form.requests[i].externalModuleId as _, j}
                   <!-- {$form.requests[i].externalModuleId[j]} -->
 
-                  <div class="border-bottom pb-4 mb-3">
-                    <div class="row">
-                      <div class="col-md-9">
-                        <label for="" class="col-form-label">Name</label>
-                        <select name="" id="" class="form-control {$errors?.requests?.[i]?.externalModuleId?.[j] ? 'is-invalid' : ''}" bind:value={$form.requests[i].externalModuleId[j]}>
-                          <option value="">-</option>
-                          {#each externalModulsByUni as module}
-                            <option value={module.moduleId}>{module.moduleName}</option>
-                          {/each}
-                        </select>
-                        {#if $errors?.requests?.[i]?.externalModuleId?.[j]}
-                          <div class="invalid-feedback">{$errors?.requests?.[i]?.externalModuleId?.[j]}</div>
-                        {/if}
+                  {#if selectedModules.get($form.requests[i].id)?.get(j)}
+                    <div class="border-bottom pb-4 mb-3">
+                      <div class="row">
+                        <div class="col-md-9">
+                          <label for="" class="col-form-label">Name</label>
+                          <input
+                            type="text"
+                            class="form-control {$errors?.requests?.[i]?.externalModuleId?.[j] ? 'is-invalid' : ''}"
+                            readonly
+                            value={selectedModules.get($form.requests[i].id)?.get(j)?.moduleName}
+                          />
+                          {#if $errors?.requests?.[i]?.externalModuleId?.[j]}
+                            <div class="invalid-feedback">{$errors?.requests?.[i]?.externalModuleId?.[j]}</div>
+                          {/if}
+                        </div>
+                        <div class="col-md-3">
+                          <label for="" class="col-form-label">LP</label>
+                          <input type="number" class="form-control reset-disable-look" disabled value={selectedModules.get($form.requests[i].id)?.get(j)?.creditPoints} />
+                        </div>
                       </div>
-                      <div class="col-md-3">
-                        <label for="" class="col-form-label">LP</label>
-                        <input type="number" class="form-control reset-disable-look" disabled value={findExternalModuleById($form.requests[i].externalModuleId[j])?.creditPoints} />
+                      <div class="row">
+                        <div class="col">
+                          <label for="" class="col-form-label">Modulbeschreibung</label>
+                          <p class="fake-textarea">{selectedModules.get($form.requests[i].id)?.get(j)?.moduleDescription ?? ''}</p>
+                        </div>
                       </div>
+                      <button class="btn btn-sm btn-outline-secondary w-100 mt-3" type="button" on:click={() => deleteExternalModule(i, j, true)}> <i class="bi bi-trash" /> Löschen</button>
                     </div>
-                    <div class="row">
-                      <div class="col">
-                        <label for="" class="col-form-label">Modulbeschreibung</label>
-                        <p class="fake-textarea">{findExternalModuleById($form.requests[i].externalModuleId[j])?.moduleDescription ?? ''}</p>
+                  {:else}
+                    <div class="border-bottom pb-4 mb-3">
+                      <div class="row">
+                        <div class="col-md-9">
+                          <label for="" class="col-form-label">Name</label>
+                          <select name="" id="" class="form-control {$errors?.requests?.[i]?.externalModuleId?.[j] ? 'is-invalid' : ''}" bind:value={$form.requests[i].externalModuleId[j]}>
+                            <option value="">-</option>
+                            {#each externalModulsByUni as module}
+                              <option value={module.moduleId}>{module.moduleName}</option>
+                            {/each}
+                          </select>
+                          {#if $errors?.requests?.[i]?.externalModuleId?.[j]}
+                            <div class="invalid-feedback">{$errors?.requests?.[i]?.externalModuleId?.[j]}</div>
+                          {/if}
+                        </div>
+                        <div class="col-md-3">
+                          <label for="" class="col-form-label">LP</label>
+                          <input type="number" class="form-control reset-disable-look" disabled value={findExternalModuleById($form.requests[i].externalModuleId[j])?.creditPoints} />
+                        </div>
                       </div>
+                      <div class="row">
+                        <div class="col">
+                          <label for="" class="col-form-label">Modulbeschreibung</label>
+                          <p class="fake-textarea">{findExternalModuleById($form.requests[i].externalModuleId[j])?.moduleDescription ?? ''}</p>
+                        </div>
+                      </div>
+                      <button class="btn btn-sm btn-outline-secondary w-100 mt-3" type="button" on:click={() => deleteExternalModule(i, j)}> <i class="bi bi-trash" /> Löschen</button>
                     </div>
-                    <button
-                      class="btn btn-sm btn-outline-secondary w-100 mt-3"
-                      type="button"
-                      on:click={() => ($form.requests[i].externalModuleId = [...$form.requests[i].externalModuleId.slice(0, j), ...$form.requests[i].externalModuleId.slice(j + 1)])}
-                    >
-                      <i class="bi bi-trash" /> Löschen</button
-                    >
-                  </div>
+                  {/if}
                 {/each}
 
                 {#if $errors?.requests?.[i]?.externalModuleId?._errors}
@@ -207,11 +332,18 @@
                 {/if}
 
                 <div class="mb-3">
-                  <button class="btn btn-sm btn-outline-primary" type="button" on:click={() => ($form.requests[i].externalModuleId = [...$form.requests[i].externalModuleId, ''])}
+                  <button
+                    class="btn btn-sm btn-outline-primary {!(externalModulsByUni?.length > 0) ? 'd-none' : ''}"
+                    type="button"
+                    on:click={() => ($form.requests[i].externalModuleId = [...$form.requests[i].externalModuleId, ''])}
                     ><i class="bi bi-plus-circle" />
                     Hinzufügen</button
                   >
-                  <button class="btn btn-primary btn-sm" type="button" on:click={() => showAddFremdmodul.dialog_open($form.universityId)}>
+                  <button
+                    class="btn btn-primary btn-sm"
+                    type="button"
+                    on:click={() => showAddFremdmodul.dialog_open($form.universityId, $form.requests?.[i]?.id, $form.requests?.[i].externalModuleId?.length)}
+                  >
                     <i class="bi bi-plus-circle" />
                     Fremdmodul erstellen
                   </button>
@@ -304,7 +436,7 @@
     {/if}
 
     <div class="mb-3 border-bottom pb-3">
-      <button class="btn btn-sm btn-outline-primary" type="button" on:click={() => ($form.requests = [...$form.requests, default_request])}><i class="bi bi-plus-circle" /> Neuen Antrag</button>
+      <button class="btn btn-sm btn-outline-primary" type="button" on:click={addAccordion}><i class="bi bi-plus-circle" /> Neuen Antrag</button>
     </div>
 
     <div class="annotation mb-3">
@@ -339,7 +471,11 @@
           <div class="hstack align-items-start flex-wrap flex-md-nowrap">
             <ul>
               {#each $form.requests[i].externalModuleId as _, z}
-                <li>{findExternalModuleById($form.requests?.[i]?.externalModuleId[z])?.moduleName}</li>
+                {#if selectedModules.get($form.requests[i].id)?.get(z)}
+                  <li>{selectedModules.get($form.requests[i].id)?.get(z)?.moduleName}</li>
+                {:else}
+                  <li>{findExternalModuleById($form.requests?.[i]?.externalModuleId[z])?.moduleName}</li>
+                {/if}
               {/each}
             </ul>
             <ul>
@@ -369,13 +505,16 @@
       {/if}
     </div>
     <hr />
-
-    <button class="btn btn-primary" type="submit">Senden</button>
+    <div class="d-flex align-items-center">
+      <button class="btn btn-primary" type="submit">Senden</button>{#if $delayed}<img class="mx-2" src="/loading2.svg" alt="" />{/if}
+    </div>
 
     <!-- <br />
     <SuperDebug data={$form} /> -->
   {/if}
 </form>
+
+<!-- <img src='/loading.svg' alt="" /> -->
 
 <!-- <SuperDebug data={$form} /> -->
 
@@ -405,16 +544,14 @@
     overflow-y: auto;
   }
 
-  .status-circle:focus {
+  .status-circle:active {
     background-color: var(--bs-body-bg);
     color: var(--bs-primary);
     border: 3px solid var(--bs-primary);
   }
 
-  .status-circle:hover {
-    background-color: var(--bs-primary);
-    color: var(--bs-body-bg);
-    border: 3px solid var(--bs-primary);
+  .status-circle.no-hover:hover {
+    cursor: auto;
   }
 
   .status-circle {

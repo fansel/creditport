@@ -14,13 +14,13 @@
   <li class="nav-item">
     <a href="/settings/" class="nav-link {$page.data.subtitle == 'Allgemein' ? 'active' : ''}">Allgemein</a>
   </li>
-  <li class="nav-item">
+  <!-- <li class="nav-item">
     <a href="/settings/notifications" class="nav-link {$page.data.subtitle == 'Benachrichtigungen' ? 'active' : ''}">Benachrichtigungen</a>
-  </li>
+  </li> -->
 
   {#if $page.data.user.role == config.user_roles.ADMIN}
     <li class="nav-item">
-      <a href="/settings/usermanagment" class="nav-link {$page.data.subtitle == 'Benutzer & Rollen' ? 'active' : ''}">Benutzer & Rollen</a>
+      <a href="/settings/usermanagment" class="nav-link {$page.data.subtitle == 'Benutzer' ? 'active' : ''}">Benutzer</a>
     </li>
 
     <li class="nav-item">

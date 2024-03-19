@@ -8,6 +8,7 @@ import { add_external_module, add_university, default_request, modulantraege as 
 import { zod } from 'sveltekit-superforms/adapters';
 import { status_requests } from '$root/lib/config';
 import { redirect } from 'sveltekit-flash-message/server';
+import { randomUUID } from '$lib/util';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ params }) {
@@ -36,17 +37,17 @@ export async function load({ params }) {
     // annotation: 'hallo',
     // universityId: '698152a1-8637-480e-a4be-696e8c1fc90a',
     // courseId: '6298a54f-e1b1-41f6-a4d9-331e4265fc69',
-    requests: [default_request]
+    requests: [default_request(randomUUID())]
   };
 
   return {
-    universities: universities.data.filter((u) => u.verified == true),
+    universities: universities.data, //.filter((u) => u.verified == true),
     courses: courses.data,
     external_modules: external_modules.data,
     internal_modules: internal_modules.data,
     externalModuleForm: await superValidate(zod(add_external_module)),
     uniForm: await superValidate(zod(add_university)),
-    multiForm: await superValidate(default_procedure, zod(lastStep), { errors: false }),
+    multiForm: await superValidate(zod(lastStep), { errors: false }),
     title: 'Vorgang erstellen'
   };
 }
@@ -60,8 +61,6 @@ export const actions = {
       return message(form, { type: 'error', message: 'Dein Input ist ungültig' }, { status: 400 });
     }
 
-    console.log(form.data);
-
     const res = await api.post(api.routes.module_all_external, form.data, null);
 
     if (!res.success) {
@@ -69,7 +68,7 @@ export const actions = {
       return message(form, { type: 'error', message: 'Fehler beim Erstellen des Moduls' }, { status: 400 });
     }
 
-    return message(form, { type: 'success', message: 'Modul wurde erfolgreich hinzugefügt' }, { status: 200 });
+    return message(form, { selectedModule: res.data, type: 'success', message: 'Modul wurde erfolgreich hinzugefügt' }, { status: 200 });
   },
   addUni: async ({ locals, request, cookies }) => {
     const form = await superValidate(request, zod(add_university));
@@ -85,7 +84,8 @@ export const actions = {
       return message(form, { type: 'error', message: 'Fehler beim Erstellen der Universität' }, { status: 400 });
     }
 
-    return message(form, { type: 'success', message: 'Universität erfolgreich hinzugefügt' }, { status: 200 });
+    return message(form, { selectedUni: res.data, type: 'success', message: 'Universität erfolgreich hinzugefügt' }, { status: 200 });
+    // return { form, selectedUni: res.data };
   },
   multiForm: async ({ locals, request, cookies }) => {
     const multiForm = await superValidate(request, zod(lastStep));
@@ -95,7 +95,7 @@ export const actions = {
     if (!multiForm.valid) {
       return message(multiForm, { type: 'error', message: 'Dein Input ist ungültig' }, { status: 400 });
     }
-    console.log('validation procedure successfull');
+    console.log('Validation Procedure Successfully');
 
     const body = {
       annotation: multiForm.data.annotation,

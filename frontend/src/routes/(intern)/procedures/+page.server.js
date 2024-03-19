@@ -1,6 +1,6 @@
 import * as config from '$lib/config';
 import * as api from '$lib/api';
-import { error, fail } from '@sveltejs/kit';
+import { error, fail, redirect } from '@sveltejs/kit';
 import { superValidate, message } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
 import { procedure_schema, procedure_by_id_schema } from '$root/lib/schema';
@@ -9,6 +9,8 @@ import { setFlash } from 'sveltekit-flash-message/server';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ params, locals }) {
+  if (!locals.user) throw redirect(302, `/login`);
+
   const res = await api.get(api.routes.procedure_all, locals.user?.token);
 
   if (!res.success) {
