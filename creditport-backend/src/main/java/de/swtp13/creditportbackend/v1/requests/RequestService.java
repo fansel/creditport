@@ -56,15 +56,12 @@ public class RequestService {
         }
     }
 
-    public void setFavored(Request request){
-        request.setFavored(!request.isFavored());
-    }
     public ResponseEntity<Request> updateRequest(UpdateRequestDTO RequestDetails, int requestId){
         List<InternalModule> internalModules = new ArrayList<>();
         for (UUID internalModuleId: RequestDetails.getInternalModuleIds()){
             if (internalModuleRepository.existsById(internalModuleId)){
                 internalModules.add(internalModuleRepository.findById(internalModuleId).get());
-            } else{
+            } else {
                 return ResponseEntity.notFound().build();
             }
         }
