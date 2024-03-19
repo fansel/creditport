@@ -114,7 +114,6 @@ export function hasDefinedAttributes(obj) {
   }
   
   countAttributes(obj);
-  console.log(count)
   return count;
 }
 
