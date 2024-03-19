@@ -1,4 +1,4 @@
-# SWTP-2023-13 Creditport Docker-Konfiguration
+# SWTP-2023-13 Creditport
 
 ## Voraussetzungen
 - Docker und Docker Compose müssen installiert sein.
