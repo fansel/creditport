@@ -38,6 +38,7 @@
     flashMessage: {
       module: flashModule
     },
+    taintedMessage: true,
     dataType: 'json',
     validationMethod: 'onsubmit',
     async onSubmit({ cancel }) {
@@ -96,18 +97,17 @@
   }
 
   function switchStep(toStep) {
-    if (toStep < step) {
-      step = toStep;
-    } else {
-      alert('Du kannst nicht vorspringen.');
-    }
+    // if (toStep < step) {
+    //   step = toStep;
+    // } else {
+    //   alert('Du kannst nicht vorspringen.');
+    // }
   }
 
   // Erstellt ein neues Request Accordion
   function addAccordion() {
     const id = crypto.randomUUID();
     selectedModules.set(id, new Map());
-    console.log(selectedModules);
     $form.requests = [...$form.requests, default_request(id)];
   }
 
@@ -120,7 +120,6 @@
   // i - Index vom Antrag , j - Stelle vom ExternalModule beides in Bezug auf das Array
   function deleteExternalModule(i, j, moduleIsInMap = false) {
     if (moduleIsInMap) {
-      console.log('lösche aus map');
       selectedModules.get($form.requests[i].id).delete(j);
     }
 
@@ -158,9 +157,9 @@
   <div class="progress" role="progressbar" aria-label="Progress" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="height: 2px;">
     <div class="progress-bar" style="width: {$stepPercentage}%" />
   </div>
-  <button type="button" on:click={() => switchStep(1)} class="fw-bold {step == 1 ? 'active' : ''} status-circle position-absolute top-0 start-0 translate-middle btn rounded-pill">1</button>
-  <button type="button" on:click={() => switchStep(2)} class="fw-bold {step == 2 ? 'active' : ''} status-circle position-absolute top-0 start-50 translate-middle btn rounded-pill">2</button>
-  <button type="button" on:click={() => switchStep(3)} class="fw-bold {step == 3 ? 'active' : ''} status-circle position-absolute top-0 start-100 translate-middle btn rounded-pill">3</button>
+  <div class="fw-bold {step >= 1 ? 'active' : ''} status-circle position-absolute top-0 start-0 translate-middle rounded-pill">1</div>
+  <div class="fw-bold {step >= 2 ? 'active' : ''} status-circle position-absolute top-0 start-50 translate-middle rounded-pill">2</div>
+  <div class="fw-bold {step >= 3 ? 'active' : ''} status-circle position-absolute top-0 start-100 translate-middle rounded-pill">3</div>
 </div>
 
 <!-- {#if step == 1}
@@ -212,7 +211,7 @@
       {/if}
     </div>
     <div class="annotation mb-3">
-      <label class="col-form-label" for=""> Anmerkungen für den Bearbeiter </label>
+      <label class="col-form-label" for=""> Anmerkungen für die Bearbeiter </label>
 
       <textarea rows="4" type="text" bind:value={$form.annotation} class="form-control {$errors?.annotation ? 'is-invalid' : ''}" />
       {#if $errors?.annotation}
@@ -479,7 +478,7 @@
   {/if}
 </form>
 
-<SuperDebug data={$form} />
+<!-- <SuperDebug data={$form} /> -->
 
 <style>
   .reset-disable-look {
@@ -507,17 +506,17 @@
     overflow-y: auto;
   }
 
-  .status-circle:focus {
+  .status-circle:active {
     background-color: var(--bs-body-bg);
     color: var(--bs-primary);
     border: 3px solid var(--bs-primary);
   }
 
-  .status-circle:hover {
+  /* .status-circle:hover {
     background-color: var(--bs-primary);
     color: var(--bs-body-bg);
     border: 3px solid var(--bs-primary);
-  }
+  } */
 
   .status-circle {
     width: 50px;
