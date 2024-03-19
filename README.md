@@ -44,3 +44,11 @@
 
 ## Swagger-Dokumentation
 - Erreichbar unter: [http://172.26.92.92:8080/api/v1/swagger-ui/index.html](http://172.26.92.92:8080/api/v1/swagger-ui/index.html)
+
+
+
+## Lokale Weiterentwicklung:
+
+- Das Projekt kann jederzeit lokal mittels Java,JavaScript und SvelteKit weiterentwickelt werden.
+- Backend-Ordner: /creditport-backend
+- Frontend: /frontend
