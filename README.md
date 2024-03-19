@@ -44,4 +44,4 @@
 - Container-Logs anzeigen: `docker logs -f [container_name]`
 
 ## Swagger-Dokumentation
-- Erreichbar unter: `172.26.92.92:8080/api/v1/swagger-ui/index.html`
+- Erreichbar unter: [172.26.92.92:8080/api/v1/swagger-ui/index.html](172.26.92.92:8080/api/v1/swagger-ui/index.html)
