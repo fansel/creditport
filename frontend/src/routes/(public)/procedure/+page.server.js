@@ -41,9 +41,9 @@ export async function load({ params }) {
   };
 
   return {
-    universities: universities.data, //.filter((u) => u.verified == true),
+    universities: universities.data.filter((u) => u.verified == true),
     courses: courses.data,
-    external_modules: external_modules.data,
+    external_modules: external_modules.data.filter((c) => c.verified == true),
     internal_modules: internal_modules.data,
     externalModuleForm: await superValidate(zod(add_external_module)),
     uniForm: await superValidate(zod(add_university)),

@@ -42,7 +42,7 @@ services:
       - PUBLIC_ENV=development
       - PUBLIC_SECURE_CONNECTION=false
       - PUBLIC_PDF_ENDPOINT=http://localhost:8080/api/v1
-      - PUBLIC_MAX_UPLOAD=1000000
+      - PUBLIC_MAX_UPLOAD=10000000
     ports:
       - 5173:5173
     volumes:

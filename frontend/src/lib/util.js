@@ -144,3 +144,24 @@ export function formatBytes(bytes) {
       return (bytes / (1000 * 1000 * 1000)).toFixed(2) + ' GB';
   }
 }
+
+export function renderMap(map) {
+  const items = [];
+  for (let [key, value] of map) {
+    if (value instanceof Map) {
+      items.push(
+        `<div class="map-item border-bottom">
+          <span class="map-key">${key}:</span>
+          ${renderMap(value)}
+        </div>`
+      );
+    } else {
+      items.push(
+        `<div class="map-item border-bottom">
+          <span class="map-key">${key}:</span> ${value}
+        </div>`
+      );
+    }
+  }
+  return items.join('');
+}

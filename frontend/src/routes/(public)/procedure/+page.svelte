@@ -14,7 +14,7 @@
   import { tweened } from 'svelte/motion';
   import { cubicOut } from 'svelte/easing';
   import { getContext, onMount } from 'svelte';
-  import { hasDefinedAttributes, randomUUID } from '$lib/util';
+  import { hasDefinedAttributes, randomUUID, renderMap } from '$lib/util';
 
   export let data;
 
@@ -134,12 +134,19 @@
     }
 
     // Veringere alle Indizies um eins
+    /// -------------------------
     const modifiedMap = new Map();
     selectedModules.get($form.requests[i].id).forEach((value, key) => {
-      modifiedMap.set(key - 1, value);
+      console.log(key);
+      if (key > j) {
+        modifiedMap.set(key - 1, value); // Indizes um eins verringern und in die neue Map einfügen
+      } else {
+        modifiedMap.set(key, value); // Ansonsten einfach in die neue Map kopieren
+      }
     });
 
     selectedModules.set($form.requests[i].id, modifiedMap);
+    /// -------------------------
 
     $form.requests[i].externalModuleId = [...$form.requests[i].externalModuleId.slice(0, j), ...$form.requests[i].externalModuleId.slice(j + 1)];
 
@@ -516,9 +523,33 @@
 
 <!-- <img src='/loading.svg' alt="" /> -->
 
-<!-- <SuperDebug data={$form} /> -->
+<!-- <SuperDebug data={$form} />
+
+<div class="map-container w-100">
+  <h2>Map</h2>
+  <div class="map-items w-100">
+    {@html renderMap(selectedModules)}
+  </div>
+</div> -->
 
 <style>
+  .map-container {
+    font-family: Arial, sans-serif;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 0 auto;
+  }
+
+  .map-item {
+    margin-bottom: 5px;
+    margin-left: 15px;
+  }
+
+  .map-key {
+    font-weight: bold;
+  }
+
   .reset-disable-look {
     background-color: var(--bs-body-bg);
   }
