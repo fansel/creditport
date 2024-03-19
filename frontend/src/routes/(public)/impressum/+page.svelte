@@ -18,7 +18,7 @@
   <p>E-Mail: <a href="mailto:studierendensekretariat@uni-leipzig.de">studierendensekretariat@uni-leipzig.de</a></p>
 </div>
 <div class="mb-3">
-  <p><a href="https://www.uni-leipzig.de/studium/beratungs-und-serviceangebote/studierendensekretariat">Homepage und Öffnungszeiten</a></p>
+  <p><a target="_blank" href="https://www.uni-leipzig.de/studium/beratungs-und-serviceangebote/studierendensekretariat">Homepage und Öffnungszeiten</a></p>
 </div>
 <div class="mb-3">
   <p><strong>Postanschrift</strong></p>
@@ -35,7 +35,7 @@
 </div>
 
 <style>
-  p{
+  p {
     margin: 0;
   }
 </style>
