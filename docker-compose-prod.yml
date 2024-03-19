@@ -51,6 +51,7 @@ services:
       - ORIGIN=http://172.26.92.92:3000
       - PUBLIC_PDF_ENDPOINT=http://172.26.92.92:8080/api/v1
       - PUBLIC_MAX_UPLOAD=10000000
+      - BODY_SIZE_LIMIT=Infinity
     networks:
       - creditport-net
     restart: unless-stopped
