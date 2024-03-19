@@ -14,7 +14,7 @@ export const add_external_module = z.object({
     // uniName: z.string(),
     // verified: z.boolean()
   }),
-  creditPoints: z.number()
+  creditPoints: z.number().int().min(1, { message: 'Bitte gebe eine positive Ganzzahl an.'})
 });
 
 export const default_request = (id) => ({
