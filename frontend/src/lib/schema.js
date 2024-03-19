@@ -14,17 +14,18 @@ export const add_external_module = z.object({
     // uniName: z.string(),
     // verified: z.boolean()
   }),
-  creditPoints: z.number().int().min(1, { message: 'Bitte gebe eine positive Ganzzahl an.'})
+  creditPoints: z.number().int().min(1, { message: 'Bitte gebe eine positive Ganzzahl an.' })
 });
 
 export const default_request = (id) => ({
   id,
   annotationStudent: '',
   annotationCommittee: '',
-  externalModuleId: [''],
-  internalModuleId: [''],
+  externalModuleId: [],
+  internalModuleId: [],
   moduleLink: '',
-  file: null
+  file: null,
+  sumExternalLp: 0
 });
 
 export const allgemeine_angaben = z.object({
@@ -37,6 +38,7 @@ export const modulantraege = allgemeine_angaben.extend({
   requests: z
     .array(
       z.object({
+        sumExternalLp: z.number().default(0),
         id: z.string(),
         externalModuleId: z.array(z.string().min(1, { message: 'Bitte wähle ein Modul aus.' })).min(1, { message: 'Bitte wähle mindestens ein externes Modul aus.' }),
         internalModuleId: z.array(z.string().min(1, { message: 'Bitte wähle ein Modul aus.' })).min(1, { message: 'Bitte wähle mindestens ein internes Modul aus.' }),

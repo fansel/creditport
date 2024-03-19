@@ -43,7 +43,7 @@
     dataType: 'json',
     validationMethod: 'onsubmit',
     async onSubmit({ cancel }) {
-      console.log('Submit on Client');
+      console.log('Submit on Client with step: ', step);
       if (step == 3) return;
       else cancel();
 
@@ -146,6 +146,20 @@
     selectedModulesPush = true;
   }
 
+  // Reaktives Statement für die Summe der externen LP
+  $: $form.requests?.forEach((r) => {
+    r.sumExternalLp = r.externalModuleId.reduce(
+      (acc, curr, i) =>
+        acc +
+        (curr === ''
+          ? 0
+          : data.external_modules.some((m) => m.moduleId == curr)
+          ? data.external_modules.find((m) => m.moduleId == curr).creditPoints
+          : selectedModules?.get(r.id)?.get(i)?.creditPoints),
+      0
+    );
+  });
+
   function resetForm() {
     reset({});
     addAccordion();
@@ -172,8 +186,11 @@
     <div class="progress-bar" style="width: {$stepPercentage}%" />
   </div>
   <button on:click={() => switchStep(1)} class="fw-bold {step < 2 ? 'no-hover' : ''} {step >= 1 ? 'active' : ''} status-circle position-absolute top-0 start-0 translate-middle rounded-pill">1</button>
-  <button on:click={() => switchStep(2)} class="fw-bold {step < 3 ? 'no-hover' : ''} {step >= 2 ? 'active' : ''} status-circle position-absolute top-0 start-50 translate-middle rounded-pill">2</button>
-  <button on:click={() => switchStep(3)} class="fw-bold {step < 4 ? 'no-hover' : ''} {step >= 3 ? 'active' : ''} status-circle position-absolute top-0 start-100 translate-middle rounded-pill">3</button>
+  <button on:click={() => switchStep(2)} class="fw-bold {step < 3 ? 'no-hover' : ''} {step >= 2 ? 'active' : ''} status-circle position-absolute top-0 start-50 translate-middle rounded-pill">2</button
+  >
+  <button on:click={() => switchStep(3)} class="fw-bold {step < 4 ? 'no-hover' : ''} {step >= 3 ? 'active' : ''} status-circle position-absolute top-0 start-100 translate-middle rounded-pill"
+    >3</button
+  >
 </div>
 
 <!-- {#if step == 1}
@@ -225,7 +242,7 @@
       {/if}
     </div>
     <div class="annotation mb-3">
-      <label class="col-form-label" for=""> Anmerkungen für die Bearbeiter </label>
+      <label class="col-form-label" for="">Anmerkungen für den/die Bearbeiter:in</label>
 
       <textarea rows="4" type="text" bind:value={$form.annotation} class="form-control {$errors?.annotation ? 'is-invalid' : ''}" />
       {#if $errors?.annotation}
@@ -246,7 +263,7 @@
           <div class="mb-3">
             <div class="row">
               <div class="col-md-6">
-                <h2 class="fs-5">Externe Module ({data.external_modules.reduce((sum, obj) => ($form.requests[i].externalModuleId.includes(obj.moduleId) ? sum + obj.creditPoints : sum), 0)} LP)</h2>
+                <h2 class="fs-5">Externe Module ({$form.requests[i].sumExternalLp} LP)</h2>
                 {#each $form.requests[i].externalModuleId as _, j}
                   <!-- {$form.requests[i].externalModuleId[j]} -->
 
@@ -314,7 +331,10 @@
                 {/if}
 
                 <div class="mb-3">
-                  <button class="btn btn-sm btn-outline-primary" type="button" on:click={() => ($form.requests[i].externalModuleId = [...$form.requests[i].externalModuleId, ''])}
+                  <button
+                    class="btn btn-sm btn-outline-primary {!(externalModulsByUni?.length > 0) ? 'd-none' : ''}"
+                    type="button"
+                    on:click={() => ($form.requests[i].externalModuleId = [...$form.requests[i].externalModuleId, ''])}
                     ><i class="bi bi-plus-circle" />
                     Hinzufügen</button
                   >
@@ -492,7 +512,7 @@
   {/if}
 </form>
 
-<!-- <SuperDebug data={$form} /> -->
+<SuperDebug data={$form} />
 
 <style>
   .reset-disable-look {
