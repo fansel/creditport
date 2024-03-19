@@ -88,6 +88,18 @@ public class RequestService {
                     // Add other fields to update if needed
                     Request updatedRequest = requestRepository.save(Request);
                     setProcedureStatus(requestId);
+                    boolean isComplete=true;
+
+                    for(Request request:requestRepository.findRequestsByProcedureId(Request.getProcedure().getProcedureId())){
+                        if(request.getStatusRequest()!= StatusRequest.ABGELEHNT && request.getStatusRequest() != StatusRequest.ANGENOMMEN){
+                            isComplete = false;
+                            break;
+                        }
+                    }
+                    if(isComplete) {
+                        Request.getProcedure().setStatus(Status.VOLLSTAENDIG);
+                        procedureRepository.save(Request.getProcedure());
+                    }
                     return ResponseEntity.ok(updatedRequest);
                 }).orElse(ResponseEntity.notFound().build());
     }
