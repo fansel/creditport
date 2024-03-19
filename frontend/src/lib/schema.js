@@ -1,5 +1,6 @@
 import z from 'zod';
-import { user_roles, status_requests, status_procedures } from '$lib/config';
+import { user_roles, status_requests, status_procedures, max_upload_size_in_bytes } from '$lib/config';
+import { formatBytes } from './util';
 /**
  * Alle globalen ZOD Schemas für Superform Integration
  */
@@ -45,7 +46,7 @@ export const modulantraege = allgemeine_angaben.extend({
         annotationStudent: z.string(),
         annotationCommittee: z.string(),
         moduleLink: z.string(),
-        file: z.instanceof(File, { message: 'Bitte lade eine Modulbeschreibung hoch.' }).refine((f) => f.size < 1_000_000, 'Max 1 MB upload size.')
+        file: z.instanceof(File, { message: 'Bitte lade eine Modulbeschreibung hoch.' }).refine((f) => f.size < max_upload_size_in_bytes, `Max ${formatBytes(max_upload_size_in_bytes)} upload size.`)
       })
     )
     .min(1, { message: 'Bitte gebe mindestens einen Antrag an.' })
@@ -87,11 +88,11 @@ export const universities_schema = z.object({
 // })
 
 export const universities_upload_schema = z.object({
-  file: z.instanceof(File, { message: 'Please upload a file.' }).refine((f) => f.size < 1_000_000, 'Max 1 MB upload size.')
+  file: z.instanceof(File, { message: 'Please upload a file.' }).refine((f) => f.size < max_upload_size_in_bytes, `Max ${formatBytes(max_upload_size_in_bytes)} upload size.`)
 });
 
 export const courses_upload_schema = z.object({
-  file: z.instanceof(File, { message: 'Please upload a file.' }).refine((f) => f.size < 1_000_000, 'Max 1 MB upload size.')
+  file: z.instanceof(File, { message: 'Please upload a file.' }).refine((f) => f.size < max_upload_size_in_bytes, `Max ${formatBytes(max_upload_size_in_bytes)} upload size.`)
 });
 
 export const courses_import_schema = z.array(

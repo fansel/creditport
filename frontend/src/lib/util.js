@@ -132,3 +132,15 @@ export function randomUUID() {
   return uuid;
 }
 
+
+export function formatBytes(bytes) {
+  if (bytes < 1000) {
+      return bytes + ' Bytes';
+  } else if (bytes < 1000 * 1000) {
+      return (bytes / 1000).toFixed(2) + ' KB';
+  } else if (bytes < 1000 * 1000 * 1000) {
+      return (bytes / (1000 * 1000)).toFixed(2) + ' MB';
+  } else {
+      return (bytes / (1000 * 1000 * 1000)).toFixed(2) + ' GB';
+  }
+}
