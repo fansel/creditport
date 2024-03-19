@@ -15,7 +15,7 @@ export async function load({ params, locals }) {
     throw error(res.http_code, { message: 'Fehler beim Laden der Vorgänge' });
   }
 
-  const offen = res.data.length;
+  const offen = res.data.filter((p) => p.status == status_procedures[1].match).length || 0;
   const archiviert = res.data.filter((p) => p.status == status_procedures[5].match).length || 0;
   const in_bearbeitung = res.data.filter((p) => p.status == status_procedures[2].match).length || 0;
 

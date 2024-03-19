@@ -54,7 +54,7 @@
       pageCount: pageCount
     };
 
-    const response = await fetch('', {
+    const response = await fetch('/set-darkmode', {
       method: 'POST',
       body: JSON.stringify(data),
       headers: {

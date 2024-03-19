@@ -40,7 +40,7 @@
         <p>Archiviert</p>
       </div>
       <div class="card-body">
-        <a href="/procedures" class="btn btn-sm btn-outline-secondary">Zu den Jobs</a>
+        <a href="/procedures" class="btn btn-sm btn-outline-secondary">Zu den Vorgängen</a>
       </div>
     </div>
   </div>
