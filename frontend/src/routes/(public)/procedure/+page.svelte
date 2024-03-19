@@ -33,7 +33,7 @@
 
   $: options.validators = steps[step - 1];
 
-  const { form, errors, message, enhance, validateForm, options, reset } = superForm(data.multiForm, {
+  const { form, errors, message, enhance, validateForm, options, reset, submitting, delayed, timeout } = superForm(data.multiForm, {
     syncFlashMessage: true,
     resetForm: true,
     flashMessage: {
@@ -504,15 +504,18 @@
       {/if}
     </div>
     <hr />
-
-    <button class="btn btn-primary" type="submit">Senden</button>
+    <div class="d-flex align-items-center">
+      <button class="btn btn-primary" type="submit">Senden</button>{#if !$delayed}<img class="mx-2" src="/loading2.svg" alt="" />{/if}
+    </div>
 
     <!-- <br />
     <SuperDebug data={$form} /> -->
   {/if}
 </form>
 
-<SuperDebug data={$form} />
+<!-- <img src='/loading.svg' alt="" /> -->
+
+<!-- <SuperDebug data={$form} /> -->
 
 <style>
   .reset-disable-look {
