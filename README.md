@@ -20,7 +20,6 @@
 
 3. **Zugriff auf Dienste**
    - **PostgreSQL-Datenbank:** Port `1432`
-   - **pgAdmin:** [http://localhost:5050](http://localhost:5050)
    - **Frontend-Anwendung:** [http://localhost:5173](http://localhost:5173)
    - **Backend-Anwendung:** [http://localhost:8080](http://localhost:8080)
 
@@ -35,6 +34,10 @@
 
 ## Docker auf der VM
 - VM-Adresse: `172.26.92.92`
+**Zugriff auf Dienste**
+   - **PostgreSQL-Datenbank:** Port `1432`
+   - **Frontend-Anwendung:** [http://172.26.92.92](http://172.26.92.92)
+   - **Backend-Anwendung:** [http://172.26.92.92:8080](http://172.26.92.92:8080)
 
 ## Docker-Befehle
 - Container auflisten: `docker ps`
