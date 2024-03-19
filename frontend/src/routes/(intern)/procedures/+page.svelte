@@ -130,7 +130,7 @@
   }
 
   // Erweitert die Procedure Objekte um ein neues Attribut searchIndex in dem in Kleinbuchstaben alle wichtigen Suchfelder aneinandergehängt werden
-  const createSearchIndex = (arr) => arr.map((obj) => ({ ...obj, searchIndex: `${obj.procedureId}${obj.status}${obj.university}${obj.createdAt}${obj.courseName}`.toLowerCase() }));
+  const createSearchIndex = (arr) => arr.map((obj) => ({ ...obj, searchIndex: `${obj.procedureId}${obj.status}${obj.university.uniName}${obj.createdAt}${obj.course.courseName}`.toLowerCase() }));
 
   $: searchResultsCount = searchResults.length;
   $: searchResults = proceduresSearchIndex
