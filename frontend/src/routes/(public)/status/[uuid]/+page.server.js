@@ -23,5 +23,6 @@ export async function load({ params }) {
     procedure: procedure.data,
     allInternalModules: allInternalModules.data,
     allExternalModules: allExternalModules.data,
+    title: `Vorgang ${uuid}`
   };
 }

@@ -1,4 +1,5 @@
 import * as api from '$lib/api.js';
+import { status_procedures } from '$root/lib/config';
 import { error, redirect } from '@sveltejs/kit';
 
 /** @type {import('./$types').PageLoad} */
@@ -15,8 +16,8 @@ export async function load({ params, locals }) {
   }
 
   const offen = res.data.length;
-  const archiviert = 0;
-  const in_bearbeitung = 0;
+  const archiviert = res.data.filter((p) => p.status == status_procedures[5].match).length || 0;
+  const in_bearbeitung = res.data.filter((p) => p.status == status_procedures[2].match).length || 0;
 
   return {
     title: 'Dashboard',
