@@ -14,6 +14,7 @@
   import { tweened } from 'svelte/motion';
   import { cubicOut } from 'svelte/easing';
   import { getContext, onMount } from 'svelte';
+  import { hasDefinedAttributes } from '$lib/util';
 
   export let data;
 
@@ -32,7 +33,7 @@
 
   $: options.validators = steps[step - 1];
 
-  const { form, errors, message, enhance, validateForm, options } = superForm(data.multiForm, {
+  const { form, errors, message, enhance, validateForm, options, reset } = superForm(data.multiForm, {
     syncFlashMessage: true,
     resetForm: true,
     flashMessage: {
@@ -97,11 +98,19 @@
   }
 
   function switchStep(toStep) {
-    // if (toStep < step) {
-    //   step = toStep;
-    // } else {
-    //   alert('Du kannst nicht vorspringen.');
-    // }
+    if (toStep < step) {
+      if (toStep == 1) {
+        confirm('Willst du zu diesem Schritt springen? Beachte das deine Eingaben zurückgesetzt werden!');
+
+        if (confirm) {
+          step = toStep;
+          resetForm();
+        }
+        return;
+      }
+
+      step = toStep;
+    }
   }
 
   // Erstellt ein neues Request Accordion
@@ -137,13 +146,18 @@
     selectedModulesPush = true;
   }
 
+  function resetForm() {
+    reset({});
+    addAccordion();
+  }
+
   onMount(() => {
     addAccordion();
   });
 
   // const selectedUni = getContext('selectedUni');
   // $: console.log(selectedModules);
-  // $: console.log($errors);
+  $: console.log('Errors', $errors);
 </script>
 
 <!-- MODALS -->
@@ -157,9 +171,9 @@
   <div class="progress" role="progressbar" aria-label="Progress" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="height: 2px;">
     <div class="progress-bar" style="width: {$stepPercentage}%" />
   </div>
-  <div class="fw-bold {step >= 1 ? 'active' : ''} status-circle position-absolute top-0 start-0 translate-middle rounded-pill">1</div>
-  <div class="fw-bold {step >= 2 ? 'active' : ''} status-circle position-absolute top-0 start-50 translate-middle rounded-pill">2</div>
-  <div class="fw-bold {step >= 3 ? 'active' : ''} status-circle position-absolute top-0 start-100 translate-middle rounded-pill">3</div>
+  <div on:click={() => switchStep(1)} class="fw-bold {step >= 1 ? 'active' : ''} status-circle position-absolute top-0 start-0 translate-middle rounded-pill">1</div>
+  <div on:click={() => switchStep(2)} class="fw-bold {step >= 2 ? 'active' : ''} status-circle position-absolute top-0 start-50 translate-middle rounded-pill">2</div>
+  <div on:click={() => switchStep(3)} class="fw-bold {step >= 3 ? 'active' : ''} status-circle position-absolute top-0 start-100 translate-middle rounded-pill">3</div>
 </div>
 
 <!-- {#if step == 1}
@@ -223,7 +237,7 @@
     <!-- <SuperDebug data={$form} /> -->
   {:else if step == 2}
     {#each $form.requests as _, i}
-      <Accordion>
+      <Accordion invalid={hasDefinedAttributes($errors?.requests?.[i]) > 0}>
         <div slot="head">
           <h1 class="fs-4 m-0 fw-bold">Antrag {i + 1}</h1>
         </div>

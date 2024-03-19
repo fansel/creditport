@@ -99,3 +99,23 @@ export function isDateBetween(date, date1, date2) {
   // Überprüfen, ob das Datum zwischen date1 und date2 liegt
   return date >= date1 && date <= date2;
 }
+
+export function hasDefinedAttributes(obj) {
+  let count = 0;
+  
+  function countAttributes(obj) {
+      for (let key in obj) {
+          if (typeof obj[key] === 'object') {
+              countAttributes(obj[key]); // Rekursiver Aufruf für verschachtelte Objekte
+          } else if (obj[key] !== undefined) {
+              count++; // Zähle das Attribut, wenn es nicht undefined ist und kein Objekt
+          }
+      }
+  }
+  
+  countAttributes(obj);
+  console.log(count)
+  return count;
+}
+
+

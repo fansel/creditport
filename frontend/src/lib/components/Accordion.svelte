@@ -1,11 +1,12 @@
 <script>
-  export let open = true; // TODO change to false
+  export let open = true;
+  export let invalid = false;
   import { slide } from 'svelte/transition';
   const handleClick = () => (open = !open);
 </script>
 
 <div class="accordion">
-  <div class="card {open ? 'open' : 'closed'}">
+  <div class="card {open ? 'open' : 'closed'} {invalid ? 'is-invalid' : ''}">
     <button class="reset-btn card-header btn m-0 {open ? 'open' : 'closed'}" type="button" on:click={handleClick}>
       <h5 class="mb-0 d-flex justify-content-between align-items-center">
         <slot name="head" />
@@ -35,6 +36,10 @@
   .card {
     border: 1px solid rgba(0, 0, 0, 0.125);
     border-radius: 0.25rem;
+  }
+
+  .card.is-invalid {
+    border: 1px solid var(--bs-danger);
   }
 
   .card.closed {
