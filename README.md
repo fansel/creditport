@@ -1,16 +1,9 @@
-# swtp-2023-13
-
-## Übersicht
-
-Dieses Projekt umfasst eine Docker-Konfiguration für die Entwicklungsumgebung von Creditport, einer Anwendung mit PostgreSQL-Datenbank, pgAdmin für Datenbankverwaltung, sowie Frontend- und Backend-Services.
+# SWTP-2023-13 Creditport Docker-Konfiguration
 
 ## Voraussetzungen
-
-Stellen Sie sicher, dass Docker und Docker Compose auf Ihrem System installiert sind. Besuchen Sie die offizielle [Docker-Website](https://www.docker.com/) für Installationsanleitungen.
+- Docker und Docker Compose müssen installiert sein.
 
 ## Struktur
-
-Das Projekt beinhaltet folgende Dienste:
 - `db`: PostgreSQL-Datenbank
 - `db-gui`: pgAdmin für Datenbankverwaltung
 - `frontend`: Frontend der Anwendung
@@ -18,38 +11,34 @@ Das Projekt beinhaltet folgende Dienste:
 
 ## Anleitung zum Starten des Projekts
 
-Führen Sie die folgenden Schritte aus, um die Umgebung zu starten:
-
 1. **Klonen des Repositories**
-
-   Klone das Projekt-Repository auf deinen lokalen Computer.
+   - Klone das Projekt-Repository auf deinen lokalen Computer.
 
 2. **Starten der Dienste**
-
-   Öffnen Sie ein Terminal im Stammverzeichnis des Projekts und führen Sie den folgenden Befehl aus:
-
-   ```bash
-   docker-compose up --build
-   ```
-
-   Dieser Befehl startet alle in der `docker-compose.yml` definierten Dienste und erstellt sie, falls nötig. Die `--build`-Flag sorgt dafür, dass alle Images neu erstellt werden.
+   - Öffne ein Terminal im Stammverzeichnis des Projekts.
+   - Führe aus: `docker-compose up --build`
 
 3. **Zugriff auf Dienste**
-
-   - **PostgreSQL-Datenbank:** Zugänglich über Port `1432`
-   - **pgAdmin:** Zugänglich über [http://localhost:5050](http://localhost:5050)
-   - **Frontend-Anwendung:** Zugänglich über [http://localhost:5173](http://localhost:5173)
-   - **Backend-Anwendung:** Zugänglich über [http://localhost:8080](http://localhost:8080)
+   - **PostgreSQL-Datenbank:** Port `1432`
+   - **pgAdmin:** [http://localhost:5050](http://localhost:5050)
+   - **Frontend-Anwendung:** [http://localhost:5173](http://localhost:5173)
+   - **Backend-Anwendung:** [http://localhost:8080](http://localhost:8080)
 
 4. **Beenden der Dienste**
+   - Verwende `Ctrl+C` im Terminal oder `docker-compose down`
 
-   Um die Dienste zu stoppen, verwenden Sie `Ctrl+C` im Terminal oder führen Sie folgenden Befehl aus:
+## Standard-Login-Daten
+- **Admin-Zugang:** `admin` / `admin`
+- **Office-Zugang:** `office` / `office`
+- **Exam Committee-Zugang:** `examcomitte` / `examComitee`
+- **pgAdmin-Zugang:** `admin@creditport.de` / `admin`
 
-   ```bash
-   docker-compose down
-   ```
+## Docker auf der VM
+- VM-Adresse: `172.26.92.92`
 
-## Wichtige Hinweise
+## Docker-Befehle
+- Container auflisten: `docker ps`
+- Container-Logs anzeigen: `docker logs -f [container_name]`
 
-- Stellen Sie sicher, dass keine anderen Dienste auf den Ports laufen, die von diesem Projekt verwendet werden.
-
+## Swagger-Dokumentation
+- Erreichbar unter: `172.26.92.92:8080/api/v1/swagger-ui/index.html`
