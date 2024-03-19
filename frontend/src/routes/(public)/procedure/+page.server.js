@@ -136,3 +136,5 @@ export const actions = {
     throw redirect(307, `/status/${procedure_id}`, { type: 'success', message: 'Vorgang erfolgreich erstellt.' }, cookies);
   }
 };
+
+export let ssr = false;

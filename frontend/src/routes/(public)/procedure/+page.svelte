@@ -115,7 +115,7 @@
 
   // Erstellt ein neues Request Accordion
   function addAccordion() {
-    const id = crypto.randomUUID();
+    const id = window.crypto.randomUUID();
     selectedModules.set(id, new Map());
     $form.requests = [...$form.requests, default_request(id)];
   }
