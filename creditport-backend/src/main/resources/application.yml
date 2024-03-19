@@ -4,7 +4,8 @@ server:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
-
+  tomcat:
+    max-swallow-size: 10MB
 spring:
   datasource:
     url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
