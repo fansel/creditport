@@ -29,11 +29,11 @@ public class RequestService {
 
     public void setProcedureStatus(int requestId){
         Procedure procedure = requestRepository.findProcedureByRequestId(requestId);
-        boolean bearbeitet = false;
+        boolean bearbeitet =true;
         List<Request> requests = requestRepository.findRequestsByProcedureId(procedure.getProcedureId());
         for (Request request : requests){
-            if (request.getStatusRequest().equals(StatusRequest.BEARBEITET)) {
-                bearbeitet = true;
+            if (request.getStatusRequest() != (StatusRequest.BEARBEITET)) {
+                bearbeitet = false;
                 break;
             }
         }
@@ -44,7 +44,7 @@ public class RequestService {
         else {
             boolean entschieden = true;
             for (Request request : requests) {
-                if (request.getStatusRequest().equals(StatusRequest.ANGENOMMEN) || request.getStatusRequest().equals(StatusRequest.ABGELEHNT)) {
+                if (request.getStatusRequest() != StatusRequest.ANGENOMMEN && request.getStatusRequest() != StatusRequest.ABGELEHNT && request.getStatusRequest() != StatusRequest.RÜCKFRAGE_NÖTIG) {
                     entschieden = false;
                     break;
                 }
@@ -88,7 +88,7 @@ public class RequestService {
                     boolean isComplete=true;
 
                     for(Request request:requestRepository.findRequestsByProcedureId(Request.getProcedure().getProcedureId())){
-                        if(request.getStatusRequest()!= StatusRequest.ABGELEHNT && request.getStatusRequest() != StatusRequest.ANGENOMMEN){
+                        if(request.getStatusRequest()!= StatusRequest.ABGELEHNT && request.getStatusRequest() != StatusRequest.ANGENOMMEN && request.getStatusRequest() != StatusRequest.RÜCKFRAGE_NÖTIG){
                             isComplete = false;
                             break;
                         }
