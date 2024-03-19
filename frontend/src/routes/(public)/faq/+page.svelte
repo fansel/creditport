@@ -14,7 +14,7 @@
 {#each faqData as _, i}
   <Accordion open={false}>
     <div slot="head">
-      <h1 class="fs-5 m-0 fw-bold px-2">{faqData[i].question}</h1>
+      <h1 class="fs-6 m-0 px-2">{faqData[i].question}</h1>
     </div>
     <div slot="details"><p>{faqData[i].answer}</p></div>
   </Accordion>

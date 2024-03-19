@@ -1,6 +1,6 @@
 import * as api from '$lib/api.js';
 import { zfd } from 'zod-form-data';
-import { fail } from '@sveltejs/kit';
+import { fail, redirect } from '@sveltejs/kit';
 import z from 'zod';
 import { message, superValidate } from 'sveltekit-superforms';
 import { zod } from 'sveltekit-superforms/adapters';
@@ -8,6 +8,8 @@ import { change_password_schema } from '$root/lib/schema';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ params, locals, cookies }) {
+  if (!locals.user) throw redirect(302, `/login`);
+
   let darkMode = cookies.get('theme') || 'light';
   let useSystemMode = cookies.get('useSystemMode') || false;
   let pageCount = cookies.get('pageCount') || 10;

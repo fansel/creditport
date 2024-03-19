@@ -186,7 +186,7 @@
       </div>
     </div>
   </div>
-  <div class="col-auto col">
+  <!-- <div class="col-auto col">
     <div class="btn-group flex-fill dropwdown">
       <button class="dropdown-toggle btn btn-outline-primary btn-sm" type="button" data-bs-toggle="dropdown">Anzahl</button>
       <div class="shadow dropdown-menu-right dropdown-menu text-sm">
@@ -196,7 +196,7 @@
         <button class="dropdown-item" tabindex="0">Alle</button>
       </div>
     </div>
-  </div>
+  </div> -->
 </div>
 
 <div class="row align-items-center pt-3 pt-sm-4 pb-3 pb-lg-4 bg-body gy-3">
@@ -208,50 +208,6 @@
 
   <div class="col-auto text-end">
     <div class="d-flex flex-wrap gap-3">
-      <div class="btn-group flex-fill dropwdown">
-        <button class="dropdown-toggle btn btn-outline-secondary btn-sm" type="button" data-bs-toggle="dropdown">Erstellt am</button>
-        <div class="shadow dropdown-menu-right dropdown-menu bordered-dropdown">
-          <button class="dropdown-item d-inline-flex justify-content-between" tabindex="0">Vor 7 Tagen</button>
-          <button class="dropdown-item d-inline-flex justify-content-between" tabindex="0">Diesen Monat</button>
-          <button class="dropdown-item d-inline-flex justify-content-between" tabindex="0">Dieses Jahr</button>
-
-          <!-- svelte-ignore a11y-click-events-have-key-events -->
-          <!-- svelte-ignore a11y-no-static-element-interactions -->
-          <div class="dropdown-item date-picker-holder" on:click|stopPropagation>
-            <label for="" class="mb-1">Nach</label>
-            <DateInput bind:value={startDateCreatedAt} closeOnSelection={true} {locale} format="dd.MM.yyyy" placeholder="dd.mm.yyyy" />
-          </div>
-          <!-- svelte-ignore a11y-click-events-have-key-events -->
-          <!-- svelte-ignore a11y-no-static-element-interactions -->
-          <div class="dropdown-item date-picker-holder" on:click|stopPropagation>
-            <label for="" class="mb-1">Vor</label>
-            <DateInput bind:value={endDateCreatedAt} closeOnSelection={true} {locale} format="dd.MM.yyyy" placeholder="dd.mm.yyyy" />
-          </div>
-        </div>
-      </div>
-
-      <div class="btn-group flex-fill dropwdown">
-        <button class="dropdown-toggle btn btn-outline-secondary btn-sm" type="button" data-bs-toggle="dropdown">Bearbeitet am</button>
-        <div class="shadow dropdown-menu-right dropdown-menu bordered-dropdown">
-          <button class="dropdown-item d-inline-flex justify-content-between" tabindex="0">Vor 7 Tagen</button>
-          <button class="dropdown-item d-inline-flex justify-content-between" tabindex="0">Diesen Monat</button>
-          <button class="dropdown-item d-inline-flex justify-content-between" tabindex="0">Dieses Jahr</button>
-
-          <!-- svelte-ignore a11y-click-events-have-key-events -->
-          <!-- svelte-ignore a11y-no-static-element-interactions -->
-          <div class="dropdown-item date-picker-holder" on:click|stopPropagation>
-            <label for="" class="mb-1">Nach</label>
-            <DateInput bind:value={startDateLastUpdated} closeOnSelection={true} {locale} format="dd.MM.yyyy" placeholder="dd.mm.yyyy" />
-          </div>
-          <!-- svelte-ignore a11y-click-events-have-key-events -->
-          <!-- svelte-ignore a11y-no-static-element-interactions -->
-          <div class="dropdown-item date-picker-holder" on:click|stopPropagation>
-            <label for="" class="mb-1">Vor</label>
-            <DateInput bind:value={endDateLastUpdated} closeOnSelection={true} {locale} format="dd.MM.yyyy" placeholder="dd.mm.yyyy" />
-          </div>
-        </div>
-      </div>
-
       <div class="d-flex flex-wrap">
         <div class="btn-group flex-fill dropwdown">
           <button class="dropdown-toggle btn btn-outline-secondary btn-sm" type="button" data-bs-toggle="dropdown">Status</button>

@@ -1,8 +1,10 @@
 import * as api from '$lib/api.js';
-import { error } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ params, locals }) {
+  if (!locals.user) throw redirect(302, `/login`);
+
   // Testen ob Nutzer autentifiziert
   // const res = await api.get('test-endpoint/secure', locals.user?.token, { res_type: api.content_type.plain });
 

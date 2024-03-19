@@ -6,5 +6,5 @@ export async function load({ cookies, locals }) {
   cookies.delete('jwt', { secure: config.secure_connection, path: '/' });
   locals.user = null;
 
-  throw redirect(300, '/');
+  throw redirect(307, '/');
 }
