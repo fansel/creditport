@@ -5,7 +5,6 @@
 
 ## Struktur
 - `db`: PostgreSQL-Datenbank
-- `db-gui`: pgAdmin für Datenbankverwaltung
 - `frontend`: Frontend der Anwendung
 - `backend`: Backend der Anwendung
 
