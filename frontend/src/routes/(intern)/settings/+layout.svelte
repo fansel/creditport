@@ -20,7 +20,7 @@
 
   {#if $page.data.user.role == config.user_roles.ADMIN}
     <li class="nav-item">
-      <a href="/settings/usermanagment" class="nav-link {$page.data.subtitle == 'Benutzer & Rollen' ? 'active' : ''}">Benutzer & Rollen</a>
+      <a href="/settings/usermanagment" class="nav-link {$page.data.subtitle == 'Benutzer' ? 'active' : ''}">Benutzer</a>
     </li>
 
     <li class="nav-item">

@@ -69,61 +69,6 @@
   {/each}
 </ul>
 
-<h4 class="mb-3">Rollen</h4>
-<p>Die Nutzerrollen sind unveränderlich</p>
-<div style=" overflow-x: auto">
-<table class="table table-auto text-center" >
-  <thead>
-      <!-- <ul class="list-group mb-4 font-sm" style="display: flex; flex-wrap: nowrap; overflow-x: auto"> -->
-        <tr  >
-          <!-- <div class="row" style="display: flex; flex-wrap: nowrap;"> -->
-            <th class="text-start" style="width: 200px;">Berechtigungen</th>
-            {#each Object.entries(config.user_roles) as [key, value] (key)}
-              <th ><span class="badge bg-secondary-subtle border border-secondary-subtle text-secondary-emphasis rounded-pill">{value}</span></th>
-            {/each}
-          <!-- </div> -->
-        </tr>
-      </thead>
-      <tbody>
-        <tr >
-         <!-- <div class="row"> -->
-            <td class="text-start" style="width: 200px;">Anträge ansehen</td>
-            <td ><input type="checkbox" name="" id="" class="form-check-input" checked disabled /></td>
-            <td ><input type="checkbox" name="" id="" class="form-check-input" disabled /></td>
-            <td ><input type="checkbox" name="" id="" class="form-check-input" disabled /></td>
-          <!-- </div> -->
-        </tr>
-
-        <tr >
-          <!-- <div class="row"> -->
-            <td class="text-start" style="width: 200px;">Anträge bearbeiten</td>
-            <td ><input type="checkbox" name="" id="" class="form-check-input" disabled /></td>
-            <td ><input type="checkbox" name="" id="" class="form-check-input" checked disabled /></td>
-            <td ><input type="checkbox" name="" id="" class="form-check-input" disabled /></td>
-          <!-- </div> -->
-        </tr>
-
-        <tr >
-          <!-- <div class="row"> -->
-            <td class="text-start" style="width: 200px;">Anträge weiterleiten</td>
-            <td><input type="checkbox" name="" id="" class="form-check-input" disabled /></td>
-            <td><input type="checkbox" name="" id="" class="form-check-input" disabled /></td>
-            <td><input type="checkbox" name="" id="" class="form-check-input" checked disabled /></td>
-          <!-- </div> -->
-        </tr>
-
-        <tr >
-          <!-- <div class="row"> -->
-            <td class="text-start"style="width: 200px;">Anträge löschen</td>
-            <td ><input type="checkbox" name="" id="" class="form-check-input" checked disabled /></td>
-            <td ><input type="checkbox" name="" id="" class="form-check-input" disabled /></td>
-            <td ><input type="checkbox" name="" id="" class="form-check-input" disabled /></td>
-          <!-- </div> -->
-        </tr>
-        <tbody/>
-      <!-- </ul> -->
-    </table>
-  </div>
 <!-- <button class="btn btn-primary mt-2 mb-2">Speichern</button> -->
 
 <style>

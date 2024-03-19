@@ -24,7 +24,7 @@ export async function load({ locals }) {
     const updateUserForm = await superValidate(zod(user_schema));
     const addUserForm = await superValidate(zod(add_user_schema));
 
-    return { title: 'Einstellungen', users: res.data, subtitle: 'Benutzer & Rollen', updateUserForm, addUserForm };
+    return { title: 'Einstellungen', users: res.data, subtitle: 'Benutzer', updateUserForm, addUserForm };
   }
 
   throw redirect(303, '/settings');
