@@ -174,8 +174,10 @@ public class ProcedureController {
 
         List<Request> requestList = procedure.getRequests();
         for (Request request : requestList) {
-            if (request.getStatusRequest() != StatusRequest.BEARBEITET) {
-                return ResponseEntity.status(428).body("All request need to be \"BEARBEITET\"");
+            if (!(request.getStatusRequest() == StatusRequest.BEARBEITET
+                    || request.getStatusRequest() == StatusRequest.ANGENOMMEN
+                    || request.getStatusRequest() == StatusRequest.ABGELEHNT)) {
+                return ResponseEntity.status(428).body("All request need to be \"BEARBEITET\" or \"ANGENOMMEN\" or \"ABGELEHNT\"");
             }
         }
         if (procedure.getStatus().equals(Status.IN_BEARBEITUNG)) {
