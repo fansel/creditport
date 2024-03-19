@@ -10,6 +10,8 @@ import { error } from '@sveltejs/kit';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ locals }) {
+  if (!locals.user) throw redirect(302, `/login`);
+
   //Muss später noch auf die Rolle angepasst werden #TODO
   if (locals.user.role == config.user_roles.ADMIN) {
     //Nutzerliste
@@ -79,7 +81,7 @@ export const actions = {
   },
   addUser: async ({ locals, request, cookies }) => {
     const form = await superValidate(request, zod(add_user_schema));
-    console.log(form)
+    console.log(form);
 
     if (!form.valid) {
       return message(form, { type: 'error', message: 'Ungültiger Input' }, { status: 400 });
@@ -87,7 +89,7 @@ export const actions = {
 
     const result = register_user_schema.safeParse(form.data);
 
-    if(!result.success) {
+    if (!result.success) {
       return message(form, { type: 'error', message: 'Ungültiger Input' }, { status: 400 });
     }
 
