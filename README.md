@@ -29,8 +29,8 @@
 ## Standard-Login-Daten
 - **Admin-Zugang:** `admin` / `admin`
 - **Office-Zugang:** `office` / `office`
-- **Exam Committee-Zugang:** `examcomitte` / `examComitee`
-- **pgAdmin-Zugang:** `admin@creditport.de` / `admin`
+- **Exam Committee-Zugang:** `examComitte` / `examComitee`
+
 
 ## Docker auf der VM
 - VM-Adresse: `172.26.92.92`
@@ -44,4 +44,4 @@
 - Container-Logs anzeigen: `docker logs -f [container_name]`
 
 ## Swagger-Dokumentation
-- Erreichbar unter: [172.26.92.92:8080/api/v1/swagger-ui/index.html](172.26.92.92:8080/api/v1/swagger-ui/index.html)
+- Erreichbar unter: [http://172.26.92.92:8080/api/v1/swagger-ui/index.html](http://172.26.92.92:8080/api/v1/swagger-ui/index.html)
