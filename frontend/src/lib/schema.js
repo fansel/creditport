@@ -5,7 +5,7 @@ import { user_roles, status_requests, status_procedures } from '$lib/config';
  */
 
 export const add_external_module = z.object({
-  moduleNumber: z.string(),
+  moduleNumber: z.string().min(1, { message: 'Bitte gebe eine Modulnummer an.' }),
   moduleName: z.string().min(1, { message: 'Bitte gebe einen Modulnamen an.' }),
   moduleDescription: z.string(),
   // university: universities_schema,
@@ -17,14 +17,15 @@ export const add_external_module = z.object({
   creditPoints: z.number()
 });
 
-export const default_request = {
+export const default_request = (id) => ({
+  id,
   annotationStudent: '',
   annotationCommittee: '',
   externalModuleId: [''],
   internalModuleId: [''],
   moduleLink: '',
   file: null
-};
+});
 
 export const allgemeine_angaben = z.object({
   annotation: z.string(),
@@ -36,6 +37,7 @@ export const modulantraege = allgemeine_angaben.extend({
   requests: z
     .array(
       z.object({
+        id: z.string(),
         externalModuleId: z.array(z.string().min(1, { message: 'Bitte wähle ein Modul aus.' })).min(1, { message: 'Bitte wähle mindestens ein externes Modul aus.' }),
         internalModuleId: z.array(z.string().min(1, { message: 'Bitte wähle ein Modul aus.' })).min(1, { message: 'Bitte wähle mindestens ein internes Modul aus.' }),
         annotationStudent: z.string(),

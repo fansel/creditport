@@ -13,11 +13,15 @@
   import Accordion from '$root/lib/components/Accordion.svelte';
   import { tweened } from 'svelte/motion';
   import { cubicOut } from 'svelte/easing';
+  import { getContext, onMount } from 'svelte';
 
   export let data;
 
   let showAddFremdmodul;
   let showAddUni;
+
+  let selectedUni;
+  let selectedUniPush = false;
 
   const stepPercentage = tweened(1, { duration: 300, easing: cubicOut });
 
@@ -36,7 +40,6 @@
     },
     dataType: 'json',
     validationMethod: 'onsubmit',
-
     async onSubmit({ cancel }) {
       console.log('Submit on Client');
       if (step == 3) return;
@@ -50,6 +53,28 @@
       if (form.valid) step = 1;
     }
   });
+
+  let selectedModules = new Map();
+  let selectedModulesPush;
+
+  $: if (selectedModules && selectedModulesPush) {
+    // Iteration über alle äußeren Schlüssel
+    for (let requestId of selectedModules.keys()) {
+      // Iteration über alle inneren Schlüssel-Wert-Paare
+      for (let [j, modulesObj] of selectedModules.get(requestId).entries()) {
+        const index = $form.requests.findIndex((r) => r.id === requestId);
+        $form.requests[index].externalModuleId[j] = modulesObj.moduleId;
+      }
+    }
+
+    selectedModulesPush = false;
+  }
+
+  // Wähle die neu erstellte Uni aus
+  $: if (selectedUni && selectedUniPush) {
+    $form.universityId = selectedUni?.uniId;
+    selectedUniPush = false;
+  }
 
   $: externalModulsByUni = data.external_modules.filter((m) => m.university?.uniId == $form.universityId);
   $: internalModulesByCourse = data.internal_modules.filter((m) => m.courses?.some((c) => c.courseId == $form.courseId));
@@ -78,12 +103,55 @@
     }
   }
 
-  $: console.log($errors);
+  // Erstellt ein neues Request Accordion
+  function addAccordion() {
+    const id = crypto.randomUUID();
+    selectedModules.set(id, new Map());
+    console.log(selectedModules);
+    $form.requests = [...$form.requests, default_request(id)];
+  }
+
+  // Löscht das Request Accordion an der i-ten Stelle
+  function deleteAccordion(i) {
+    selectedModules.delete($form.requests[i].id);
+    $form.requests = [...$form.requests.slice(0, i), ...$form.requests.slice(i + 1)];
+  }
+
+  // i - Index vom Antrag , j - Stelle vom ExternalModule beides in Bezug auf das Array
+  function deleteExternalModule(i, j, moduleIsInMap = false) {
+    if (moduleIsInMap) {
+      console.log('lösche aus map');
+      selectedModules.get($form.requests[i].id).delete(j);
+    }
+
+    // Veringere alle Indizies um eins
+    const modifiedMap = new Map();
+    selectedModules.get($form.requests[i].id).forEach((value, key) => {
+      modifiedMap.set(key - 1, value);
+    });
+
+    selectedModules.set($form.requests[i].id, modifiedMap);
+
+    $form.requests[i].externalModuleId = [...$form.requests[i].externalModuleId.slice(0, j), ...$form.requests[i].externalModuleId.slice(j + 1)];
+
+    // Die IDs der Form updaten
+    selectedModulesPush = true;
+  }
+
+  onMount(() => {
+    addAccordion();
+  });
+
+  // const selectedUni = getContext('selectedUni');
+  // $: console.log(selectedModules);
+  // $: console.log($errors);
 </script>
 
 <!-- MODALS -->
-<AddExternalModule bind:this={showAddFremdmodul} {data} />
-<AddUni bind:this={showAddUni} {data} />
+<AddExternalModule bind:this={showAddFremdmodul} {data} bind:selectedModules bind:selectedModulesPush />
+<AddUni bind:this={showAddUni} {data} bind:selectedUni bind:selectedUniPush />
+
+<!-- <button on:click={console.log(selectedModules)}>dsfsdf</button> -->
 
 <!-- Status Leiste -->
 <div class="position-relative status-leiste">
@@ -110,7 +178,11 @@
     <div class="uni mb-3">
       <label class="mb-2" for="">Universität der anzurechnenden Module</label>
       <select class="form-select {$errors?.universityId ? 'is-invalid' : ''}" bind:value={$form.universityId}>
-        <option value="">-</option>
+        {#if !selectedUni}
+          <option value="">-</option>
+        {:else}
+          <option value={selectedUni?.uniId}>{selectedUni?.uniName}</option>
+        {/if}
         {#each data.universities as university, index}
           <option value={university.uniId}>{university.uniName}</option>
         {/each}
@@ -156,9 +228,7 @@
         <div slot="head">
           <h1 class="fs-4 m-0 fw-bold">Antrag {i + 1}</h1>
         </div>
-        <button type="button" class="btn text-danger" slot="icon" on:click={() => ($form.requests = [...$form.requests.slice(0, i), ...$form.requests.slice(i + 1)])}
-          ><i class="bi bi-trash" />
-        </button>
+        <button type="button" class="btn text-danger" slot="icon" on:click={() => deleteAccordion(i)}><i class="bi bi-trash" /> </button>
         <div slot="details">
           <div class="mb-3">
             <div class="row">
@@ -167,39 +237,63 @@
                 {#each $form.requests[i].externalModuleId as _, j}
                   <!-- {$form.requests[i].externalModuleId[j]} -->
 
-                  <div class="border-bottom pb-4 mb-3">
-                    <div class="row">
-                      <div class="col-md-9">
-                        <label for="" class="col-form-label">Name</label>
-                        <select name="" id="" class="form-control {$errors?.requests?.[i]?.externalModuleId?.[j] ? 'is-invalid' : ''}" bind:value={$form.requests[i].externalModuleId[j]}>
-                          <option value="">-</option>
-                          {#each externalModulsByUni as module}
-                            <option value={module.moduleId}>{module.moduleName}</option>
-                          {/each}
-                        </select>
-                        {#if $errors?.requests?.[i]?.externalModuleId?.[j]}
-                          <div class="invalid-feedback">{$errors?.requests?.[i]?.externalModuleId?.[j]}</div>
-                        {/if}
+                  {#if selectedModules.get($form.requests[i].id)?.get(j)}
+                    <div class="border-bottom pb-4 mb-3">
+                      <div class="row">
+                        <div class="col-md-9">
+                          <label for="" class="col-form-label">Name</label>
+                          <input
+                            type="text"
+                            class="form-control {$errors?.requests?.[i]?.externalModuleId?.[j] ? 'is-invalid' : ''}"
+                            readonly
+                            value={selectedModules.get($form.requests[i].id)?.get(j)?.moduleName}
+                          />
+                          {#if $errors?.requests?.[i]?.externalModuleId?.[j]}
+                            <div class="invalid-feedback">{$errors?.requests?.[i]?.externalModuleId?.[j]}</div>
+                          {/if}
+                        </div>
+                        <div class="col-md-3">
+                          <label for="" class="col-form-label">LP</label>
+                          <input type="number" class="form-control reset-disable-look" disabled value={selectedModules.get($form.requests[i].id)?.get(j)?.creditPoints} />
+                        </div>
                       </div>
-                      <div class="col-md-3">
-                        <label for="" class="col-form-label">LP</label>
-                        <input type="number" class="form-control reset-disable-look" disabled value={findExternalModuleById($form.requests[i].externalModuleId[j])?.creditPoints} />
+                      <div class="row">
+                        <div class="col">
+                          <label for="" class="col-form-label">Modulbeschreibung</label>
+                          <p class="fake-textarea">{selectedModules.get($form.requests[i].id)?.get(j)?.moduleDescription ?? ''}</p>
+                        </div>
                       </div>
+                      <button class="btn btn-sm btn-outline-secondary w-100 mt-3" type="button" on:click={() => deleteExternalModule(i, j, true)}> <i class="bi bi-trash" /> Löschen</button>
                     </div>
-                    <div class="row">
-                      <div class="col">
-                        <label for="" class="col-form-label">Modulbeschreibung</label>
-                        <p class="fake-textarea">{findExternalModuleById($form.requests[i].externalModuleId[j])?.moduleDescription ?? ''}</p>
+                  {:else}
+                    <div class="border-bottom pb-4 mb-3">
+                      <div class="row">
+                        <div class="col-md-9">
+                          <label for="" class="col-form-label">Name</label>
+                          <select name="" id="" class="form-control {$errors?.requests?.[i]?.externalModuleId?.[j] ? 'is-invalid' : ''}" bind:value={$form.requests[i].externalModuleId[j]}>
+                            <option value="">-</option>
+                            {#each externalModulsByUni as module}
+                              <option value={module.moduleId}>{module.moduleName}</option>
+                            {/each}
+                          </select>
+                          {#if $errors?.requests?.[i]?.externalModuleId?.[j]}
+                            <div class="invalid-feedback">{$errors?.requests?.[i]?.externalModuleId?.[j]}</div>
+                          {/if}
+                        </div>
+                        <div class="col-md-3">
+                          <label for="" class="col-form-label">LP</label>
+                          <input type="number" class="form-control reset-disable-look" disabled value={findExternalModuleById($form.requests[i].externalModuleId[j])?.creditPoints} />
+                        </div>
                       </div>
+                      <div class="row">
+                        <div class="col">
+                          <label for="" class="col-form-label">Modulbeschreibung</label>
+                          <p class="fake-textarea">{findExternalModuleById($form.requests[i].externalModuleId[j])?.moduleDescription ?? ''}</p>
+                        </div>
+                      </div>
+                      <button class="btn btn-sm btn-outline-secondary w-100 mt-3" type="button" on:click={() => deleteExternalModule(i, j)}> <i class="bi bi-trash" /> Löschen</button>
                     </div>
-                    <button
-                      class="btn btn-sm btn-outline-secondary w-100 mt-3"
-                      type="button"
-                      on:click={() => ($form.requests[i].externalModuleId = [...$form.requests[i].externalModuleId.slice(0, j), ...$form.requests[i].externalModuleId.slice(j + 1)])}
-                    >
-                      <i class="bi bi-trash" /> Löschen</button
-                    >
-                  </div>
+                  {/if}
                 {/each}
 
                 {#if $errors?.requests?.[i]?.externalModuleId?._errors}
@@ -211,7 +305,11 @@
                     ><i class="bi bi-plus-circle" />
                     Hinzufügen</button
                   >
-                  <button class="btn btn-primary btn-sm" type="button" on:click={() => showAddFremdmodul.dialog_open($form.universityId)}>
+                  <button
+                    class="btn btn-primary btn-sm"
+                    type="button"
+                    on:click={() => showAddFremdmodul.dialog_open($form.universityId, $form.requests?.[i]?.id, $form.requests?.[i].externalModuleId?.length)}
+                  >
                     <i class="bi bi-plus-circle" />
                     Fremdmodul erstellen
                   </button>
@@ -304,7 +402,7 @@
     {/if}
 
     <div class="mb-3 border-bottom pb-3">
-      <button class="btn btn-sm btn-outline-primary" type="button" on:click={() => ($form.requests = [...$form.requests, default_request])}><i class="bi bi-plus-circle" /> Neuen Antrag</button>
+      <button class="btn btn-sm btn-outline-primary" type="button" on:click={addAccordion}><i class="bi bi-plus-circle" /> Neuen Antrag</button>
     </div>
 
     <div class="annotation mb-3">
@@ -339,7 +437,11 @@
           <div class="hstack align-items-start flex-wrap flex-md-nowrap">
             <ul>
               {#each $form.requests[i].externalModuleId as _, z}
-                <li>{findExternalModuleById($form.requests?.[i]?.externalModuleId[z])?.moduleName}</li>
+                {#if selectedModules.get($form.requests[i].id)?.get(z)}
+                  <li>{selectedModules.get($form.requests[i].id)?.get(z)?.moduleName}</li>
+                {:else}
+                  <li>{findExternalModuleById($form.requests?.[i]?.externalModuleId[z])?.moduleName}</li>
+                {/if}
               {/each}
             </ul>
             <ul>
@@ -377,7 +479,7 @@
   {/if}
 </form>
 
-<!-- <SuperDebug data={$form} /> -->
+<SuperDebug data={$form} />
 
 <style>
   .reset-disable-look {
