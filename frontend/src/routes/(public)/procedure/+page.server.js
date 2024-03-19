@@ -8,6 +8,7 @@ import { add_external_module, add_university, default_request, modulantraege as 
 import { zod } from 'sveltekit-superforms/adapters';
 import { status_requests } from '$root/lib/config';
 import { redirect } from 'sveltekit-flash-message/server';
+import { randomUUID } from '$lib/util';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ params }) {
@@ -36,7 +37,7 @@ export async function load({ params }) {
     // annotation: 'hallo',
     // universityId: '698152a1-8637-480e-a4be-696e8c1fc90a',
     // courseId: '6298a54f-e1b1-41f6-a4d9-331e4265fc69',
-    requests: [default_request(crypto.randomUUID())]
+    requests: [default_request(randomUUID())]
   };
 
   return {
@@ -136,5 +137,3 @@ export const actions = {
     throw redirect(307, `/status/${procedure_id}`, { type: 'success', message: 'Vorgang erfolgreich erstellt.' }, cookies);
   }
 };
-
-export let ssr = false;

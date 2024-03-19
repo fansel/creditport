@@ -14,7 +14,7 @@
   import { tweened } from 'svelte/motion';
   import { cubicOut } from 'svelte/easing';
   import { getContext, onMount } from 'svelte';
-  import { hasDefinedAttributes } from '$lib/util';
+  import { hasDefinedAttributes, randomUUID } from '$lib/util';
 
   export let data;
 
@@ -115,7 +115,7 @@
 
   // Erstellt ein neues Request Accordion
   function addAccordion() {
-    const id = window.crypto.randomUUID();
+    const id = randomUUID();
     selectedModules.set(id, new Map());
     $form.requests = [...$form.requests, default_request(id)];
   }

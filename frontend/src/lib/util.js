@@ -117,4 +117,18 @@ export function hasDefinedAttributes(obj) {
   return count;
 }
 
+export function randomUUID() {
+  let uuid = '';
+  const chars = '0123456789abcdef';
+
+  for (let i = 0; i < 32; i++) {
+      const index = Math.floor(Math.random() * 16);
+      uuid += chars[index];
+      if (i === 7 || i === 11 || i === 15 || i === 19) {
+          uuid += '-';
+      }
+  }
+
+  return uuid;
+}
 

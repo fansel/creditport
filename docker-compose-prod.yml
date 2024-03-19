@@ -16,6 +16,7 @@ services:
     networks:
       - creditport-net
   db-gui:
+    container_name: creditport-db-gui
     image: elestio/pgadmin
     restart: always
     environment:
