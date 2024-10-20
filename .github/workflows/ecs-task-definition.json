@@ -1,0 +1,88 @@
+{
+  "family": "creditport-task",
+  "networkMode": "awsvpc",
+  "containerDefinitions": [
+    {
+      "name": "frontend",
+      "image": "${{ secrets.FRONTEND_IMAGE }}", 
+      "cpu": 256,
+      "memory": 512,
+      "portMappings": [
+        {
+          "containerPort": 80,
+          "hostPort": 80,
+          "protocol": "tcp"
+        }
+      ],
+      "essential": true,
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/creditport",
+          "awslogs-region": "${{ secrets.AWS_REGION }}",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    },
+    {
+      "name": "backend",
+      "image": "${{ secrets.BACKEND_IMAGE }}", 
+      "cpu": 512,
+      "memory": 1024,
+      "portMappings": [
+        {
+          "containerPort": 8080,
+          "hostPort": 8080,
+          "protocol": "tcp"
+        }
+      ],
+      "essential": true,
+      "environment": [
+        {
+          "name": "DB_HOST",
+          "value": "${{ secrets.DB_HOST }}"
+        },
+        {
+          "name": "DB_NAME",
+          "value": "${{ secrets.DB_NAME }}"
+        },
+        {
+          "name": "DB_USERNAME",
+          "value": "${{ secrets.DB_USERNAME }}"
+        },
+        {
+          "name": "DB_PASSWORD",
+          "value": "${{ secrets.DB_PASSWORD }}"
+        },
+        {
+          "name": "DB_PORT",
+          "value": "${{ secrets.DB_PORT }}"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/creditport",
+          "awslogs-region": "${{ secrets.AWS_REGION }}",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    }
+  ],
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "1024",
+  "memory": "2048",
+  "executionRoleArn": "${{ secrets.EXECUTION_ROLE_ARN }}",
+  "taskRoleArn": "${{ secrets.TASK_ROLE_ARN }}",
+  "networkConfiguration": {
+    "awsvpcConfiguration": {
+      "subnets": [
+        "${{ secrets.SUBNET_ID }}"
+      ],
+      "securityGroups": [
+        "${{ secrets.SECURITY_GROUP_ID }}"
+      ],
+      "assignPublicIp": "ENABLED"
+    }
+  }
+}
