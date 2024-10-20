@@ -1,0 +1,113 @@
+name: CI/CD Pipeline for AWS ECS
+
+on:
+  push:
+    branches:
+      - main  # Trigger pipeline when code is pushed to the main branch
+
+jobs:
+  test_frontend:
+    runs-on: ubuntu-latest
+    container:
+      image: node:21.1-alpine3.17
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '21'
+
+      - name: Install dependencies and run tests
+        run: |
+          cd frontend
+          npm install
+          npm run test
+
+  test_backend:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16.0-alpine
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+        env:
+          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          POSTGRES_USER: ${{ secrets.DB_USERNAME }}
+          POSTGRES_DB: ${{ secrets.DB_NAME }}
+    container:
+      image: gradle:8.4.0-jdk17-alpine
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Gradle
+        uses: gradle/gradle-build-action@v2
+
+      - name: Run Backend Tests
+        run: |
+          cd creditport-backend
+          gradle test -i
+        env:
+          DB_HOST: localhost
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_PORT: 5432
+
+  build_backend:
+    needs: test_backend
+    runs-on: ubuntu-latest
+    container:
+      image: gcr.io/kaniko-project/executor:v1.14.0-debug
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build and Push Backend Docker Image
+        run: |
+          echo "{\"auths\":{\"$CI_REGISTRY\":{\"auth\":\"$(echo -n ${{ secrets.CI_REGISTRY_USER }}:${{ secrets.CI_REGISTRY_PASSWORD }} | base64)\"}}}" > /kaniko/.docker/config.json
+          /kaniko/executor --context "${{ github.workspace }}/creditport-backend" --dockerfile "${{ github.workspace }}/creditport-backend/Dockerfile" --destination "${{ secrets.CI_REGISTRY_IMAGE }}:backend-latest"
+
+  build_frontend:
+    needs: test_frontend
+    runs-on: ubuntu-latest
+    container:
+      image: gcr.io/kaniko-project/executor:v1.14.0-debug
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build and Push Frontend Docker Image
+        run: |
+          echo "{\"auths\":{\"$CI_REGISTRY\":{\"auth\":\"$(echo -n ${{ secrets.CI_REGISTRY_USER }}:${{ secrets.CI_REGISTRY_PASSWORD }} | base64)\"}}}" > /kaniko/.docker/config.json
+          /kaniko/executor --context "${{ github.workspace }}/frontend" --dockerfile "${{ github.workspace }}/frontend/Dockerfile" --destination "${{ secrets.CI_REGISTRY_IMAGE }}:frontend-latest"
+
+  deploy:
+    needs: [build_backend, build_frontend]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up AWS CLI
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Deploy to ECS
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ecs-task-definition.json
+          service: your-service-name
+          cluster: your-cluster-name
+          wait-for-service-stability: true
+
